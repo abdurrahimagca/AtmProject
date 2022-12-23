@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         //kart numarasının valid olduğundan emin olunmalı
         System.out.println("Lutfen Kart Numaranizi Giriniz: ");
         Scanner sc = new Scanner(System.in);
@@ -18,9 +18,14 @@ public class Main {
         ResultSet rs = SqlQuery.getResult(query);
         while(true)
         {
-            assert rs != null;
-            if (!rs.next()) break;
-            cardsPin = rs.getString("PIN");
+            try {
+                assert rs != null;
+                if (!rs.next()) break;
+                cardsPin = rs.getString("PIN");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
         }
         if(pin.equals(cardsPin))
         {

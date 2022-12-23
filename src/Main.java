@@ -2,23 +2,37 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException {
+        //kart numarasının valid olduğundan emin olunmalı
+        System.out.println("Lutfen Kart Numaranizi Giriniz: ");
         Scanner sc = new Scanner(System.in);
-        //String cardNum = sc.nextLine();
-        Scanner sc2 = new Scanner(System.in);
-        //int pin = sc2.nextInt();
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con= DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/atm","root","root");
-        Statement stmt=con.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT Name,Surname FROM clients");
-            while(rs.next())
-                System.out.println(rs.getString(1) + " " + rs.getString(2) );
-            con.close();
+        String cardNum = sc.next();
+        System.out.println("Lutfen dort haneden olusan pininizi giriniz: ");
+        String pin = sc.next();
+        String cardsPin = null;
 
+        String query = "SELECT PIN FROM clients WHERE CardNum=" + cardNum;
 
-        }catch(Exception e){ System.out.println(e);}
+        //pinin dört haneden oluştuğundan ve integer oldugundan emin olunmalı
+
+        ResultSet rs = SqlQuery.getResult(query);
+        while(true)
+        {
+            assert rs != null;
+            if (!rs.next()) break;
+            cardsPin = rs.getString("PIN");
+        }
+        if(pin.equals(cardsPin))
+        {
+            System.out.println("Sifre Dogru");
+        }
+        else
+        {
+            //todo: şifre bir kaç kez daha istenmeli, üç kez hatadan sonra database'de şifre
+            //blocked olarak işaretlenmeli, bu bu kısma elif olarak eklenecektir.
+            System.out.println("sifreniz hatali");
+        }
+
 
 
 

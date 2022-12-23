@@ -1055,7 +1055,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Position>4</Position>
     </column>
     <column id="304" parent="299" name="PIN">
-      <DasType>int|0s</DasType>
+      <DasType>text|0s</DasType>
       <Position>5</Position>
     </column>
   </database-model>

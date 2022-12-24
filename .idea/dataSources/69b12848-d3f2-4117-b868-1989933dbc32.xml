@@ -1059,11 +1059,11 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Position>5</Position>
     </column>
     <column id="305" parent="299" name="deposit">
-      <DasType>bigint|0s</DasType>
+      <DasType>text|0s</DasType>
       <Position>6</Position>
     </column>
     <column id="306" parent="299" name="id">
-      <DasType>tinyint|0s</DasType>
+      <DasType>text|0s</DasType>
       <NotNull>1</NotNull>
       <Position>7</Position>
     </column>

@@ -1,3 +1,4 @@
+import com.mysql.cj.Query;
 import com.mysql.cj.x.protobuf.MysqlxCrud;
 
 import java.sql.Connection;
@@ -6,41 +7,55 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class SqlQuery {
-    public static ResultSet getResult(String query)
-    {
-        try{
+    public static ResultSet getResult(String query) {
+        System.out.println("getresult");
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con= DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/atm","root","root");
-            Statement stmt=con.createStatement();
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/atm", "root", "root");
+            Statement stmt = con.createStatement();
             return stmt.executeQuery(query);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-  /*  public static boolean isIndb(String query)
-    {
-        try{
+
+    public static void UpdateData(String query) {
+        System.out.println("update data");
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con= DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/atm","root","root");
-            Statement stmt=con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/atm", "root", "root");
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(query);
 
 
-        }catch(Exception e){
-            return false;
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-    public static void UpdateData(String query)
+    public static String StringGetSQL(String query, String label)
     {
+        String temp=null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/atm", "root", "root");
+            Statement stmt = con.createStatement();
+            ResultSet rs  = stmt.executeQuery(query);
+            while (rs.next())
+                {
+                    temp = rs.getString(label);
+                                    }
 
-    }*/
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
 
 }
 

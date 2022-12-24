@@ -7,18 +7,14 @@ public class Login extends Card {
     public Login(String cardNum, String pin) {
         super(cardNum, pin);
     }
-    private static String query;
+
     private static String cardsPin;
     private static String cardsNum;
     private static int attempts = 0;
 
     private static boolean isCardValid(String cardNum) throws SQLException
     {
-
-
-            query = "SELECT Name FROM clients WHERE CardNum=" + cardNum;
-            //System.out.println(query);
-            ResultSet checkRs = SqlQuery.getResult(query);
+            ResultSet checkRs = SqlQuery.getResult(("SELECT Name FROM clients WHERE CardNum=" + cardNum));
 
                 if(!checkRs.next()) {
                     System.out.println("hatali bir kart numarasi girdiniz lutfen tekrar deneyiniz.. ");
@@ -45,8 +41,7 @@ public class Login extends Card {
             {
                 try {
                     int x = Integer.parseInt(cardPin);
-                    query = "SELECT PIN FROM clients WHERE CardNum=" + cardNum;
-                    ResultSet rs = SqlQuery.getResult(query);
+                    ResultSet rs = SqlQuery.getResult(("SELECT PIN FROM clients WHERE CardNum=" + cardNum));
 
                     //burada varolan uyarı anlamsız, not null veri döndürüyor
                     while (rs.next())

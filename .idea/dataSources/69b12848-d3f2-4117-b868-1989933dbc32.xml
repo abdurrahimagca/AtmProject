@@ -1064,7 +1064,6 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </column>
     <column id="306" parent="299" name="id">
       <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
       <Position>7</Position>
     </column>
   </database-model>

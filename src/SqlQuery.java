@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class SqlQuery {
     public static ResultSet getResult(String query) {
-        System.out.println("getresult");
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -23,7 +23,7 @@ public class SqlQuery {
     }
 
     public static void UpdateData(String query) {
-        System.out.println("update data");
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(
@@ -49,7 +49,7 @@ public class SqlQuery {
             while (rs.next())
                 {
                     temp = rs.getString(label);
-                                    }
+                }
 
         } catch (Exception e) {
             e.printStackTrace();

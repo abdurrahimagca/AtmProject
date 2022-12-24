@@ -2,6 +2,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Card {
+
     protected static String cardNum;
     protected static String pin;
 

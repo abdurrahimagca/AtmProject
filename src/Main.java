@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         do {
-
+            System.out.println("Lutfen Kart Numaranizi ve Pininizi giriniz... ");
             String CardNum = sc.next();
             String Pin = sc.next();
 
@@ -15,16 +15,15 @@ public class Main {
         String currentID = Card.returnID();
 
 
+
         //todo: do-while dongusu icinde opsiyonlar sunulacak
         int checker=-1;
-
-
-
         do {
             //terminal her seferinde temizlenmeli
+            System.out.println("Kullanibilir bakiyeniz: "+ SqlQuery.StringGetSQL("SELECT deposit FROM clients WHERE id=" + currentID,"deposit"));
             System.out.println("Lutfen yapmak istediginiz islemi seciniz. ");
-            System.out.println("1: Para Cek    2: Para Yatir");
-            System.out.println("3: Para Gonder    4: Kredi Karti Borcu Ode");
+            System.out.println("1: Para Cek     2: Para Yatir");
+            System.out.println("3: Para Gonder  4: Kredi Karti Borcu Ode");
             System.out.println("5: Fatura Ode    0:Cikis Yap");
             checker = sc.nextInt();
             switch (checker){
@@ -38,6 +37,9 @@ public class Main {
                     if(Transactions.withdraw(currentID,amount))
                     {
                         System.out.println("para cekme basarili");
+                    }
+                    else{
+                        System.out.println("para cekme islemi basarisiz");
                     }
                     break;
                 case 2:

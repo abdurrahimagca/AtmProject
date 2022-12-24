@@ -6,18 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="01ca9391-8f45-420c-b5f5-725b38e99d11" name="Changes" comment="login pre-finish and added todos">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/69b12848-d3f2-4117-b868-1989933dbc32.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/69b12848-d3f2-4117-b868-1989933dbc32.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b51f0aeb-ccd9-46c9-9888-cde09ad551e6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b51f0aeb-ccd9-46c9-9888-cde09ad551e6/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b51f0aeb-ccd9-46c9-9888-cde09ad551e6/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b51f0aeb-ccd9-46c9-9888-cde09ad551e6/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b51f0aeb-ccd9-46c9-9888-cde09ad551e6/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Atm/Card.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/Card.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Atm/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/Login.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Atm/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Atm/SqlQuery.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/SqlQuery.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Login.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SqlQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SqlQuery.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Transactions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Transactions.java" afterDir="false" />
@@ -86,7 +76,8 @@
       <workItem from="1671810907032" duration="5905000" />
       <workItem from="1671833701372" duration="17555000" />
       <workItem from="1671889851183" duration="4920000" />
-      <workItem from="1671896809661" duration="814000" />
+      <workItem from="1671896809661" duration="989000" />
+      <workItem from="1671899063047" duration="4229000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1671806048989</created>
@@ -172,7 +163,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671882525652</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="login pre-finish and added todos">
+      <created>1671898878710</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1671898878710</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

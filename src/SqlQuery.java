@@ -1,3 +1,5 @@
+import com.mysql.cj.x.protobuf.MysqlxCrud;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,4 +20,27 @@ public class SqlQuery {
         }
         return null;
     }
+  /*  public static boolean isIndb(String query)
+    {
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con= DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/atm","root","root");
+            Statement stmt=con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+
+        }catch(Exception e){
+            return false;
+            e.printStackTrace();
+        }
+
+    }
+    public static void UpdateData(String query)
+    {
+
+    }*/
+
+
 }
+

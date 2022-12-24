@@ -7,6 +7,8 @@ public class Main {
         //todo: kart numarasının valid olduğundan emin olunmalı,bu database'de oldugundan emin olunmasıyla
         //todo: aynıdır
 
+        //BU GITHUB DENEME SATIRI
+
 
 
         System.out.println("Lutfen Kart Numaranizi Giriniz: ");

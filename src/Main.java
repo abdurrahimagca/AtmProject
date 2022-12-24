@@ -3,7 +3,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        //kart numarasının valid olduğundan emin olunmalı
+        //todo: kart numarasının valid olduğundan emin olunmalı,bu database'de oldugundan emin olunmasıyla
+        //todo: aynıdır
         System.out.println("Lutfen Kart Numaranizi Giriniz: ");
         Scanner sc = new Scanner(System.in);
         String cardNum = sc.next();
@@ -13,20 +14,22 @@ public class Main {
 
         String query = "SELECT PIN FROM clients WHERE CardNum=" + cardNum;
 
-        //pinin dört haneden oluştuğundan ve integer oldugundan emin olunmalı
+        //todo: pinin dört haneden oluştuğundan ve integer oldugundan emin olunmalı
+        //todo: bu databaseden önce kontrol edilmelidir ?
 
         ResultSet rs = SqlQuery.getResult(query);
-        while(true)
-        {
+
             try {
-                assert rs != null;
-                if (!rs.next()) break;
-                cardsPin = rs.getString("PIN");
+                if (rs != null) {
+                    while (rs.next()) {
+                        cardsPin = rs.getString("PIN");
+                    }
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
 
-        }
+
         if(pin.equals(cardsPin))
         {
             System.out.println("Sifre Dogru");
@@ -34,7 +37,7 @@ public class Main {
         else
         {
             //todo: şifre bir kaç kez daha istenmeli, üç kez hatadan sonra database'de şifre
-            //blocked olarak işaretlenmeli, bu bu kısma elif olarak eklenecektir.
+            //todo: blocked olarak işaretlenmeli, bu bu kısma elif olarak eklenecektir.
             System.out.println("sifreniz hatali");
         }
 

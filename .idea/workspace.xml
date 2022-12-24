@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01ca9391-8f45-420c-b5f5-725b38e99d11" name="Changes" comment="baby steps">
+      <change beforePath="$PROJECT_DIR$/out/production/Atm/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +69,7 @@
       <workItem from="1671795327549" duration="2274000" />
       <workItem from="1671805669449" duration="2546000" />
       <workItem from="1671810907032" duration="5905000" />
-      <workItem from="1671833701372" duration="3175000" />
+      <workItem from="1671833701372" duration="3477000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1671806048989</created>
@@ -91,7 +92,21 @@
       <option name="project" value="LOCAL" />
       <updated>1671839553444</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="baby steps">
+      <created>1671839709798</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1671839709798</updated>
+    </task>
+    <task id="LOCAL-00005" summary="baby steps">
+      <created>1671839716965</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1671839716965</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

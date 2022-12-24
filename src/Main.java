@@ -10,6 +10,9 @@ public class Main {
 
             Card card = new Login(CardNum, Pin);
         }while(!Login.login());
+        int currentID = Card.returnID();
+        //todo: do-while dongusu icinde opsiyonlar sunulacak
+
 
 
 

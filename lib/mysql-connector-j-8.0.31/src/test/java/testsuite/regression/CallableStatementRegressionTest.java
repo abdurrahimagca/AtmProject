@@ -1574,7 +1574,7 @@ public class CallableStatementRegressionTest extends BaseTestCase {
       for (int m = 0;
           m < 4;
           m++) { // Method call type: 0) by index; 1) by name; 2) by invalid index; 3) by invalid
-                 // name;
+        // name;
         final String testCase = String.format("Case: [sql: %d, method: %d ]", i, m);
         final CallableStatement cstmt = this.conn.prepareCall(sql[i]);
         boolean dataExpected = true;
@@ -1685,7 +1685,7 @@ public class CallableStatementRegressionTest extends BaseTestCase {
             return null;
           }
         }); // Although the procedure metadata could be obtained, the end query actually fails due
-            // to syntax errors.
+    // to syntax errors.
     cstmtP.close();
 
     /*
@@ -1727,7 +1727,7 @@ public class CallableStatementRegressionTest extends BaseTestCase {
             return null;
           }
         }); // Although the function metadata could be obtained, the end query actually fails due to
-            // syntax errors.
+    // syntax errors.
     cstmtP.close();
     cstmtF.close();
   }

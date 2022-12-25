@@ -4863,8 +4863,7 @@ public final class MysqlxPrepare {
   static {
     java.lang.String[] descriptorData = {
       "\n"
-          + "\024mysqlx_prepare.proto\022\016Mysqlx.Prepare\032\014"
-          + "mysqlx.proto\032\020mysqlx_sql.proto\032\021mysqlx_crud.proto\032\026mysqlx_datatypes.proto\"\235\003\n"
+          + "\024mysqlx_prepare.proto\022\016Mysqlx.Prepare\032\014mysqlx.proto\032\020mysqlx_sql.proto\032\021mysqlx_crud.proto\032\026mysqlx_datatypes.proto\"\235\003\n"
           + "\007Prepare\022\017\n"
           + "\007stmt_id\030\001 \002(\r"
           + "\0222\n"

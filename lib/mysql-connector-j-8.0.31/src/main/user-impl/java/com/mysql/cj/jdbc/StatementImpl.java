@@ -881,7 +881,7 @@ public class StatementImpl implements JdbcStatement {
         try {
           this.retrieveGeneratedKeys =
               true; // The JDBC spec doesn't forbid this, but doesn't provide for it either...we
-                    // do..
+          // do..
 
           long[] updateCounts = null;
 
@@ -1067,7 +1067,7 @@ public class StatementImpl implements JdbcStatement {
         if (this.doEscapeProcessing) {
           escapeAdjust =
               2; // We assume packet _could_ grow by this amount, as we're not sure how big
-                 // statement will end up after escape processing
+          // statement will end up after escape processing
         }
 
         SQLException sqlEx = null;
@@ -1871,7 +1871,7 @@ public class StatementImpl implements JdbcStatement {
     } catch (StatementIsClosedException e) {
       return this
           .results; // you end up with the same thing as before, you'll get exception when actually
-                    // trying to use it
+      // trying to use it
     }
   }
 

@@ -1755,8 +1755,8 @@ public class ConnectionTest extends BaseTestCase {
     assumeTrue(
         versionMeetsMinimum(5, 6),
         "MySQL 5.6+ is required to run this test."); // this test could work with MySQL 5.5 but
-                                                     // requires specific server configuration, e.g.
-                                                     // "--bind-address=::"
+    // requires specific server configuration, e.g.
+    // "--bind-address=::"
 
     String testUser = "testIPv6User";
     createUser("'" + testUser + "'@'%'", "IDENTIFIED BY '" + testUser + "'");
@@ -2918,7 +2918,7 @@ public class ConnectionTest extends BaseTestCase {
           SQLSyntaxErrorException.class,
           versionMeetsMinimum(8, 0, 19)
               ? "Loading local data is disabled; this must be enabled on both the client and server"
-                    + " sides"
+                  + " sides"
               : "The used command is not allowed with this MySQL version",
           () ->
               testStmt.execute(
@@ -2936,7 +2936,7 @@ public class ConnectionTest extends BaseTestCase {
           SQLSyntaxErrorException.class,
           versionMeetsMinimum(8, 0, 19)
               ? "Loading local data is disabled; this must be enabled on both the client and server"
-                    + " sides"
+                  + " sides"
               : "The used command is not allowed with this MySQL version",
           () ->
               testStmt.execute(

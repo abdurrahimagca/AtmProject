@@ -455,7 +455,7 @@ public class NativeSession extends CoreSession implements Serializable {
           newLocalVariableMap.putAll(cachedVariableMap);
           newLocalVariableMap.putAll(
               localVariableMap); // preserving variables already configured on previous session
-                                 // initialization steps
+          // initialization steps
           this.protocol.getServerSession().setServerVariables(newLocalVariableMap);
           return;
         }

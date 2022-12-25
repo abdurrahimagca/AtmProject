@@ -161,7 +161,7 @@ public abstract class AbstractValueEncoder implements ValueEncoder {
   protected Timestamp adjustTimestamp(Timestamp x, Field f, boolean keepOrigNanos) {
     if (keepOrigNanos) {
       return x; // if the value is set as a key for UpdatableResultSet updater, it should keep
-                // original milliseconds
+      // original milliseconds
     }
     if (!this.serverSession.getCapabilities().serverSupportsFracSecs()
         || !this.sendFractionalSeconds.getValue()) {

@@ -96,10 +96,8 @@ public class StringInspectorTest extends BaseTestCase {
     assertEquals(-1, si.matchesIgnoreCase(toMatch));
     assertEquals(-1, si.indexOfIgnoreCase(toMatch));
     assertEquals(
-        111,
-        si
-            .getPosition()); // Skipped to the very last closing marker ("), otherwise would have
-                             // stopped (toMatch.lengh() - 1) chars before.
+        111, si.getPosition()); // Skipped to the very last closing marker ("), otherwise would have
+    // stopped (toMatch.lengh() - 1) chars before.
     si.restart();
 
     // Single word matches, using multi word mathing method.
@@ -133,10 +131,8 @@ public class StringInspectorTest extends BaseTestCase {
     assertEquals(-1, si.matchesIgnoreCase(toMatchMulti1));
     assertEquals(-1, si.indexOfIgnoreCase(toMatchMulti1));
     assertEquals(
-        111,
-        si
-            .getPosition()); // Skipped to the very last closing marker ("), otherwise would have
-                             // stopped (toMatch.lengh() - 1) chars before.
+        111, si.getPosition()); // Skipped to the very last closing marker ("), otherwise would have
+    // stopped (toMatch.lengh() - 1) chars before.
     si.restart();
 
     // Two words matches.
@@ -164,10 +160,8 @@ public class StringInspectorTest extends BaseTestCase {
     assertEquals(-1, si.matchesIgnoreCase(toMatchMulti2));
     assertEquals(-1, si.indexOfIgnoreCase(toMatchMulti2));
     assertEquals(
-        111,
-        si
-            .getPosition()); // Skipped to the very last closing marker ("), otherwise would have
-                             // stopped (toMatch.lengh() - 1) chars before.
+        111, si.getPosition()); // Skipped to the very last closing marker ("), otherwise would have
+    // stopped (toMatch.lengh() - 1) chars before.
     si.restart();
 
     // Multiple words matches.
@@ -183,10 +177,8 @@ public class StringInspectorTest extends BaseTestCase {
     assertEquals(-1, si.matchesIgnoreCase(toMatchMultiN));
     assertEquals(-1, si.indexOfIgnoreCase(toMatchMultiN));
     assertEquals(
-        111,
-        si
-            .getPosition()); // Skipped to the very last closing marker ("), otherwise would have
-                             // stopped (toMatch.lengh() - 1) chars before.
+        111, si.getPosition()); // Skipped to the very last closing marker ("), otherwise would have
+    // stopped (toMatch.lengh() - 1) chars before.
     si.restart();
 
     /*

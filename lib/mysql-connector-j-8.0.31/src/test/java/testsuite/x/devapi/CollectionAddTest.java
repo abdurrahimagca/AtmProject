@@ -213,7 +213,7 @@ public class CollectionAddTest extends BaseCollectionTestCase {
 
     for (String strId :
         ids) { // Although the _id="Id#1" is not returned in getGeneratedIds(), it may be in a
-               // future version from some other method.
+      // future version from some other method.
       DocResult docs = this.collection.find("_id == '" + strId + "'").execute();
       DbDoc d = docs.next();
       JsonString val = (JsonString) d.get("name");

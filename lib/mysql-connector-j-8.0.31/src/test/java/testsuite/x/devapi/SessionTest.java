@@ -2259,9 +2259,8 @@ public class SessionTest extends DevApiBaseTestCase {
 
     UnreliableSocketFactory.flushConnectionAttempts();
     Session testSession1 =
-        client
-            .getSession(); // Pick previous connection from the pool. Doesn't count as new
-                           // connections.
+        client.getSession(); // Pick previous connection from the pool. Doesn't count as new
+    // connections.
     assertEquals(0, UnreliableSocketFactory.getHostsFromAllConnections().size());
     Session testSession2 = client.getSession(); // Create a new connection.
     assertTrue(UnreliableSocketFactory.isConnected());
@@ -2430,9 +2429,8 @@ public class SessionTest extends DevApiBaseTestCase {
 
     UnreliableSocketFactory.flushConnectionAttempts();
     Session testSession1 =
-        client
-            .getSession(); // Pick previous connection from the pool. Doesn't count as new
-                           // connections.
+        client.getSession(); // Pick previous connection from the pool. Doesn't count as new
+    // connections.
     assertEquals(0, UnreliableSocketFactory.getHostsFromAllConnections().size());
     Session testSession2 = client.getSession(); // Create a new connection.
     assertTrue(UnreliableSocketFactory.isConnected());

@@ -1359,9 +1359,8 @@ public class MultiHostConnectionTest extends BaseTestCase {
       assertTrue(testConn.isReadOnly());
       assertEquals(
           -1,
-          testConn
-              .getSessionMaxRows()); // this value is reset to default 'maxRows' when the new
-                                     // "internal" connection is created
+          testConn.getSessionMaxRows()); // this value is reset to default 'maxRows' when the new
+      // "internal" connection is created
 
       // change session values
       testConn.setAutoCommit(true);
@@ -1398,9 +1397,8 @@ public class MultiHostConnectionTest extends BaseTestCase {
       assertFalse(testConn.isReadOnly());
       assertEquals(
           -1,
-          testConn
-              .getSessionMaxRows()); // this value is reset to default 'maxRows' when the new
-                                     // "internal" connection is created
+          testConn.getSessionMaxRows()); // this value is reset to default 'maxRows' when the new
+      // "internal" connection is created
 
       assertConnectionsHistory(
           HOST_1_FAIL,

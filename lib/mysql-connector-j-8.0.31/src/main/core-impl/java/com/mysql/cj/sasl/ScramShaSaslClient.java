@@ -302,9 +302,8 @@ public abstract class ScramShaSaslClient implements SaslClient {
   private String generateRandomPrintableAsciiString(int length) {
     final int first = 0x21; // First printable ASCII character: exclamation mark (!).
     final int last = 0x7E; // Last printable ASCII character: tilde (~).
-    final int excl =
-        0x2C; // Comma (,) is excluded as per RFC 5802
-              // (https://tools.ietf.org/html/rfc5802#section-5.1).
+    final int excl = 0x2C; // Comma (,) is excluded as per RFC 5802
+    // (https://tools.ietf.org/html/rfc5802#section-5.1).
     final int bound = last - first;
     Random random = new SecureRandom();
     char[] result = new char[length];

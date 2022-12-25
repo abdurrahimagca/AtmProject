@@ -558,7 +558,7 @@ public class XProtocol extends AbstractProtocol<XMessage> implements Protocol<XM
       currPassword = null,
       currDatabase =
           null; // TODO remove these variables after implementing mysql_reset_connection() in
-                // reset() method
+  // reset() method
 
   @Override
   public void connect(String user, String password, String database) {

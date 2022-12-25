@@ -180,7 +180,7 @@ class EscapeProcessor {
               if (escapeSequence.length() < 3) {
                 newSql.append(
                     token); // it's just part of the query, push possible syntax errors onto
-                            // server's shoulders
+                // server's shoulders
               } else {
 
                 escapeSequence = escapeSequence.substring(1, escapeSequence.length() - 1);
@@ -189,7 +189,7 @@ class EscapeProcessor {
             } catch (java.util.NoSuchElementException e) {
               newSql.append(
                   token); // it's just part of the query, push possible syntax errors onto server's
-                          // shoulders
+              // shoulders
             }
           } else if (StringUtils.startsWithIgnoreCase(collapsedToken, "{fn")) {
             int startPos = token.toLowerCase().indexOf("fn ") + 3;
@@ -212,7 +212,7 @@ class EscapeProcessor {
             if ((startPos == -1) || (endPos == -1)) {
               newSql.append(
                   token); // it's just part of the query, push possible syntax errors onto server's
-                          // shoulders
+              // shoulders
             } else {
 
               String argument = token.substring(startPos, endPos);
@@ -329,7 +329,7 @@ class EscapeProcessor {
     if ((startPos == -1) || (endPos == -1)) {
       newSql.append(
           token); // it's just part of the query, push possible syntax errors onto server's
-                  // shoulders
+      // shoulders
     } else {
 
       String argument = token.substring(startPos, endPos);
@@ -379,7 +379,7 @@ class EscapeProcessor {
     if ((startPos == -1) || (endPos == -1)) {
       newSql.append(
           token); // it's just part of the query, push possible syntax errors onto server's
-                  // shoulders
+      // shoulders
     } else {
 
       String argument = token.substring(startPos, endPos);

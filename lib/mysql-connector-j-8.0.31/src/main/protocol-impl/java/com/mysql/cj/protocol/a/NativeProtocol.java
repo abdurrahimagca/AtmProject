@@ -2037,10 +2037,10 @@ public class NativeProtocol extends AbstractProtocol<NativePacketPayload>
         } while (streamResults
             && this.serverSession
                 .hasMoreResults() // we need to consume all result sets which don't contain rows
-                                  // from streamer right now,
+            // from streamer right now,
             && !((Resultset) currentResultSet)
                 .hasRows()); // because next data portion from streamer is available only via
-                             // ResultsetRows.next()
+        // ResultsetRows.next()
       }
     }
     return result;
@@ -2703,7 +2703,7 @@ public class NativeProtocol extends AbstractProtocol<NativePacketPayload>
           TimeZone.getTimeZone(
               ZoneId.of(
                   connectionTimeZone)); // TODO use ZoneId.of(String zoneId, Map<String, String>
-                                        // aliasMap) for custom abbreviations support
+      // aliasMap) for custom abbreviations support
     }
 
     this.serverSession.setSessionTimeZone(selectedTz);

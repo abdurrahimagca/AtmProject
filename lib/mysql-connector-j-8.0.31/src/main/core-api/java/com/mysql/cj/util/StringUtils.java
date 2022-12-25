@@ -935,7 +935,7 @@ public class StringUtils {
       if (searchFor.charAt(searchForPos) == WILDCARD_ONE) {
         do {
           if (searchInPos == searchInEnd) {
-              /* Skip one char if possible */
+            /* Skip one char if possible */
             return result;
           }
           searchInPos++;
@@ -948,7 +948,7 @@ public class StringUtils {
       }
 
       if (searchFor.charAt(searchForPos) == WILDCARD_MANY) {
-          /* Found w_many */
+        /* Found w_many */
         searchForPos++;
 
         /* Remove any '%' and '_' from the wild search string */
@@ -959,7 +959,7 @@ public class StringUtils {
 
           if (searchFor.charAt(searchForPos) == WILDCARD_ONE) {
             if (searchInPos == searchInEnd) {
-                /* Skip one char if possible */
+              /* Skip one char if possible */
               return WILD_COMPARE_NO_MATCH;
             }
             searchInPos++;

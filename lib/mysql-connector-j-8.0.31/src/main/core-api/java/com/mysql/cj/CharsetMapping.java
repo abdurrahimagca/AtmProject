@@ -127,7 +127,7 @@ public class CharsetMapping {
               new String[] {
                 "SHIFT_JIS", "Cp943", "WINDOWS-31J"
               }), // SJIS is alias for SHIFT_JIS, Cp943 is rather a cp932 but we map it to sjis for
-                  // years
+          // years
           new MysqlCharset(MYSQL_CHARSET_NAME_cp932, 2, 1, new String[] {"WINDOWS-31J"}),
           new MysqlCharset(MYSQL_CHARSET_NAME_gb2312, 2, 0, new String[] {"GB2312"}),
           new MysqlCharset(MYSQL_CHARSET_NAME_ujis, 3, 0, new String[] {"EUC_JP"}),
@@ -164,8 +164,8 @@ public class CharsetMapping {
               new String[] {
                 "Cp852"
               }), // Kamenicky encoding usually known as Cp895 but there is no official cp895
-                  // specification; close to Cp852, see
-                  // http://ftp.muni.cz/pub/localization/charsets/cs-encodings-faq
+          // specification; close to Cp852, see
+          // http://ftp.muni.cz/pub/localization/charsets/cs-encodings-faq
           new MysqlCharset(MYSQL_CHARSET_NAME_cp866, 1, 0, new String[] {"Cp866"}),
           new MysqlCharset(MYSQL_CHARSET_NAME_koi8r, 1, 1, new String[] {"KOI8_R"}),
           new MysqlCharset(MYSQL_CHARSET_NAME_koi8u, 1, 0, new String[] {"KOI8_R"}),

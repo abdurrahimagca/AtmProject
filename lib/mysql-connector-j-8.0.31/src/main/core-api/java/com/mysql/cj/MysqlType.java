@@ -604,7 +604,7 @@ public enum MysqlType implements SQLType {
       MysqlType.IS_NOT_DECIMAL,
       65535L,
       ""), // TODO check precision, it isn't well documented, only mentioned that WKB format is
-           // represented by BLOB
+  // represented by BLOB
   /**
    * Fall-back type for those MySQL data types which c/J can't recognize. Handled the same as BLOB.
    *

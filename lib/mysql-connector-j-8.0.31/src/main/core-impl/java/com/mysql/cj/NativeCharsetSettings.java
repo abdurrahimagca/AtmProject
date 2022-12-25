@@ -171,7 +171,7 @@ public class NativeCharsetSettings extends CharsetMapping implements CharsetSett
         .equalsIgnoreCase(
             this.characterSetResults
                 .getValue())) { // the "null" instead of an encoding name is allowed for
-                                // characterSetResults
+      // characterSetResults
       tryAndFixEncoding(this.characterSetResults, false);
     }
   }
@@ -261,9 +261,8 @@ public class NativeCharsetSettings extends CharsetMapping implements CharsetSett
 
     if (this.sessionCollationIndex > Constants.UNSIGNED_BYTE_MAX_VALUE //
         || isStaticImpermissibleCollation(
-            this
-                .sessionCollationIndex)) { // At this point, impermissible charset can be set only
-                                           // with "connectionCollation".
+            this.sessionCollationIndex)) { // At this point, impermissible charset can be set only
+      // with "connectionCollation".
       this.sessionCollationIndex = MYSQL_COLLATION_INDEX_utf8mb4_0900_ai_ci;
     }
 
@@ -271,7 +270,7 @@ public class NativeCharsetSettings extends CharsetMapping implements CharsetSett
         && !capabilities.getServerVersion().meetsMinimum(new ServerVersion(8, 0, 1))) {
       this.sessionCollationIndex =
           MYSQL_COLLATION_INDEX_utf8mb4_general_ci; // use utf8mb4_general_ci instead of
-                                                    // utf8mb4_0900_ai_ci for old servers
+      // utf8mb4_0900_ai_ci for old servers
     }
 
     // error messages are returned according to character_set_results which, at this point, is set
@@ -352,8 +351,8 @@ public class NativeCharsetSettings extends CharsetMapping implements CharsetSett
               .meetsMinimum(new ServerVersion(8, 0, 1))) {
             this.sessionCollationIndex =
                 MYSQL_COLLATION_INDEX_utf8mb4_0900_ai_ci; // We can't do more, just trying to use
-                                                          // utf8mb4_0900_ai_ci because the most of
-                                                          // collations in that range are utf8mb4.
+            // utf8mb4_0900_ai_ci because the most of
+            // collations in that range are utf8mb4.
             requiredCollation = "utf8mb4_0900_ai_ci";
           } else {
             this.sessionCollationIndex = MYSQL_COLLATION_INDEX_utf8mb4_general_ci;

@@ -716,7 +716,7 @@ public class ExportControlled {
       if (trustKeyStore != null || verifyServerCert && fallbackToDefaultTrustStore) {
         tmf.init(
             trustKeyStore); // (trustKeyStore == null) initializes the TrustManagerFactory with the
-                            // default truststore.
+        // default truststore.
 
         // building the customized list of TrustManagers from original one if it's available
         TrustManager[] origTms = tmf.getTrustManagers();

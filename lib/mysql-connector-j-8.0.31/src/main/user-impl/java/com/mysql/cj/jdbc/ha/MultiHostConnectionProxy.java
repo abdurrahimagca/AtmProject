@@ -341,9 +341,8 @@ public abstract class MultiHostConnectionProxy implements InvocationHandler {
     JdbcConnection topmostProxy = getProxy();
     if (topmostProxy != this.thisAsConnection) {
       conn.setProxy(
-          this
-              .thisAsConnection); // First call sets this connection as underlying connection parent
-                                  // proxy (its creator).
+          this.thisAsConnection); // First call sets this connection as underlying connection parent
+      // proxy (its creator).
     }
     conn.setProxy(topmostProxy); // Set the topmost proxy in the underlying connection.
     return conn;

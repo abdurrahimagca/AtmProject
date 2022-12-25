@@ -4766,7 +4766,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
           versionMeetsMinimum(5, 7, 6)
               ? "ALTER USER 'must_change1'@'%', 'must_change2'@'%' PASSWORD EXPIRE"
               : "ALTER USER 'must_change1'@'%' PASSWORD EXPIRE, 'must_change2'@'%' PASSWORD"
-                    + " EXPIRE");
+                  + " EXPIRE");
 
       Properties props = new Properties();
       props.setProperty(PropertyKey.sslMode.getKeyName(), SslMode.DISABLED.name());
@@ -4782,7 +4782,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
                 versionMeetsMinimum(5, 7, 6)
                     ? "ALTER USER 'must_change1'@'%', 'must_change2'@'%' PASSWORD EXPIRE"
                     : "ALTER USER 'must_change1'@'%' PASSWORD EXPIRE, 'must_change2'@'%' PASSWORD"
-                          + " EXPIRE");
+                        + " EXPIRE");
         this.pstmt.executeUpdate();
         this.pstmt.close();
 
@@ -6562,9 +6562,9 @@ public class ConnectionRegressionTest extends BaseTestCase {
       this.stmt.executeUpdate(
           ((MysqlConnection) this.conn).getSession().versionMeetsMinimum(5, 7, 6)
               ? "ALTER USER 'bug18869381user1'@'%' IDENTIFIED BY"
-                    + " 'LongLongLongLongLongLongLongLongLongLongLongLongPwd1'"
+                  + " 'LongLongLongLongLongLongLongLongLongLongLongLongPwd1'"
               : "set password for 'bug18869381user1'@'%' ="
-                    + " PASSWORD('LongLongLongLongLongLongLongLongLongLongLongLongPwd1')");
+                  + " PASSWORD('LongLongLongLongLongLongLongLongLongLongLongLongPwd1')");
       this.stmt.executeUpdate(
           ((MysqlConnection) this.conn).getSession().versionMeetsMinimum(5, 7, 6)
               ? "ALTER USER 'bug18869381user2'@'%' IDENTIFIED BY 'pwd2'"
@@ -8396,7 +8396,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
       }
       if (deadlockCount
           == 2) { // Acquire the connection's monitor to mimic the behavior of other synchronized
-                  // methods (like close() or doPing()).
+        // methods (like close() or doPing()).
         fail("Deadlock detected. WARNING: this failure may lead to JVM instability.");
       } else {
         fail(
@@ -9733,7 +9733,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
     assertFalse(
         UnreliableSocketFactory.getHostsFromAllConnections()
             .contains(UnreliableSocketFactory.getHostConnectedStatus(removedHost)));
@@ -9772,7 +9772,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
     assertTrue(
         UnreliableSocketFactory.getHostsFromAllConnections()
             .contains(UnreliableSocketFactory.getHostConnectedStatus(newHost)));
@@ -9813,7 +9813,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
     assertTrue(
         UnreliableSocketFactory.getHostsFromAllConnections()
             .contains(UnreliableSocketFactory.getHostConnectedStatus(newHost)));
@@ -9864,7 +9864,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
 
     // Make sure the connection is working fine.
     this.rs = testConn.createStatement().executeQuery("SELECT 'testBug22848249'");
@@ -9956,7 +9956,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
     assertFalse(
         UnreliableSocketFactory.getHostsFromAllConnections()
             .contains(UnreliableSocketFactory.getHostConnectedStatus(removedHost)));
@@ -9995,7 +9995,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
     assertTrue(
         UnreliableSocketFactory.getHostsFromAllConnections()
             .contains(UnreliableSocketFactory.getHostConnectedStatus(newHost)));
@@ -10036,7 +10036,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
     assertTrue(
         UnreliableSocketFactory.getHostsFromAllConnections()
             .contains(UnreliableSocketFactory.getHostConnectedStatus(newHost)));
@@ -10094,7 +10094,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
 
     // Make sure the connection is working fine.
     this.rs = testConn.createStatement().executeQuery("SELECT 'testBug22848249'");
@@ -10186,7 +10186,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
     assertEquals(4, hostsUsed.size());
 
     // Make sure the connection is working fine.
@@ -10246,7 +10246,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
 
     // Make sure the connection is working fine.
     this.rs = testConn.createStatement().executeQuery("SELECT 'testBug22848249'");
@@ -10325,7 +10325,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
 
     // Make sure the connection is working fine.
     this.rs = testConn.createStatement().executeQuery("SELECT 'testBug22848249'");
@@ -10368,7 +10368,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         connectionSwaps
             > 0); // Non-deterministic, but something must be wrong if there are no swaps after 100
-                  // transaction boundaries.
+    // transaction boundaries.
     assertEquals(4, hostsUsed.size());
 
     // Make sure the connection is working fine.
@@ -10534,7 +10534,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     assertTrue(
         testConnC
             .isReadOnly()); // ... but the connection is read-only because it was initialized with
-                            // no sources.
+    // no sources.
     testConnC.setAutoCommit(false);
     testConnC.close();
 
@@ -10605,9 +10605,8 @@ public class ConnectionRegressionTest extends BaseTestCase {
     ReplicationConnectionGroupManager.removeReplicaHost(replConnGroup, hostPortPair, true);
     assertTrue(testConnE.isSourceConnection()); // Connected to a source host...
     assertTrue(
-        testConnE
-            .isReadOnly()); // ... but the connection is read-only because that's how it was
-                            // previously set.
+        testConnE.isReadOnly()); // ... but the connection is read-only because that's how it was
+    // previously set.
     testConnE.setAutoCommit(false);
 
     ReplicationConnectionGroupManager.removeSourceHost(replConnGroup, hostPortPair, false);
@@ -10630,9 +10629,8 @@ public class ConnectionRegressionTest extends BaseTestCase {
     ReplicationConnectionGroupManager.promoteReplicaToSource(replConnGroup, hostPortPair);
     assertTrue(testConnE.isSourceConnection()); // Connected to a source host...
     assertTrue(
-        testConnE
-            .isReadOnly()); // ... but the connection is read-only because that's how it was
-                            // previously set.
+        testConnE.isReadOnly()); // ... but the connection is read-only because that's how it was
+    // previously set.
     testConnE.setAutoCommit(false);
     testConnE.close();
 
@@ -10744,8 +10742,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     testBug22678872CheckConnectionsHistory(hostNotConnected); // One failed connection attempt.
 
     assertFalse(
-        testConnG
-            .isSourceConnection()); // Actually not connected, but the promotion to source
+        testConnG.isSourceConnection()); // Actually not connected, but the promotion to source
     // succeeded.
     assertThrows(
         SQLException.class,
@@ -10767,11 +10764,11 @@ public class ConnectionRegressionTest extends BaseTestCase {
           public Void call() throws Exception {
             testConnG.setReadOnly(
                 false); // Triggers a reconnection that fails. The read-only state change is
-                        // canceled by the exception.
+            // canceled by the exception.
             return null;
           }
         }); // This throws a comm failure because it tried to connect to the existing server and
-            // failed. The internal read-only state didn't change.
+    // failed. The internal read-only state didn't change.
 
     testBug22678872CheckConnectionsHistory(hostNotConnected); // Another failed connection attempt.
 
@@ -10782,9 +10779,8 @@ public class ConnectionRegressionTest extends BaseTestCase {
 
     assertTrue(testConnG.isSourceConnection()); // Connected to a source host...
     assertTrue(
-        testConnG
-            .isReadOnly()); // ... but the connection is read-only because that's how it was
-                            // previously set.
+        testConnG.isReadOnly()); // ... but the connection is read-only because that's how it was
+    // previously set.
     testConnG.setAutoCommit(false);
 
     testConnG.close();
@@ -11022,7 +11018,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     String originalInitConnect = this.rs.getString(1);
     this.stmt.execute(
         "SET @@global.init_connect='SET @testBug70785=1'"); // Server variable init_connect cannot
-                                                            // be empty for this test.
+    // be empty for this test.
 
     this.rs = this.stmt.executeQuery("SELECT @@global.autocommit");
     this.rs.next();
@@ -11062,7 +11058,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
               dbUrl
                   + "&testBug70785="
                   + n; // Make sure that the first connection will be a cache miss and the second a
-                       // cache hit.
+          // cache hit.
           Connection testConn1 = getConnectionWithProps(uniqueUrl, props);
           Connection testConn2 = getConnectionWithProps(uniqueUrl, props);
 
@@ -11711,7 +11707,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
             public Void call() throws Exception {
               testStmt.executeQuery(
                   "SELECT SLEEP(3)"); // Throws exception due to socket timeout. Transaction should
-                                      // be rolled back or canceled.
+              // be rolled back or canceled.
               return null;
             }
           });
@@ -11724,7 +11720,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
        */
       testStmt.execute(
           "START TRANSACTION"); // Reconnects and causes implicit commit in previous transaction if
-                                // not rolled back.
+      // not rolled back.
       testStmt.executeUpdate("INSERT INTO testBug88232 VALUES (2)");
       testStmt.execute("COMMIT");
 
@@ -11736,9 +11732,8 @@ public class ConnectionRegressionTest extends BaseTestCase {
     } finally {
       testConn
           .createStatement()
-          .execute(
-              "ROLLBACK"); // Make sure the table testBug88232 is unlocked in case of failure,
-                           // otherwise it can't be deleted.
+          .execute("ROLLBACK"); // Make sure the table testBug88232 is unlocked in case of failure,
+      // otherwise it can't be deleted.
       testConn.close();
     }
   }
@@ -13616,7 +13611,7 @@ public class ConnectionRegressionTest extends BaseTestCase {
     System.out.println("\n=== Test SESSION_TRACK_SCHEMA and SESSION_TRACK_STATE_CHANGE ===");
     testStmt.executeUpdate(
         "SET SESSION session_track_state_change=1"); // this statement itself does not produce
-                                                     // SESSION_TRACK_STATE_CHANGE
+    // SESSION_TRACK_STATE_CHANGE
     testStmt.executeUpdate(
         "USE "
             + this

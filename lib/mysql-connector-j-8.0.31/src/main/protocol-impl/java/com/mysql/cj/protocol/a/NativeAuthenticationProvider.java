@@ -166,7 +166,7 @@ public class NativeAuthenticationProvider implements AuthenticationProvider<Nati
     fullSeed.append(
         authPluginDataLength > 0
             ? // read string[$len] auth-plugin-data-part-2 ($len=MAX(13, length of auth-plugin-data
-              // - 8))
+            // - 8))
             buf.readString(StringLengthDataType.STRING_FIXED, "ASCII", authPluginDataLength - 8)
             : buf.readString(StringSelfDataType.STRING_TERM, "ASCII"));
     this.seed = fullSeed.toString();

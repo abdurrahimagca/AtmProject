@@ -91,7 +91,7 @@ public class LoadBalanceConnectionUrl extends ConnectionUrl {
     this.properties.putAll(properties);
     injectPerTypeProperties(this.properties);
     setupPropertiesTransformer(); // This is needed if new hosts come to be spawned in this
-                                  // connection URL.
+    // connection URL.
     hosts.stream()
         .map(this::fixHostInfo)
         .forEach(

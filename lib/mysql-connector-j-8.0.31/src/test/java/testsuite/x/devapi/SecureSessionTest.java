@@ -751,7 +751,7 @@ public class SecureSessionTest extends DevApiBaseTestCase {
       if (mysqlVersionMeetsMinimum(
           ServerVersion.parseVersion(
               "8.0.4"))) { // CACHING_SHA2_PASSWORD requires secure connections in MySQL 8.0.3 and
-                           // below.
+        // below.
         // *** User: testAuthMechCachingSha2; Auth: default.
         props.setProperty(PropertyKey.USER.getKeyName(), "testAuthMechCachingSha2");
         props.setProperty(PropertyKey.PASSWORD.getKeyName(), "cachingsha2");

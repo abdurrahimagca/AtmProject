@@ -1920,7 +1920,7 @@ public class DateTimeTest extends BaseTestCase {
                         useSSPS
                             ? expTimeNoMs
                             : expTimeSendTimeFract; // TODO milliseconds are ignored by server. Bug
-                                                    // ?
+                    // ?
                     String expTimeCal2 =
                         useSSPS
                             ? expTimeNoMsCal

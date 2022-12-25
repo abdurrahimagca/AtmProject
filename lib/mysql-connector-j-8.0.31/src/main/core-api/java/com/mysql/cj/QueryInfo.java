@@ -239,7 +239,7 @@ public class QueryInfo {
           valuesClauseEnd =
               strInspector
                   .getPosition(); // It may not be the end of the VALUES clause yet but save it for
-                                  // later.
+          // later.
 
         } else if (withinValuesClause
             && parensLevel == 0
@@ -793,9 +793,8 @@ public class QueryInfo {
       }
       String section = commentsFreeSql.substring(nws, ws);
       if (!asFound && section.equalsIgnoreCase(AS_CLAUSE)) {
-        asFound =
-            true; // Since the subquery part is skipped, this must be followed by a "," or the
-                  // context statement.
+        asFound = true; // Since the subquery part is skipped, this must be followed by a "," or the
+        // context statement.
       } else if (asFound) {
         if (section.equalsIgnoreCase(",")) {
           asFound = false; // Another CTE is expected.

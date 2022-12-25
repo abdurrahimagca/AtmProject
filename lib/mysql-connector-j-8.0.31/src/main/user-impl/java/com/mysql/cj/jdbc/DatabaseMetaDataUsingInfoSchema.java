@@ -181,16 +181,14 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
     sqlBuf.append(
         " WHEN UPPER(DATA_TYPE)='DATE' THEN 10"); // supported range is '1000-01-01' to '9999-12-31'
     if (this.conn.getServerVersion().meetsMinimum(ServerVersion.parseVersion("5.6.4"))) {
-      sqlBuf.append(
-          " WHEN UPPER(DATA_TYPE)='TIME'"); // supported range is '-838:59:59.000000' to
+      sqlBuf.append(" WHEN UPPER(DATA_TYPE)='TIME'"); // supported range is '-838:59:59.000000' to
       // '838:59:59.000000'
       sqlBuf.append(
           "  THEN 8+(CASE WHEN DATETIME_PRECISION>0 THEN DATETIME_PRECISION+1 ELSE"
               + " DATETIME_PRECISION END)");
-      sqlBuf.append(
-          " WHEN UPPER(DATA_TYPE)='DATETIME' OR"); // supported range is '1000-01-01
-                                                   // 00:00:00.000000' to '9999-12-31
-                                                   // 23:59:59.999999'
+      sqlBuf.append(" WHEN UPPER(DATA_TYPE)='DATETIME' OR"); // supported range is '1000-01-01
+      // 00:00:00.000000' to '9999-12-31
+      // 23:59:59.999999'
       sqlBuf.append(
           "  UPPER(DATA_TYPE)='TIMESTAMP'"); // supported range is '1970-01-01 00:00:01.000000' UTC
       // to '2038-01-19 03:14:07.999999' UTC
@@ -200,14 +198,13 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
     } else {
       sqlBuf.append(
           " WHEN UPPER(DATA_TYPE)='TIME' THEN 8"); // supported range is '-838:59:59.000000' to
-                                                   // '838:59:59.000000'
-      sqlBuf.append(
-          " WHEN UPPER(DATA_TYPE)='DATETIME' OR"); // supported range is '1000-01-01
-                                                   // 00:00:00.000000' to '9999-12-31
-                                                   // 23:59:59.999999'
+      // '838:59:59.000000'
+      sqlBuf.append(" WHEN UPPER(DATA_TYPE)='DATETIME' OR"); // supported range is '1000-01-01
+      // 00:00:00.000000' to '9999-12-31
+      // 23:59:59.999999'
       sqlBuf.append(
           "  UPPER(DATA_TYPE)='TIMESTAMP'"); // supported range is '1970-01-01 00:00:01.000000' UTC
-                                             // to '2038-01-19 03:14:07.999999' UTC
+      // to '2038-01-19 03:14:07.999999' UTC
       sqlBuf.append("  THEN 19");
     }
 
@@ -226,8 +223,8 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
             + " 8");
     sqlBuf.append(
         " WHEN UPPER(DATA_TYPE)='JSON' THEN 1073741824"); // JSON columns is limited to the value of
-                                                          // the max_allowed_packet system variable
-                                                          // (max value 1073741824)
+    // the max_allowed_packet system variable
+    // (max value 1073741824)
 
     // spatial data types
     sqlBuf.append(" WHEN UPPER(DATA_TYPE)='GEOMETRY' THEN 65535");
@@ -375,9 +372,9 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
         new StringBuilder(
             this.databaseTerm.getValue() == DatabaseTerm.SCHEMA
                 ? "SELECT DISTINCT A.CONSTRAINT_CATALOG AS PKTABLE_CAT, A.REFERENCED_TABLE_SCHEMA"
-                      + " AS PKTABLE_SCHEM,"
+                    + " AS PKTABLE_SCHEM,"
                 : "SELECT DISTINCT A.REFERENCED_TABLE_SCHEMA AS PKTABLE_CAT,NULL AS"
-                      + " PKTABLE_SCHEM,");
+                    + " PKTABLE_SCHEM,");
     sqlBuf.append(
         " A.REFERENCED_TABLE_NAME AS PKTABLE_NAME, A.REFERENCED_COLUMN_NAME AS PKCOLUMN_NAME,");
     sqlBuf.append(
@@ -458,9 +455,9 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
         new StringBuilder(
             this.databaseTerm.getValue() == DatabaseTerm.SCHEMA
                 ? "SELECT DISTINCT A.CONSTRAINT_CATALOG AS PKTABLE_CAT, A.REFERENCED_TABLE_SCHEMA"
-                      + " AS PKTABLE_SCHEM,"
+                    + " AS PKTABLE_SCHEM,"
                 : "SELECT DISTINCT A.REFERENCED_TABLE_SCHEMA AS PKTABLE_CAT,NULL AS"
-                      + " PKTABLE_SCHEM,");
+                    + " PKTABLE_SCHEM,");
     sqlBuf.append(
         " A.REFERENCED_TABLE_NAME AS PKTABLE_NAME, A.REFERENCED_COLUMN_NAME AS PKCOLUMN_NAME,");
     sqlBuf.append(
@@ -519,8 +516,8 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
 
   private String generateOptionalRefContraintsJoin() {
     return ("JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS R ON (R.CONSTRAINT_NAME ="
-                + " B.CONSTRAINT_NAME AND R.TABLE_NAME = B.TABLE_NAME AND R.CONSTRAINT_SCHEMA ="
-                + " B.TABLE_SCHEMA) ");
+        + " B.CONSTRAINT_NAME AND R.TABLE_NAME = B.TABLE_NAME AND R.CONSTRAINT_SCHEMA ="
+        + " B.TABLE_SCHEMA) ");
   }
 
   private String generateDeleteRuleClause() {
@@ -573,9 +570,9 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
         new StringBuilder(
             this.databaseTerm.getValue() == DatabaseTerm.SCHEMA
                 ? "SELECT DISTINCT A.CONSTRAINT_CATALOG AS PKTABLE_CAT, A.REFERENCED_TABLE_SCHEMA"
-                      + " AS PKTABLE_SCHEM,"
+                    + " AS PKTABLE_SCHEM,"
                 : "SELECT DISTINCT A.REFERENCED_TABLE_SCHEMA AS PKTABLE_CAT,NULL AS"
-                      + " PKTABLE_SCHEM,");
+                    + " PKTABLE_SCHEM,");
     sqlBuf.append(
         " A.REFERENCED_TABLE_NAME AS PKTABLE_NAME, A.REFERENCED_COLUMN_NAME AS PKCOLUMN_NAME,");
     sqlBuf.append(
@@ -899,8 +896,8 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
             + " 8");
     sqlBuf.append(
         " WHEN UPPER(DATA_TYPE)='JSON' THEN 1073741824"); // JSON columns is limited to the value of
-                                                          // the max_allowed_packet system variable
-                                                          // (max value 1073741824)
+    // the max_allowed_packet system variable
+    // (max value 1073741824)
     sqlBuf.append(" ELSE NUMERIC_PRECISION END AS `PRECISION`,"); //
 
     // LENGTH
@@ -931,8 +928,8 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
             + " 8");
     sqlBuf.append(
         " WHEN UPPER(DATA_TYPE)='JSON' THEN 1073741824"); // JSON columns is limited to the value of
-                                                          // the max_allowed_packet system variable
-                                                          // (max value 1073741824)
+    // the max_allowed_packet system variable
+    // (max value 1073741824)
     sqlBuf.append(" WHEN CHARACTER_MAXIMUM_LENGTH IS NULL THEN NUMERIC_PRECISION");
     sqlBuf.append(" WHEN CHARACTER_MAXIMUM_LENGTH > ");
     sqlBuf.append(Integer.MAX_VALUE);
@@ -1276,8 +1273,8 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
             + " 8");
     sqlBuf.append(
         " WHEN UPPER(DATA_TYPE)='JSON' THEN 1073741824"); // JSON columns is limited to the value of
-                                                          // the max_allowed_packet system variable
-                                                          // (max value 1073741824)
+    // the max_allowed_packet system variable
+    // (max value 1073741824)
     sqlBuf.append(" ELSE NUMERIC_PRECISION END AS `PRECISION`,"); //
 
     // LENGTH
@@ -1308,8 +1305,8 @@ public class DatabaseMetaDataUsingInfoSchema extends DatabaseMetaData {
             + " 8");
     sqlBuf.append(
         " WHEN UPPER(DATA_TYPE)='JSON' THEN 1073741824"); // JSON columns is limited to the value of
-                                                          // the max_allowed_packet system variable
-                                                          // (max value 1073741824)
+    // the max_allowed_packet system variable
+    // (max value 1073741824)
     sqlBuf.append(" WHEN CHARACTER_MAXIMUM_LENGTH IS NULL THEN NUMERIC_PRECISION");
     sqlBuf.append(
         " WHEN CHARACTER_MAXIMUM_LENGTH > " + Integer.MAX_VALUE + " THEN " + Integer.MAX_VALUE);

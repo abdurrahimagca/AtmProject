@@ -77,7 +77,7 @@ public class InputStreamValueEncoder extends AbstractValueEncoder {
     in.mark(
         Integer
             .MAX_VALUE); // we may need to read this same stream several times, so we need to reset
-                         // it at the end.
+    // it at the end.
     try {
       if (this.streamConvertBuf == null) {
         this.streamConvertBuf = new byte[4096];

@@ -265,10 +265,8 @@ public class AuthenticationLdapSaslClientPlugin
                       options.put("renewTGT", "false");
                       options.put("principal", localUser);
                       options.put(
-                          "debug",
-                          Boolean.toString(
-                              debug)); // Hook debugging on system property
-                                       // 'sun.security.jgss.debug'.
+                          "debug", Boolean.toString(debug)); // Hook debugging on system property
+                      // 'sun.security.jgss.debug'.
                       return new AppConfigurationEntry[] {
                         new AppConfigurationEntry(
                             "com.sun.security.auth.module.Krb5LoginModule",

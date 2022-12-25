@@ -132,7 +132,7 @@ public class ReplicationConnectionUrl extends ConnectionUrl {
     this.properties.putAll(properties);
     injectPerTypeProperties(this.properties);
     setupPropertiesTransformer(); // This is needed if new hosts come to be spawned in this
-                                  // connection URL.
+    // connection URL.
     sources.stream()
         .map(this::fixHostInfo)
         .peek(this.sourceHosts::add)

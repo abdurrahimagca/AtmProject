@@ -50,7 +50,7 @@ public class XAuthenticationProvider implements AuthenticationProvider<XMessage>
   XProtocol protocol;
   private AuthMech authMech =
       null; // Used in test case SecureSessionTest#testAuthMechanisns() to check what type of the
-            // authentication was actually used.
+  // authentication was actually used.
   private XMessageBuilder messageBuilder = new XMessageBuilder();
 
   @Override

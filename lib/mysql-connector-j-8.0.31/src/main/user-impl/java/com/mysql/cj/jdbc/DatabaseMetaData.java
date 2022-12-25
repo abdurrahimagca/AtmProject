@@ -2164,11 +2164,10 @@ public class DatabaseMetaData implements java.sql.DatabaseMetaData {
               String sqlState =
                   sqlEx
                       .getSQLState(); // If SQLState is 42S02, ignore this SQLException it means the
-                                      // table doesn't exist....
+              // table doesn't exist....
               int errorCode =
-                  sqlEx
-                      .getErrorCode(); // Sometimes SQLState is not mapped correctly for pre-4.1 so
-                                       // use error code instead.
+                  sqlEx.getErrorCode(); // Sometimes SQLState is not mapped correctly for pre-4.1 so
+              // use error code instead.
 
               if (!"42S02".equals(sqlState)
                   && errorCode != MysqlErrorNumbers.ER_NO_SUCH_TABLE
@@ -2860,9 +2859,8 @@ public class DatabaseMetaData implements java.sql.DatabaseMetaData {
           : new StringListIterator(getDatabases());
     }
     return new StringListIterator(
-        getDatabases(
-            schemaPattern)); // new SingleStringIterator(this.pedantic ? schemaPattern :
-                             // StringUtils.unQuoteIdentifier(schemaPattern, this.quotedId));
+        getDatabases(schemaPattern)); // new SingleStringIterator(this.pedantic ? schemaPattern :
+    // StringUtils.unQuoteIdentifier(schemaPattern, this.quotedId));
   }
 
   /**
@@ -4169,11 +4167,10 @@ public class DatabaseMetaData implements java.sql.DatabaseMetaData {
               String sqlState =
                   sqlEx
                       .getSQLState(); // If SQLState is 42S02, ignore this SQLException it means the
-                                      // table doesn't exist....
+              // table doesn't exist....
               int errorCode =
-                  sqlEx
-                      .getErrorCode(); // Sometimes SQLState is not mapped correctly for pre-4.1 so
-                                       // use error code instead.
+                  sqlEx.getErrorCode(); // Sometimes SQLState is not mapped correctly for pre-4.1 so
+              // use error code instead.
 
               if (!"42S02".equals(sqlState)
                   && errorCode != MysqlErrorNumbers.ER_NO_SUCH_TABLE
@@ -4558,11 +4555,10 @@ public class DatabaseMetaData implements java.sql.DatabaseMetaData {
               String sqlState =
                   sqlEx
                       .getSQLState(); // If SQLState is 42S02, ignore this SQLException it means the
-                                      // table doesn't exist....
+              // table doesn't exist....
               int errorCode =
-                  sqlEx
-                      .getErrorCode(); // Sometimes SQLState is not mapped correctly for pre-4.1 so
-                                       // use error code instead.
+                  sqlEx.getErrorCode(); // Sometimes SQLState is not mapped correctly for pre-4.1 so
+              // use error code instead.
 
               if (!"42S02".equals(sqlState)
                   && errorCode != MysqlErrorNumbers.ER_NO_SUCH_TABLE
@@ -6541,13 +6537,11 @@ public class DatabaseMetaData implements java.sql.DatabaseMetaData {
                 results = stmt.executeQuery(queryBuf.toString());
               } catch (SQLException sqlEx) {
                 String sqlState =
-                    sqlEx
-                        .getSQLState(); // If SQLState is 42S02, ignore this SQLException it means
-                                        // the table doesn't exist....
+                    sqlEx.getSQLState(); // If SQLState is 42S02, ignore this SQLException it means
+                // the table doesn't exist....
                 int errorCode =
-                    sqlEx
-                        .getErrorCode(); // Sometimes SQLState is not mapped correctly for pre-4.1
-                                         // so use error code instead.
+                    sqlEx.getErrorCode(); // Sometimes SQLState is not mapped correctly for pre-4.1
+                // so use error code instead.
 
                 if (!"42S02".equals(sqlState)
                     && errorCode != MysqlErrorNumbers.ER_NO_SUCH_TABLE

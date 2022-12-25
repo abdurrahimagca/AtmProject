@@ -1341,9 +1341,8 @@ public class CharsetRegressionTest extends BaseTestCase {
     }
     // Assert that some charsets were tested.
     assertTrue(
-        csCount
-            > 35); // There are 39 charsets in MySQL 5.5.61, 40 in MySQL 5.6.41 and 41 in MySQL
-                   // 5.7.23 and above, but these numbers can vary.
+        csCount > 35); // There are 39 charsets in MySQL 5.5.61, 40 in MySQL 5.6.41 and 41 in MySQL
+    // 5.7.23 and above, but these numbers can vary.
   }
 
   /**

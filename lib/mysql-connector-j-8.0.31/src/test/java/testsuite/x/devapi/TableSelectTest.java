@@ -526,7 +526,7 @@ public class TableSelectTest extends BaseTableTestCase {
     sqlUpdate("create table testTableRowLocks (_id varchar(32), a varchar(20))");
     sqlUpdate(
         "CREATE UNIQUE INDEX myIndex ON testTableRowLocks (_id)"); // index is required to enable
-                                                                   // row locking
+    // row locking
     sqlUpdate("insert into testTableRowLocks values ('1', '1')");
     sqlUpdate("insert into testTableRowLocks values ('2', '1')");
     sqlUpdate("insert into testTableRowLocks values ('3', '1')");
@@ -659,7 +659,7 @@ public class TableSelectTest extends BaseTableTestCase {
     sqlUpdate("CREATE TABLE testTableRowLockOptions (_id VARCHAR(32), a VARCHAR(20))");
     sqlUpdate(
         "CREATE UNIQUE INDEX myIndex ON testTableRowLockOptions (_id)"); // index is required to
-                                                                         // enable row locking
+    // enable row locking
     sqlUpdate("INSERT INTO testTableRowLockOptions VALUES ('1', '1'), ('2', '1'), ('3', '1')");
 
     Session session1 = null;

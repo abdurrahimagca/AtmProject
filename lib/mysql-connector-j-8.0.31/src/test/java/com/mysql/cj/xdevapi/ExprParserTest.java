@@ -193,7 +193,7 @@ public class ExprParserTest {
     checkParseRoundTrip(
         ":0 > x and func(:3, :2, :1)",
         "((:0 > x) && func(:1, :2, :3))"); // serialized in order of position (needs mapped
-                                           // externally)
+    // externally)
     checkParseRoundTrip(
         "a > now() + interval (2 + x) MiNuTe", "(a > date_add(now(), (2 + x), \"MINUTE\"))");
     checkParseRoundTrip("a between 1 and 2", "(a between 1 AND 2)");

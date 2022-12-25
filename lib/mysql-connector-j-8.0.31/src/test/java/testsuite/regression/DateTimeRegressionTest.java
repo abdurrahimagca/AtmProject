@@ -237,7 +237,7 @@ public class DateTimeRegressionTest extends BaseTestCase {
 
       while (this.rs
           .next()) { // Driver now converts/checks DATE/TIME/TIMESTAMP/DATETIME types when calling
-                     // getString()...
+        // getString()...
         String retrTimestampString = new String(this.rs.getBytes(1));
         Timestamp retrTimestamp = this.rs.getTimestamp(1);
 

@@ -6691,9 +6691,9 @@ public class ResultSetRegressionTest extends BaseTestCase {
     PreparedStatement pstm2 =
         conn2.prepareStatement(
             "select id, val_one, val_three from testBug25215008 where val_one = ?"); // let's not
-                                                                                     // request
-                                                                                     // val_blob for
-                                                                                     // now
+    // request
+    // val_blob for
+    // now
     pstm2.setString(1, VALUE_ONE);
     rs1 = pstm2.executeQuery();
     assertTrue(rs1.next());
@@ -8589,9 +8589,9 @@ public class ResultSetRegressionTest extends BaseTestCase {
         "testBug94457",
         withFract
             ? "(dt DATETIME(4) NOT NULL, ts TIMESTAMP(4) NOT NULL, t TIME(4) NOT NULL, odt"
-                  + " VARCHAR(30), ot VARCHAR(20))"
+                + " VARCHAR(30), ot VARCHAR(20))"
             : "(dt DATETIME NOT NULL, ts TIMESTAMP NOT NULL, t TIME NOT NULL, odt VARCHAR(30), ot"
-                  + " VARCHAR(20))");
+                + " VARCHAR(20))");
 
     Properties props = new Properties();
     props.setProperty(PropertyKey.sslMode.getKeyName(), SslMode.DISABLED.name());

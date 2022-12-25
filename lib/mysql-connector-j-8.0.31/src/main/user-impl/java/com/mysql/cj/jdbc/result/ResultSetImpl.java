@@ -2239,7 +2239,7 @@ public class ResultSetImpl extends NativeResultset
   public void setFetchSize(int rows) throws SQLException {
     synchronized (checkClosed().getConnectionMutex()) {
       if (rows < 0) {
-          /* || rows > getMaxRows() */
+        /* || rows > getMaxRows() */
         throw SQLError.createSQLException(
             Messages.getString("ResultSet.Value_must_be_between_0_and_getMaxRows()_66"),
             MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT,

@@ -1011,7 +1011,7 @@ public class StringInspector {
       } else {
         if (this.pos - prevPos
             > 1) { // Non consecutive characters, there was a comment in between. Add a space if
-                   // needed.
+          // needed.
           if (prevPos > 0
               && !Character.isWhitespace(this.source.charAt(prevPos - 1))
               && !Character.isWhitespace(this.source.charAt(this.pos))) {

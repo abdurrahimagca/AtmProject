@@ -134,9 +134,8 @@ public class CollectionFindTest extends BaseCollectionTestCase {
                           ? "{'X':cast(pow(2,63) as signed)+1}"
                           : "{'X':1-cast(pow(2,63) as signed)}"))
               .execute();
-      docs
-          .next(); // we are getting valid data from xplugin before the error, need this call to
-                   // force the error
+      docs.next(); // we are getting valid data from xplugin before the error, need this call to
+      // force the error
       fail("Statement should raise an error");
     } catch (XProtocolError err) {
       assertEquals(MysqlErrorNumbers.ER_DATA_OUT_OF_RANGE, err.getErrorCode());

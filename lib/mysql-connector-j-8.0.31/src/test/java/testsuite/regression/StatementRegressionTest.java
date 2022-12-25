@@ -2914,7 +2914,7 @@ public class StatementRegressionTest extends BaseTestCase {
 
     long initialTimeout =
         20; // may need to raise this depending on environment we try and do this automatically in
-            // this testcase
+    // this testcase
 
     for (int i = 0; i < 10; i++) {
       Properties props = new Properties();
@@ -4900,7 +4900,7 @@ public class StatementRegressionTest extends BaseTestCase {
             versionMeetsMinimum(5, 5, 16)
                 ? 1
                 : 2; // behavior changed by fix of Bug#46675, affects servers starting from 5.5.16
-                     // and 5.6.3
+        // and 5.6.3
 
         int rwUpdateCounts[] = testStmts[1].executeBatch();
         ResultSet rewrittenRsKeys = testStmts[1].getGeneratedKeys();
@@ -4954,7 +4954,7 @@ public class StatementRegressionTest extends BaseTestCase {
           versionMeetsMinimum(5, 5, 16)
               ? 1
               : 2; // behavior changed by fix of Bug#46675, affects servers starting from 5.5.16 and
-                   // 5.6.3
+      // 5.6.3
 
       assertEquals(expectedUpdateCount, stmt1.getUpdateCount());
       ResultSet stmtKeys = stmt1.getGeneratedKeys();
@@ -5231,9 +5231,8 @@ public class StatementRegressionTest extends BaseTestCase {
               twoStmt.addBatch("INSERT INTO " + tableName + " (p) VALUES ('" + j + "')");
             }
 
-            twoStmt
-                .executeBatch(); // No getGeneratedKeys() support in JDBC spec, but we allow
-                                 // it...might have to rewrite test if/when we don't
+            twoStmt.executeBatch(); // No getGeneratedKeys() support in JDBC spec, but we allow
+            // it...might have to rewrite test if/when we don't
             this.rs = twoStmt.getGeneratedKeys();
 
             int key = 1;
@@ -6096,9 +6095,8 @@ public class StatementRegressionTest extends BaseTestCase {
         rewriteStmt.addBatch("INSERT INTO testBug51704 VALUES ({tsp '2002-11-12 10:00:00'})");
       }
 
-      rewriteStmt
-          .executeBatch(); // this should pass, because mysqld doesn't validate any escape
-                           // sequences,
+      rewriteStmt.executeBatch(); // this should pass, because mysqld doesn't validate any escape
+      // sequences,
       // it just strips them, where our escape processor validates them
 
       Statement batchStmt = this.conn.createStatement();
@@ -10309,7 +10307,7 @@ public class StatementRegressionTest extends BaseTestCase {
       testStmt = testConn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
       testStmt.executeUpdate(
           "INSERT INTO testBug77449_time VALUES (2, NOW(), NOW())/* no_ts_trunk */"); // insert
-                                                                                      // dummy row
+      // dummy row
       this.rs = testStmt.executeQuery("SELECT * FROM testBug77449_time WHERE id = 2");
       assertTrue(this.rs.next(), testCase);
       this.rs.updateObject("t_short", originalLt);
@@ -11119,7 +11117,7 @@ public class StatementRegressionTest extends BaseTestCase {
             // checked in the beginning.)
             assertTrue(isSPS, testCase);
           } // prepStmtCacheSize + 1 < prepCount <= maxPrepStmtCount --> can't assert anything as
-            // there can statements prepared externally.
+          // there can statements prepared externally.
 
           ((StatementImpl) testPstmt2)
               .setPoolable(poolable); // Need to cast, this is a JDBC 4.0 feature.
@@ -14076,7 +14074,7 @@ public class StatementRegressionTest extends BaseTestCase {
     private int countValues(String query) {
       query +=
           "/* junk */"; // Add some junk to the end of the query so that the following split allows
-                        // counting the values correctly.
+      // counting the values correctly.
       if (query.contains("?")) {
         return query.split("\\(\\?\\)").length - 1;
       }

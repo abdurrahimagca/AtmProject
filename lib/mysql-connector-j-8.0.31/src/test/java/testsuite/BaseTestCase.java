@@ -201,7 +201,7 @@ public abstract class BaseTestCase {
                   + " trying again");
           st.executeUpdate(
               "FLUSH TABLES"); // some bug in 5.1 on the mac causes tables to not disappear from the
-                               // cache
+          // cache
           st.executeUpdate(createSql.toString());
         } else {
           throw sqlEx;

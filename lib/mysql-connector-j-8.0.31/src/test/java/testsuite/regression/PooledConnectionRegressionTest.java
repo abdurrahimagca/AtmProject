@@ -661,9 +661,8 @@ public final class PooledConnectionRegressionTest extends BaseTestCase {
     cw.close();
     assertEquals(
         26,
-        cw
-            .getActiveStatementCount()); // TODO why are they still active? Active statements should
-                                         // be cleaned when connection is returned to pool.
+        cw.getActiveStatementCount()); // TODO why are they still active? Active statements should
+    // be cleaned when connection is returned to pool.
     checkConnectionReturnedToPool(cw);
 
     cw.normalClose();

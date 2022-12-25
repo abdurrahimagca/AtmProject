@@ -519,7 +519,7 @@ public class FailoverConnectionProxy extends MultiHostConnectionProxy {
       if (this.autoReconnect && !this.closedExplicitly) {
         this.currentHostIndex =
             NO_CONNECTION_INDEX; // Act as if this is the first connection but let it sync with the
-                                 // previous one.
+        // previous one.
         pickNewConnection();
         this.isClosed = false;
         this.closedReason = null;

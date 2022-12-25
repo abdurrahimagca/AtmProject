@@ -44,10 +44,10 @@ import java.lang.ref.ReferenceQueue;
 public abstract class PreparableStatement<RES_T> {
   protected enum PreparedState {
     UNSUPPORTED, // Preparing statements is completely unsupported in the server currently being
-                 // used.
+    // used.
     UNPREPARED, // Statement is not prepared yet, next execution will run unprepared.
     SUSPENDED, // Preparing statements is currently suspended but it is expected to resume sometime
-               // later.
+    // later.
     PREPARED, // The statement is prepared and ready for execution.
     PREPARE, // The statement shall be prepared on next execution.
     DEALLOCATE, // The statement shall be deallocated on next execution.

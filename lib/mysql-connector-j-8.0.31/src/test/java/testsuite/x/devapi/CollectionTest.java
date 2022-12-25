@@ -927,7 +927,7 @@ public class CollectionTest extends BaseCollectionTestCase {
           i <= 2
               ? "ERROR 3751 \\(01000\\) Data truncated for functional index 'myIndex' at row 1"
               : "ERROR 3903 \\(22018\\) Invalid JSON value for CAST for functional index"
-                    + " 'myIndex'\\.";
+                  + " 'myIndex'\\.";
       assertThrows(
           XProtocolError.class,
           errMsg,
@@ -1001,7 +1001,7 @@ public class CollectionTest extends BaseCollectionTestCase {
           i <= 0
               ? "ERROR 3751 \\(01000\\) Data truncated for functional index 'myIndex' at row 1"
               : "ERROR 3903 \\(22018\\) Invalid JSON value for CAST for functional index"
-                    + " 'myIndex'\\.";
+                  + " 'myIndex'\\.";
       assertThrows(
           XProtocolError.class,
           errMsg,
@@ -1080,7 +1080,7 @@ public class CollectionTest extends BaseCollectionTestCase {
           i <= 1
               ? "ERROR 3751 \\(01000\\) Data truncated for functional index 'myIndex' at row 1"
               : "ERROR 3903 \\(22018\\) Invalid JSON value for CAST for functional index"
-                    + " 'myIndex'\\.";
+                  + " 'myIndex'\\.";
       assertThrows(
           XProtocolError.class,
           errMsg,

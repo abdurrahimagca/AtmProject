@@ -2794,7 +2794,7 @@ public class CollectionModifyTest extends BaseCollectionTestCase {
     Result res;
     String testData =
         "(%d) foo\nbar\\nbaz\\u003D|\"\""; // Use "(%d)" as an increment to force different
-                                           // documents each step.
+    // documents each step.
 
     // Test document with a string element.
     DbDoc doc =

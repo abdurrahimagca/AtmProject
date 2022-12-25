@@ -978,7 +978,7 @@ public class ClientPreparedStatement extends com.mysql.cj.jdbc.StatementImpl
         return rs;
       } catch (NullPointerException npe) {
         checkClosed(); // we can't synchronize ourselves against async connection-close due to
-                       // deadlock issues, so this is the next best thing for
+        // deadlock issues, so this is the next best thing for
         // this particular corner case.
 
         throw npe;

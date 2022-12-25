@@ -140,9 +140,9 @@ public class CharsetTest extends BaseTestCase {
         0xFF71, // halfwidth katakana letter A, 0xB100 of WINDOWS-31J, one of JISX0201.
         0x65E5, // CJK unified ideograph, 0x93FA of WINDOWS-31J, one of JISX0208.
         0x3231, // parenthesized ideograph stok, 0x878B of WINDOWS-31J, one of NEC special
-                // characters(row13).
+        // characters(row13).
         0x67BB, // CJK unified ideograph, 0xEDC6 of WINDOWS-31J, one of NEC selected IBM special
-                // characters.
+        // characters.
         0x6D6F, // CJK unified ideograph, 0xFAFC of WINDOWS-31J, one of IBM special characters.
         0x8868, // one of CJK unified ideograph, 0x955C of WINDOWS-31J, one of '5c' characters.
         0x2225 // 0x8161 of SJIS/WINDOWS-31J, converted to differently to/from ucs2
@@ -167,7 +167,7 @@ public class CharsetTest extends BaseTestCase {
         0x65E5, // CJK unified ideograph, 0xC6FC of ujis, one of JISX0208.
         0x7B5D, // CJK unified ideograph, 0xE4B882 of ujis, one of JISX0212
         0x3231, // parenthesized ideograph stok, 0x878A of WINDOWS-31J, one of NEC special
-                // characters(row13).
+        // characters(row13).
         0xFF5E // wave dash, 0xA1C1 of eucjpms, convertion rule is different from ujis
       };
 

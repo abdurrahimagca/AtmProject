@@ -187,7 +187,7 @@ public class XProtocolTest extends InternalXBaseTestCase {
     assertEquals(
         "7.6000",
         value); // TODO: zeroes ok here??? scale is adjusted to 4 due to ".1111" value in RS? not
-                // happening in decimal test down below
+    // happening in decimal test down below
 
     // second row
     assertTrue(rowInputStream.hasNext());

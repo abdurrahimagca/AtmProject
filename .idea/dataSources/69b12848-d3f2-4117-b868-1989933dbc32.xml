@@ -1066,5 +1066,9 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DasType>text|0s</DasType>
       <Position>7</Position>
     </column>
+    <column id="307" parent="299" name="debt">
+      <DasType>text|0s</DasType>
+      <Position>8</Position>
+    </column>
   </database-model>
 </dataSource>

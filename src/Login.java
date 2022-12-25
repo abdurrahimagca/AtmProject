@@ -29,11 +29,11 @@ public class Login extends Card {
     private static boolean isPinTrue(String cardsPin, String cardPin)
     {
 
-
         if (attempts > 3)
             {
-                //todo: cardnum PIN degeri BLOCKED olarak değiştiriip uygulamadan set edilmelidir.
-                //todo: bu bir sql querysidir.
+                //todo: her seferinde yeni obje olusturuldugundan bunun yapılması o kadar da kolay degil attemps degişkeni daima sıfır oluyor
+                SqlQuery.UpdateData("UPDATE clients SET PIN='BLOCKED' WHERE CardNum=" + cardNum);
+
                 return false;
 
             }

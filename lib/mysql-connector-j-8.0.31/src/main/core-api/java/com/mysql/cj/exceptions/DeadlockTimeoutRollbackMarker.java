@@ -29,9 +29,5 @@
 
 package com.mysql.cj.exceptions;
 
-/**
- * Marker interface for exceptions that are caused by deadlock/wait timeout
- */
-public interface DeadlockTimeoutRollbackMarker {
-
-}
+/** Marker interface for exceptions that are caused by deadlock/wait timeout */
+public interface DeadlockTimeoutRollbackMarker {}

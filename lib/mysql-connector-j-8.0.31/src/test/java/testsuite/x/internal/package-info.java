@@ -27,8 +27,5 @@
  * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
  */
 
-/**
- * Tests for internal components of the X Protocol and X DevAPI features.
- */
-
+/** Tests for internal components of the X Protocol and X DevAPI features. */
 package testsuite.x.internal;

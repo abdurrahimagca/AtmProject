@@ -33,11 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.conf.PropertyDefinitions;
 import com.mysql.cj.exceptions.MysqlErrorNumbers;
 import com.mysql.cj.protocol.x.OkBuilder;
@@ -45,124 +40,158 @@ import com.mysql.cj.protocol.x.XMessageBuilder;
 import com.mysql.cj.protocol.x.XProtocol;
 import com.mysql.cj.protocol.x.XProtocolError;
 import com.mysql.cj.xdevapi.Session;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-/**
- * Tests for protocol-level auth APIs against X Plugin via X Protocol.
- */
+/** Tests for protocol-level auth APIs against X Plugin via X Protocol. */
 public class XProtocolAuthTest extends InternalXBaseTestCase {
-    private static XProtocol protocol;
-    private XMessageBuilder messageBuilder;
+  private static XProtocol protocol;
+  private XMessageBuilder messageBuilder;
 
-    @BeforeEach
-    public void setupTestProtocol() throws Exception {
-        if (this.isSetForXTests) {
-            protocol = createTestProtocol();
-            protocol.beforeHandshake();
-            this.messageBuilder = (XMessageBuilder) protocol.getMessageBuilder();
-        }
+  @BeforeEach
+  public void setupTestProtocol() throws Exception {
+    if (this.isSetForXTests) {
+      protocol = createTestProtocol();
+      protocol.beforeHandshake();
+      this.messageBuilder = (XMessageBuilder) protocol.getMessageBuilder();
     }
+  }
 
-    @AfterEach
-    public void destroyTestProtocol() throws Exception {
-        if (this.isSetForXTests) {
-            protocol.close();
-        }
+  @AfterEach
+  public void destroyTestProtocol() throws Exception {
+    if (this.isSetForXTests) {
+      protocol.close();
     }
+  }
 
-    /**
-     * Test that we are disconnected with an error if we send a bad authentication message. The server responds by immediately closing the socket. The async
-     * implementation may block indefinitely here and we need to prevent any regression.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testBadAuthMessage() throws Exception {
-        assumeTrue(this.isSetForXTests, PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
-        protocol.send(this.messageBuilder.buildCreateCollection(getTestDatabase(), "wont_be_Created"), 0);
-        assertThrows("Should fail after first message is sent", XProtocolError.class, () -> protocol.readQueryResult(new OkBuilder()));
+  /**
+   * Test that we are disconnected with an error if we send a bad authentication message. The server
+   * responds by immediately closing the socket. The async implementation may block indefinitely
+   * here and we need to prevent any regression.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testBadAuthMessage() throws Exception {
+    assumeTrue(
+        this.isSetForXTests,
+        PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
+    protocol.send(
+        this.messageBuilder.buildCreateCollection(getTestDatabase(), "wont_be_Created"), 0);
+    assertThrows(
+        "Should fail after first message is sent",
+        XProtocolError.class,
+        () -> protocol.readQueryResult(new OkBuilder()));
+  }
+
+  @Test
+  @Disabled("PLAIN only supported over SSL")
+  public void testBasicSaslPlainAuth() throws Exception {
+    assumeTrue(
+        this.isSetForXTests,
+        PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
+
+    protocol.send(
+        this.messageBuilder.buildPlainAuthStart(
+            getTestUser(), getTestPassword(), getTestDatabase()),
+        0);
+    protocol.readAuthenticateOk();
+  }
+
+  @Test
+  public void testBasicSaslMysql41Auth() throws Exception {
+    assumeTrue(
+        this.isSetForXTests,
+        PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
+
+    try {
+      Session testSession = this.fact.getSession(this.baseUrl);
+      testSession
+          .sql(
+              "CREATE USER IF NOT EXISTS 'testPlainAuth'@'%' IDENTIFIED WITH mysql_native_password"
+                  + " BY 'pwd'")
+          .execute();
+      testSession.sql("GRANT SELECT ON *.* TO 'testPlainAuth'@'%'").execute();
+      testSession.close();
+
+      protocol.send(this.messageBuilder.buildMysql41AuthStart(), 0);
+      byte[] salt = protocol.readAuthenticateContinue();
+      protocol.send(
+          this.messageBuilder.buildMysql41AuthContinue(
+              "testPlainAuth", "pwd", salt, getTestDatabase()),
+          0);
+      protocol.readAuthenticateOk();
+    } catch (Throwable t) {
+      throw t;
+    } finally {
+      Session testSession = this.fact.getSession(this.baseUrl);
+      testSession.sql("DROP USER if exists testPlainAuth").execute();
+      testSession.close();
     }
+  }
 
-    @Test
-    @Disabled("PLAIN only supported over SSL")
-    public void testBasicSaslPlainAuth() throws Exception {
-        assumeTrue(this.isSetForXTests, PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
+  @Test
+  @Disabled("PLAIN only supported over SSL")
+  public void testBasicSaslPlainAuthFailure() throws Exception {
+    assumeTrue(
+        this.isSetForXTests,
+        PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
 
-        protocol.send(this.messageBuilder.buildPlainAuthStart(getTestUser(), getTestPassword(), getTestDatabase()), 0);
-        protocol.readAuthenticateOk();
+    try {
+      protocol.send(
+          this.messageBuilder.buildPlainAuthStart(
+              getTestUser(), "com.mysql.cj.theWrongPassword", getTestDatabase()),
+          0);
+      protocol.readAuthenticateOk();
+      fail("Auth using wrong password should fail");
+    } catch (XProtocolError ex) {
+      assertEquals(MysqlErrorNumbers.ER_ACCESS_DENIED_ERROR, ex.getErrorCode());
+      assertEquals("ERROR 1045 (HY000) Invalid user or password", ex.getMessage());
     }
+  }
 
-    @Test
-    public void testBasicSaslMysql41Auth() throws Exception {
-        assumeTrue(this.isSetForXTests, PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
+  /** Bug#21680263 - NullPointerException When Try to connect without DB Name. */
+  @Test
+  public void testEmptyDatabaseMYSQL41() {
+    assumeTrue(
+        this.isSetForXTests,
+        PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
 
-        try {
-            Session testSession = this.fact.getSession(this.baseUrl);
-            testSession.sql("CREATE USER IF NOT EXISTS 'testPlainAuth'@'%' IDENTIFIED WITH mysql_native_password BY 'pwd'").execute();
-            testSession.sql("GRANT SELECT ON *.* TO 'testPlainAuth'@'%'").execute();
-            testSession.close();
+    try {
+      Session testSession = this.fact.getSession(this.baseUrl);
+      testSession
+          .sql(
+              "CREATE USER IF NOT EXISTS 'testPlainAuth'@'%' IDENTIFIED WITH mysql_native_password"
+                  + " BY 'pwd'")
+          .execute();
+      testSession.close();
 
-            protocol.send(this.messageBuilder.buildMysql41AuthStart(), 0);
-            byte[] salt = protocol.readAuthenticateContinue();
-            protocol.send(this.messageBuilder.buildMysql41AuthContinue("testPlainAuth", "pwd", salt, getTestDatabase()), 0);
-            protocol.readAuthenticateOk();
-        } catch (Throwable t) {
-            throw t;
-        } finally {
-            Session testSession = this.fact.getSession(this.baseUrl);
-            testSession.sql("DROP USER if exists testPlainAuth").execute();
-            testSession.close();
-        }
+      protocol.send(this.messageBuilder.buildMysql41AuthStart(), 0);
+      byte[] salt = protocol.readAuthenticateContinue();
+      protocol.send(
+          this.messageBuilder.buildMysql41AuthContinue("testPlainAuth", "pwd", salt, null), 0);
+      protocol.readAuthenticateOk();
+    } catch (Throwable t) {
+      throw t;
+    } finally {
+      Session testSession = this.fact.getSession(this.baseUrl);
+      testSession.sql("DROP USER if exists testPlainAuth").execute();
+      testSession.close();
     }
+  }
 
-    @Test
-    @Disabled("PLAIN only supported over SSL")
-    public void testBasicSaslPlainAuthFailure() throws Exception {
-        assumeTrue(this.isSetForXTests, PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
+  /** Bug#21680263 - NullPointerException When Try to connect without DB Name. */
+  @Test
+  @Disabled("PLAIN only supported over SSL")
+  public void testEmptyDatabasePLAIN() {
+    assumeTrue(
+        this.isSetForXTests,
+        PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
 
-        try {
-            protocol.send(this.messageBuilder.buildPlainAuthStart(getTestUser(), "com.mysql.cj.theWrongPassword", getTestDatabase()), 0);
-            protocol.readAuthenticateOk();
-            fail("Auth using wrong password should fail");
-        } catch (XProtocolError ex) {
-            assertEquals(MysqlErrorNumbers.ER_ACCESS_DENIED_ERROR, ex.getErrorCode());
-            assertEquals("ERROR 1045 (HY000) Invalid user or password", ex.getMessage());
-        }
-    }
-
-    /**
-     * Bug#21680263 - NullPointerException When Try to connect without DB Name.
-     */
-    @Test
-    public void testEmptyDatabaseMYSQL41() {
-        assumeTrue(this.isSetForXTests, PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
-
-        try {
-            Session testSession = this.fact.getSession(this.baseUrl);
-            testSession.sql("CREATE USER IF NOT EXISTS 'testPlainAuth'@'%' IDENTIFIED WITH mysql_native_password BY 'pwd'").execute();
-            testSession.close();
-
-            protocol.send(this.messageBuilder.buildMysql41AuthStart(), 0);
-            byte[] salt = protocol.readAuthenticateContinue();
-            protocol.send(this.messageBuilder.buildMysql41AuthContinue("testPlainAuth", "pwd", salt, null), 0);
-            protocol.readAuthenticateOk();
-        } catch (Throwable t) {
-            throw t;
-        } finally {
-            Session testSession = this.fact.getSession(this.baseUrl);
-            testSession.sql("DROP USER if exists testPlainAuth").execute();
-            testSession.close();
-        }
-    }
-
-    /**
-     * Bug#21680263 - NullPointerException When Try to connect without DB Name.
-     */
-    @Test
-    @Disabled("PLAIN only supported over SSL")
-    public void testEmptyDatabasePLAIN() {
-        assumeTrue(this.isSetForXTests, PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
-
-        protocol.send(this.messageBuilder.buildPlainAuthStart(getTestUser(), getTestPassword(), null), 0);
-        protocol.readAuthenticateOk();
-    }
+    protocol.send(
+        this.messageBuilder.buildPlainAuthStart(getTestUser(), getTestPassword(), null), 0);
+    protocol.readAuthenticateOk();
+  }
 }

@@ -29,41 +29,37 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * Represents the item of XPLUGIN_STMT_LIST_OBJECTS operation result.
- */
+/** Represents the item of XPLUGIN_STMT_LIST_OBJECTS operation result. */
 public class DatabaseObjectDescription {
-    private String objectName;
-    private DatabaseObject.DbObjectType objectType;
+  private String objectName;
+  private DatabaseObject.DbObjectType objectType;
 
-    /**
-     * Constructor.
-     * 
-     * @param name
-     *            database object name
-     * @param type
-     *            database object type, one of COLLECTION, TABLE, VIEW or COLLECTION_VIEW
-     */
-    public DatabaseObjectDescription(String name, String type) {
-        this.objectName = name;
-        this.objectType = DatabaseObject.DbObjectType.valueOf(type);
-    }
+  /**
+   * Constructor.
+   *
+   * @param name database object name
+   * @param type database object type, one of COLLECTION, TABLE, VIEW or COLLECTION_VIEW
+   */
+  public DatabaseObjectDescription(String name, String type) {
+    this.objectName = name;
+    this.objectType = DatabaseObject.DbObjectType.valueOf(type);
+  }
 
-    /**
-     * Get database object name.
-     * 
-     * @return database object name
-     */
-    public String getObjectName() {
-        return this.objectName;
-    }
+  /**
+   * Get database object name.
+   *
+   * @return database object name
+   */
+  public String getObjectName() {
+    return this.objectName;
+  }
 
-    /**
-     * Get database object type
-     * 
-     * @return {@link DatabaseObject.DbObjectType}
-     */
-    public DatabaseObject.DbObjectType getObjectType() {
-        return this.objectType;
-    }
+  /**
+   * Get database object type
+   *
+   * @return {@link DatabaseObject.DbObjectType}
+   */
+  public DatabaseObject.DbObjectType getObjectType() {
+    return this.objectType;
+  }
 }

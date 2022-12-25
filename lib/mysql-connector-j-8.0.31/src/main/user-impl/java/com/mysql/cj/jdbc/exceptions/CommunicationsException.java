@@ -29,8 +29,6 @@
 
 package com.mysql.cj.jdbc.exceptions;
 
-import java.sql.SQLRecoverableException;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.exceptions.ExceptionFactory;
 import com.mysql.cj.exceptions.MysqlErrorNumbers;
@@ -38,46 +36,58 @@ import com.mysql.cj.exceptions.StreamingNotifiable;
 import com.mysql.cj.jdbc.JdbcConnection;
 import com.mysql.cj.protocol.PacketReceivedTimeHolder;
 import com.mysql.cj.protocol.PacketSentTimeHolder;
+import java.sql.SQLRecoverableException;
 
 /**
  * An exception to represent communications errors with the database.
- * 
- * Attempts to provide 'friendlier' error messages to end-users, including the last time a packet was sent to the database,
- * what the client-timeout is set to, and whether the idle time has been exceeded.
+ *
+ * <p>Attempts to provide 'friendlier' error messages to end-users, including the last time a packet
+ * was sent to the database, what the client-timeout is set to, and whether the idle time has been
+ * exceeded.
  */
-public class CommunicationsException extends SQLRecoverableException implements StreamingNotifiable {
+public class CommunicationsException extends SQLRecoverableException
+    implements StreamingNotifiable {
 
-    private static final long serialVersionUID = 4317904269000988676L;
+  private static final long serialVersionUID = 4317904269000988676L;
 
-    private String exceptionMessage;
+  private String exceptionMessage;
 
-    public CommunicationsException(JdbcConnection conn, PacketSentTimeHolder packetSentTimeHolder, PacketReceivedTimeHolder packetReceivedTimeHolder,
-            Exception underlyingException) {
-        this(ExceptionFactory.createLinkFailureMessageBasedOnHeuristics(conn.getPropertySet(), conn.getSession().getServerSession(), packetSentTimeHolder,
-                packetReceivedTimeHolder, underlyingException), underlyingException);
+  public CommunicationsException(
+      JdbcConnection conn,
+      PacketSentTimeHolder packetSentTimeHolder,
+      PacketReceivedTimeHolder packetReceivedTimeHolder,
+      Exception underlyingException) {
+    this(
+        ExceptionFactory.createLinkFailureMessageBasedOnHeuristics(
+            conn.getPropertySet(),
+            conn.getSession().getServerSession(),
+            packetSentTimeHolder,
+            packetReceivedTimeHolder,
+            underlyingException),
+        underlyingException);
+  }
+
+  public CommunicationsException(String message, Throwable underlyingException) {
+    this.exceptionMessage = message;
+
+    if (underlyingException != null) {
+      initCause(underlyingException);
     }
+  }
 
-    public CommunicationsException(String message, Throwable underlyingException) {
-        this.exceptionMessage = message;
+  @Override
+  public String getMessage() {
+    return this.exceptionMessage;
+  }
 
-        if (underlyingException != null) {
-            initCause(underlyingException);
-        }
-    }
+  @Override
+  public String getSQLState() {
+    return MysqlErrorNumbers.SQL_STATE_COMMUNICATION_LINK_FAILURE;
+  }
 
-    @Override
-    public String getMessage() {
-        return this.exceptionMessage;
-    }
-
-    @Override
-    public String getSQLState() {
-        return MysqlErrorNumbers.SQL_STATE_COMMUNICATION_LINK_FAILURE;
-    }
-
-    @Override
-    public void setWasStreamingResults() {
-        // replace exception message
-        this.exceptionMessage = Messages.getString("CommunicationsException.ClientWasStreaming");
-    }
+  @Override
+  public void setWasStreamingResults() {
+    // replace exception message
+    this.exceptionMessage = Messages.getString("CommunicationsException.ClientWasStreaming");
+  }
 }

@@ -29,55 +29,52 @@
 
 package testsuite.simple;
 
+import com.mysql.cj.MysqlConnection;
+import com.mysql.cj.jdbc.interceptors.ConnectionLifecycleInterceptor;
+import com.mysql.cj.log.Log;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.util.Properties;
 
-import com.mysql.cj.MysqlConnection;
-import com.mysql.cj.jdbc.interceptors.ConnectionLifecycleInterceptor;
-import com.mysql.cj.log.Log;
-
 public class TestLifecycleInterceptor implements ConnectionLifecycleInterceptor {
-    static int transactionsBegun = 0;
-    static int transactionsCompleted = 0;
+  static int transactionsBegun = 0;
+  static int transactionsCompleted = 0;
 
-    public void close() throws SQLException {
-    }
+  public void close() throws SQLException {}
 
-    public boolean commit() throws SQLException {
-        return true;
-    }
+  public boolean commit() throws SQLException {
+    return true;
+  }
 
-    public boolean rollback() throws SQLException {
-        return true;
-    }
+  public boolean rollback() throws SQLException {
+    return true;
+  }
 
-    public boolean rollback(Savepoint s) throws SQLException {
-        return true;
-    }
+  public boolean rollback(Savepoint s) throws SQLException {
+    return true;
+  }
 
-    public boolean setAutoCommit(boolean flag) throws SQLException {
-        return true;
-    }
+  public boolean setAutoCommit(boolean flag) throws SQLException {
+    return true;
+  }
 
-    public boolean setDatabase(String db) throws SQLException {
-        return true;
-    }
+  public boolean setDatabase(String db) throws SQLException {
+    return true;
+  }
 
-    public boolean transactionBegun() {
-        transactionsBegun++;
-        return true;
-    }
+  public boolean transactionBegun() {
+    transactionsBegun++;
+    return true;
+  }
 
-    public boolean transactionCompleted() {
-        transactionsCompleted++;
-        return true;
-    }
+  public boolean transactionCompleted() {
+    transactionsCompleted++;
+    return true;
+  }
 
-    public void destroy() {
-    }
+  public void destroy() {}
 
-    public ConnectionLifecycleInterceptor init(MysqlConnection conn, Properties props, Log log) {
-        return this;
-    }
+  public ConnectionLifecycleInterceptor init(MysqlConnection conn, Properties props, Log log) {
+    return this;
+  }
 }

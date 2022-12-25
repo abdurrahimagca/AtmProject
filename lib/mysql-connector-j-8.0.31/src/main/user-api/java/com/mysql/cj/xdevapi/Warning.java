@@ -29,8 +29,5 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * A warning generated during statement execution.
- */
-public interface Warning extends com.mysql.cj.protocol.Warning {
-}
+/** A warning generated during statement execution. */
+public interface Warning extends com.mysql.cj.protocol.Warning {}

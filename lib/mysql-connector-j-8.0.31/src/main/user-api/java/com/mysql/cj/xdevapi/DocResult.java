@@ -29,8 +29,5 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * A sequence of documents retrieved from a find query.
- */
-public interface DocResult extends FetchResult<DbDoc>, Result {
-}
+/** A sequence of documents retrieved from a find query. */
+public interface DocResult extends FetchResult<DbDoc>, Result {}

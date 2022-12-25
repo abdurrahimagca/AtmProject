@@ -39,96 +39,109 @@ import com.mysql.cj.result.Row;
 import com.mysql.cj.result.ValueFactory;
 
 /**
- * A ResultSetRow implementation that holds one row packet (which is re-used by the driver, and thus saves memory allocations), and tries when possible to avoid
- * allocations to break out the results as individual byte[]s.
- * 
- * (this isn't possible when doing things like reading floating point values).
+ * A ResultSetRow implementation that holds one row packet (which is re-used by the driver, and thus
+ * saves memory allocations), and tries when possible to avoid allocations to break out the results
+ * as individual byte[]s.
+ *
+ * <p>(this isn't possible when doing things like reading floating point values).
  */
 public class TextBufferRow extends AbstractBufferRow {
 
-    public TextBufferRow(NativePacketPayload buf, ColumnDefinition cd, ExceptionInterceptor exceptionInterceptor, ValueDecoder valueDecoder) {
-        super(exceptionInterceptor);
+  public TextBufferRow(
+      NativePacketPayload buf,
+      ColumnDefinition cd,
+      ExceptionInterceptor exceptionInterceptor,
+      ValueDecoder valueDecoder) {
+    super(exceptionInterceptor);
 
-        this.rowFromServer = buf;
-        this.homePosition = this.rowFromServer.getPosition();
-        this.valueDecoder = valueDecoder;
+    this.rowFromServer = buf;
+    this.homePosition = this.rowFromServer.getPosition();
+    this.valueDecoder = valueDecoder;
 
-        if (cd.getFields() != null) {
-            setMetadata(cd);
-        }
+    if (cd.getFields() != null) {
+      setMetadata(cd);
+    }
+  }
+
+  @Override
+  protected int findAndSeekToOffset(int index) {
+
+    if (index == 0) {
+      this.lastRequestedIndex = 0;
+      this.lastRequestedPos = this.homePosition;
+      this.rowFromServer.setPosition(this.homePosition);
+
+      return 0;
     }
 
-    @Override
-    protected int findAndSeekToOffset(int index) {
+    if (index == this.lastRequestedIndex) {
+      this.rowFromServer.setPosition(this.lastRequestedPos);
 
-        if (index == 0) {
-            this.lastRequestedIndex = 0;
-            this.lastRequestedPos = this.homePosition;
-            this.rowFromServer.setPosition(this.homePosition);
-
-            return 0;
-        }
-
-        if (index == this.lastRequestedIndex) {
-            this.rowFromServer.setPosition(this.lastRequestedPos);
-
-            return this.lastRequestedPos;
-        }
-
-        int startingIndex = 0;
-
-        if (index > this.lastRequestedIndex) {
-            if (this.lastRequestedIndex >= 0) {
-                startingIndex = this.lastRequestedIndex;
-            } else {
-                startingIndex = 0;
-            }
-
-            this.rowFromServer.setPosition(this.lastRequestedPos);
-        } else {
-            this.rowFromServer.setPosition(this.homePosition);
-        }
-
-        for (int i = startingIndex; i < index; i++) {
-            this.rowFromServer.skipBytes(StringSelfDataType.STRING_LENENC);
-        }
-
-        this.lastRequestedIndex = index;
-        this.lastRequestedPos = this.rowFromServer.getPosition();
-
-        return this.lastRequestedPos;
+      return this.lastRequestedPos;
     }
 
-    @Override
-    public byte[] getBytes(int index) {
-        if (getNull(index)) {
-            return null;
-        }
+    int startingIndex = 0;
 
-        findAndSeekToOffset(index);
-        return this.rowFromServer.readBytes(StringSelfDataType.STRING_LENENC);
+    if (index > this.lastRequestedIndex) {
+      if (this.lastRequestedIndex >= 0) {
+        startingIndex = this.lastRequestedIndex;
+      } else {
+        startingIndex = 0;
+      }
+
+      this.rowFromServer.setPosition(this.lastRequestedPos);
+    } else {
+      this.rowFromServer.setPosition(this.homePosition);
     }
 
-    @Override
-    public boolean getNull(int columnIndex) {
-        findAndSeekToOffset(columnIndex);
-        this.wasNull = this.rowFromServer.readInteger(IntegerDataType.INT_LENENC) == NativePacketPayload.NULL_LENGTH;
-        return this.wasNull;
+    for (int i = startingIndex; i < index; i++) {
+      this.rowFromServer.skipBytes(StringSelfDataType.STRING_LENENC);
     }
 
-    @Override
-    public Row setMetadata(ColumnDefinition f) {
-        super.setMetadata(f);
-        return this;
+    this.lastRequestedIndex = index;
+    this.lastRequestedPos = this.rowFromServer.getPosition();
+
+    return this.lastRequestedPos;
+  }
+
+  @Override
+  public byte[] getBytes(int index) {
+    if (getNull(index)) {
+      return null;
     }
 
-    /**
-     * Implementation of getValue() based on the underlying Buffer object. Delegate to superclass for decoding.
-     */
-    @Override
-    public <T> T getValue(int columnIndex, ValueFactory<T> vf) {
-        findAndSeekToOffset(columnIndex);
-        int length = (int) this.rowFromServer.readInteger(IntegerDataType.INT_LENENC);
-        return getValueFromBytes(columnIndex, this.rowFromServer.getByteBuffer(), this.rowFromServer.getPosition(), length, vf);
-    }
+    findAndSeekToOffset(index);
+    return this.rowFromServer.readBytes(StringSelfDataType.STRING_LENENC);
+  }
+
+  @Override
+  public boolean getNull(int columnIndex) {
+    findAndSeekToOffset(columnIndex);
+    this.wasNull =
+        this.rowFromServer.readInteger(IntegerDataType.INT_LENENC)
+            == NativePacketPayload.NULL_LENGTH;
+    return this.wasNull;
+  }
+
+  @Override
+  public Row setMetadata(ColumnDefinition f) {
+    super.setMetadata(f);
+    return this;
+  }
+
+  /**
+   * Implementation of getValue() based on the underlying Buffer object. Delegate to superclass for
+   * decoding.
+   */
+  @Override
+  public <T> T getValue(int columnIndex, ValueFactory<T> vf) {
+    findAndSeekToOffset(columnIndex);
+    int length = (int) this.rowFromServer.readInteger(IntegerDataType.INT_LENENC);
+    return getValueFromBytes(
+        columnIndex,
+        this.rowFromServer.getByteBuffer(),
+        this.rowFromServer.getPosition(),
+        length,
+        vf);
+  }
 }

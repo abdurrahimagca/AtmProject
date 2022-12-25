@@ -29,19 +29,17 @@
 
 package com.mysql.cj.exceptions;
 
-/**
- * Indicates that data could not be read according to the given request.
- */
+/** Indicates that data could not be read according to the given request. */
 public class DataReadException extends CJException {
-    private static final long serialVersionUID = 1684265521187171525L;
+  private static final long serialVersionUID = 1684265521187171525L;
 
-    public DataReadException(Exception cause) {
-        super(cause);
-        setSQLState("S1009");
-    }
+  public DataReadException(Exception cause) {
+    super(cause);
+    setSQLState("S1009");
+  }
 
-    public DataReadException(String msg) {
-        super(msg);
-        setSQLState("S1009");
-    }
+  public DataReadException(String msg) {
+    super(msg);
+    setSQLState("S1009");
+  }
 }

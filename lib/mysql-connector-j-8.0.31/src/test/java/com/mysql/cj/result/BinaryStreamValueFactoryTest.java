@@ -31,14 +31,13 @@ package com.mysql.cj.result;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.mysql.cj.conf.DefaultPropertySet;
 import org.junit.jupiter.api.Test;
 
-import com.mysql.cj.conf.DefaultPropertySet;
-
 public class BinaryStreamValueFactoryTest extends CommonAsserts {
-    @Test
-    public void testBasics() {
-        BinaryStreamValueFactory vf = new BinaryStreamValueFactory(new DefaultPropertySet());
-        assertEquals("java.io.InputStream", vf.getTargetTypeName());
-    }
+  @Test
+  public void testBasics() {
+    BinaryStreamValueFactory vf = new BinaryStreamValueFactory(new DefaultPropertySet());
+    assertEquals("java.io.InputStream", vf.getTargetTypeName());
+  }
 }

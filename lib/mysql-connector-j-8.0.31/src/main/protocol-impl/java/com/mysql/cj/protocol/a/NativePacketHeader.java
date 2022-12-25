@@ -29,39 +29,40 @@
 
 package com.mysql.cj.protocol.a;
 
+import com.mysql.cj.protocol.MessageHeader;
 import java.nio.ByteBuffer;
 
-import com.mysql.cj.protocol.MessageHeader;
-
 /**
- * Represents the legacy protocol packet header, consisting of
- * 3-bytes payload_length and 1-byte sequence_id.
- * 
- * see http://dev.mysql.com/doc/internals/en/mysql-packet.html
+ * Represents the legacy protocol packet header, consisting of 3-bytes payload_length and 1-byte
+ * sequence_id.
+ *
+ * <p>see http://dev.mysql.com/doc/internals/en/mysql-packet.html
  */
 public class NativePacketHeader implements MessageHeader {
 
-    protected ByteBuffer packetHeaderBuf;
+  protected ByteBuffer packetHeaderBuf;
 
-    public NativePacketHeader() {
-        this.packetHeaderBuf = ByteBuffer.allocate(4);
-    }
+  public NativePacketHeader() {
+    this.packetHeaderBuf = ByteBuffer.allocate(4);
+  }
 
-    public NativePacketHeader(byte[] buf) {
-        this.packetHeaderBuf = ByteBuffer.wrap(buf);
-    }
+  public NativePacketHeader(byte[] buf) {
+    this.packetHeaderBuf = ByteBuffer.wrap(buf);
+  }
 
-    public ByteBuffer getBuffer() {
-        return this.packetHeaderBuf;
-    }
+  public ByteBuffer getBuffer() {
+    return this.packetHeaderBuf;
+  }
 
-    @Override
-    public int getMessageSize() {
-        return (this.packetHeaderBuf.array()[0] & 0xff) + ((this.packetHeaderBuf.array()[1] & 0xff) << 8) + ((this.packetHeaderBuf.array()[2] & 0xff) << 16);
-    }
+  @Override
+  public int getMessageSize() {
+    return (this.packetHeaderBuf.array()[0] & 0xff)
+        + ((this.packetHeaderBuf.array()[1] & 0xff) << 8)
+        + ((this.packetHeaderBuf.array()[2] & 0xff) << 16);
+  }
 
-    @Override
-    public byte getMessageSequence() {
-        return this.packetHeaderBuf.array()[3];
-    }
+  @Override
+  public byte getMessageSequence() {
+    return this.packetHeaderBuf.array()[3];
+  }
 }

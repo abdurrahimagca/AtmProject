@@ -31,40 +31,41 @@ package com.mysql.cj.xdevapi;
 
 /**
  * X DevAPI class encapsulating a Session pooling functionality.
- * <p>
- * The Client object is obtained via {@link ClientFactory#getClient(String, java.util.Properties)} or {@link ClientFactory#getClient(String, String)} methods.
+ *
+ * <p>The Client object is obtained via {@link ClientFactory#getClient(String,
+ * java.util.Properties)} or {@link ClientFactory#getClient(String, String)} methods.
  */
 public interface Client {
 
-    /**
-     * Get <code>Session</code> from pool or the new one.
-     * 
-     * @return {@link Session}
-     */
-    public Session getSession();
+  /**
+   * Get <code>Session</code> from pool or the new one.
+   *
+   * @return {@link Session}
+   */
+  public Session getSession();
 
-    /**
-     * Close <code>Client</code>.
-     * Closes all Sessions it has created, and destroys the managed pool.
-     * <p>
-     * Calling the method <code>close</code> on a <code>Client</code>
-     * object that is already closed is a no-op.
-     */
-    public void close();
+  /**
+   * Close <code>Client</code>. Closes all Sessions it has created, and destroys the managed pool.
+   *
+   * <p>Calling the method <code>close</code> on a <code>Client</code> object that is already closed
+   * is a no-op.
+   */
+  public void close();
 
-    public enum ClientProperty {
-        POOLING_ENABLED("pooling.enabled"), POOLING_MAX_SIZE("pooling.maxSize"), POOLING_MAX_IDLE_TIME("pooling.maxIdleTime"),
-        POOLING_QUEUE_TIMEOUT("pooling.queueTimeout");
+  public enum ClientProperty {
+    POOLING_ENABLED("pooling.enabled"),
+    POOLING_MAX_SIZE("pooling.maxSize"),
+    POOLING_MAX_IDLE_TIME("pooling.maxIdleTime"),
+    POOLING_QUEUE_TIMEOUT("pooling.queueTimeout");
 
-        private String keyName = "";
+    private String keyName = "";
 
-        ClientProperty(String keyName) {
-            this.keyName = keyName;
-        }
-
-        public String getKeyName() {
-            return this.keyName;
-        }
+    ClientProperty(String keyName) {
+      this.keyName = keyName;
     }
 
+    public String getKeyName() {
+      return this.keyName;
+    }
+  }
 }

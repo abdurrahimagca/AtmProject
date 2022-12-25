@@ -30,38 +30,38 @@
 package com.mysql.cj.exceptions;
 
 /**
- * Equivalent to SQLSTATE ER_MUST_CHANGE_PASSWORD_LOGIN = 1862
- * "Your password has expired. To log in you must change it using a client that supports expired passwords."
- * 
- * Server closes connection when this failure happens.
+ * Equivalent to SQLSTATE ER_MUST_CHANGE_PASSWORD_LOGIN = 1862 "Your password has expired. To log in
+ * you must change it using a client that supports expired passwords."
+ *
+ * <p>Server closes connection when this failure happens.
  */
 public class ClosedOnExpiredPasswordException extends CJException {
 
-    private static final long serialVersionUID = -3807215681364413250L;
+  private static final long serialVersionUID = -3807215681364413250L;
 
-    public ClosedOnExpiredPasswordException() {
-        super();
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
-    }
+  public ClosedOnExpiredPasswordException() {
+    super();
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
+  }
 
-    public ClosedOnExpiredPasswordException(String message) {
-        super(message);
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
-    }
+  public ClosedOnExpiredPasswordException(String message) {
+    super(message);
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
+  }
 
-    public ClosedOnExpiredPasswordException(String message, Throwable cause) {
-        super(message, cause);
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
-    }
+  public ClosedOnExpiredPasswordException(String message, Throwable cause) {
+    super(message, cause);
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
+  }
 
-    public ClosedOnExpiredPasswordException(Throwable cause) {
-        super(cause);
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
-    }
+  public ClosedOnExpiredPasswordException(Throwable cause) {
+    super(cause);
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
+  }
 
-    protected ClosedOnExpiredPasswordException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
-    }
-
+  protected ClosedOnExpiredPasswordException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD_LOGIN);
+  }
 }

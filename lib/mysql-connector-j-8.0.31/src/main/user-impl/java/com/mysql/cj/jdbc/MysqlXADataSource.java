@@ -29,54 +29,51 @@
 
 package com.mysql.cj.jdbc;
 
+import com.mysql.cj.conf.PropertyKey;
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import javax.sql.XAConnection;
-
-import com.mysql.cj.conf.PropertyKey;
 
 public class MysqlXADataSource extends MysqlDataSource implements javax.sql.XADataSource {
 
-    static final long serialVersionUID = 7911390333152247455L;
+  static final long serialVersionUID = 7911390333152247455L;
 
-    /**
-     * Default no-arg constructor is required by specification.
-     */
-    public MysqlXADataSource() {
+  /** Default no-arg constructor is required by specification. */
+  public MysqlXADataSource() {}
+
+  @Override
+  public XAConnection getXAConnection() throws SQLException {
+
+    Connection conn = getConnection();
+
+    return wrapConnection(conn);
+  }
+
+  @Override
+  public XAConnection getXAConnection(String u, String p) throws SQLException {
+
+    Connection conn = getConnection(u, p);
+
+    return wrapConnection(conn);
+  }
+
+  /**
+   * Wraps a connection as a 'fake' XAConnection
+   *
+   * @param conn connection to wrap
+   * @return {@link XAConnection}
+   * @throws SQLException if an error occurs
+   */
+  private XAConnection wrapConnection(Connection conn) throws SQLException {
+    if (getBooleanProperty(PropertyKey.pinGlobalTxToPhysicalConnection).getValue()
+        || ((JdbcConnection) conn)
+            .getPropertySet()
+            .getBooleanProperty(PropertyKey.pinGlobalTxToPhysicalConnection)
+            .getValue()) {
+      return SuspendableXAConnection.getInstance((JdbcConnection) conn);
     }
 
-    @Override
-    public XAConnection getXAConnection() throws SQLException {
-
-        Connection conn = getConnection();
-
-        return wrapConnection(conn);
-    }
-
-    @Override
-    public XAConnection getXAConnection(String u, String p) throws SQLException {
-
-        Connection conn = getConnection(u, p);
-
-        return wrapConnection(conn);
-    }
-
-    /**
-     * Wraps a connection as a 'fake' XAConnection
-     * 
-     * @param conn
-     *            connection to wrap
-     * @return {@link XAConnection}
-     * @throws SQLException
-     *             if an error occurs
-     */
-    private XAConnection wrapConnection(Connection conn) throws SQLException {
-        if (getBooleanProperty(PropertyKey.pinGlobalTxToPhysicalConnection).getValue()
-                || ((JdbcConnection) conn).getPropertySet().getBooleanProperty(PropertyKey.pinGlobalTxToPhysicalConnection).getValue()) {
-            return SuspendableXAConnection.getInstance((JdbcConnection) conn);
-        }
-
-        return MysqlXAConnection.getInstance((JdbcConnection) conn, getBooleanProperty(PropertyKey.logXaCommands).getValue());
-    }
+    return MysqlXAConnection.getInstance(
+        (JdbcConnection) conn, getBooleanProperty(PropertyKey.logXaCommands).getValue());
+  }
 }

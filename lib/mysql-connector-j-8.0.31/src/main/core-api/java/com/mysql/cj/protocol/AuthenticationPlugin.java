@@ -29,126 +29,122 @@
 
 package com.mysql.cj.protocol;
 
+import com.mysql.cj.callback.MysqlCallbackHandler;
 import java.util.List;
 
-import com.mysql.cj.callback.MysqlCallbackHandler;
-
 /**
- * Implementors of this interface can be installed via the "authenticationPlugins" configuration property.
- * 
- * The driver will create one instance of a given plugin per AuthenticationProvider instance if it's reusable (see {@link #isReusable()}) or a new instance
- * in each NativeAuthenticationProvider#proceedHandshakeWithPluggableAuthentication(String, String, String, Buffer) call.
- * 
- * @param <M>
- *            Message type
+ * Implementors of this interface can be installed via the "authenticationPlugins" configuration
+ * property.
+ *
+ * <p>The driver will create one instance of a given plugin per AuthenticationProvider instance if
+ * it's reusable (see {@link #isReusable()}) or a new instance in each
+ * NativeAuthenticationProvider#proceedHandshakeWithPluggableAuthentication(String, String, String,
+ * Buffer) call.
+ *
+ * @param <M> Message type
  */
 public interface AuthenticationPlugin<M extends Message> {
 
-    /**
-     * We need direct Protocol reference because it isn't available from Connection before authentication complete.
-     * 
-     * @param protocol
-     *            protocol instance
-     */
-    default void init(Protocol<M> protocol) {
-    }
+  /**
+   * We need direct Protocol reference because it isn't available from Connection before
+   * authentication complete.
+   *
+   * @param protocol protocol instance
+   */
+  default void init(Protocol<M> protocol) {}
 
-    /**
-     * Initializes this plugin with a direct Protocol reference and a generic {@link MysqlCallbackHandler} that can be used to pass over information back to the
-     * authentication provider.
-     * For example an authentication plugin may accept <code>null</code> usernames and use that information to obtain them from some external source, such as
-     * the system login.
-     * 
-     * @param protocol
-     *            the protocol instance
-     * @param callbackHandler
-     *            a callback handler to provide additional information to the authentication provider
-     */
-    default void init(Protocol<M> protocol, MysqlCallbackHandler callbackHandler) {
-        init(protocol);
-    }
+  /**
+   * Initializes this plugin with a direct Protocol reference and a generic {@link
+   * MysqlCallbackHandler} that can be used to pass over information back to the authentication
+   * provider. For example an authentication plugin may accept <code>null</code> usernames and use
+   * that information to obtain them from some external source, such as the system login.
+   *
+   * @param protocol the protocol instance
+   * @param callbackHandler a callback handler to provide additional information to the
+   *     authentication provider
+   */
+  default void init(Protocol<M> protocol, MysqlCallbackHandler callbackHandler) {
+    init(protocol);
+  }
 
-    /**
-     * Resets the authentication steps sequence.
-     */
-    default void reset() {
-    }
+  /** Resets the authentication steps sequence. */
+  default void reset() {}
 
-    /**
-     * Called by the driver when this extension should release any resources it is holding and cleanup internally before the connection is closed.
-     */
-    default void destroy() {
-    }
+  /**
+   * Called by the driver when this extension should release any resources it is holding and cleanup
+   * internally before the connection is closed.
+   */
+  default void destroy() {}
 
-    /**
-     * Returns the client-side name that the MySQL server uses on the wire for this plugin.
-     * 
-     * @return plugin name
-     */
-    String getProtocolPluginName();
+  /**
+   * Returns the client-side name that the MySQL server uses on the wire for this plugin.
+   *
+   * @return plugin name
+   */
+  String getProtocolPluginName();
 
-    /**
-     * Does this plugin require the connection itself to be confidential (i.e. tls/ssl)...Highly recommended to return "true" for plugins that return the
-     * credentials in the clear.
-     * 
-     * @return true if secure connection is required
-     */
-    boolean requiresConfidentiality();
+  /**
+   * Does this plugin require the connection itself to be confidential (i.e. tls/ssl)...Highly
+   * recommended to return "true" for plugins that return the credentials in the clear.
+   *
+   * @return true if secure connection is required
+   */
+  boolean requiresConfidentiality();
 
-    /**
-     * @return true if plugin instance may be reused, false otherwise
-     */
-    boolean isReusable();
+  /**
+   * @return true if plugin instance may be reused, false otherwise
+   */
+  boolean isReusable();
 
-    /**
-     * This method called from Connector/J before first nextAuthenticationStep call. Values of user and password parameters are passed from those in
-     * NativeAuthenticationProvider#changeUser() or NativeAuthenticationProvider#connect().
-     * 
-     * Plugin should use these values instead of values from connection properties because parent method may be a changeUser call which saves user and password
-     * into connection only after successful handshake.
-     * 
-     * @param user
-     *            user name
-     * @param password
-     *            user password
-     */
-    void setAuthenticationParameters(String user, String password);
+  /**
+   * This method called from Connector/J before first nextAuthenticationStep call. Values of user
+   * and password parameters are passed from those in NativeAuthenticationProvider#changeUser() or
+   * NativeAuthenticationProvider#connect().
+   *
+   * <p>Plugin should use these values instead of values from connection properties because parent
+   * method may be a changeUser call which saves user and password into connection only after
+   * successful handshake.
+   *
+   * @param user user name
+   * @param password user password
+   */
+  void setAuthenticationParameters(String user, String password);
 
-    /**
-     * Connector/J uses this method to identify the source of the authentication data, as an authentication plugin name, that will be available to the next
-     * authentication step(s). The source of the authentication data in the first iteration will always be the sever-side default authentication plugin name.
-     * In the following iterations this depends on the client-side default authentication plugin or on the successive Protocol::AuthSwitchRequest that may have
-     * been received in the meantime.
-     * 
-     * Authentication plugin implementation can use this information to decide if the data coming from the server is useful to them or not.
-     * 
-     * @param sourceOfAuthData
-     */
-    default void setSourceOfAuthData(String sourceOfAuthData) {
-        // Do nothing by default.
-    }
+  /**
+   * Connector/J uses this method to identify the source of the authentication data, as an
+   * authentication plugin name, that will be available to the next authentication step(s). The
+   * source of the authentication data in the first iteration will always be the sever-side default
+   * authentication plugin name. In the following iterations this depends on the client-side default
+   * authentication plugin or on the successive Protocol::AuthSwitchRequest that may have been
+   * received in the meantime.
+   *
+   * <p>Authentication plugin implementation can use this information to decide if the data coming
+   * from the server is useful to them or not.
+   *
+   * @param sourceOfAuthData
+   */
+  default void setSourceOfAuthData(String sourceOfAuthData) {
+    // Do nothing by default.
+  }
 
-    /**
-     * Process authentication handshake data from server and optionally produce data to be sent back to the server.
-     * The driver will keep calling this method on each new server packet arrival until either an Exception is thrown
-     * (authentication failure, please use appropriate SQLStates) or the number of exchange iterations exceeded max
-     * limit or an OK packet is sent by server indicating that the connection has been approved.
-     * 
-     * If, on return from this method, toServer is a non-empty list of buffers, then these buffers will be sent to
-     * the server in the same order and without any reads in between them. If toServer is an empty list, no
-     * data will be sent to server, driver immediately reads the next packet from server.
-     * 
-     * In case of errors the method should throw Exception.
-     * 
-     * @param fromServer
-     *            a buffer containing handshake data payload from
-     *            server (can be empty).
-     * @param toServer
-     *            list of buffers with data to be sent to the server
-     *            (the list can be empty, but buffers in the list
-     *            should contain data).
-     * 
-     * @return return value is ignored.
-     */
-    boolean nextAuthenticationStep(M fromServer, List<M> toServer);
+  /**
+   * Process authentication handshake data from server and optionally produce data to be sent back
+   * to the server. The driver will keep calling this method on each new server packet arrival until
+   * either an Exception is thrown (authentication failure, please use appropriate SQLStates) or the
+   * number of exchange iterations exceeded max limit or an OK packet is sent by server indicating
+   * that the connection has been approved.
+   *
+   * <p>If, on return from this method, toServer is a non-empty list of buffers, then these buffers
+   * will be sent to the server in the same order and without any reads in between them. If toServer
+   * is an empty list, no data will be sent to server, driver immediately reads the next packet from
+   * server.
+   *
+   * <p>In case of errors the method should throw Exception.
+   *
+   * @param fromServer a buffer containing handshake data payload from server (can be empty).
+   * @param toServer list of buffers with data to be sent to the server (the list can be empty, but
+   *     buffers in the list should contain data).
+   * @return return value is ignored.
+   */
+  boolean nextAuthenticationStep(M fromServer, List<M> toServer);
 }

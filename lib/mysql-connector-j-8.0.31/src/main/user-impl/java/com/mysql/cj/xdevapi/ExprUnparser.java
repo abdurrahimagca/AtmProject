@@ -29,12 +29,6 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.mysql.cj.x.protobuf.MysqlxDatatypes.Scalar;
 import com.mysql.cj.x.protobuf.MysqlxExpr.Array;
 import com.mysql.cj.x.protobuf.MysqlxExpr.ColumnIdentifier;
@@ -44,302 +38,312 @@ import com.mysql.cj.x.protobuf.MysqlxExpr.FunctionCall;
 import com.mysql.cj.x.protobuf.MysqlxExpr.Identifier;
 import com.mysql.cj.x.protobuf.MysqlxExpr.Object;
 import com.mysql.cj.x.protobuf.MysqlxExpr.Operator;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * Serializer utility for dealing with X Protocol expression trees.
- */
+/** Serializer utility for dealing with X Protocol expression trees. */
 public class ExprUnparser {
-    /**
-     * List of operators which will be serialized as infix operators.
-     */
-    static Set<String> infixOperators = new HashSet<>();
+  /** List of operators which will be serialized as infix operators. */
+  static Set<String> infixOperators = new HashSet<>();
 
-    static {
-        infixOperators.add("and");
-        infixOperators.add("or");
+  static {
+    infixOperators.add("and");
+    infixOperators.add("or");
+  }
+
+  // /**
+  //  * Convert an "Any" (scalar) to a string.
+  //  */
+  // static String anyToString(Any e) {
+  //     switch (e.getType()) {
+  //         case SCALAR:
+  //             return scalarToString(e.getScalar());
+  //         default:
+  //             throw new IllegalArgumentException("Unknown type tag: " + e.getType());
+  //     }
+  // }
+
+  /**
+   * Scalar to string.
+   *
+   * @param e {@link Scalar}
+   * @return scalar string
+   */
+  static String scalarToString(Scalar e) {
+    switch (e.getType()) {
+      case V_SINT:
+        return "" + e.getVSignedInt();
+      case V_OCTETS:
+        return "\"" + escapeLiteral(e.getVOctets().getValue().toStringUtf8()) + "\"";
+      case V_STRING:
+        return "\"" + escapeLiteral(e.getVString().getValue().toStringUtf8()) + "\"";
+      case V_DOUBLE:
+        return "" + e.getVDouble();
+      case V_BOOL:
+        return e.getVBool() ? "TRUE" : "FALSE";
+      case V_NULL:
+        return "NULL";
+      default:
+        throw new IllegalArgumentException("Unknown type tag: " + e.getType());
     }
+  }
 
-    // /**
-    //  * Convert an "Any" (scalar) to a string.
-    //  */
-    // static String anyToString(Any e) {
-    //     switch (e.getType()) {
-    //         case SCALAR:
-    //             return scalarToString(e.getScalar());
-    //         default:
-    //             throw new IllegalArgumentException("Unknown type tag: " + e.getType());
-    //     }
-    // }
-
-    /**
-     * Scalar to string.
-     * 
-     * @param e
-     *            {@link Scalar}
-     * @return scalar string
-     */
-    static String scalarToString(Scalar e) {
-        switch (e.getType()) {
-            case V_SINT:
-                return "" + e.getVSignedInt();
-            case V_OCTETS:
-                return "\"" + escapeLiteral(e.getVOctets().getValue().toStringUtf8()) + "\"";
-            case V_STRING:
-                return "\"" + escapeLiteral(e.getVString().getValue().toStringUtf8()) + "\"";
-            case V_DOUBLE:
-                return "" + e.getVDouble();
-            case V_BOOL:
-                return e.getVBool() ? "TRUE" : "FALSE";
-            case V_NULL:
-                return "NULL";
-            default:
-                throw new IllegalArgumentException("Unknown type tag: " + e.getType());
-        }
+  /**
+   * JSON document path to string.
+   *
+   * @param items list of {@link DocumentPathItem} objects
+   * @return JSON document path string
+   */
+  static String documentPathToString(List<DocumentPathItem> items) {
+    StringBuilder docPathString = new StringBuilder();
+    for (DocumentPathItem item : items) {
+      switch (item.getType()) {
+        case MEMBER:
+          docPathString.append(".").append(quoteDocumentPathMember(item.getValue()));
+          break;
+        case MEMBER_ASTERISK:
+          docPathString.append(".*");
+          break;
+        case ARRAY_INDEX:
+          docPathString
+              .append("[")
+              .append("" + Integer.toUnsignedLong(item.getIndex()))
+              .append("]");
+          break;
+        case ARRAY_INDEX_ASTERISK:
+          docPathString.append("[*]");
+          break;
+        case DOUBLE_ASTERISK:
+          docPathString.append("**");
+          break;
+      }
     }
+    return docPathString.toString();
+  }
 
-    /**
-     * JSON document path to string.
-     * 
-     * @param items
-     *            list of {@link DocumentPathItem} objects
-     * @return JSON document path string
-     */
-    static String documentPathToString(List<DocumentPathItem> items) {
-        StringBuilder docPathString = new StringBuilder();
-        for (DocumentPathItem item : items) {
-            switch (item.getType()) {
-                case MEMBER:
-                    docPathString.append(".").append(quoteDocumentPathMember(item.getValue()));
-                    break;
-                case MEMBER_ASTERISK:
-                    docPathString.append(".*");
-                    break;
-                case ARRAY_INDEX:
-                    docPathString.append("[").append("" + Integer.toUnsignedLong(item.getIndex())).append("]");
-                    break;
-                case ARRAY_INDEX_ASTERISK:
-                    docPathString.append("[*]");
-                    break;
-                case DOUBLE_ASTERISK:
-                    docPathString.append("**");
-                    break;
-            }
-        }
-        return docPathString.toString();
+  /**
+   * Column identifier (or JSON path) to string.
+   *
+   * @param e {@link ColumnIdentifier}
+   * @return Column identifier or JSON path string.
+   */
+  static String columnIdentifierToString(ColumnIdentifier e) {
+    if (e.hasName()) {
+      String s = quoteIdentifier(e.getName());
+      if (e.hasTableName()) {
+        s = quoteIdentifier(e.getTableName()) + "." + s;
+      }
+      if (e.hasSchemaName()) {
+        s = quoteIdentifier(e.getSchemaName()) + "." + s;
+      }
+      if (e.getDocumentPathCount() > 0) {
+        s = s + "->$" + documentPathToString(e.getDocumentPathList());
+      }
+      return s;
     }
+    return "$" + documentPathToString(e.getDocumentPathList());
+  }
 
-    /**
-     * Column identifier (or JSON path) to string.
-     * 
-     * @param e
-     *            {@link ColumnIdentifier}
-     * @return Column identifier or JSON path string.
-     */
-    static String columnIdentifierToString(ColumnIdentifier e) {
-        if (e.hasName()) {
-            String s = quoteIdentifier(e.getName());
-            if (e.hasTableName()) {
-                s = quoteIdentifier(e.getTableName()) + "." + s;
-            }
-            if (e.hasSchemaName()) {
-                s = quoteIdentifier(e.getSchemaName()) + "." + s;
-            }
-            if (e.getDocumentPathCount() > 0) {
-                s = s + "->$" + documentPathToString(e.getDocumentPathList());
-            }
-            return s;
-        }
-        return "$" + documentPathToString(e.getDocumentPathList());
+  /**
+   * Function call to string.
+   *
+   * @param e {@link FunctionCall}
+   * @return Function call string
+   */
+  static String functionCallToString(FunctionCall e) {
+    Identifier i = e.getName();
+    String s = quoteIdentifier(i.getName());
+    if (i.hasSchemaName()) {
+      s = quoteIdentifier(i.getSchemaName()) + "." + s;
     }
-
-    /**
-     * Function call to string.
-     * 
-     * @param e
-     *            {@link FunctionCall}
-     * @return Function call string
-     */
-    static String functionCallToString(FunctionCall e) {
-        Identifier i = e.getName();
-        String s = quoteIdentifier(i.getName());
-        if (i.hasSchemaName()) {
-            s = quoteIdentifier(i.getSchemaName()) + "." + s;
-        }
-        s = s + "(";
-        for (Expr p : e.getParamList()) {
-            s += exprToString(p) + ", ";
-        }
-        s = s.replaceAll(", $", "");
-        s += ")";
-        return s;
+    s = s + "(";
+    for (Expr p : e.getParamList()) {
+      s += exprToString(p) + ", ";
     }
+    s = s.replaceAll(", $", "");
+    s += ")";
+    return s;
+  }
 
-    static String arrayToString(Array e) {
-        String s = "[";
+  static String arrayToString(Array e) {
+    String s = "[";
 
-        for (Expr v : e.getValueList()) {
-            s += exprToString(v) + ", ";
-        }
-        s = s.replaceAll(", $", "");
-        s += "]";
-
-        return s;
+    for (Expr v : e.getValueList()) {
+      s += exprToString(v) + ", ";
     }
+    s = s.replaceAll(", $", "");
+    s += "]";
 
-    /**
-     * Create a string from a list of (already stringified) parameters. Surround by parens and separate by commas.
-     * 
-     * @param params
-     *            list of param strings
-     * @return param list string
-     */
-    static String paramListToString(List<String> params) {
-        String s = "(";
-        boolean first = true;
-        for (String param : params) {
-            if (!first) {
-                s += ", ";
-            }
-            first = false;
-            s += param;
-        }
-        return s + ")";
-    }
+    return s;
+  }
 
-    /**
-     * Convert an operator to a string. Includes special cases for chosen infix operators (AND, OR) and special forms such as LIKE and BETWEEN.
-     * 
-     * @param e
-     *            {@link Operator}
-     * @return Operator string
-     */
-    static String operatorToString(Operator e) {
-        String name = e.getName();
-        List<String> params = new ArrayList<>();
-        for (Expr p : e.getParamList()) {
-            params.add(exprToString(p));
-        }
-        if ("between".equals(name) || "not_between".equals(name)) {
-            name = name.replaceAll("not_between", "not between");
-            return String.format("(%s %s %s AND %s)", params.get(0), name, params.get(1), params.get(2));
-        } else if ("in".equals(name) || "not_in".equals(name)) {
-            name = name.replaceAll("not_in", "not in");
-            return String.format("%s %s%s", params.get(0), name, paramListToString(params.subList(1, params.size())));
-        } else if ("like".equals(name) || "not_like".equals(name)) {
-            name = name.replaceAll("not_like", "not like");
-            String s = String.format("%s %s %s", params.get(0), name, params.get(1));
-            if (params.size() == 3) {
-                s += " ESCAPE " + params.get(2);
-            }
-            return s;
-        } else if ("overlaps".equals(name) || "not_overlaps".equals(name)) {
-            name = name.replaceAll("not_overlaps", "not overlaps");
-            return String.format("%s %s %s", params.get(0), name, params.get(1));
-        } else if ("regexp".equals(name) || "not_regexp".equals("name")) {
-            name = name.replaceAll("not_regexp", "not regexp");
-            return String.format("(%s %s %s)", params.get(0), name, params.get(1));
-        } else if ("cast".equals(name)) {
-            return String.format("cast(%s AS %s)", params.get(0), params.get(1).replaceAll("\"", ""));
-        } else if ((name.length() < 3 || infixOperators.contains(name)) && params.size() == 2) {
-            return String.format("(%s %s %s)", params.get(0), name, params.get(1));
-        } else if ("sign_minus".equals(name)) {
-            name = name.replaceAll("sign_minus", "-");
-            return String.format("%s%s", name, params.get(0));
-        } else if ("sign_plus".equals(name)) {
-            name = name.replaceAll("sign_plus", "+");
-            return String.format("%s%s", name, params.get(0));
-        } else if (params.size() == 1) {
-            return String.format("%s%s", name, params.get(0));
-        } else if (params.size() == 0) {
-            return name;
-        } else {
-            return name + paramListToString(params);
-        }
+  /**
+   * Create a string from a list of (already stringified) parameters. Surround by parens and
+   * separate by commas.
+   *
+   * @param params list of param strings
+   * @return param list string
+   */
+  static String paramListToString(List<String> params) {
+    String s = "(";
+    boolean first = true;
+    for (String param : params) {
+      if (!first) {
+        s += ", ";
+      }
+      first = false;
+      s += param;
     }
+    return s + ")";
+  }
 
-    static String objectToString(Object o) {
-        String fields = o.getFldList().stream().map(
-                f -> new StringBuilder().append("'").append(quoteJsonKey(f.getKey())).append("'").append(":").append(exprToString(f.getValue())).toString())
-                .collect(Collectors.joining(", "));
-        return new StringBuilder("{").append(fields).append("}").toString();
+  /**
+   * Convert an operator to a string. Includes special cases for chosen infix operators (AND, OR)
+   * and special forms such as LIKE and BETWEEN.
+   *
+   * @param e {@link Operator}
+   * @return Operator string
+   */
+  static String operatorToString(Operator e) {
+    String name = e.getName();
+    List<String> params = new ArrayList<>();
+    for (Expr p : e.getParamList()) {
+      params.add(exprToString(p));
     }
+    if ("between".equals(name) || "not_between".equals(name)) {
+      name = name.replaceAll("not_between", "not between");
+      return String.format("(%s %s %s AND %s)", params.get(0), name, params.get(1), params.get(2));
+    } else if ("in".equals(name) || "not_in".equals(name)) {
+      name = name.replaceAll("not_in", "not in");
+      return String.format(
+          "%s %s%s", params.get(0), name, paramListToString(params.subList(1, params.size())));
+    } else if ("like".equals(name) || "not_like".equals(name)) {
+      name = name.replaceAll("not_like", "not like");
+      String s = String.format("%s %s %s", params.get(0), name, params.get(1));
+      if (params.size() == 3) {
+        s += " ESCAPE " + params.get(2);
+      }
+      return s;
+    } else if ("overlaps".equals(name) || "not_overlaps".equals(name)) {
+      name = name.replaceAll("not_overlaps", "not overlaps");
+      return String.format("%s %s %s", params.get(0), name, params.get(1));
+    } else if ("regexp".equals(name) || "not_regexp".equals("name")) {
+      name = name.replaceAll("not_regexp", "not regexp");
+      return String.format("(%s %s %s)", params.get(0), name, params.get(1));
+    } else if ("cast".equals(name)) {
+      return String.format("cast(%s AS %s)", params.get(0), params.get(1).replaceAll("\"", ""));
+    } else if ((name.length() < 3 || infixOperators.contains(name)) && params.size() == 2) {
+      return String.format("(%s %s %s)", params.get(0), name, params.get(1));
+    } else if ("sign_minus".equals(name)) {
+      name = name.replaceAll("sign_minus", "-");
+      return String.format("%s%s", name, params.get(0));
+    } else if ("sign_plus".equals(name)) {
+      name = name.replaceAll("sign_plus", "+");
+      return String.format("%s%s", name, params.get(0));
+    } else if (params.size() == 1) {
+      return String.format("%s%s", name, params.get(0));
+    } else if (params.size() == 0) {
+      return name;
+    } else {
+      return name + paramListToString(params);
+    }
+  }
 
-    /**
-     * Escape a string literal.
-     * 
-     * @param s
-     *            literal
-     * @return escaped literal
-     */
-    public static String escapeLiteral(String s) {
-        return s.replaceAll("\"", "\"\"");
-    }
+  static String objectToString(Object o) {
+    String fields =
+        o.getFldList().stream()
+            .map(
+                f ->
+                    new StringBuilder()
+                        .append("'")
+                        .append(quoteJsonKey(f.getKey()))
+                        .append("'")
+                        .append(":")
+                        .append(exprToString(f.getValue()))
+                        .toString())
+            .collect(Collectors.joining(", "));
+    return new StringBuilder("{").append(fields).append("}").toString();
+  }
 
-    /**
-     * Quote a named identifier.
-     * 
-     * @param ident
-     *            identifier
-     * @return quoted identifier
-     */
-    public static String quoteIdentifier(String ident) {
-        // TODO: make sure this is correct
-        if (ident.contains("`") || ident.contains("\"") || ident.contains("'") || ident.contains("$") || ident.contains(".") || ident.contains("-")) {
-            return "`" + ident.replaceAll("`", "``") + "`";
-        }
-        return ident;
-    }
+  /**
+   * Escape a string literal.
+   *
+   * @param s literal
+   * @return escaped literal
+   */
+  public static String escapeLiteral(String s) {
+    return s.replaceAll("\"", "\"\"");
+  }
 
-    /**
-     * Quote a JSON document field key.
-     * 
-     * @param key
-     *            key
-     * @return quoted key
-     */
-    public static String quoteJsonKey(String key) {
-        return key.replaceAll("'", "\\\\'");
+  /**
+   * Quote a named identifier.
+   *
+   * @param ident identifier
+   * @return quoted identifier
+   */
+  public static String quoteIdentifier(String ident) {
+    // TODO: make sure this is correct
+    if (ident.contains("`")
+        || ident.contains("\"")
+        || ident.contains("'")
+        || ident.contains("$")
+        || ident.contains(".")
+        || ident.contains("-")) {
+      return "`" + ident.replaceAll("`", "``") + "`";
     }
+    return ident;
+  }
 
-    /**
-     * Quote a JSON document path member.
-     * 
-     * @param member
-     *            path member
-     * @return quoted path member
-     */
-    public static String quoteDocumentPathMember(String member) {
-        if (!member.matches("[a-zA-Z0-9_]*")) {
-            return "\"" + member.replaceAll("\"", "\\\\\"") + "\"";
-        }
-        return member;
-    }
+  /**
+   * Quote a JSON document field key.
+   *
+   * @param key key
+   * @return quoted key
+   */
+  public static String quoteJsonKey(String key) {
+    return key.replaceAll("'", "\\\\'");
+  }
 
-    /**
-     * Serialize an expression to a string.
-     * 
-     * @param e
-     *            {@link Expr}
-     * @return string expression
-     */
-    public static String exprToString(Expr e) {
-        switch (e.getType()) {
-            case LITERAL:
-                return scalarToString(e.getLiteral());
-            case IDENT:
-                return columnIdentifierToString(e.getIdentifier());
-            case FUNC_CALL:
-                return functionCallToString(e.getFunctionCall());
-            case OPERATOR:
-                return operatorToString(e.getOperator());
-            case PLACEHOLDER:
-                return ":" + Integer.toUnsignedLong(e.getPosition());
-            case ARRAY:
-                return arrayToString(e.getArray());
-            case OBJECT:
-                return objectToString(e.getObject());
-            default:
-                throw new IllegalArgumentException("Unknown type tag: " + e.getType());
-        }
+  /**
+   * Quote a JSON document path member.
+   *
+   * @param member path member
+   * @return quoted path member
+   */
+  public static String quoteDocumentPathMember(String member) {
+    if (!member.matches("[a-zA-Z0-9_]*")) {
+      return "\"" + member.replaceAll("\"", "\\\\\"") + "\"";
     }
+    return member;
+  }
+
+  /**
+   * Serialize an expression to a string.
+   *
+   * @param e {@link Expr}
+   * @return string expression
+   */
+  public static String exprToString(Expr e) {
+    switch (e.getType()) {
+      case LITERAL:
+        return scalarToString(e.getLiteral());
+      case IDENT:
+        return columnIdentifierToString(e.getIdentifier());
+      case FUNC_CALL:
+        return functionCallToString(e.getFunctionCall());
+      case OPERATOR:
+        return operatorToString(e.getOperator());
+      case PLACEHOLDER:
+        return ":" + Integer.toUnsignedLong(e.getPosition());
+      case ARRAY:
+        return arrayToString(e.getArray());
+      case OBJECT:
+        return objectToString(e.getObject());
+      default:
+        throw new IllegalArgumentException("Unknown type tag: " + e.getType());
+    }
+  }
 }

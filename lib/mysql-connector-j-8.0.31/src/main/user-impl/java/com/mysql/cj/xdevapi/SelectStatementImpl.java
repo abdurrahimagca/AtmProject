@@ -29,102 +29,105 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.concurrent.CompletableFuture;
-
 import com.mysql.cj.MysqlxSession;
 import com.mysql.cj.protocol.x.XMessage;
 import com.mysql.cj.xdevapi.FilterParams.RowLock;
 import com.mysql.cj.xdevapi.FilterParams.RowLockOptions;
+import java.util.concurrent.CompletableFuture;
 
-/**
- * {@link SelectStatement} implementation.
- */
-public class SelectStatementImpl extends FilterableStatement<SelectStatement, RowResult> implements SelectStatement {
-    /* package private */ SelectStatementImpl(MysqlxSession mysqlxSession, String schema, String table, String... projection) {
-        super(new TableFilterParams(schema, table));
-        this.mysqlxSession = mysqlxSession;
-        if (projection != null && projection.length > 0) {
-            this.filterParams.setFields(projection);
-        }
+/** {@link SelectStatement} implementation. */
+public class SelectStatementImpl extends FilterableStatement<SelectStatement, RowResult>
+    implements SelectStatement {
+  /* package private */ SelectStatementImpl(
+      MysqlxSession mysqlxSession, String schema, String table, String... projection) {
+    super(new TableFilterParams(schema, table));
+    this.mysqlxSession = mysqlxSession;
+    if (projection != null && projection.length > 0) {
+      this.filterParams.setFields(projection);
     }
+  }
 
-    @Override
-    protected RowResult executeStatement() {
-        return this.mysqlxSession.query(this.getMessageBuilder().buildFind(this.filterParams), new StreamingRowResultBuilder(this.mysqlxSession));
-    }
+  @Override
+  protected RowResult executeStatement() {
+    return this.mysqlxSession.query(
+        this.getMessageBuilder().buildFind(this.filterParams),
+        new StreamingRowResultBuilder(this.mysqlxSession));
+  }
 
-    @Override
-    protected XMessage getPrepareStatementXMessage() {
-        return getMessageBuilder().buildPrepareFind(this.preparedStatementId, this.filterParams);
-    }
+  @Override
+  protected XMessage getPrepareStatementXMessage() {
+    return getMessageBuilder().buildPrepareFind(this.preparedStatementId, this.filterParams);
+  }
 
-    @Override
-    protected RowResult executePreparedStatement() {
-        return this.mysqlxSession.query(this.getMessageBuilder().buildPrepareExecute(this.preparedStatementId, this.filterParams),
-                new StreamingRowResultBuilder(this.mysqlxSession));
-    }
+  @Override
+  protected RowResult executePreparedStatement() {
+    return this.mysqlxSession.query(
+        this.getMessageBuilder().buildPrepareExecute(this.preparedStatementId, this.filterParams),
+        new StreamingRowResultBuilder(this.mysqlxSession));
+  }
 
-    public CompletableFuture<RowResult> executeAsync() {
-        return this.mysqlxSession.queryAsync(getMessageBuilder().buildFind(this.filterParams), new RowResultBuilder(this.mysqlxSession));
-    }
+  public CompletableFuture<RowResult> executeAsync() {
+    return this.mysqlxSession.queryAsync(
+        getMessageBuilder().buildFind(this.filterParams), new RowResultBuilder(this.mysqlxSession));
+  }
 
-    @Override
-    public SelectStatement groupBy(String... groupBy) {
-        resetPrepareState();
-        this.filterParams.setGrouping(groupBy);
-        return this;
-    }
+  @Override
+  public SelectStatement groupBy(String... groupBy) {
+    resetPrepareState();
+    this.filterParams.setGrouping(groupBy);
+    return this;
+  }
 
-    public SelectStatement having(String having) {
-        resetPrepareState();
-        this.filterParams.setGroupingCriteria(having);
-        return this;
-    }
+  public SelectStatement having(String having) {
+    resetPrepareState();
+    this.filterParams.setGroupingCriteria(having);
+    return this;
+  }
 
-    @Override
-    public FilterParams getFilterParams() {
-        return this.filterParams;
-    }
+  @Override
+  public FilterParams getFilterParams() {
+    return this.filterParams;
+  }
 
-    @Override
-    public SelectStatement lockShared() {
-        return lockShared(LockContention.DEFAULT);
-    }
+  @Override
+  public SelectStatement lockShared() {
+    return lockShared(LockContention.DEFAULT);
+  }
 
-    @Override
-    public SelectStatement lockShared(LockContention lockContention) {
-        resetPrepareState();
-        this.filterParams.setLock(RowLock.SHARED_LOCK);
-        switch (lockContention) {
-            case NOWAIT:
-                this.filterParams.setLockOption(RowLockOptions.NOWAIT);
-                break;
-            case SKIP_LOCKED:
-                this.filterParams.setLockOption(RowLockOptions.SKIP_LOCKED);
-                break;
-            case DEFAULT:
-        }
-        return this;
+  @Override
+  public SelectStatement lockShared(LockContention lockContention) {
+    resetPrepareState();
+    this.filterParams.setLock(RowLock.SHARED_LOCK);
+    switch (lockContention) {
+      case NOWAIT:
+        this.filterParams.setLockOption(RowLockOptions.NOWAIT);
+        break;
+      case SKIP_LOCKED:
+        this.filterParams.setLockOption(RowLockOptions.SKIP_LOCKED);
+        break;
+      case DEFAULT:
     }
+    return this;
+  }
 
-    @Override
-    public SelectStatement lockExclusive() {
-        return lockExclusive(LockContention.DEFAULT);
-    }
+  @Override
+  public SelectStatement lockExclusive() {
+    return lockExclusive(LockContention.DEFAULT);
+  }
 
-    @Override
-    public SelectStatement lockExclusive(LockContention lockContention) {
-        resetPrepareState();
-        this.filterParams.setLock(RowLock.EXCLUSIVE_LOCK);
-        switch (lockContention) {
-            case NOWAIT:
-                this.filterParams.setLockOption(RowLockOptions.NOWAIT);
-                break;
-            case SKIP_LOCKED:
-                this.filterParams.setLockOption(RowLockOptions.SKIP_LOCKED);
-                break;
-            case DEFAULT:
-        }
-        return this;
+  @Override
+  public SelectStatement lockExclusive(LockContention lockContention) {
+    resetPrepareState();
+    this.filterParams.setLock(RowLock.EXCLUSIVE_LOCK);
+    switch (lockContention) {
+      case NOWAIT:
+        this.filterParams.setLockOption(RowLockOptions.NOWAIT);
+        break;
+      case SKIP_LOCKED:
+        this.filterParams.setLockOption(RowLockOptions.SKIP_LOCKED);
+        break;
+      case DEFAULT:
     }
+    return this;
+  }
 }

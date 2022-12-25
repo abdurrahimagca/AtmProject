@@ -29,42 +29,45 @@
 
 package com.mysql.cj.util;
 
+import com.mysql.cj.CacheAdapter;
+import com.mysql.cj.CacheAdapterFactory;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.mysql.cj.CacheAdapter;
-import com.mysql.cj.CacheAdapterFactory;
+public class PerVmServerConfigCacheFactory
+    implements CacheAdapterFactory<String, Map<String, String>> {
+  static final ConcurrentHashMap<String, Map<String, String>> serverConfigByUrl =
+      new ConcurrentHashMap<>();
 
-public class PerVmServerConfigCacheFactory implements CacheAdapterFactory<String, Map<String, String>> {
-    static final ConcurrentHashMap<String, Map<String, String>> serverConfigByUrl = new ConcurrentHashMap<>();
-
-    private static final CacheAdapter<String, Map<String, String>> serverConfigCache = new CacheAdapter<String, Map<String, String>>() {
+  private static final CacheAdapter<String, Map<String, String>> serverConfigCache =
+      new CacheAdapter<String, Map<String, String>>() {
 
         public Map<String, String> get(String key) {
-            return serverConfigByUrl.get(key);
+          return serverConfigByUrl.get(key);
         }
 
         public void put(String key, Map<String, String> value) {
-            serverConfigByUrl.putIfAbsent(key, value);
+          serverConfigByUrl.putIfAbsent(key, value);
         }
 
         public void invalidate(String key) {
-            serverConfigByUrl.remove(key);
+          serverConfigByUrl.remove(key);
         }
 
         public void invalidateAll(Set<String> keys) {
-            for (String key : keys) {
-                serverConfigByUrl.remove(key);
-            }
+          for (String key : keys) {
+            serverConfigByUrl.remove(key);
+          }
         }
 
         public void invalidateAll() {
-            serverConfigByUrl.clear();
+          serverConfigByUrl.clear();
         }
-    };
+      };
 
-    public CacheAdapter<String, Map<String, String>> getInstance(Object syncMutex, String url, int cacheMaxSize, int maxKeySize) {
-        return serverConfigCache;
-    }
+  public CacheAdapter<String, Map<String, String>> getInstance(
+      Object syncMutex, String url, int cacheMaxSize, int maxKeySize) {
+    return serverConfigCache;
+  }
 }

@@ -29,22 +29,20 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * A result from a SQL statement which may have several sets of data following by a DML result.
- */
+/** A result from a SQL statement which may have several sets of data following by a DML result. */
 public interface SqlResult extends Result, InsertResult, RowResult {
-    /**
-     * Move to the next result. This method has no effect after returning <code>false</code> for the first time.
-     *
-     * @return was there a next result that we moved to?
-     */
-    default boolean nextResult() {
-        return false;
-    }
+  /**
+   * Move to the next result. This method has no effect after returning <code>false</code> for the
+   * first time.
+   *
+   * @return was there a next result that we moved to?
+   */
+  default boolean nextResult() {
+    return false;
+  }
 
-    @Override
-    default Long getAutoIncrementValue() {
-        throw new XDevAPIError("Method getAutoIncrementValue() is allowed only for insert statements.");
-    }
-
+  @Override
+  default Long getAutoIncrementValue() {
+    throw new XDevAPIError("Method getAutoIncrementValue() is allowed only for insert statements.");
+  }
 }

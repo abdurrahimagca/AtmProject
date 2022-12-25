@@ -38,108 +38,142 @@ import java.util.concurrent.TimeUnit;
 
 public class InternalTimestamp extends InternalDate {
 
-    private int hours = 0;
-    private int minutes = 0;
-    private int seconds = 0;
-    private int nanos = 0;
-    private int scale = 0;
-    private int offset = 0;
+  private int hours = 0;
+  private int minutes = 0;
+  private int seconds = 0;
+  private int nanos = 0;
+  private int scale = 0;
+  private int offset = 0;
 
-    public static InternalTimestamp from(LocalDate x) {
-        return new InternalTimestamp(x.getYear(), x.getMonthValue(), x.getDayOfMonth(), 0, 0, 0, 0, -1);
-    }
+  public static InternalTimestamp from(LocalDate x) {
+    return new InternalTimestamp(x.getYear(), x.getMonthValue(), x.getDayOfMonth(), 0, 0, 0, 0, -1);
+  }
 
-    public static InternalTimestamp from(LocalDateTime x) {
-        return new InternalTimestamp(x.getYear(), x.getMonthValue(), x.getDayOfMonth(), x.getHour(), x.getMinute(), x.getSecond(), x.getNano(), -1);
-    }
+  public static InternalTimestamp from(LocalDateTime x) {
+    return new InternalTimestamp(
+        x.getYear(),
+        x.getMonthValue(),
+        x.getDayOfMonth(),
+        x.getHour(),
+        x.getMinute(),
+        x.getSecond(),
+        x.getNano(),
+        -1);
+  }
 
-    public static InternalTimestamp from(OffsetDateTime x) {
-        InternalTimestamp internalTimestamp = new InternalTimestamp(x.getYear(), x.getMonthValue(), x.getDayOfMonth(), x.getHour(), x.getMinute(),
-                x.getSecond(), x.getNano(), -1);
-        internalTimestamp.setOffset((int) TimeUnit.SECONDS.toMinutes(x.getOffset().getTotalSeconds()));
-        return internalTimestamp;
-    }
+  public static InternalTimestamp from(OffsetDateTime x) {
+    InternalTimestamp internalTimestamp =
+        new InternalTimestamp(
+            x.getYear(),
+            x.getMonthValue(),
+            x.getDayOfMonth(),
+            x.getHour(),
+            x.getMinute(),
+            x.getSecond(),
+            x.getNano(),
+            -1);
+    internalTimestamp.setOffset((int) TimeUnit.SECONDS.toMinutes(x.getOffset().getTotalSeconds()));
+    return internalTimestamp;
+  }
 
-    public static InternalTimestamp from(ZonedDateTime x) {
-        InternalTimestamp internalTimestamp = new InternalTimestamp(x.getYear(), x.getMonthValue(), x.getDayOfMonth(), x.getHour(), x.getMinute(),
-                x.getSecond(), x.getNano(), -1);
-        internalTimestamp.setOffset((int) TimeUnit.SECONDS.toMinutes(x.getOffset().getTotalSeconds()));
-        return internalTimestamp;
-    }
+  public static InternalTimestamp from(ZonedDateTime x) {
+    InternalTimestamp internalTimestamp =
+        new InternalTimestamp(
+            x.getYear(),
+            x.getMonthValue(),
+            x.getDayOfMonth(),
+            x.getHour(),
+            x.getMinute(),
+            x.getSecond(),
+            x.getNano(),
+            -1);
+    internalTimestamp.setOffset((int) TimeUnit.SECONDS.toMinutes(x.getOffset().getTotalSeconds()));
+    return internalTimestamp;
+  }
 
-    public static InternalTimestamp from(Calendar x, int nanos) {
-        return new InternalTimestamp(x.get(Calendar.YEAR), x.get(Calendar.MONTH) + 1, x.get(Calendar.DAY_OF_MONTH), x.get(Calendar.HOUR_OF_DAY),
-                x.get(Calendar.MINUTE), x.get(Calendar.SECOND), nanos, -1);
-    }
+  public static InternalTimestamp from(Calendar x, int nanos) {
+    return new InternalTimestamp(
+        x.get(Calendar.YEAR),
+        x.get(Calendar.MONTH) + 1,
+        x.get(Calendar.DAY_OF_MONTH),
+        x.get(Calendar.HOUR_OF_DAY),
+        x.get(Calendar.MINUTE),
+        x.get(Calendar.SECOND),
+        nanos,
+        -1);
+  }
 
-    /**
-     * Constructs a zero datetime
-     */
-    public InternalTimestamp() {
-        super();
-    }
+  /** Constructs a zero datetime */
+  public InternalTimestamp() {
+    super();
+  }
 
-    public InternalTimestamp(int year, int month, int day, int hours, int minutes, int seconds, int nanos, int scale) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
-        this.hours = hours;
-        this.minutes = minutes;
-        this.seconds = seconds;
-        this.nanos = nanos;
-        this.scale = scale;
-    }
+  public InternalTimestamp(
+      int year, int month, int day, int hours, int minutes, int seconds, int nanos, int scale) {
+    this.year = year;
+    this.month = month;
+    this.day = day;
+    this.hours = hours;
+    this.minutes = minutes;
+    this.seconds = seconds;
+    this.nanos = nanos;
+    this.scale = scale;
+  }
 
-    public int getHours() {
-        return this.hours;
-    }
+  public int getHours() {
+    return this.hours;
+  }
 
-    public void setHours(int hours) {
-        this.hours = hours;
-    }
+  public void setHours(int hours) {
+    this.hours = hours;
+  }
 
-    public int getMinutes() {
-        return this.minutes;
-    }
+  public int getMinutes() {
+    return this.minutes;
+  }
 
-    public void setMinutes(int minutes) {
-        this.minutes = minutes;
-    }
+  public void setMinutes(int minutes) {
+    this.minutes = minutes;
+  }
 
-    public int getSeconds() {
-        return this.seconds;
-    }
+  public int getSeconds() {
+    return this.seconds;
+  }
 
-    public void setSeconds(int seconds) {
-        this.seconds = seconds;
-    }
+  public void setSeconds(int seconds) {
+    this.seconds = seconds;
+  }
 
-    public int getNanos() {
-        return this.nanos;
-    }
+  public int getNanos() {
+    return this.nanos;
+  }
 
-    public void setNanos(int nanos) {
-        this.nanos = nanos;
-    }
+  public void setNanos(int nanos) {
+    this.nanos = nanos;
+  }
 
-    public int getScale() {
-        return this.scale;
-    }
+  public int getScale() {
+    return this.scale;
+  }
 
-    public void setScale(int scale) {
-        this.scale = scale;
-    }
+  public void setScale(int scale) {
+    this.scale = scale;
+  }
 
-    public int getOffset() {
-        return this.offset;
-    }
+  public int getOffset() {
+    return this.offset;
+  }
 
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
+  public void setOffset(int offset) {
+    this.offset = offset;
+  }
 
-    @Override
-    public boolean isZero() {
-        return super.isZero() && this.hours == 0 && this.minutes == 0 && this.seconds == 0 && this.nanos == 0;
-    }
+  @Override
+  public boolean isZero() {
+    return super.isZero()
+        && this.hours == 0
+        && this.minutes == 0
+        && this.seconds == 0
+        && this.nanos == 0;
+  }
 }

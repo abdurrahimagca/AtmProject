@@ -29,85 +29,88 @@
 
 package com.mysql.cj.protocol;
 
+import com.mysql.cj.Messages;
 import java.io.EOFException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.mysql.cj.Messages;
-
 /**
- * InputStream wrapper that provides methods to aggregate reads of a given size. c.f. readFully(byte[],int,int).
+ * InputStream wrapper that provides methods to aggregate reads of a given size. c.f.
+ * readFully(byte[],int,int).
  */
 public class FullReadInputStream extends FilterInputStream {
 
-    public FullReadInputStream(InputStream underlyingStream) {
-        super(underlyingStream);
+  public FullReadInputStream(InputStream underlyingStream) {
+    super(underlyingStream);
+  }
+
+  public InputStream getUnderlyingStream() {
+    return this.in;
+  }
+
+  public int readFully(byte[] b) throws IOException {
+    return readFully(b, 0, b.length);
+  }
+
+  public int readFully(byte[] b, int off, int len) throws IOException {
+    if (len < 0) {
+      throw new IndexOutOfBoundsException();
     }
 
-    public InputStream getUnderlyingStream() {
-        return this.in;
+    int n = 0;
+
+    while (n < len) {
+      int count = read(b, off + n, len - n);
+
+      if (count < 0) {
+        throw new EOFException(
+            Messages.getString(
+                "MysqlIO.EOF", new Object[] {Integer.valueOf(len), Integer.valueOf(n)}));
+      }
+
+      n += count;
     }
 
-    public int readFully(byte[] b) throws IOException {
-        return readFully(b, 0, b.length);
+    return n;
+  }
+
+  public long skipFully(long len) throws IOException {
+    if (len < 0) {
+      throw new IOException(Messages.getString("MysqlIO.105"));
     }
 
-    public int readFully(byte[] b, int off, int len) throws IOException {
-        if (len < 0) {
-            throw new IndexOutOfBoundsException();
-        }
+    long n = 0;
 
-        int n = 0;
+    while (n < len) {
+      long count = skip(len - n);
 
-        while (n < len) {
-            int count = read(b, off + n, len - n);
+      if (count < 0) {
+        throw new EOFException(
+            Messages.getString("MysqlIO.EOF", new Object[] {Long.valueOf(len), Long.valueOf(n)}));
+      }
 
-            if (count < 0) {
-                throw new EOFException(Messages.getString("MysqlIO.EOF", new Object[] { Integer.valueOf(len), Integer.valueOf(n) }));
-            }
-
-            n += count;
-        }
-
-        return n;
+      n += count;
     }
 
-    public long skipFully(long len) throws IOException {
-        if (len < 0) {
-            throw new IOException(Messages.getString("MysqlIO.105"));
-        }
+    return n;
+  }
 
-        long n = 0;
+  public int skipLengthEncodedInteger() throws IOException {
+    int sw = read() & 0xff;
 
-        while (n < len) {
-            long count = skip(len - n);
+    switch (sw) {
+      case 252:
+        return (int) skipFully(2) + 1;
 
-            if (count < 0) {
-                throw new EOFException(Messages.getString("MysqlIO.EOF", new Object[] { Long.valueOf(len), Long.valueOf(n) }));
-            }
+      case 253:
+        return (int) skipFully(3) + 1;
 
-            n += count;
-        }
+      case 254:
+        return (int) skipFully(8) + 1;
 
-        return n;
+      default:
+        return 1;
     }
-
-    public int skipLengthEncodedInteger() throws IOException {
-        int sw = read() & 0xff;
-
-        switch (sw) {
-            case 252:
-                return (int) skipFully(2) + 1;
-
-            case 253:
-                return (int) skipFully(3) + 1;
-
-            case 254:
-                return (int) skipFully(8) + 1;
-
-            default:
-                return 1;
-        }
-    }
+  }
 }

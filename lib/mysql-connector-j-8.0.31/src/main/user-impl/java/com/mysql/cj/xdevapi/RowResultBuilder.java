@@ -29,10 +29,6 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimeZone;
-
 import com.mysql.cj.MysqlxSession;
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.exceptions.ExceptionFactory;
@@ -48,58 +44,65 @@ import com.mysql.cj.result.BufferedRowList;
 import com.mysql.cj.result.DefaultColumnDefinition;
 import com.mysql.cj.result.Field;
 import com.mysql.cj.result.Row;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimeZone;
 
-/**
- * Result builder producing a {@link RowResult} instance.
- */
+/** Result builder producing a {@link RowResult} instance. */
 public class RowResultBuilder implements ResultBuilder<RowResult> {
-    private ArrayList<Field> fields = new ArrayList<>();
-    private ColumnDefinition metadata;
-    private List<Row> rows = new ArrayList<>();
-    private RowResult result;
+  private ArrayList<Field> fields = new ArrayList<>();
+  private ColumnDefinition metadata;
+  private List<Row> rows = new ArrayList<>();
+  private RowResult result;
 
-    TimeZone defaultTimeZone;
-    PropertySet pset;
-    private StatementExecuteOkBuilder statementExecuteOkBuilder = new StatementExecuteOkBuilder();
+  TimeZone defaultTimeZone;
+  PropertySet pset;
+  private StatementExecuteOkBuilder statementExecuteOkBuilder = new StatementExecuteOkBuilder();
 
-    public RowResultBuilder(MysqlxSession sess) {
-        this.defaultTimeZone = sess.getServerSession().getDefaultTimeZone();
-        this.pset = sess.getPropertySet();
+  public RowResultBuilder(MysqlxSession sess) {
+    this.defaultTimeZone = sess.getServerSession().getDefaultTimeZone();
+    this.pset = sess.getPropertySet();
+  }
+
+  @Override
+  public boolean addProtocolEntity(ProtocolEntity entity) {
+    if (entity instanceof Field) {
+      this.fields.add((Field) entity);
+      return false;
+
+    } else if (entity instanceof Row) {
+      if (this.metadata == null) {
+        this.metadata = new DefaultColumnDefinition(this.fields.toArray(new Field[] {}));
+      }
+      this.rows.add(((Row) entity).setMetadata(this.metadata));
+      return false;
+
+    } else if (entity instanceof Notice) {
+      this.statementExecuteOkBuilder.addProtocolEntity(entity);
+      return false;
+
+    } else if (entity instanceof FetchDoneEntity) {
+      return false;
+
+    } else if (entity instanceof StatementExecuteOk) {
+      return true;
     }
+    throw ExceptionFactory.createException(
+        WrongArgumentException.class, "Unexpected protocol entity " + entity);
+  }
 
-    @Override
-    public boolean addProtocolEntity(ProtocolEntity entity) {
-        if (entity instanceof Field) {
-            this.fields.add((Field) entity);
-            return false;
-
-        } else if (entity instanceof Row) {
-            if (this.metadata == null) {
-                this.metadata = new DefaultColumnDefinition(this.fields.toArray(new Field[] {}));
-            }
-            this.rows.add(((Row) entity).setMetadata(this.metadata));
-            return false;
-
-        } else if (entity instanceof Notice) {
-            this.statementExecuteOkBuilder.addProtocolEntity(entity);
-            return false;
-
-        } else if (entity instanceof FetchDoneEntity) {
-            return false;
-
-        } else if (entity instanceof StatementExecuteOk) {
-            return true;
-        }
-        throw ExceptionFactory.createException(WrongArgumentException.class, "Unexpected protocol entity " + entity);
+  @Override
+  public RowResult build() {
+    if (this.metadata == null) {
+      this.metadata = new DefaultColumnDefinition(this.fields.toArray(new Field[] {}));
     }
-
-    @Override
-    public RowResult build() {
-        if (this.metadata == null) {
-            this.metadata = new DefaultColumnDefinition(this.fields.toArray(new Field[] {}));
-        }
-        this.result = new RowResultImpl(this.metadata, this.defaultTimeZone, new BufferedRowList(this.rows), () -> this.statementExecuteOkBuilder.build(),
-                this.pset);
-        return this.result;
-    }
+    this.result =
+        new RowResultImpl(
+            this.metadata,
+            this.defaultTimeZone,
+            new BufferedRowList(this.rows),
+            () -> this.statementExecuteOkBuilder.build(),
+            this.pset);
+    return this.result;
+  }
 }

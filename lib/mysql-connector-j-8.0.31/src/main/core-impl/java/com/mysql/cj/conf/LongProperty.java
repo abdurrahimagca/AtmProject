@@ -35,20 +35,29 @@ import com.mysql.cj.exceptions.WrongArgumentException;
 
 public class LongProperty extends AbstractRuntimeProperty<Long> {
 
-    private static final long serialVersionUID = 1814429804634837665L;
+  private static final long serialVersionUID = 1814429804634837665L;
 
-    protected LongProperty(PropertyDefinition<Long> propertyDefinition) {
-        super(propertyDefinition);
-    }
+  protected LongProperty(PropertyDefinition<Long> propertyDefinition) {
+    super(propertyDefinition);
+  }
 
-    @Override
-    protected void checkRange(Long val, String valueAsString, ExceptionInterceptor exceptionInterceptor) {
-        if ((val.longValue() < getPropertyDefinition().getLowerBound()) || (val.longValue() > getPropertyDefinition().getUpperBound())) {
-            throw ExceptionFactory.createException(WrongArgumentException.class,
-                    "The connection property '" + getPropertyDefinition().getName() + "' only accepts long integer values in the range of "
-                            + getPropertyDefinition().getLowerBound() + " - " + getPropertyDefinition().getUpperBound() + ", the value '"
-                            + (valueAsString == null ? val.longValue() : valueAsString) + "' exceeds this range.",
-                    exceptionInterceptor);
-        }
+  @Override
+  protected void checkRange(
+      Long val, String valueAsString, ExceptionInterceptor exceptionInterceptor) {
+    if ((val.longValue() < getPropertyDefinition().getLowerBound())
+        || (val.longValue() > getPropertyDefinition().getUpperBound())) {
+      throw ExceptionFactory.createException(
+          WrongArgumentException.class,
+          "The connection property '"
+              + getPropertyDefinition().getName()
+              + "' only accepts long integer values in the range of "
+              + getPropertyDefinition().getLowerBound()
+              + " - "
+              + getPropertyDefinition().getUpperBound()
+              + ", the value '"
+              + (valueAsString == null ? val.longValue() : valueAsString)
+              + "' exceeds this range.",
+          exceptionInterceptor);
     }
+  }
 }

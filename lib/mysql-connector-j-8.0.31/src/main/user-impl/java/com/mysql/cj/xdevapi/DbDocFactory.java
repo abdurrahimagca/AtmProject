@@ -34,20 +34,17 @@ import com.mysql.cj.protocol.ProtocolEntity;
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 import com.mysql.cj.protocol.x.XMessage;
 
-/**
- * Create {@link DbDoc} objects from internal row representation.
- */
+/** Create {@link DbDoc} objects from internal row representation. */
 public class DbDocFactory implements ProtocolEntityFactory<DbDoc, XMessage> {
 
-    private PropertySet pset;
+  private PropertySet pset;
 
-    public DbDocFactory(PropertySet pset) {
-        this.pset = pset;
-    }
+  public DbDocFactory(PropertySet pset) {
+    this.pset = pset;
+  }
 
-    @Override
-    public DbDoc createFromProtocolEntity(ProtocolEntity internalRow) {
-        return ((com.mysql.cj.result.Row) internalRow).getValue(0, new DbDocValueFactory(this.pset));
-    }
-
+  @Override
+  public DbDoc createFromProtocolEntity(ProtocolEntity internalRow) {
+    return ((com.mysql.cj.result.Row) internalRow).getValue(0, new DbDocValueFactory(this.pset));
+  }
 }

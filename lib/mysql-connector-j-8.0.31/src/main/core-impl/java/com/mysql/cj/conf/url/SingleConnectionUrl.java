@@ -29,22 +29,21 @@
 
 package com.mysql.cj.conf.url;
 
-import java.util.Properties;
-
 import com.mysql.cj.conf.ConnectionUrl;
 import com.mysql.cj.conf.ConnectionUrlParser;
+import java.util.Properties;
 
 public class SingleConnectionUrl extends ConnectionUrl {
-    /**
-     * Constructs an instance of {@link SingleConnectionUrl}, performing all the required initializations.
-     * 
-     * @param connStrParser
-     *            a {@link ConnectionUrlParser} instance containing the parsed version of the original connection string
-     * @param info
-     *            the connection arguments map
-     */
-    public SingleConnectionUrl(ConnectionUrlParser connStrParser, Properties info) {
-        super(connStrParser, info);
-        this.type = Type.SINGLE_CONNECTION;
-    }
+  /**
+   * Constructs an instance of {@link SingleConnectionUrl}, performing all the required
+   * initializations.
+   *
+   * @param connStrParser a {@link ConnectionUrlParser} instance containing the parsed version of
+   *     the original connection string
+   * @param info the connection arguments map
+   */
+  public SingleConnectionUrl(ConnectionUrlParser connStrParser, Properties info) {
+    super(connStrParser, info);
+    this.type = Type.SINGLE_CONNECTION;
+  }
 }

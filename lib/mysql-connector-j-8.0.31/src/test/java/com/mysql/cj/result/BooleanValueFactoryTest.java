@@ -33,10 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.concurrent.Callable;
-
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.Constants;
 import com.mysql.cj.MysqlType;
 import com.mysql.cj.conf.DefaultPropertySet;
@@ -46,138 +42,154 @@ import com.mysql.cj.exceptions.DataConversionException;
 import com.mysql.cj.protocol.InternalDate;
 import com.mysql.cj.protocol.InternalTime;
 import com.mysql.cj.protocol.InternalTimestamp;
+import java.util.concurrent.Callable;
+import org.junit.jupiter.api.Test;
 
-/**
- * Tests for {@link BooleanValueFactory}
- */
+/** Tests for {@link BooleanValueFactory} */
 public class BooleanValueFactoryTest extends CommonAsserts {
-    PropertySet pset = new DefaultPropertySet();
-    ValueFactory<Boolean> vf = new BooleanValueFactory(this.pset);
+  PropertySet pset = new DefaultPropertySet();
+  ValueFactory<Boolean> vf = new BooleanValueFactory(this.pset);
 
-    @Test
-    public void testCreateFromDate() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from DATE to java.lang.Boolean", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                BooleanValueFactoryTest.this.vf.createFromDate(new InternalDate(2006, 1, 1));
-                return null;
-            }
+  @Test
+  public void testCreateFromDate() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from DATE to java.lang.Boolean",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            BooleanValueFactoryTest.this.vf.createFromDate(new InternalDate(2006, 1, 1));
+            return null;
+          }
         });
-    }
+  }
 
-    @Test
-    public void testCreateFromTime() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from TIME to java.lang.Boolean", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                BooleanValueFactoryTest.this.vf.createFromTime(new InternalTime(12, 0, 0, 0, 0));
-                return null;
-            }
+  @Test
+  public void testCreateFromTime() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from TIME to java.lang.Boolean",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            BooleanValueFactoryTest.this.vf.createFromTime(new InternalTime(12, 0, 0, 0, 0));
+            return null;
+          }
         });
-    }
+  }
 
-    @Test
-    public void testCreateFromTimestamp() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from TIMESTAMP to java.lang.Boolean", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                BooleanValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(2006, 1, 1, 12, 0, 0, 0, 0));
-                return null;
-            }
+  @Test
+  public void testCreateFromTimestamp() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from TIMESTAMP to java.lang.Boolean",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            BooleanValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(2006, 1, 1, 12, 0, 0, 0, 0));
+            return null;
+          }
         });
-    }
+  }
 
-    @Test
-    public void testCreateFromLong() {
-        assertTrue(this.vf.createFromLong(1));
-        assertTrue(this.vf.createFromLong(Integer.MAX_VALUE));
-        assertTrue(this.vf.createFromLong(-1));
-        assertFalse(this.vf.createFromLong(Integer.MIN_VALUE));
-        assertFalse(this.vf.createFromLong(0));
-    }
+  @Test
+  public void testCreateFromLong() {
+    assertTrue(this.vf.createFromLong(1));
+    assertTrue(this.vf.createFromLong(Integer.MAX_VALUE));
+    assertTrue(this.vf.createFromLong(-1));
+    assertFalse(this.vf.createFromLong(Integer.MIN_VALUE));
+    assertFalse(this.vf.createFromLong(0));
+  }
 
-    @Test
-    public void testCreateFromBigInteger() {
-        assertTrue(this.vf.createFromBigInteger(Constants.BIG_INTEGER_ONE));
-        assertTrue(this.vf.createFromBigInteger(Constants.BIG_INTEGER_MAX_INTEGER_VALUE));
-        assertTrue(this.vf.createFromBigInteger(Constants.BIG_INTEGER_NEGATIVE_ONE));
-        assertFalse(this.vf.createFromBigInteger(Constants.BIG_INTEGER_MIN_INTEGER_VALUE));
-        assertFalse(this.vf.createFromBigInteger(Constants.BIG_INTEGER_ZERO));
-    }
+  @Test
+  public void testCreateFromBigInteger() {
+    assertTrue(this.vf.createFromBigInteger(Constants.BIG_INTEGER_ONE));
+    assertTrue(this.vf.createFromBigInteger(Constants.BIG_INTEGER_MAX_INTEGER_VALUE));
+    assertTrue(this.vf.createFromBigInteger(Constants.BIG_INTEGER_NEGATIVE_ONE));
+    assertFalse(this.vf.createFromBigInteger(Constants.BIG_INTEGER_MIN_INTEGER_VALUE));
+    assertFalse(this.vf.createFromBigInteger(Constants.BIG_INTEGER_ZERO));
+  }
 
-    @Test
-    public void testCreateFromDouble() {
-        assertTrue(this.vf.createFromDouble(1));
-        assertTrue(this.vf.createFromDouble(Integer.MAX_VALUE));
-        assertTrue(this.vf.createFromDouble(-1));
-        assertFalse(this.vf.createFromDouble(Integer.MIN_VALUE));
-        assertFalse(this.vf.createFromDouble(0));
-    }
+  @Test
+  public void testCreateFromDouble() {
+    assertTrue(this.vf.createFromDouble(1));
+    assertTrue(this.vf.createFromDouble(Integer.MAX_VALUE));
+    assertTrue(this.vf.createFromDouble(-1));
+    assertFalse(this.vf.createFromDouble(Integer.MIN_VALUE));
+    assertFalse(this.vf.createFromDouble(0));
+  }
 
-    @Test
-    public void testCreateFromBigDecimal() {
-        assertTrue(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_ONE));
-        assertTrue(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_MAX_INTEGER_VALUE));
-        assertTrue(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_NEGATIVE_ONE));
-        assertFalse(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_MIN_INTEGER_VALUE));
-        assertFalse(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_ZERO));
-    }
+  @Test
+  public void testCreateFromBigDecimal() {
+    assertTrue(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_ONE));
+    assertTrue(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_MAX_INTEGER_VALUE));
+    assertTrue(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_NEGATIVE_ONE));
+    assertFalse(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_MIN_INTEGER_VALUE));
+    assertFalse(this.vf.createFromBigDecimal(Constants.BIG_DECIMAL_ZERO));
+  }
 
-    @Test
-    public void testCreateFromBytes() {
-        Field f = new Field("test", "test", 33, "UTF-8", MysqlType.VARCHAR, 10);
+  @Test
+  public void testCreateFromBytes() {
+    Field f = new Field("test", "test", 33, "UTF-8", MysqlType.VARCHAR, 10);
 
-        this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(true);
-        assertFalse(this.vf.createFromBytes("".getBytes(), 0, 0, f));
+    this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(true);
+    assertFalse(this.vf.createFromBytes("".getBytes(), 0, 0, f));
 
-        this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(false);
-        assertThrows(DataConversionException.class, "Cannot determine value type from string ''", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                BooleanValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
-                return null;
-            }
+    this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(false);
+    assertThrows(
+        DataConversionException.class,
+        "Cannot determine value type from string ''",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            BooleanValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
+            return null;
+          }
         });
 
-        assertFalse(this.vf.createFromBytes("False".getBytes(), 0, 5, f));
-        assertFalse(this.vf.createFromBytes("N".getBytes(), 0, 1, f));
-        assertTrue(this.vf.createFromBytes("tRue".getBytes(), 0, 4, f));
-        assertTrue(this.vf.createFromBytes("Y".getBytes(), 0, 1, f));
+    assertFalse(this.vf.createFromBytes("False".getBytes(), 0, 5, f));
+    assertFalse(this.vf.createFromBytes("N".getBytes(), 0, 1, f));
+    assertTrue(this.vf.createFromBytes("tRue".getBytes(), 0, 4, f));
+    assertTrue(this.vf.createFromBytes("Y".getBytes(), 0, 1, f));
 
-        assertTrue(this.vf.createFromBytes("-1.0".getBytes(), 0, 4, f));
-        assertTrue(this.vf.createFromBytes("1e0".getBytes(), 0, 3, f));
-        assertTrue(this.vf.createFromBytes("1e1".getBytes(), 0, 3, f));
-        assertTrue(this.vf.createFromBytes("1.2E1".getBytes(), 0, 5, f));
-        assertTrue(this.vf.createFromBytes("1.2E-2".getBytes(), 0, 6, f));
-        assertFalse(this.vf.createFromBytes("0.0".getBytes(), 0, 3, f));
-        assertFalse(this.vf.createFromBytes("-1e1".getBytes(), 0, 4, f));
+    assertTrue(this.vf.createFromBytes("-1.0".getBytes(), 0, 4, f));
+    assertTrue(this.vf.createFromBytes("1e0".getBytes(), 0, 3, f));
+    assertTrue(this.vf.createFromBytes("1e1".getBytes(), 0, 3, f));
+    assertTrue(this.vf.createFromBytes("1.2E1".getBytes(), 0, 5, f));
+    assertTrue(this.vf.createFromBytes("1.2E-2".getBytes(), 0, 6, f));
+    assertFalse(this.vf.createFromBytes("0.0".getBytes(), 0, 3, f));
+    assertFalse(this.vf.createFromBytes("-1e1".getBytes(), 0, 4, f));
 
-        assertTrue(this.vf.createFromBytes("1".getBytes(), 0, 1, f));
-        assertTrue(this.vf.createFromBytes("123".getBytes(), 0, 3, f));
-        assertTrue(this.vf.createFromBytes("-1".getBytes(), 0, 2, f));
-        assertFalse(this.vf.createFromBytes("-123".getBytes(), 0, 4, f));
-        assertFalse(this.vf.createFromBytes("0".getBytes(), 0, 1, f));
-        assertFalse(this.vf.createFromBytes("000".getBytes(), 0, 3, f));
+    assertTrue(this.vf.createFromBytes("1".getBytes(), 0, 1, f));
+    assertTrue(this.vf.createFromBytes("123".getBytes(), 0, 3, f));
+    assertTrue(this.vf.createFromBytes("-1".getBytes(), 0, 2, f));
+    assertFalse(this.vf.createFromBytes("-123".getBytes(), 0, 4, f));
+    assertFalse(this.vf.createFromBytes("0".getBytes(), 0, 1, f));
+    assertFalse(this.vf.createFromBytes("000".getBytes(), 0, 3, f));
 
-        assertThrows(DataConversionException.class, "Cannot determine value type from string 'just a string'", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                BooleanValueFactoryTest.this.vf.createFromBytes("just a string".getBytes(), 0, 13, f);
-                return null;
-            }
+    assertThrows(
+        DataConversionException.class,
+        "Cannot determine value type from string 'just a string'",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            BooleanValueFactoryTest.this.vf.createFromBytes("just a string".getBytes(), 0, 13, f);
+            return null;
+          }
         });
-    }
+  }
 
-    @Test
-    public void testCreateFromBit() {
-        assertFalse(this.vf.createFromBit(new byte[] { 0 }, 0, 1));
-        assertTrue(this.vf.createFromBit(new byte[] { 1 }, 0, 1));
-        assertTrue(this.vf.createFromBit(new byte[] { 2 }, 0, 1));
-        assertTrue(this.vf.createFromBit(new byte[] { (byte) 0xff }, 0, 1));
-    }
+  @Test
+  public void testCreateFromBit() {
+    assertFalse(this.vf.createFromBit(new byte[] {0}, 0, 1));
+    assertTrue(this.vf.createFromBit(new byte[] {1}, 0, 1));
+    assertTrue(this.vf.createFromBit(new byte[] {2}, 0, 1));
+    assertTrue(this.vf.createFromBit(new byte[] {(byte) 0xff}, 0, 1));
+  }
 
-    @Test
-    public void testCreateFromNull() {
-        assertNull(this.vf.createFromNull());
-    }
+  @Test
+  public void testCreateFromNull() {
+    assertNull(this.vf.createFromNull());
+  }
 }

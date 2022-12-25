@@ -36,58 +36,60 @@ import com.mysql.cj.protocol.a.MysqlTextValueDecoder;
 import com.mysql.cj.protocol.result.AbstractResultsetRow;
 import com.mysql.cj.result.ValueFactory;
 
-/**
- * A RowHolder implementation that is for cached results (a-la mysql_store_result()).
- */
+/** A RowHolder implementation that is for cached results (a-la mysql_store_result()). */
 public class ByteArrayRow extends AbstractResultsetRow {
 
-    byte[][] internalRowData;
+  byte[][] internalRowData;
 
-    public ByteArrayRow(byte[][] internalRowData, ExceptionInterceptor exceptionInterceptor, ValueDecoder valueDecoder) {
-        super(exceptionInterceptor);
+  public ByteArrayRow(
+      byte[][] internalRowData,
+      ExceptionInterceptor exceptionInterceptor,
+      ValueDecoder valueDecoder) {
+    super(exceptionInterceptor);
 
-        this.internalRowData = internalRowData;
-        this.valueDecoder = valueDecoder;
+    this.internalRowData = internalRowData;
+    this.valueDecoder = valueDecoder;
+  }
+
+  public ByteArrayRow(byte[][] internalRowData, ExceptionInterceptor exceptionInterceptor) {
+    super(exceptionInterceptor);
+
+    this.internalRowData = internalRowData;
+    this.valueDecoder = new MysqlTextValueDecoder();
+  }
+
+  @Override
+  public boolean isBinaryEncoded() {
+    return this.valueDecoder instanceof MysqlBinaryValueDecoder;
+  }
+
+  @Override
+  public byte[] getBytes(int index) {
+    if (getNull(index)) {
+      return null;
     }
+    return this.internalRowData[index];
+  }
 
-    public ByteArrayRow(byte[][] internalRowData, ExceptionInterceptor exceptionInterceptor) {
-        super(exceptionInterceptor);
+  @Override
+  public void setBytes(int index, byte[] value) {
+    this.internalRowData[index] = value;
+  }
 
-        this.internalRowData = internalRowData;
-        this.valueDecoder = new MysqlTextValueDecoder();
-    }
+  @Override
+  public boolean getNull(int columnIndex) {
+    this.wasNull = this.internalRowData[columnIndex] == null;
+    return this.wasNull;
+  }
 
-    @Override
-    public boolean isBinaryEncoded() {
-        return this.valueDecoder instanceof MysqlBinaryValueDecoder;
-    }
-
-    @Override
-    public byte[] getBytes(int index) {
-        if (getNull(index)) {
-            return null;
-        }
-        return this.internalRowData[index];
-    }
-
-    @Override
-    public void setBytes(int index, byte[] value) {
-        this.internalRowData[index] = value;
-    }
-
-    @Override
-    public boolean getNull(int columnIndex) {
-        this.wasNull = this.internalRowData[columnIndex] == null;
-        return this.wasNull;
-    }
-
-    /**
-     * Implementation of getValue() based on the underlying byte array. Delegate to superclass for decoding.
-     */
-    @Override
-    public <T> T getValue(int columnIndex, ValueFactory<T> vf) {
-        byte[] columnData = this.internalRowData[columnIndex];
-        int length = columnData == null ? 0 : columnData.length;
-        return getValueFromBytes(columnIndex, columnData, 0, length, vf);
-    }
+  /**
+   * Implementation of getValue() based on the underlying byte array. Delegate to superclass for
+   * decoding.
+   */
+  @Override
+  public <T> T getValue(int columnIndex, ValueFactory<T> vf) {
+    byte[] columnData = this.internalRowData[columnIndex];
+    int length = columnData == null ? 0 : columnData.length;
+    return getValueFromBytes(columnIndex, columnData, 0, length, vf);
+  }
 }

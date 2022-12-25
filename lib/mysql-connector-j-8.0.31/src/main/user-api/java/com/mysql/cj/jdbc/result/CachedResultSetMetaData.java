@@ -29,13 +29,12 @@
 
 package com.mysql.cj.jdbc.result;
 
-import java.sql.ResultSetMetaData;
-
 import com.mysql.cj.protocol.ColumnDefinition;
+import java.sql.ResultSetMetaData;
 
 public interface CachedResultSetMetaData extends ColumnDefinition {
 
-    ResultSetMetaData getMetadata();
+  ResultSetMetaData getMetadata();
 
-    void setMetadata(java.sql.ResultSetMetaData metadata);
+  void setMetadata(java.sql.ResultSetMetaData metadata);
 }

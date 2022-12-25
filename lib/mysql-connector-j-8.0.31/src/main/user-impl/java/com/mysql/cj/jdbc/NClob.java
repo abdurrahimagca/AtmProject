@@ -31,16 +31,14 @@ package com.mysql.cj.jdbc;
 
 import com.mysql.cj.exceptions.ExceptionInterceptor;
 
-/**
- * Simplistic implementation of java.sql.NClob for MySQL Connector/J
- */
+/** Simplistic implementation of java.sql.NClob for MySQL Connector/J */
 public class NClob extends Clob implements java.sql.NClob {
 
-    NClob(ExceptionInterceptor exceptionInterceptor) {
-        super(exceptionInterceptor);
-    }
+  NClob(ExceptionInterceptor exceptionInterceptor) {
+    super(exceptionInterceptor);
+  }
 
-    public NClob(String charDataInit, ExceptionInterceptor exceptionInterceptor) {
-        super(charDataInit, exceptionInterceptor);
-    }
+  public NClob(String charDataInit, ExceptionInterceptor exceptionInterceptor) {
+    super(charDataInit, exceptionInterceptor);
+  }
 }

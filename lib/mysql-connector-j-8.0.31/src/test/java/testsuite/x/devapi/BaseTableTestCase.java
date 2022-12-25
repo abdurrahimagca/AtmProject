@@ -31,23 +31,24 @@ package testsuite.x.devapi;
 
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import com.mysql.cj.conf.PropertyDefinitions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-
-import com.mysql.cj.conf.PropertyDefinitions;
 
 /**
  * @todo
  */
 public class BaseTableTestCase extends DevApiBaseTestCase {
-    @BeforeEach
-    public void setupBaseTableTest() {
-        assumeTrue(this.isSetForXTests, PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
-        super.setupTestSession();
-    }
+  @BeforeEach
+  public void setupBaseTableTest() {
+    assumeTrue(
+        this.isSetForXTests,
+        PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
+    super.setupTestSession();
+  }
 
-    @AfterEach
-    public void teardownBaseTableTest() {
-        super.destroyTestSession();
-    }
+  @AfterEach
+  public void teardownBaseTableTest() {
+    super.destroyTestSession();
+  }
 }

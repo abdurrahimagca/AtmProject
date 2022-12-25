@@ -33,25 +33,25 @@ import java.nio.channels.CompletionHandler;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Base class that propagates any error to the given future allowing only implementation of the success callback.
- * 
- * @param <T>
- *            result type
+ * Base class that propagates any error to the given future allowing only implementation of the
+ * success callback.
+ *
+ * @param <T> result type
  */
 public class ErrorToFutureCompletionHandler<T> implements CompletionHandler<T, Void> {
-    private CompletableFuture<?> future;
-    private Runnable successCallback;
+  private CompletableFuture<?> future;
+  private Runnable successCallback;
 
-    public ErrorToFutureCompletionHandler(CompletableFuture<?> future, Runnable successCallback) {
-        this.future = future;
-        this.successCallback = successCallback;
-    }
+  public ErrorToFutureCompletionHandler(CompletableFuture<?> future, Runnable successCallback) {
+    this.future = future;
+    this.successCallback = successCallback;
+  }
 
-    public void completed(T result, Void attachment) {
-        this.successCallback.run();
-    }
+  public void completed(T result, Void attachment) {
+    this.successCallback.run();
+  }
 
-    public void failed(Throwable ex, Void attachment) {
-        this.future.completeExceptionally(ex);
-    }
+  public void failed(Throwable ex, Void attachment) {
+    this.future.completeExceptionally(ex);
+  }
 }

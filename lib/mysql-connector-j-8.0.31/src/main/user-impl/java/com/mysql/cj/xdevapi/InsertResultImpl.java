@@ -31,24 +31,20 @@ package com.mysql.cj.xdevapi;
 
 import com.mysql.cj.protocol.x.StatementExecuteOk;
 
-/**
- * A result from a statement that doesn't return a set of rows.
- */
+/** A result from a statement that doesn't return a set of rows. */
 public class InsertResultImpl extends UpdateResult implements InsertResult {
 
-    /**
-     * Create a new result.
-     *
-     * @param ok
-     *            the response from the server
-     */
-    public InsertResultImpl(StatementExecuteOk ok) {
-        super(ok);
-    }
+  /**
+   * Create a new result.
+   *
+   * @param ok the response from the server
+   */
+  public InsertResultImpl(StatementExecuteOk ok) {
+    super(ok);
+  }
 
-    @Override
-    public Long getAutoIncrementValue() {
-        return this.ok.getLastInsertId();
-    }
-
+  @Override
+  public Long getAutoIncrementValue() {
+    return this.ok.getLastInsertId();
+  }
 }

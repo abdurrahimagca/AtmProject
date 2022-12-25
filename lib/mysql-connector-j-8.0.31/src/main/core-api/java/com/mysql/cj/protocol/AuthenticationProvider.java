@@ -34,19 +34,16 @@ import com.mysql.cj.exceptions.ExceptionInterceptor;
 
 public interface AuthenticationProvider<M extends Message> {
 
-    void init(Protocol<M> prot, PropertySet propertySet, ExceptionInterceptor exceptionInterceptor);
+  void init(Protocol<M> prot, PropertySet propertySet, ExceptionInterceptor exceptionInterceptor);
 
-    void connect(String username, String password, String database);
+  void connect(String username, String password, String database);
 
-    /**
-     * Re-authenticates as the given user and password
-     * 
-     * @param username
-     *            user name
-     * @param password
-     *            password
-     * @param database
-     *            db name
-     */
-    void changeUser(String username, String password, String database);
+  /**
+   * Re-authenticates as the given user and password
+   *
+   * @param username user name
+   * @param password password
+   * @param database db name
+   */
+  void changeUser(String username, String password, String database);
 }

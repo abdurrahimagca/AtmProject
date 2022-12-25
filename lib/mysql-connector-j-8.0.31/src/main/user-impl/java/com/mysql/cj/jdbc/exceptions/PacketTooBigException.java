@@ -29,31 +29,28 @@
 
 package com.mysql.cj.jdbc.exceptions;
 
-import java.sql.SQLException;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.exceptions.MysqlErrorNumbers;
+import java.sql.SQLException;
 
-/**
- * Thrown when a packet that is too big for the server is created.
- */
+/** Thrown when a packet that is too big for the server is created. */
 public class PacketTooBigException extends SQLException {
 
-    static final long serialVersionUID = 7248633977685452174L;
+  static final long serialVersionUID = 7248633977685452174L;
 
-    /**
-     * Creates a new PacketTooBigException object.
-     * 
-     * @param packetSize
-     *            the size of the packet that was going to be sent
-     * @param maximumPacketSize
-     *            the maximum size the server will accept
-     */
-    public PacketTooBigException(long packetSize, long maximumPacketSize) {
-        super(Messages.getString("PacketTooBigException.0", new Object[] { packetSize, maximumPacketSize }), MysqlErrorNumbers.SQL_STATE_GENERAL_ERROR);
-    }
+  /**
+   * Creates a new PacketTooBigException object.
+   *
+   * @param packetSize the size of the packet that was going to be sent
+   * @param maximumPacketSize the maximum size the server will accept
+   */
+  public PacketTooBigException(long packetSize, long maximumPacketSize) {
+    super(
+        Messages.getString("PacketTooBigException.0", new Object[] {packetSize, maximumPacketSize}),
+        MysqlErrorNumbers.SQL_STATE_GENERAL_ERROR);
+  }
 
-    public PacketTooBigException(String message) {
-        super(message, MysqlErrorNumbers.SQL_STATE_GENERAL_ERROR);
-    }
+  public PacketTooBigException(String message) {
+    super(message, MysqlErrorNumbers.SQL_STATE_GENERAL_ERROR);
+  }
 }

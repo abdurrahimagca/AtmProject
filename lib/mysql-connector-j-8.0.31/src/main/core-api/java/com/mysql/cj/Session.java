@@ -29,12 +29,6 @@
 
 package com.mysql.cj;
 
-import java.net.SocketAddress;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collector;
-
 import com.mysql.cj.conf.HostInfo;
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.exceptions.CJOperationNotSupportedException;
@@ -47,176 +41,155 @@ import com.mysql.cj.protocol.Protocol;
 import com.mysql.cj.protocol.ResultBuilder;
 import com.mysql.cj.protocol.ServerSession;
 import com.mysql.cj.result.Row;
+import java.net.SocketAddress;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collector;
 
 /**
- * {@link Session} exposes logical level which user API uses internally to call {@link Protocol} methods.
- * It's a higher-level abstraction than MySQL server session ({@link ServerSession}). {@link Protocol} and {@link ServerSession} methods
- * should never be used directly from user API.
- * 
+ * {@link Session} exposes logical level which user API uses internally to call {@link Protocol}
+ * methods. It's a higher-level abstraction than MySQL server session ({@link ServerSession}).
+ * {@link Protocol} and {@link ServerSession} methods should never be used directly from user API.
  */
 public interface Session {
 
-    PropertySet getPropertySet();
+  PropertySet getPropertySet();
 
-    <M extends Message> MessageBuilder<M> getMessageBuilder();
+  <M extends Message> MessageBuilder<M> getMessageBuilder();
 
-    /**
-     * Re-authenticates as the given user and password
-     * 
-     * @param userName
-     *            DB user name
-     * @param password
-     *            DB user password
-     * @param database
-     *            database name
-     * 
-     */
-    void changeUser(String userName, String password, String database);
+  /**
+   * Re-authenticates as the given user and password
+   *
+   * @param userName DB user name
+   * @param password DB user password
+   * @param database database name
+   */
+  void changeUser(String userName, String password, String database);
 
-    ExceptionInterceptor getExceptionInterceptor();
+  ExceptionInterceptor getExceptionInterceptor();
 
-    void setExceptionInterceptor(ExceptionInterceptor exceptionInterceptor);
+  void setExceptionInterceptor(ExceptionInterceptor exceptionInterceptor);
 
-    /**
-     * Log-off of the MySQL server and close the socket.
-     * 
-     */
-    void quit();
+  /** Log-off of the MySQL server and close the socket. */
+  void quit();
 
-    /**
-     * Clobbers the physical network connection and marks this session as closed.
-     */
-    void forceClose();
+  /** Clobbers the physical network connection and marks this session as closed. */
+  void forceClose();
 
-    /**
-     * Does the version of the MySQL server we are connected to meet the given
-     * minimums?
-     * 
-     * @param major
-     *            major version number
-     * @param minor
-     *            minor version number
-     * @param subminor
-     *            sub-minor version number
-     * @return true if current server version equal or higher than provided one
-     */
-    boolean versionMeetsMinimum(int major, int minor, int subminor);
+  /**
+   * Does the version of the MySQL server we are connected to meet the given minimums?
+   *
+   * @param major major version number
+   * @param minor minor version number
+   * @param subminor sub-minor version number
+   * @return true if current server version equal or higher than provided one
+   */
+  boolean versionMeetsMinimum(int major, int minor, int subminor);
 
-    long getThreadId();
+  long getThreadId();
 
-    boolean isSetNeededForAutoCommitMode(boolean autoCommitFlag);
+  boolean isSetNeededForAutoCommitMode(boolean autoCommitFlag);
 
-    /**
-     * Returns the log mechanism that should be used to log information from/for this Session.
-     * 
-     * @return the Log instance to use for logging messages.
-     */
-    Log getLog();
+  /**
+   * Returns the log mechanism that should be used to log information from/for this Session.
+   *
+   * @return the Log instance to use for logging messages.
+   */
+  Log getLog();
 
-    /**
-     * Returns the current ProfilerEventHandler or initializes a new one if none exists.
-     * 
-     * @return the {@link ProfilerEventHandler} object.
-     */
-    ProfilerEventHandler getProfilerEventHandler();
+  /**
+   * Returns the current ProfilerEventHandler or initializes a new one if none exists.
+   *
+   * @return the {@link ProfilerEventHandler} object.
+   */
+  ProfilerEventHandler getProfilerEventHandler();
 
-    HostInfo getHostInfo();
+  HostInfo getHostInfo();
 
-    String getQueryTimingUnits();
+  String getQueryTimingUnits();
 
-    ServerSession getServerSession();
+  ServerSession getServerSession();
 
-    boolean isSSLEstablished();
+  boolean isSSLEstablished();
 
-    SocketAddress getRemoteSocketAddress();
+  SocketAddress getRemoteSocketAddress();
 
-    String getProcessHost();
+  String getProcessHost();
 
-    /**
-     * Add listener for this session status changes.
-     * 
-     * @param l
-     *            {@link SessionEventListener} instance.
-     */
-    void addListener(SessionEventListener l);
+  /**
+   * Add listener for this session status changes.
+   *
+   * @param l {@link SessionEventListener} instance.
+   */
+  void addListener(SessionEventListener l);
 
-    /**
-     * Remove session listener.
-     * 
-     * @param l
-     *            {@link SessionEventListener} instance.
-     */
-    void removeListener(SessionEventListener l);
+  /**
+   * Remove session listener.
+   *
+   * @param l {@link SessionEventListener} instance.
+   */
+  void removeListener(SessionEventListener l);
 
-    public static interface SessionEventListener {
-        void handleNormalClose();
+  public static interface SessionEventListener {
+    void handleNormalClose();
 
-        void handleReconnect();
+    void handleReconnect();
 
-        void handleCleanup(Throwable whyCleanedUp);
-    }
+    void handleCleanup(Throwable whyCleanedUp);
+  }
 
-    boolean isClosed();
+  boolean isClosed();
 
-    String getIdentifierQuoteString();
+  String getIdentifierQuoteString();
 
-    DataStoreMetadata getDataStoreMetadata();
+  DataStoreMetadata getDataStoreMetadata();
 
-    /**
-     * Synchronously query database with applying rows filtering and mapping.
-     * 
-     * @param message
-     *            query message
-     * @param rowFilter
-     *            row filter function
-     * @param rowMapper
-     *            row map function
-     * @param collector
-     *            result collector
-     * @param <M>
-     *            Message type
-     * @param <R>
-     *            Row type
-     * @param <RES>
-     *            Result type
-     * @return List of rows
-     */
-    default <M extends Message, R, RES> RES query(M message, Predicate<Row> rowFilter, Function<Row, R> rowMapper, Collector<R, ?, RES> collector) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
+  /**
+   * Synchronously query database with applying rows filtering and mapping.
+   *
+   * @param message query message
+   * @param rowFilter row filter function
+   * @param rowMapper row map function
+   * @param collector result collector
+   * @param <M> Message type
+   * @param <R> Row type
+   * @param <RES> Result type
+   * @return List of rows
+   */
+  default <M extends Message, R, RES> RES query(
+      M message,
+      Predicate<Row> rowFilter,
+      Function<Row, R> rowMapper,
+      Collector<R, ?, RES> collector) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 
-    /**
-     * Synchronously query database.
-     * 
-     * @param message
-     *            query message
-     * @param resultBuilder
-     *            ResultBuilder instance
-     * @param <M>
-     *            Message type
-     * @param <R>
-     *            Result type
-     * @return {@link QueryResult} object
-     */
-    default <M extends Message, R extends QueryResult> R query(M message, ResultBuilder<R> resultBuilder) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
+  /**
+   * Synchronously query database.
+   *
+   * @param message query message
+   * @param resultBuilder ResultBuilder instance
+   * @param <M> Message type
+   * @param <R> Result type
+   * @return {@link QueryResult} object
+   */
+  default <M extends Message, R extends QueryResult> R query(
+      M message, ResultBuilder<R> resultBuilder) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 
-    /**
-     * Asynchronously query database.
-     * 
-     * @param message
-     *            query message
-     * @param resultBuilder
-     *            ResultBuilder instance
-     * @param <M>
-     *            Message type
-     * @param <R>
-     *            Result type
-     * @return CompletableFuture providing a {@link QueryResult} object
-     */
-    default <M extends Message, R extends QueryResult> CompletableFuture<R> queryAsync(M message, ResultBuilder<R> resultBuilder) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
-
+  /**
+   * Asynchronously query database.
+   *
+   * @param message query message
+   * @param resultBuilder ResultBuilder instance
+   * @param <M> Message type
+   * @param <R> Result type
+   * @return CompletableFuture providing a {@link QueryResult} object
+   */
+  default <M extends Message, R extends QueryResult> CompletableFuture<R> queryAsync(
+      M message, ResultBuilder<R> resultBuilder) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 }

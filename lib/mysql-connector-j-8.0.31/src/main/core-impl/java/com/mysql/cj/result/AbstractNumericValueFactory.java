@@ -38,35 +38,40 @@ import com.mysql.cj.util.StringUtils;
 
 public abstract class AbstractNumericValueFactory<T> extends DefaultValueFactory<T> {
 
-    public AbstractNumericValueFactory(PropertySet pset) {
-        super(pset);
+  public AbstractNumericValueFactory(PropertySet pset) {
+    super(pset);
+  }
+
+  @Override
+  public T createFromBytes(byte[] bytes, int offset, int length, Field f) {
+    if (length == 0
+        && this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).getValue()) {
+      return createFromLong(0);
     }
 
-    @Override
-    public T createFromBytes(byte[] bytes, int offset, int length, Field f) {
-        if (length == 0 && this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).getValue()) {
-            return createFromLong(0);
-        }
+    String s = StringUtils.toString(bytes, offset, length, f.getEncoding());
+    byte[] newBytes = s.getBytes();
 
-        String s = StringUtils.toString(bytes, offset, length, f.getEncoding());
-        byte[] newBytes = s.getBytes();
-
-        if (s.contains("e") || s.contains("E") || s.matches("-?\\d*\\.\\d*")) {
-            // floating point
-            return createFromDouble(MysqlTextValueDecoder.getDouble(newBytes, 0, newBytes.length));
-        } else if (s.matches("-?\\d+")) {
-            // integer
-            if (s.charAt(0) == '-' // TODO shouldn't we check the length as well?
-                    || length <= (MysqlTextValueDecoder.MAX_SIGNED_LONG_LEN - 1) && newBytes[0] >= '0' && newBytes[0] <= '8') {
-                return createFromLong(MysqlTextValueDecoder.getLong(newBytes, 0, newBytes.length));
-            }
-            return createFromBigInteger(MysqlTextValueDecoder.getBigInteger(newBytes, 0, newBytes.length));
-        }
-        throw new DataConversionException(Messages.getString("ResultSet.UnableToInterpretString", new Object[] { s }));
+    if (s.contains("e") || s.contains("E") || s.matches("-?\\d*\\.\\d*")) {
+      // floating point
+      return createFromDouble(MysqlTextValueDecoder.getDouble(newBytes, 0, newBytes.length));
+    } else if (s.matches("-?\\d+")) {
+      // integer
+      if (s.charAt(0) == '-' // TODO shouldn't we check the length as well?
+          || length <= (MysqlTextValueDecoder.MAX_SIGNED_LONG_LEN - 1)
+              && newBytes[0] >= '0'
+              && newBytes[0] <= '8') {
+        return createFromLong(MysqlTextValueDecoder.getLong(newBytes, 0, newBytes.length));
+      }
+      return createFromBigInteger(
+          MysqlTextValueDecoder.getBigInteger(newBytes, 0, newBytes.length));
     }
+    throw new DataConversionException(
+        Messages.getString("ResultSet.UnableToInterpretString", new Object[] {s}));
+  }
 
-    @Override
-    public T createFromYear(long l) {
-        return createFromLong(l);
-    }
+  @Override
+  public T createFromYear(long l) {
+    return createFromLong(l);
+  }
 }

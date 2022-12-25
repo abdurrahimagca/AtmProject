@@ -31,31 +31,35 @@ package com.mysql.cj.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
 
 /**
- * This class is used to obtain a physical connection and instantiate and return a MysqlPooledConnection. J2EE application servers map client calls to
- * dataSource.getConnection to this class based upon mapping set within deployment descriptor. This class extends MysqlDataSource.
+ * This class is used to obtain a physical connection and instantiate and return a
+ * MysqlPooledConnection. J2EE application servers map client calls to dataSource.getConnection to
+ * this class based upon mapping set within deployment descriptor. This class extends
+ * MysqlDataSource.
  */
-public class MysqlConnectionPoolDataSource extends MysqlDataSource implements ConnectionPoolDataSource {
+public class MysqlConnectionPoolDataSource extends MysqlDataSource
+    implements ConnectionPoolDataSource {
 
-    static final long serialVersionUID = -7767325445592304961L;
+  static final long serialVersionUID = -7767325445592304961L;
 
-    @Override
-    public synchronized PooledConnection getPooledConnection() throws SQLException {
-        Connection connection = getConnection();
-        MysqlPooledConnection mysqlPooledConnection = MysqlPooledConnection.getInstance((JdbcConnection) connection);
+  @Override
+  public synchronized PooledConnection getPooledConnection() throws SQLException {
+    Connection connection = getConnection();
+    MysqlPooledConnection mysqlPooledConnection =
+        MysqlPooledConnection.getInstance((JdbcConnection) connection);
 
-        return mysqlPooledConnection;
-    }
+    return mysqlPooledConnection;
+  }
 
-    @Override
-    public synchronized PooledConnection getPooledConnection(String u, String p) throws SQLException {
-        Connection connection = getConnection(u, p);
-        MysqlPooledConnection mysqlPooledConnection = MysqlPooledConnection.getInstance((JdbcConnection) connection);
+  @Override
+  public synchronized PooledConnection getPooledConnection(String u, String p) throws SQLException {
+    Connection connection = getConnection(u, p);
+    MysqlPooledConnection mysqlPooledConnection =
+        MysqlPooledConnection.getInstance((JdbcConnection) connection);
 
-        return mysqlPooledConnection;
-    }
+    return mysqlPooledConnection;
+  }
 }

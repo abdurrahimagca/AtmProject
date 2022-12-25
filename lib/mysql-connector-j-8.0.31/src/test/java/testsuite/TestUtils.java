@@ -39,107 +39,101 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-/**
- * Utility functions to use in tests.
- */
-
+/** Utility functions to use in tests. */
 public class TestUtils {
-    /**
-     * Percent-encode all occurrence of the the percent sign (%) in the given string.
-     * 
-     * @param strToEncode
-     *            the string to encode
-     * @return the encoded string
-     */
-    public static String encodePercent(String strToEncode) {
-        return strToEncode.replaceAll("%", "%25");
-    }
+  /**
+   * Percent-encode all occurrence of the the percent sign (%) in the given string.
+   *
+   * @param strToEncode the string to encode
+   * @return the encoded string
+   */
+  public static String encodePercent(String strToEncode) {
+    return strToEncode.replaceAll("%", "%25");
+  }
 
-    /**
-     * Get all IPv6 addresses defined in local network adapters.
-     * 
-     * @return a list of {@link Inet6Address}s
-     */
-    public static List<Inet6Address> getIpv6List() {
-        List<Inet6Address> addresses = new ArrayList<>();
-        try {
-            for (Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces(); nis.hasMoreElements();) {
-                NetworkInterface ni = nis.nextElement();
-                for (Enumeration<InetAddress> ias2 = ni.getInetAddresses(); ias2.hasMoreElements();) {
-                    InetAddress ia = ias2.nextElement();
-                    if (ia instanceof Inet6Address) {
-                        addresses.add((Inet6Address) ia);
-                    }
-                }
-            }
-        } catch (SocketException e) {
-            // Failed to get the network interfaces. Return an empty list. 
+  /**
+   * Get all IPv6 addresses defined in local network adapters.
+   *
+   * @return a list of {@link Inet6Address}s
+   */
+  public static List<Inet6Address> getIpv6List() {
+    List<Inet6Address> addresses = new ArrayList<>();
+    try {
+      for (Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
+          nis.hasMoreElements(); ) {
+        NetworkInterface ni = nis.nextElement();
+        for (Enumeration<InetAddress> ias2 = ni.getInetAddresses(); ias2.hasMoreElements(); ) {
+          InetAddress ia = ias2.nextElement();
+          if (ia instanceof Inet6Address) {
+            addresses.add((Inet6Address) ia);
+          }
         }
-        return addresses;
+      }
+    } catch (SocketException e) {
+      // Failed to get the network interfaces. Return an empty list.
     }
+    return addresses;
+  }
 
-    /**
-     * Get all IPv6 addresses of the given host.
-     * 
-     * @return a list of {@link Inet6Address}s
-     */
-    public static List<Inet6Address> getIpv6List(String hostname) {
-        List<Inet6Address> addresses = new ArrayList<>();
-        try {
-            InetAddress[] allAddresses = InetAddress.getAllByName(hostname);
-            for (InetAddress address : allAddresses) {
-                if (address instanceof Inet6Address) {
-                    addresses.add((Inet6Address) address);
-                }
-                System.out.println(address.getHostAddress());
-            }
-        } catch (UnknownHostException e) {
-            // Failed to get the network interfaces. Return an empty list. 
+  /**
+   * Get all IPv6 addresses of the given host.
+   *
+   * @return a list of {@link Inet6Address}s
+   */
+  public static List<Inet6Address> getIpv6List(String hostname) {
+    List<Inet6Address> addresses = new ArrayList<>();
+    try {
+      InetAddress[] allAddresses = InetAddress.getAllByName(hostname);
+      for (InetAddress address : allAddresses) {
+        if (address instanceof Inet6Address) {
+          addresses.add((Inet6Address) address);
         }
-        return addresses;
+        System.out.println(address.getHostAddress());
+      }
+    } catch (UnknownHostException e) {
+      // Failed to get the network interfaces. Return an empty list.
     }
+    return addresses;
+  }
 
-    /**
-     * Checks if there is a server socket listening in the given host and port.
-     * 
-     * @param hostName
-     *            the host where to look for the server socket
-     * @param port
-     *            the expected port the server is listening
-     * @return true if there is a server socket listening in the given address and port, false otherwise
-     */
-    public static boolean serverListening(String hostName, int port) {
-        try {
-            return serverListening(InetAddress.getByName(hostName), port);
-        } catch (UnknownHostException e) {
-            return false;
-        }
+  /**
+   * Checks if there is a server socket listening in the given host and port.
+   *
+   * @param hostName the host where to look for the server socket
+   * @param port the expected port the server is listening
+   * @return true if there is a server socket listening in the given address and port, false
+   *     otherwise
+   */
+  public static boolean serverListening(String hostName, int port) {
+    try {
+      return serverListening(InetAddress.getByName(hostName), port);
+    } catch (UnknownHostException e) {
+      return false;
     }
+  }
 
-    /**
-     * Checks if there is a server socket listening in the given address and port.
-     * 
-     * @param addr
-     *            the address where to look for the server socket
-     * @param port
-     *            the expected port the server is listening
-     * @return true if there is a server socket listening in the given address and port, false otherwise
-     */
-    public static boolean serverListening(InetAddress addr, int port) {
-        Socket s = null;
+  /**
+   * Checks if there is a server socket listening in the given address and port.
+   *
+   * @param addr the address where to look for the server socket
+   * @param port the expected port the server is listening
+   * @return true if there is a server socket listening in the given address and port, false
+   *     otherwise
+   */
+  public static boolean serverListening(InetAddress addr, int port) {
+    Socket s = null;
+    try {
+      s = new Socket(addr, port);
+      return true;
+    } catch (Exception e) {
+      return false;
+    } finally {
+      if (s != null) {
         try {
-            s = new Socket(addr, port);
-            return true;
+          s.close();
         } catch (Exception e) {
-            return false;
-        } finally {
-            if (s != null) {
-                try {
-                    s.close();
-                } catch (Exception e) {
-                }
-            }
         }
+      }
     }
-
+  }
 }

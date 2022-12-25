@@ -33,11 +33,9 @@ import java.io.OutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
-/**
- * Wrapper around {@link DeflaterOutputStream} that enables sync flush by default.
- */
+/** Wrapper around {@link DeflaterOutputStream} that enables sync flush by default. */
 public class SyncFlushDeflaterOutputStream extends DeflaterOutputStream {
-    public SyncFlushDeflaterOutputStream(OutputStream out) {
-        super(out, new Deflater(), true);
-    }
+  public SyncFlushDeflaterOutputStream(OutputStream out) {
+    super(out, new Deflater(), true);
+  }
 }

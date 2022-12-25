@@ -29,11 +29,6 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.MysqlxSession;
 import com.mysql.cj.exceptions.MysqlErrorNumbers;
@@ -43,137 +38,155 @@ import com.mysql.cj.protocol.x.XProtocolError;
 import com.mysql.cj.result.Row;
 import com.mysql.cj.result.StringValueFactory;
 import com.mysql.cj.result.ValueFactory;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-/**
- * {@link Table} implementation
- */
+/** {@link Table} implementation */
 public class TableImpl implements Table {
 
-    private MysqlxSession mysqlxSession;
-    private SchemaImpl schema;
-    private String name;
-    private Boolean isView = null;
-    private XMessageBuilder xbuilder;
+  private MysqlxSession mysqlxSession;
+  private SchemaImpl schema;
+  private String name;
+  private Boolean isView = null;
+  private XMessageBuilder xbuilder;
 
-    /* package private */ TableImpl(MysqlxSession mysqlxSession, SchemaImpl schema, String name) {
-        if (mysqlxSession == null) {
-            throw new XDevAPIError(Messages.getString("CreateTableStatement.0", new String[] { "mysqlxSession" }));
-        }
-        if (schema == null) {
-            throw new XDevAPIError(Messages.getString("CreateTableStatement.0", new String[] { "schema" }));
-        }
-        if (name == null) {
-            throw new XDevAPIError(Messages.getString("CreateTableStatement.0", new String[] { "name" }));
-        }
-        this.mysqlxSession = mysqlxSession;
-        this.xbuilder = (XMessageBuilder) this.mysqlxSession.<XMessage>getMessageBuilder();
-        this.schema = schema;
-        this.name = name;
+  /* package private */ TableImpl(MysqlxSession mysqlxSession, SchemaImpl schema, String name) {
+    if (mysqlxSession == null) {
+      throw new XDevAPIError(
+          Messages.getString("CreateTableStatement.0", new String[] {"mysqlxSession"}));
     }
+    if (schema == null) {
+      throw new XDevAPIError(Messages.getString("CreateTableStatement.0", new String[] {"schema"}));
+    }
+    if (name == null) {
+      throw new XDevAPIError(Messages.getString("CreateTableStatement.0", new String[] {"name"}));
+    }
+    this.mysqlxSession = mysqlxSession;
+    this.xbuilder = (XMessageBuilder) this.mysqlxSession.<XMessage>getMessageBuilder();
+    this.schema = schema;
+    this.name = name;
+  }
 
-    public Session getSession() {
-        return this.schema.getSession();
-    }
+  public Session getSession() {
+    return this.schema.getSession();
+  }
 
-    public Schema getSchema() {
-        return this.schema;
-    }
+  public Schema getSchema() {
+    return this.schema;
+  }
 
-    public String getName() {
-        return this.name;
-    }
+  public String getName() {
+    return this.name;
+  }
 
-    public DbObjectStatus existsInDatabase() {
-        if (this.mysqlxSession.getDataStoreMetadata().tableExists(this.schema.getName(), this.name)) {
-            return DbObjectStatus.EXISTS;
-        }
-        return DbObjectStatus.NOT_EXISTS;
+  public DbObjectStatus existsInDatabase() {
+    if (this.mysqlxSession.getDataStoreMetadata().tableExists(this.schema.getName(), this.name)) {
+      return DbObjectStatus.EXISTS;
     }
+    return DbObjectStatus.NOT_EXISTS;
+  }
 
-    public InsertStatement insert() {
-        return new InsertStatementImpl(this.mysqlxSession, this.schema.getName(), this.name, new String[] {});
-    }
+  public InsertStatement insert() {
+    return new InsertStatementImpl(
+        this.mysqlxSession, this.schema.getName(), this.name, new String[] {});
+  }
 
-    public InsertStatement insert(String... fields) {
-        return new InsertStatementImpl(this.mysqlxSession, this.schema.getName(), this.name, fields);
-    }
+  public InsertStatement insert(String... fields) {
+    return new InsertStatementImpl(this.mysqlxSession, this.schema.getName(), this.name, fields);
+  }
 
-    public InsertStatement insert(Map<String, Object> fieldsAndValues) {
-        return new InsertStatementImpl(this.mysqlxSession, this.schema.getName(), this.name, fieldsAndValues);
-    }
+  public InsertStatement insert(Map<String, Object> fieldsAndValues) {
+    return new InsertStatementImpl(
+        this.mysqlxSession, this.schema.getName(), this.name, fieldsAndValues);
+  }
 
-    @Override
-    public SelectStatement select(String... projection) {
-        return new SelectStatementImpl(this.mysqlxSession, this.schema.getName(), this.name, projection);
-    }
+  @Override
+  public SelectStatement select(String... projection) {
+    return new SelectStatementImpl(
+        this.mysqlxSession, this.schema.getName(), this.name, projection);
+  }
 
-    public UpdateStatement update() {
-        return new UpdateStatementImpl(this.mysqlxSession, this.schema.getName(), this.name);
-    }
+  public UpdateStatement update() {
+    return new UpdateStatementImpl(this.mysqlxSession, this.schema.getName(), this.name);
+  }
 
-    public DeleteStatement delete() {
-        return new DeleteStatementImpl(this.mysqlxSession, this.schema.getName(), this.name);
-    }
+  public DeleteStatement delete() {
+    return new DeleteStatementImpl(this.mysqlxSession, this.schema.getName(), this.name);
+  }
 
-    public long count() {
-        try {
-            return this.mysqlxSession.getDataStoreMetadata().getTableRowCount(this.schema.getName(), this.name);
-        } catch (XProtocolError e) {
-            if (e.getErrorCode() == MysqlErrorNumbers.ER_NO_SUCH_TABLE) {
-                throw new XProtocolError("Table '" + this.name + "' does not exist in schema '" + this.schema.getName() + "'", e);
-            }
-            throw e;
-        }
+  public long count() {
+    try {
+      return this.mysqlxSession
+          .getDataStoreMetadata()
+          .getTableRowCount(this.schema.getName(), this.name);
+    } catch (XProtocolError e) {
+      if (e.getErrorCode() == MysqlErrorNumbers.ER_NO_SUCH_TABLE) {
+        throw new XProtocolError(
+            "Table '" + this.name + "' does not exist in schema '" + this.schema.getName() + "'",
+            e);
+      }
+      throw e;
     }
+  }
 
-    @Override
-    public boolean equals(Object other) {
-        return other != null && other.getClass() == TableImpl.class && ((TableImpl) other).schema.equals(this.schema)
-                && ((TableImpl) other).mysqlxSession == this.mysqlxSession && this.name.equals(((TableImpl) other).name);
-    }
+  @Override
+  public boolean equals(Object other) {
+    return other != null
+        && other.getClass() == TableImpl.class
+        && ((TableImpl) other).schema.equals(this.schema)
+        && ((TableImpl) other).mysqlxSession == this.mysqlxSession
+        && this.name.equals(((TableImpl) other).name);
+  }
 
-    @Override
-    public int hashCode() {
-        assert false : "hashCode not designed";
-        return 0;
-    }
+  @Override
+  public int hashCode() {
+    assert false : "hashCode not designed";
+    return 0;
+  }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Table(");
-        sb.append(ExprUnparser.quoteIdentifier(this.schema.getName()));
-        sb.append(".");
-        sb.append(ExprUnparser.quoteIdentifier(this.name));
-        sb.append(")");
-        return sb.toString();
-    }
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("Table(");
+    sb.append(ExprUnparser.quoteIdentifier(this.schema.getName()));
+    sb.append(".");
+    sb.append(ExprUnparser.quoteIdentifier(this.name));
+    sb.append(")");
+    return sb.toString();
+  }
 
-    @Override
-    public boolean isView() {
-        // if this.isView isn't set (was unknown on the table construction time) then query database
-        if (this.isView == null) {
-            ValueFactory<String> svf = new StringValueFactory(this.mysqlxSession.getPropertySet());
-            Function<Row, DatabaseObjectDescription> rowToDatabaseObjectDescription = r -> new DatabaseObjectDescription(r.getValue(0, svf),
-                    r.getValue(1, svf));
-            List<DatabaseObjectDescription> objects = this.mysqlxSession.query(this.xbuilder.buildListObjects(this.schema.getName(), this.name), null,
-                    rowToDatabaseObjectDescription, Collectors.toList());
-            if (objects.isEmpty()) {
-                // object not found, means it doesn't exist in database
-                return false;
-            }
-            // objects should contain exactly one element with matching this.name
-            this.isView = objects.get(0).getObjectType() == DbObjectType.VIEW || objects.get(0).getObjectType() == DbObjectType.COLLECTION_VIEW;
-        }
-        return this.isView;
+  @Override
+  public boolean isView() {
+    // if this.isView isn't set (was unknown on the table construction time) then query database
+    if (this.isView == null) {
+      ValueFactory<String> svf = new StringValueFactory(this.mysqlxSession.getPropertySet());
+      Function<Row, DatabaseObjectDescription> rowToDatabaseObjectDescription =
+          r -> new DatabaseObjectDescription(r.getValue(0, svf), r.getValue(1, svf));
+      List<DatabaseObjectDescription> objects =
+          this.mysqlxSession.query(
+              this.xbuilder.buildListObjects(this.schema.getName(), this.name),
+              null,
+              rowToDatabaseObjectDescription,
+              Collectors.toList());
+      if (objects.isEmpty()) {
+        // object not found, means it doesn't exist in database
+        return false;
+      }
+      // objects should contain exactly one element with matching this.name
+      this.isView =
+          objects.get(0).getObjectType() == DbObjectType.VIEW
+              || objects.get(0).getObjectType() == DbObjectType.COLLECTION_VIEW;
     }
+    return this.isView;
+  }
 
-    /**
-     * Set flag indicating if the underlying object is a view.
-     * 
-     * @param isView
-     *            true if it is a View
-     */
-    public void setView(boolean isView) {
-        this.isView = isView;
-    }
+  /**
+   * Set flag indicating if the underlying object is a view.
+   *
+   * @param isView true if it is a View
+   */
+  public void setView(boolean isView) {
+    this.isView = isView;
+  }
 }

@@ -38,52 +38,48 @@ import com.mysql.cj.protocol.a.NativePacketPayload;
 
 public abstract class AbstractResultsetRows implements ResultsetRows {
 
-    protected final static int BEFORE_START_OF_ROWS = -1;
+  protected static final int BEFORE_START_OF_ROWS = -1;
 
-    /**
-     * Field-level metadata from the server. We need this, because it is not
-     * sent for each batch of rows, but we need the metadata to unpack the
-     * results for each field.
-     */
-    protected ColumnDefinition metadata;
+  /**
+   * Field-level metadata from the server. We need this, because it is not sent for each batch of
+   * rows, but we need the metadata to unpack the results for each field.
+   */
+  protected ColumnDefinition metadata;
 
-    /**
-     * Position in cache of rows, used to determine if we need to fetch more
-     * rows from the server to satisfy a request for the next row.
-     */
-    protected int currentPositionInFetchedRows = BEFORE_START_OF_ROWS;
+  /**
+   * Position in cache of rows, used to determine if we need to fetch more rows from the server to
+   * satisfy a request for the next row.
+   */
+  protected int currentPositionInFetchedRows = BEFORE_START_OF_ROWS;
 
-    protected boolean wasEmpty = false; // we don't know until we attempt to traverse
+  protected boolean wasEmpty = false; // we don't know until we attempt to traverse
 
-    /**
-     * The result set that we 'belong' to.
-     */
-    protected ResultsetRowsOwner owner;
+  /** The result set that we 'belong' to. */
+  protected ResultsetRowsOwner owner;
 
-    protected ProtocolEntityFactory<ResultsetRow, NativePacketPayload> rowFactory;
+  protected ProtocolEntityFactory<ResultsetRow, NativePacketPayload> rowFactory;
 
-    @Override
-    public void setOwner(ResultsetRowsOwner rs) {
-        this.owner = rs;
-    }
+  @Override
+  public void setOwner(ResultsetRowsOwner rs) {
+    this.owner = rs;
+  }
 
-    @Override
-    public ResultsetRowsOwner getOwner() {
-        return this.owner;
-    }
+  @Override
+  public ResultsetRowsOwner getOwner() {
+    return this.owner;
+  }
 
-    @Override
-    public void setMetadata(ColumnDefinition columnDefinition) {
-        this.metadata = columnDefinition;
-    }
+  @Override
+  public void setMetadata(ColumnDefinition columnDefinition) {
+    this.metadata = columnDefinition;
+  }
 
-    public ColumnDefinition getMetadata() {
-        return this.metadata;
-    }
+  public ColumnDefinition getMetadata() {
+    return this.metadata;
+  }
 
-    @Override
-    public boolean wasEmpty() {
-        return this.wasEmpty;
-    }
-
+  @Override
+  public boolean wasEmpty() {
+    return this.wasEmpty;
+  }
 }

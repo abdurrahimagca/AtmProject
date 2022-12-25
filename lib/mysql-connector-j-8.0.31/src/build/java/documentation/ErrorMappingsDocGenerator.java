@@ -29,56 +29,61 @@
 
 package documentation;
 
+import com.mysql.cj.exceptions.MysqlErrorNumbers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.mysql.cj.exceptions.MysqlErrorNumbers;
-
-/**
- * Creates XML file describing mapping of MySQL error #'s to SQL92 and X/Open states.
- */
+/** Creates XML file describing mapping of MySQL error #'s to SQL92 and X/Open states. */
 public class ErrorMappingsDocGenerator {
 
-    public static void main(String[] args) throws Exception {
-        dumpSqlStatesMappingsAsXml();
+  public static void main(String[] args) throws Exception {
+    dumpSqlStatesMappingsAsXml();
+  }
+
+  public static void dumpSqlStatesMappingsAsXml() throws Exception {
+    TreeMap<Integer, Integer> allErrorNumbers = new TreeMap<>();
+    Map<Object, String> mysqlErrorNumbersToNames = new HashMap<>();
+
+    //      Integer errorNumber = null;
+
+    //
+    // First create a list of all 'known' error numbers that are mapped.
+    //
+    for (Integer errorNumber : MysqlErrorNumbers.mysqlToSql99State.keySet()) {
+      allErrorNumbers.put(errorNumber, errorNumber);
     }
 
-    public static void dumpSqlStatesMappingsAsXml() throws Exception {
-        TreeMap<Integer, Integer> allErrorNumbers = new TreeMap<>();
-        Map<Object, String> mysqlErrorNumbersToNames = new HashMap<>();
+    //
+    // Now create a list of the actual MySQL error numbers we know about
+    //
+    java.lang.reflect.Field[] possibleFields = MysqlErrorNumbers.class.getDeclaredFields();
 
-        //      Integer errorNumber = null;
+    for (int i = 0; i < possibleFields.length; i++) {
+      String fieldName = possibleFields[i].getName();
 
-        // 
-        // First create a list of all 'known' error numbers that are mapped.
-        //
-        for (Integer errorNumber : MysqlErrorNumbers.mysqlToSql99State.keySet()) {
-            allErrorNumbers.put(errorNumber, errorNumber);
-        }
-
-        //
-        // Now create a list of the actual MySQL error numbers we know about
-        //
-        java.lang.reflect.Field[] possibleFields = MysqlErrorNumbers.class.getDeclaredFields();
-
-        for (int i = 0; i < possibleFields.length; i++) {
-            String fieldName = possibleFields[i].getName();
-
-            if (fieldName.startsWith("ER_")) {
-                mysqlErrorNumbersToNames.put(possibleFields[i].get(null), fieldName);
-            }
-        }
-
-        System.out.println("<ErrorMappings>");
-
-        for (Integer errorNumber : allErrorNumbers.keySet()) {
-            String sql92State = MysqlErrorNumbers.mysqlToSql99(errorNumber.intValue());
-
-            System.out.println("   <ErrorMapping mysqlErrorNumber=\"" + errorNumber + "\" mysqlErrorName=\"" + mysqlErrorNumbersToNames.get(errorNumber)
-                    + "\" legacySqlState=\"" + "" + "\" sql92SqlState=\"" + ((sql92State == null) ? "" : sql92State) + "\"/>");
-        }
-
-        System.out.println("</ErrorMappings>");
+      if (fieldName.startsWith("ER_")) {
+        mysqlErrorNumbersToNames.put(possibleFields[i].get(null), fieldName);
+      }
     }
+
+    System.out.println("<ErrorMappings>");
+
+    for (Integer errorNumber : allErrorNumbers.keySet()) {
+      String sql92State = MysqlErrorNumbers.mysqlToSql99(errorNumber.intValue());
+
+      System.out.println(
+          "   <ErrorMapping mysqlErrorNumber=\""
+              + errorNumber
+              + "\" mysqlErrorName=\""
+              + mysqlErrorNumbersToNames.get(errorNumber)
+              + "\" legacySqlState=\""
+              + ""
+              + "\" sql92SqlState=\""
+              + ((sql92State == null) ? "" : sql92State)
+              + "\"/>");
+    }
+
+    System.out.println("</ErrorMappings>");
+  }
 }

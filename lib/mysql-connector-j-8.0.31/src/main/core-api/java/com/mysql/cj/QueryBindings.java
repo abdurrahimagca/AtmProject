@@ -29,6 +29,8 @@
 
 package com.mysql.cj;
 
+import com.mysql.cj.protocol.ColumnDefinition;
+import com.mysql.cj.result.Field;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -41,94 +43,96 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.mysql.cj.protocol.ColumnDefinition;
-import com.mysql.cj.result.Field;
-
 public interface QueryBindings {
 
-    QueryBindings clone();
+  QueryBindings clone();
 
-    void setColumnDefinition(ColumnDefinition colDef);
+  void setColumnDefinition(ColumnDefinition colDef);
 
-    BindValue[] getBindValues();
+  BindValue[] getBindValues();
 
-    void setBindValues(BindValue[] bindValues);
+  void setBindValues(BindValue[] bindValues);
 
-    /**
-     * 
-     * @return true if bind values had long data
-     */
-    boolean clearBindValues();
+  /**
+   * @return true if bind values had long data
+   */
+  boolean clearBindValues();
 
-    void checkParameterSet(int columnIndex);
+  void checkParameterSet(int columnIndex);
 
-    void checkAllParametersSet();
+  void checkAllParametersSet();
 
-    int getNumberOfExecutions();
+  int getNumberOfExecutions();
 
-    void setNumberOfExecutions(int numberOfExecutions);
+  void setNumberOfExecutions(int numberOfExecutions);
 
-    boolean isLongParameterSwitchDetected();
+  boolean isLongParameterSwitchDetected();
 
-    void setLongParameterSwitchDetected(boolean longParameterSwitchDetected);
+  void setLongParameterSwitchDetected(boolean longParameterSwitchDetected);
 
-    AtomicBoolean getSendTypesToServer();
+  AtomicBoolean getSendTypesToServer();
 
-    BindValue getBinding(int parameterIndex, boolean forLongData);
+  BindValue getBinding(int parameterIndex, boolean forLongData);
 
-    void setFromBindValue(int parameterIndex, BindValue bv);
+  void setFromBindValue(int parameterIndex, BindValue bv);
 
-    void setAsciiStream(int parameterIndex, InputStream x, int length);
+  void setAsciiStream(int parameterIndex, InputStream x, int length);
 
-    void setBigDecimal(int parameterIndex, BigDecimal x);
+  void setBigDecimal(int parameterIndex, BigDecimal x);
 
-    void setBigInteger(int parameterIndex, BigInteger x);
+  void setBigInteger(int parameterIndex, BigInteger x);
 
-    void setBinaryStream(int parameterIndex, InputStream x, int length);
+  void setBinaryStream(int parameterIndex, InputStream x, int length);
 
-    void setBlob(int parameterIndex, java.sql.Blob x);
+  void setBlob(int parameterIndex, java.sql.Blob x);
 
-    void setBoolean(int parameterIndex, boolean x);
+  void setBoolean(int parameterIndex, boolean x);
 
-    void setByte(int parameterIndex, byte x);
+  void setByte(int parameterIndex, byte x);
 
-    void setBytes(int parameterIndex, byte[] x, boolean escapeIfNeeded);
+  void setBytes(int parameterIndex, byte[] x, boolean escapeIfNeeded);
 
-    void setCharacterStream(int parameterIndex, Reader reader, int length);
+  void setCharacterStream(int parameterIndex, Reader reader, int length);
 
-    void setClob(int i, Clob x);
+  void setClob(int i, Clob x);
 
-    void setDate(int parameterIndex, Date x, Calendar cal);
+  void setDate(int parameterIndex, Date x, Calendar cal);
 
-    void setDouble(int parameterIndex, double x);
+  void setDouble(int parameterIndex, double x);
 
-    void setFloat(int parameterIndex, float x);
+  void setFloat(int parameterIndex, float x);
 
-    void setInt(int parameterIndex, int x);
+  void setInt(int parameterIndex, int x);
 
-    void setLong(int parameterIndex, long x);
+  void setLong(int parameterIndex, long x);
 
-    void setNCharacterStream(int parameterIndex, Reader reader, long length);
+  void setNCharacterStream(int parameterIndex, Reader reader, long length);
 
-    void setNClob(int parameterIndex, NClob value);
+  void setNClob(int parameterIndex, NClob value);
 
-    void setNString(int parameterIndex, String x);
+  void setNString(int parameterIndex, String x);
 
-    void setNull(int parameterIndex);
+  void setNull(int parameterIndex);
 
-    boolean isNull(int parameterIndex);
+  boolean isNull(int parameterIndex);
 
-    void setObject(int parameterIndex, Object parameterObj);
+  void setObject(int parameterIndex, Object parameterObj);
 
-    void setObject(int parameterIndex, Object parameterObj, MysqlType targetMysqlType, int scaleOrLength);
+  void setObject(
+      int parameterIndex, Object parameterObj, MysqlType targetMysqlType, int scaleOrLength);
 
-    void setShort(int parameterIndex, short x);
+  void setShort(int parameterIndex, short x);
 
-    void setString(int parameterIndex, String x);
+  void setString(int parameterIndex, String x);
 
-    void setTime(int parameterIndex, Time x, Calendar cal);
+  void setTime(int parameterIndex, Time x, Calendar cal);
 
-    void setTimestamp(int parameterIndex, Timestamp x, Calendar targetCalendar, Field field, MysqlType targetMysqlType);
+  void setTimestamp(
+      int parameterIndex,
+      Timestamp x,
+      Calendar targetCalendar,
+      Field field,
+      MysqlType targetMysqlType);
 
-    byte[] getBytesRepresentation(int parameterIndex);
+  byte[] getBytesRepresentation(int parameterIndex);
 }

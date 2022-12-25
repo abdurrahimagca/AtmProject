@@ -31,14 +31,13 @@ package com.mysql.cj;
 
 public interface CancelQueryTask {
 
-    boolean cancel();
+  boolean cancel();
 
-    Throwable getCaughtWhileCancelling();
+  Throwable getCaughtWhileCancelling();
 
-    void setCaughtWhileCancelling(Throwable caughtWhileCancelling);
+  void setCaughtWhileCancelling(Throwable caughtWhileCancelling);
 
-    Query getQueryToCancel();
+  Query getQueryToCancel();
 
-    void setQueryToCancel(Query queryToCancel);
-
+  void setQueryToCancel(Query queryToCancel);
 }

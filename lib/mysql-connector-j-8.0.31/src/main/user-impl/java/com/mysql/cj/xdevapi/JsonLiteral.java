@@ -29,22 +29,20 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * Represents JSON <b>true</b>, <b>false</b> and <b>null</b> literals.
- */
+/** Represents JSON <b>true</b>, <b>false</b> and <b>null</b> literals. */
 public enum JsonLiteral implements JsonValue {
+  TRUE("\u0074\u0072\u0075\u0065"),
+  FALSE("\u0066\u0061\u006c\u0073\u0065"),
+  NULL("\u006E\u0075\u006C\u006C");
 
-    TRUE("\u0074\u0072\u0075\u0065"), FALSE("\u0066\u0061\u006c\u0073\u0065"), NULL("\u006E\u0075\u006C\u006C");
+  public final String value;
 
-    public final String value;
+  private JsonLiteral(String val) {
+    this.value = val;
+  }
 
-    private JsonLiteral(String val) {
-        this.value = val;
-    }
-
-    @Override
-    public String toString() {
-        return this.value;
-    }
-
+  @Override
+  public String toString() {
+    return this.value;
+  }
 }

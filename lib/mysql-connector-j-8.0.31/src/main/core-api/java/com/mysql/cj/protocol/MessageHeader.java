@@ -31,15 +31,12 @@ package com.mysql.cj.protocol;
 
 import java.nio.ByteBuffer;
 
-/**
- * Represents the protocol specific message header
- */
+/** Represents the protocol specific message header */
 public interface MessageHeader {
 
-    ByteBuffer getBuffer();
+  ByteBuffer getBuffer();
 
-    int getMessageSize();
+  int getMessageSize();
 
-    byte getMessageSequence();
-
+  byte getMessageSequence();
 }

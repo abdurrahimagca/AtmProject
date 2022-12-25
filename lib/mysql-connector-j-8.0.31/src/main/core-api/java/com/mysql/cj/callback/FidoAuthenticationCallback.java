@@ -30,103 +30,99 @@
 package com.mysql.cj.callback;
 
 /**
- * The callback object used by the authentication plugin AuthenticationFidoClient to exchange authenticator data between the driver and the client application.
- * 
- * Applications must implement a MysqlCallbackHandler to manage the interaction with authenticator devices and provide the data required to proceed with FIDO
- * authentication. Such handler receives an instance of this class, which must then be used to obtain the data to send to the device and to submit the produced
- * authenticator data and signature into the driver.
+ * The callback object used by the authentication plugin AuthenticationFidoClient to exchange
+ * authenticator data between the driver and the client application.
+ *
+ * <p>Applications must implement a MysqlCallbackHandler to manage the interaction with
+ * authenticator devices and provide the data required to proceed with FIDO authentication. Such
+ * handler receives an instance of this class, which must then be used to obtain the data to send to
+ * the device and to submit the produced authenticator data and signature into the driver.
  */
 public class FidoAuthenticationCallback implements MysqlCallback {
-    // FIDO inputs.
-    private byte[] scramble;
-    private String relyingPartyId;
-    private byte[] credentialId;
+  // FIDO inputs.
+  private byte[] scramble;
+  private String relyingPartyId;
+  private byte[] credentialId;
 
-    // FIDO outputs.
-    private byte[] authenticatorData;
-    private byte[] signature;
+  // FIDO outputs.
+  private byte[] authenticatorData;
+  private byte[] signature;
 
-    /**
-     * Instances of this object are used to exchange FIDO data between the client application and the driver and is responsible for managing all the
-     * interactions with the FIDO authenticator devices.
-     * 
-     * @param scramble
-     * @param relyingPartyId
-     * @param credentialId
-     */
-    public FidoAuthenticationCallback(byte[] scramble, String relyingPartyId, byte[] credentialId) {
-        this.scramble = scramble;
-        this.relyingPartyId = relyingPartyId;
-        this.credentialId = credentialId;
-    }
+  /**
+   * Instances of this object are used to exchange FIDO data between the client application and the
+   * driver and is responsible for managing all the interactions with the FIDO authenticator
+   * devices.
+   *
+   * @param scramble
+   * @param relyingPartyId
+   * @param credentialId
+   */
+  public FidoAuthenticationCallback(byte[] scramble, String relyingPartyId, byte[] credentialId) {
+    this.scramble = scramble;
+    this.relyingPartyId = relyingPartyId;
+    this.credentialId = credentialId;
+  }
 
-    /**
-     * Returns the FIDO Client Data Hash (scramble) for the coming authenticator interaction.
-     * 
-     * @return
-     *         the scramble
-     */
-    public byte[] getScramble() {
-        return this.scramble;
-    }
+  /**
+   * Returns the FIDO Client Data Hash (scramble) for the coming authenticator interaction.
+   *
+   * @return the scramble
+   */
+  public byte[] getScramble() {
+    return this.scramble;
+  }
 
-    /**
-     * Returns the FIDO Relying Party ID for the coming authenticator interaction.
-     * 
-     * @return
-     *         the relying party id
-     */
-    public String getRelyingPartyId() {
-        return this.relyingPartyId;
-    }
+  /**
+   * Returns the FIDO Relying Party ID for the coming authenticator interaction.
+   *
+   * @return the relying party id
+   */
+  public String getRelyingPartyId() {
+    return this.relyingPartyId;
+  }
 
-    /**
-     * Returns the FIDO Credential ID for the coming authenticator interaction.
-     * 
-     * @return
-     *         the credential id
-     */
-    public byte[] getCredentialId() {
-        return this.credentialId;
-    }
+  /**
+   * Returns the FIDO Credential ID for the coming authenticator interaction.
+   *
+   * @return the credential id
+   */
+  public byte[] getCredentialId() {
+    return this.credentialId;
+  }
 
-    /**
-     * Sets the FIDO Authenticator Data produced by the authenticator interaction.
-     * 
-     * @param authenticatorData
-     *            the authenticator data
-     */
-    public void setAuthenticatorData(byte[] authenticatorData) {
-        this.authenticatorData = authenticatorData;
-    }
+  /**
+   * Sets the FIDO Authenticator Data produced by the authenticator interaction.
+   *
+   * @param authenticatorData the authenticator data
+   */
+  public void setAuthenticatorData(byte[] authenticatorData) {
+    this.authenticatorData = authenticatorData;
+  }
 
-    /**
-     * Returns the FIDO Authenticator Data produced by the authenticator interaction.
-     * 
-     * @return
-     *         the authenticator data
-     */
-    public byte[] getAuthenticatorData() {
-        return this.authenticatorData;
-    }
+  /**
+   * Returns the FIDO Authenticator Data produced by the authenticator interaction.
+   *
+   * @return the authenticator data
+   */
+  public byte[] getAuthenticatorData() {
+    return this.authenticatorData;
+  }
 
-    /**
-     * Sets the FIDO Signature produced by the authenticator interaction.
-     * 
-     * @param signature
-     *            the signature
-     */
-    public void setSignature(byte[] signature) {
-        this.signature = signature;
-    }
+  /**
+   * Sets the FIDO Signature produced by the authenticator interaction.
+   *
+   * @param signature the signature
+   */
+  public void setSignature(byte[] signature) {
+    this.signature = signature;
+  }
 
-    /**
-     * Returns the FIDO Signature produced by the authenticator interaction
-     * 
-     * @return
-     *         the signature
-     */
-    public byte[] getSignature() {
-        return this.signature;
-    }
+  /**
+   * Returns the FIDO Signature produced by the authenticator interaction
+   *
+   * @return the signature
+   */
+  public byte[] getSignature() {
+    return this.signature;
+  }
 }

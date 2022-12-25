@@ -29,64 +29,69 @@
 
 package com.mysql.cj.result;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.mysql.cj.Constants;
 import com.mysql.cj.Messages;
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.exceptions.NumberOutOfRange;
 import com.mysql.cj.util.DataTypeUtil;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
-/**
- * A value factory for creating long values.
- */
+/** A value factory for creating long values. */
 public class LongValueFactory extends AbstractNumericValueFactory<Long> {
 
-    public LongValueFactory(PropertySet pset) {
-        super(pset);
-    }
+  public LongValueFactory(PropertySet pset) {
+    super(pset);
+  }
 
-    @Override
-    public Long createFromBigInteger(BigInteger i) {
-        if (this.jdbcCompliantTruncationForReads
-                && (i.compareTo(Constants.BIG_INTEGER_MIN_LONG_VALUE) < 0 || i.compareTo(Constants.BIG_INTEGER_MAX_LONG_VALUE) > 0)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { i, getTargetTypeName() }));
-        }
-        return i.longValue();
+  @Override
+  public Long createFromBigInteger(BigInteger i) {
+    if (this.jdbcCompliantTruncationForReads
+        && (i.compareTo(Constants.BIG_INTEGER_MIN_LONG_VALUE) < 0
+            || i.compareTo(Constants.BIG_INTEGER_MAX_LONG_VALUE) > 0)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {i, getTargetTypeName()}));
     }
+    return i.longValue();
+  }
 
-    @Override
-    public Long createFromLong(long l) {
-        if (this.jdbcCompliantTruncationForReads && (l < Long.MIN_VALUE || l > Long.MAX_VALUE)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { Long.valueOf(l).toString(), getTargetTypeName() }));
-        }
-        return l;
+  @Override
+  public Long createFromLong(long l) {
+    if (this.jdbcCompliantTruncationForReads && (l < Long.MIN_VALUE || l > Long.MAX_VALUE)) {
+      throw new NumberOutOfRange(
+          Messages.getString(
+              "ResultSet.NumberOutOfRange",
+              new Object[] {Long.valueOf(l).toString(), getTargetTypeName()}));
     }
+    return l;
+  }
 
-    @Override
-    public Long createFromBigDecimal(BigDecimal d) {
-        if (this.jdbcCompliantTruncationForReads
-                && (d.compareTo(Constants.BIG_DECIMAL_MIN_LONG_VALUE) < 0 || d.compareTo(Constants.BIG_DECIMAL_MAX_LONG_VALUE) > 0)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { d, getTargetTypeName() }));
-        }
-        return d.longValue();
+  @Override
+  public Long createFromBigDecimal(BigDecimal d) {
+    if (this.jdbcCompliantTruncationForReads
+        && (d.compareTo(Constants.BIG_DECIMAL_MIN_LONG_VALUE) < 0
+            || d.compareTo(Constants.BIG_DECIMAL_MAX_LONG_VALUE) > 0)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {d, getTargetTypeName()}));
     }
+    return d.longValue();
+  }
 
-    @Override
-    public Long createFromDouble(double d) {
-        if (this.jdbcCompliantTruncationForReads && (d < Long.MIN_VALUE || d > Long.MAX_VALUE)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { d, getTargetTypeName() }));
-        }
-        return (long) d;
+  @Override
+  public Long createFromDouble(double d) {
+    if (this.jdbcCompliantTruncationForReads && (d < Long.MIN_VALUE || d > Long.MAX_VALUE)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {d, getTargetTypeName()}));
     }
+    return (long) d;
+  }
 
-    @Override
-    public Long createFromBit(byte[] bytes, int offset, int length) {
-        return DataTypeUtil.bitToLong(bytes, offset, length);
-    }
+  @Override
+  public Long createFromBit(byte[] bytes, int offset, int length) {
+    return DataTypeUtil.bitToLong(bytes, offset, length);
+  }
 
-    public String getTargetTypeName() {
-        return Long.class.getName();
-    }
+  public String getTargetTypeName() {
+    return Long.class.getName();
+  }
 }

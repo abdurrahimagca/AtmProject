@@ -29,40 +29,35 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.TimeZone;
-
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.protocol.ColumnDefinition;
 import com.mysql.cj.protocol.ProtocolEntity;
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 import com.mysql.cj.protocol.x.XMessage;
+import java.util.TimeZone;
 
-/**
- * Create {@link Row} objects from internal row representation.
- */
+/** Create {@link Row} objects from internal row representation. */
 public class RowFactory implements ProtocolEntityFactory<Row, XMessage> {
-    private ColumnDefinition metadata;
-    private TimeZone defaultTimeZone;
-    private PropertySet pset;
+  private ColumnDefinition metadata;
+  private TimeZone defaultTimeZone;
+  private PropertySet pset;
 
-    /**
-     * Constructor.
-     * 
-     * @param metadata
-     *            {@link ColumnDefinition} object to use for new rows.
-     * @param defaultTimeZone
-     *            {@link TimeZone} object representing the default time zone
-     * @param pset
-     *            {@link PropertySet}
-     */
-    public RowFactory(ColumnDefinition metadata, TimeZone defaultTimeZone, PropertySet pset) {
-        this.metadata = metadata;
-        this.defaultTimeZone = defaultTimeZone;
-        this.pset = pset;
-    }
+  /**
+   * Constructor.
+   *
+   * @param metadata {@link ColumnDefinition} object to use for new rows.
+   * @param defaultTimeZone {@link TimeZone} object representing the default time zone
+   * @param pset {@link PropertySet}
+   */
+  public RowFactory(ColumnDefinition metadata, TimeZone defaultTimeZone, PropertySet pset) {
+    this.metadata = metadata;
+    this.defaultTimeZone = defaultTimeZone;
+    this.pset = pset;
+  }
 
-    @Override
-    public Row createFromProtocolEntity(ProtocolEntity internalRow) {
-        return new RowImpl((com.mysql.cj.result.Row) internalRow, this.metadata, this.defaultTimeZone, this.pset);
-    }
+  @Override
+  public Row createFromProtocolEntity(ProtocolEntity internalRow) {
+    return new RowImpl(
+        (com.mysql.cj.result.Row) internalRow, this.metadata, this.defaultTimeZone, this.pset);
+  }
 }

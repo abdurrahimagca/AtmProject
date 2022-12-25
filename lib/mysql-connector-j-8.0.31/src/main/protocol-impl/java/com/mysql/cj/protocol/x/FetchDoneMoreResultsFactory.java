@@ -31,13 +31,12 @@ package com.mysql.cj.protocol.x;
 
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 
-/**
- * Factory producing {@link FetchDoneMoreResults} from protocol message.
- */
-public class FetchDoneMoreResultsFactory implements ProtocolEntityFactory<FetchDoneMoreResults, XMessage> {
+/** Factory producing {@link FetchDoneMoreResults} from protocol message. */
+public class FetchDoneMoreResultsFactory
+    implements ProtocolEntityFactory<FetchDoneMoreResults, XMessage> {
 
-    @Override
-    public FetchDoneMoreResults createFromMessage(XMessage message) {
-        return new FetchDoneMoreResults();
-    }
+  @Override
+  public FetchDoneMoreResults createFromMessage(XMessage message) {
+    return new FetchDoneMoreResults();
+  }
 }

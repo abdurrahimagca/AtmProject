@@ -32,58 +32,53 @@ package com.mysql.cj.protocol.x;
 import com.mysql.cj.exceptions.CJException;
 import com.mysql.cj.x.protobuf.Mysqlx.Error;
 
-/**
- * An Error returned from X Plugin.
- */
+/** An Error returned from X Plugin. */
 public class XProtocolError extends CJException {
-    private static final long serialVersionUID = 6991120628391138584L;
+  private static final long serialVersionUID = 6991120628391138584L;
 
-    /**
-     * The error message returned from the server.
-     */
-    private Error msg;
+  /** The error message returned from the server. */
+  private Error msg;
 
-    public XProtocolError(String message) {
-        super(message);
-    }
+  public XProtocolError(String message) {
+    super(message);
+  }
 
-    public XProtocolError(Error msg) {
-        super(getFullErrorDescription(msg));
-        this.msg = msg;
-    }
+  public XProtocolError(Error msg) {
+    super(getFullErrorDescription(msg));
+    this.msg = msg;
+  }
 
-    public XProtocolError(XProtocolError fromOtherThread) {
-        super(getFullErrorDescription(fromOtherThread.msg), fromOtherThread);
-        this.msg = fromOtherThread.msg;
-    }
+  public XProtocolError(XProtocolError fromOtherThread) {
+    super(getFullErrorDescription(fromOtherThread.msg), fromOtherThread);
+    this.msg = fromOtherThread.msg;
+  }
 
-    public XProtocolError(String message, Throwable t) {
-        super(message, t);
-    }
+  public XProtocolError(String message, Throwable t) {
+    super(message, t);
+  }
 
-    /**
-     * Format the error message's contents into a complete error description for the exception.
-     * 
-     * @param msg
-     *            {@link Error}
-     * @return string error message
-     */
-    private static String getFullErrorDescription(Error msg) {
-        StringBuilder stringMessage = new StringBuilder("ERROR ");
-        stringMessage.append(msg.getCode());
-        stringMessage.append(" (");
-        stringMessage.append(msg.getSqlState());
-        stringMessage.append(") ");
-        stringMessage.append(msg.getMsg());
-        return stringMessage.toString();
-    }
+  /**
+   * Format the error message's contents into a complete error description for the exception.
+   *
+   * @param msg {@link Error}
+   * @return string error message
+   */
+  private static String getFullErrorDescription(Error msg) {
+    StringBuilder stringMessage = new StringBuilder("ERROR ");
+    stringMessage.append(msg.getCode());
+    stringMessage.append(" (");
+    stringMessage.append(msg.getSqlState());
+    stringMessage.append(") ");
+    stringMessage.append(msg.getMsg());
+    return stringMessage.toString();
+  }
 
-    public int getErrorCode() {
-        return this.msg == null ? super.getVendorCode() : this.msg.getCode();
-    }
+  public int getErrorCode() {
+    return this.msg == null ? super.getVendorCode() : this.msg.getCode();
+  }
 
-    @Override
-    public String getSQLState() {
-        return this.msg == null ? super.getSQLState() : this.msg.getSqlState();
-    }
+  @Override
+  public String getSQLState() {
+    return this.msg == null ? super.getSQLState() : this.msg.getSqlState();
+  }
 }

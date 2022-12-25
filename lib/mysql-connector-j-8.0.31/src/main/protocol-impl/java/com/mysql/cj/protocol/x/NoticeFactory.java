@@ -31,13 +31,11 @@ package com.mysql.cj.protocol.x;
 
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 
-/**
- * Factory producing {@link Notice} from protocol message.
- */
+/** Factory producing {@link Notice} from protocol message. */
 public class NoticeFactory implements ProtocolEntityFactory<Notice, XMessage> {
 
-    @Override
-    public Notice createFromMessage(XMessage message) {
-        return Notice.getInstance(message);
-    }
+  @Override
+  public Notice createFromMessage(XMessage message) {
+    return Notice.getInstance(message);
+  }
 }

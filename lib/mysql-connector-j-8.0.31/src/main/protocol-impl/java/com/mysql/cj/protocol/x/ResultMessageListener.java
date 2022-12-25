@@ -29,10 +29,6 @@
 
 package com.mysql.cj.protocol.x;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
 import com.google.protobuf.GeneratedMessageV3;
 import com.mysql.cj.exceptions.WrongArgumentException;
 import com.mysql.cj.protocol.MessageListener;
@@ -40,46 +36,57 @@ import com.mysql.cj.protocol.ProtocolEntity;
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 import com.mysql.cj.protocol.ResultBuilder;
 import com.mysql.cj.x.protobuf.Mysqlx.Error;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-/**
- * A {@link MessageListener} to handle result data and propagate it to a {@link ResultBuilder}.
- */
+/** A {@link MessageListener} to handle result data and propagate it to a {@link ResultBuilder}. */
 public class ResultMessageListener<R> implements MessageListener<XMessage> {
-    private ResultBuilder<?> resultBuilder;
-    private CompletableFuture<R> future;
+  private ResultBuilder<?> resultBuilder;
+  private CompletableFuture<R> future;
 
-    private Map<Class<? extends GeneratedMessageV3>, ProtocolEntityFactory<? extends ProtocolEntity, XMessage>> messageToProtocolEntityFactory = new HashMap<>();
+  private Map<
+          Class<? extends GeneratedMessageV3>,
+          ProtocolEntityFactory<? extends ProtocolEntity, XMessage>>
+      messageToProtocolEntityFactory = new HashMap<>();
 
-    public ResultMessageListener(
-            Map<Class<? extends GeneratedMessageV3>, ProtocolEntityFactory<? extends ProtocolEntity, XMessage>> messageToProtocolEntityFactory,
-            ResultBuilder<R> resultBuilder, CompletableFuture<R> future) {
-        this.messageToProtocolEntityFactory = messageToProtocolEntityFactory;
-        this.resultBuilder = resultBuilder;
-        this.future = future;
+  public ResultMessageListener(
+      Map<
+              Class<? extends GeneratedMessageV3>,
+              ProtocolEntityFactory<? extends ProtocolEntity, XMessage>>
+          messageToProtocolEntityFactory,
+      ResultBuilder<R> resultBuilder,
+      CompletableFuture<R> future) {
+    this.messageToProtocolEntityFactory = messageToProtocolEntityFactory;
+    this.resultBuilder = resultBuilder;
+    this.future = future;
+  }
+
+  @SuppressWarnings("unchecked")
+  public boolean processMessage(XMessage message) {
+    Class<? extends GeneratedMessageV3> msgClass =
+        (Class<? extends GeneratedMessageV3>) message.getMessage().getClass();
+
+    if (Error.class.equals(msgClass)) {
+      this.future.completeExceptionally(new XProtocolError(Error.class.cast(message.getMessage())));
+
+    } else if (!this.messageToProtocolEntityFactory.containsKey(msgClass)) {
+      this.future.completeExceptionally(
+          new WrongArgumentException(
+              "Unhandled msg class (" + msgClass + ") + msg=" + message.getMessage()));
+
+    } else {
+      if (!this.resultBuilder.addProtocolEntity(
+          this.messageToProtocolEntityFactory.get(msgClass).createFromMessage(message))) {
+        return false;
+      }
+      this.future.complete((R) this.resultBuilder.build());
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean processMessage(XMessage message) {
-        Class<? extends GeneratedMessageV3> msgClass = (Class<? extends GeneratedMessageV3>) message.getMessage().getClass();
+    return true; /* done reading */
+  }
 
-        if (Error.class.equals(msgClass)) {
-            this.future.completeExceptionally(new XProtocolError(Error.class.cast(message.getMessage())));
-
-        } else if (!this.messageToProtocolEntityFactory.containsKey(msgClass)) {
-            this.future.completeExceptionally(new WrongArgumentException("Unhandled msg class (" + msgClass + ") + msg=" + message.getMessage()));
-
-        } else {
-            if (!this.resultBuilder.addProtocolEntity(this.messageToProtocolEntityFactory.get(msgClass).createFromMessage(message))) {
-                return false;
-            }
-            this.future.complete((R) this.resultBuilder.build());
-        }
-
-        return true; /* done reading */
-    }
-
-    public void error(Throwable ex) {
-        this.future.completeExceptionally(ex);
-    }
-
+  public void error(Throwable ex) {
+    this.future.completeExceptionally(ex);
+  }
 }

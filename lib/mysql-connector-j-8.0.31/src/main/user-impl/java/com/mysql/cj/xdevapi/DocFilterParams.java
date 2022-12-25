@@ -29,55 +29,52 @@
 
 package com.mysql.cj.xdevapi;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud.Projection;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud.Projection;
-
-/**
- * {@link FilterParams} implementation for {@link com.mysql.cj.xdevapi.Collection} syntax.
- */
+/** {@link FilterParams} implementation for {@link com.mysql.cj.xdevapi.Collection} syntax. */
 public class DocFilterParams extends AbstractFilterParams {
 
-    /**
-     * Constructor.
-     * 
-     * @param schemaName
-     *            Schema name
-     * @param collectionName
-     *            Collection name
-     */
-    public DocFilterParams(String schemaName, String collectionName) {
-        this(schemaName, collectionName, true);
-    }
+  /**
+   * Constructor.
+   *
+   * @param schemaName Schema name
+   * @param collectionName Collection name
+   */
+  public DocFilterParams(String schemaName, String collectionName) {
+    this(schemaName, collectionName, true);
+  }
 
-    /**
-     * Constructor.
-     * 
-     * @param schemaName
-     *            Schema name
-     * @param collectionName
-     *            Collection name
-     * @param supportsOffset
-     *            Whether OFFSET is supported or not
-     */
-    public DocFilterParams(String schemaName, String collectionName, boolean supportsOffset) {
-        super(schemaName, collectionName, supportsOffset, false);
-    }
+  /**
+   * Constructor.
+   *
+   * @param schemaName Schema name
+   * @param collectionName Collection name
+   * @param supportsOffset Whether OFFSET is supported or not
+   */
+  public DocFilterParams(String schemaName, String collectionName, boolean supportsOffset) {
+    super(schemaName, collectionName, supportsOffset, false);
+  }
 
-    /**
-     * Parse projection expressions into X Protocol Projection objects.
-     * 
-     * @param docProjection
-     *            projection expression
-     */
-    public void setFields(Expression docProjection) {
-        this.fields = Collections.singletonList(Projection.newBuilder().setSource(new ExprParser(docProjection.getExpressionString(), false).parse()).build());
-    }
+  /**
+   * Parse projection expressions into X Protocol Projection objects.
+   *
+   * @param docProjection projection expression
+   */
+  public void setFields(Expression docProjection) {
+    this.fields =
+        Collections.singletonList(
+            Projection.newBuilder()
+                .setSource(new ExprParser(docProjection.getExpressionString(), false).parse())
+                .build());
+  }
 
-    @Override
-    public void setFields(String... projection) {
-        this.fields = new ExprParser(Arrays.stream(projection).collect(Collectors.joining(", ")), false).parseDocumentProjection();
-    }
+  @Override
+  public void setFields(String... projection) {
+    this.fields =
+        new ExprParser(Arrays.stream(projection).collect(Collectors.joining(", ")), false)
+            .parseDocumentProjection();
+  }
 }

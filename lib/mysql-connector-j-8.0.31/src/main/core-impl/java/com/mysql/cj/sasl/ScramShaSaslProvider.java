@@ -37,49 +37,65 @@ import java.security.Provider;
 import java.security.ProviderException;
 
 /**
- * A SASL provider for the authentication mechanisms SCRAM-SHA-1 and SCRAM-SHA-256, here renamed to MYSQLCJ-SCRAM-SHA-1 and MYSQL-SRAM-SHA-256 respectively to
- * avoid conflicts with future default implementations.
+ * A SASL provider for the authentication mechanisms SCRAM-SHA-1 and SCRAM-SHA-256, here renamed to
+ * MYSQLCJ-SCRAM-SHA-1 and MYSQL-SRAM-SHA-256 respectively to avoid conflicts with future default
+ * implementations.
  */
 public final class ScramShaSaslProvider extends Provider {
-    private static final long serialVersionUID = 866717063477857937L;
+  private static final long serialVersionUID = 866717063477857937L;
 
-    private static final String INFO = "MySQL Connector/J SASL provider (implements client mechanisms for " + ScramSha1SaslClient.MECHANISM_NAME + " and "
-            + ScramSha256SaslClient.MECHANISM_NAME + ")";
+  private static final String INFO =
+      "MySQL Connector/J SASL provider (implements client mechanisms for "
+          + ScramSha1SaslClient.MECHANISM_NAME
+          + " and "
+          + ScramSha256SaslClient.MECHANISM_NAME
+          + ")";
 
-    private static final class ProviderService extends Provider.Service {
-        public ProviderService(Provider provider, String type, String algorithm, String className) {
-            super(provider, type, algorithm, className, null, null);
-        }
-
-        @Override
-        public Object newInstance(Object constructorParameter) throws NoSuchAlgorithmException {
-            String type = getType();
-            if (constructorParameter != null) {
-                throw new InvalidParameterException("constructorParameter not used with " + type + " engines");
-            }
-
-            String algorithm = getAlgorithm();
-            if (type.equals("SaslClientFactory")) {
-                if (algorithm.equals(ScramSha1SaslClient.MECHANISM_NAME)) {
-                    return new ScramShaSaslClientFactory();
-                }
-                if (algorithm.equals(ScramSha256SaslClient.MECHANISM_NAME)) {
-                    return new ScramShaSaslClientFactory();
-                }
-            }
-            throw new ProviderException("No implementation for " + algorithm + " " + type);
-        }
+  private static final class ProviderService extends Provider.Service {
+    public ProviderService(Provider provider, String type, String algorithm, String className) {
+      super(provider, type, algorithm, className, null, null);
     }
 
-    public ScramShaSaslProvider() {
-        super("MySQLScramShaSasl", 1.0, INFO);
+    @Override
+    public Object newInstance(Object constructorParameter) throws NoSuchAlgorithmException {
+      String type = getType();
+      if (constructorParameter != null) {
+        throw new InvalidParameterException(
+            "constructorParameter not used with " + type + " engines");
+      }
 
-        AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-            putService(new ProviderService(ScramShaSaslProvider.this, "SaslClientFactory", ScramSha1SaslClient.MECHANISM_NAME,
-                    ScramShaSaslClientFactory.class.getName()));
-            putService(new ProviderService(ScramShaSaslProvider.this, "SaslClientFactory", ScramSha256SaslClient.MECHANISM_NAME,
-                    ScramShaSaslClientFactory.class.getName()));
-            return null;
-        });
+      String algorithm = getAlgorithm();
+      if (type.equals("SaslClientFactory")) {
+        if (algorithm.equals(ScramSha1SaslClient.MECHANISM_NAME)) {
+          return new ScramShaSaslClientFactory();
+        }
+        if (algorithm.equals(ScramSha256SaslClient.MECHANISM_NAME)) {
+          return new ScramShaSaslClientFactory();
+        }
+      }
+      throw new ProviderException("No implementation for " + algorithm + " " + type);
     }
+  }
+
+  public ScramShaSaslProvider() {
+    super("MySQLScramShaSasl", 1.0, INFO);
+
+    AccessController.doPrivileged(
+        (PrivilegedAction<Void>)
+            () -> {
+              putService(
+                  new ProviderService(
+                      ScramShaSaslProvider.this,
+                      "SaslClientFactory",
+                      ScramSha1SaslClient.MECHANISM_NAME,
+                      ScramShaSaslClientFactory.class.getName()));
+              putService(
+                  new ProviderService(
+                      ScramShaSaslProvider.this,
+                      "SaslClientFactory",
+                      ScramSha256SaslClient.MECHANISM_NAME,
+                      ScramShaSaslClientFactory.class.getName()));
+              return null;
+            });
+  }
 }

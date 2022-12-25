@@ -31,22 +31,30 @@ package testsuite.regression;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.jdbc.exceptions.SQLError;
-
+import org.junit.jupiter.api.Test;
 import testsuite.BaseTestCase;
 
 public class ExceptionSubclassesTest extends BaseTestCase {
-    @Test
-    public void testBug17750877() throws Exception {
-        assertEquals("java.sql.SQLTransientConnectionException", SQLError.createSQLException("test", "08000", 0, true, null).getClass().getCanonicalName());
-        assertEquals("java.sql.SQLNonTransientConnectionException", SQLError.createSQLException("test", "08000", 0, false, null).getClass().getCanonicalName());
-        assertEquals("java.sql.SQLSyntaxErrorException", SQLError.createSQLException("test", "42000", null).getClass().getCanonicalName());
-        assertEquals("java.sql.SQLIntegrityConstraintViolationException", SQLError.createSQLException("test", "23000", null).getClass().getCanonicalName());
-        assertEquals("com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException",
-                SQLError.createSQLException("test", "40000", null).getClass().getCanonicalName());
-        assertEquals("com.mysql.cj.jdbc.exceptions.MySQLQueryInterruptedException",
-                SQLError.createSQLException("test", "70100", null).getClass().getCanonicalName());
-    }
+  @Test
+  public void testBug17750877() throws Exception {
+    assertEquals(
+        "java.sql.SQLTransientConnectionException",
+        SQLError.createSQLException("test", "08000", 0, true, null).getClass().getCanonicalName());
+    assertEquals(
+        "java.sql.SQLNonTransientConnectionException",
+        SQLError.createSQLException("test", "08000", 0, false, null).getClass().getCanonicalName());
+    assertEquals(
+        "java.sql.SQLSyntaxErrorException",
+        SQLError.createSQLException("test", "42000", null).getClass().getCanonicalName());
+    assertEquals(
+        "java.sql.SQLIntegrityConstraintViolationException",
+        SQLError.createSQLException("test", "23000", null).getClass().getCanonicalName());
+    assertEquals(
+        "com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException",
+        SQLError.createSQLException("test", "40000", null).getClass().getCanonicalName());
+    assertEquals(
+        "com.mysql.cj.jdbc.exceptions.MySQLQueryInterruptedException",
+        SQLError.createSQLException("test", "70100", null).getClass().getCanonicalName());
+  }
 }

@@ -33,53 +33,51 @@ import java.util.Properties;
 
 /**
  * ClientFactory is used for creation of {@link Client} instances.
- * 
- * {@link Client} objects provide the means of creating {@link Session}s that use an internally managed connection pool.
- * 
+ *
+ * <p>{@link Client} objects provide the means of creating {@link Session}s that use an internally
+ * managed connection pool.
+ *
  * <pre>
  * ClientFactory xClientFactory = new ClientFactory();
- * 
+ *
  * {@link Client} client1 = xClientFactory.getClient("<b>mysqlx:</b>//[user1[:pwd1]@]host1[:port1]/db", poolingProps);
  * {@link Client} client2 = xClientFactory.getClient("<b>mysqlx:</b>//host2[:port2]/db?user=user2&amp;password=pwd2", poolingProps);
  * </pre>
- *
  */
 public class ClientFactory {
-    /**
-     * Creates a {@link Client} object which provides a Session pooling functionality.
-     * 
-     * @param url
-     *            the session URL.
-     * @param clientPropsJson
-     *            JSON string representing a document that defines connection properties in a special format.
-     *            For pooling configuration, it should contain an embedded document after the "pooling" key:
-     * 
-     *            <pre>
-     * pooling : {
-     *     enabled: true|false,
-     *     maxSize: integer &gt; 0
-     *     maxIdleTime: integer &ge; 0,
-     *     queueTimeOut: integer &ge; 0
-     * }
-     *            </pre>
-     * 
-     * @return a {@link Client} instance
-     */
-    public Client getClient(String url, String clientPropsJson) {
-        return new ClientImpl(url, clientPropsJson);
-    }
+  /**
+   * Creates a {@link Client} object which provides a Session pooling functionality.
+   *
+   * @param url the session URL.
+   * @param clientPropsJson JSON string representing a document that defines connection properties
+   *     in a special format. For pooling configuration, it should contain an embedded document
+   *     after the "pooling" key:
+   *     <pre>
+   * pooling : {
+   *     enabled: true|false,
+   *     maxSize: integer &gt; 0
+   *     maxIdleTime: integer &ge; 0,
+   *     queueTimeOut: integer &ge; 0
+   * }
+   *            </pre>
+   *
+   * @return a {@link Client} instance
+   */
+  public Client getClient(String url, String clientPropsJson) {
+    return new ClientImpl(url, clientPropsJson);
+  }
 
-    /**
-     * Creates a {@link Client} object that provides a Session pooling functionality.
-     * 
-     * @param url
-     *            the session URL.
-     * @param clientProps
-     *            the {@link Properties} instance that contains the connection properties. The keys in this {@link Properties} match with the path of each value
-     *            in the JSON document from {@link #getClient(String, String)} (for example, <code>pooling.enabled</code> or <code>pooling.maxSize</code>).
-     * @return a {@link Client} instance.
-     */
-    public Client getClient(String url, Properties clientProps) {
-        return new ClientImpl(url, clientProps);
-    }
+  /**
+   * Creates a {@link Client} object that provides a Session pooling functionality.
+   *
+   * @param url the session URL.
+   * @param clientProps the {@link Properties} instance that contains the connection properties. The
+   *     keys in this {@link Properties} match with the path of each value in the JSON document from
+   *     {@link #getClient(String, String)} (for example, <code>pooling.enabled</code> or <code>
+   *     pooling.maxSize</code>).
+   * @return a {@link Client} instance.
+   */
+  public Client getClient(String url, Properties clientProps) {
+    return new ClientImpl(url, clientProps);
+  }
 }

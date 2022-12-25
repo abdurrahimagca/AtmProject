@@ -29,20 +29,16 @@
 
 package testsuite.simple;
 
-import java.util.Properties;
-
 import com.mysql.cj.conf.ConnectionPropertiesTransform;
 import com.mysql.cj.conf.PropertyKey;
+import java.util.Properties;
 
-/**
- * Used for testing the ConnectionPropertiesTransform functionality.
- */
+/** Used for testing the ConnectionPropertiesTransform functionality. */
 public class SimpleTransformer implements ConnectionPropertiesTransform {
 
-    public Properties transformProperties(Properties props) {
-        props.setProperty(PropertyKey.HOST.getKeyName(), "albequerque");
+  public Properties transformProperties(Properties props) {
+    props.setProperty(PropertyKey.HOST.getKeyName(), "albequerque");
 
-        return props;
-    }
-
+    return props;
+  }
 }

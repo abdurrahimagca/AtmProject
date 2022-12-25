@@ -29,8 +29,6 @@
 
 package com.mysql.cj;
 
-import java.net.SocketAddress;
-
 import com.mysql.cj.conf.HostInfo;
 import com.mysql.cj.conf.PropertyKey;
 import com.mysql.cj.conf.PropertySet;
@@ -46,176 +44,191 @@ import com.mysql.cj.protocol.Message;
 import com.mysql.cj.protocol.Protocol;
 import com.mysql.cj.protocol.ServerSession;
 import com.mysql.cj.util.Util;
+import java.net.SocketAddress;
 
 public abstract class CoreSession implements Session {
 
-    protected PropertySet propertySet;
-    protected ExceptionInterceptor exceptionInterceptor;
+  protected PropertySet propertySet;
+  protected ExceptionInterceptor exceptionInterceptor;
 
-    /** The logger we're going to use */
-    protected transient Log log;
+  /** The logger we're going to use */
+  protected transient Log log;
 
-    /** Null logger shared by all connections at startup */
-    protected static final Log NULL_LOGGER = new NullLogger(Log.LOGGER_INSTANCE_NAME);
+  /** Null logger shared by all connections at startup */
+  protected static final Log NULL_LOGGER = new NullLogger(Log.LOGGER_INSTANCE_NAME);
 
-    protected transient Protocol<? extends Message> protocol;
-    protected MessageBuilder<? extends Message> messageBuilder;
+  protected transient Protocol<? extends Message> protocol;
+  protected MessageBuilder<? extends Message> messageBuilder;
 
-    /** The point in time when this connection was created */
-    protected long connectionCreationTimeMillis = 0;
-    protected HostInfo hostInfo = null;
+  /** The point in time when this connection was created */
+  protected long connectionCreationTimeMillis = 0;
 
-    protected RuntimeProperty<Boolean> gatherPerfMetrics;
-    protected RuntimeProperty<String> characterEncoding;
-    protected RuntimeProperty<Boolean> disconnectOnExpiredPasswords;
-    protected RuntimeProperty<Boolean> cacheServerConfiguration;
-    protected RuntimeProperty<Boolean> autoReconnect;
-    protected RuntimeProperty<Boolean> autoReconnectForPools;
-    protected RuntimeProperty<Boolean> maintainTimeStats;
+  protected HostInfo hostInfo = null;
 
-    /** The max-rows setting for current session */
-    protected int sessionMaxRows = -1;
+  protected RuntimeProperty<Boolean> gatherPerfMetrics;
+  protected RuntimeProperty<String> characterEncoding;
+  protected RuntimeProperty<Boolean> disconnectOnExpiredPasswords;
+  protected RuntimeProperty<Boolean> cacheServerConfiguration;
+  protected RuntimeProperty<Boolean> autoReconnect;
+  protected RuntimeProperty<Boolean> autoReconnectForPools;
+  protected RuntimeProperty<Boolean> maintainTimeStats;
 
-    /** The event sink to use for profiling */
-    private ProfilerEventHandler eventSink;
+  /** The max-rows setting for current session */
+  protected int sessionMaxRows = -1;
 
-    public CoreSession(HostInfo hostInfo, PropertySet propSet) {
-        this.connectionCreationTimeMillis = System.currentTimeMillis();
-        this.hostInfo = hostInfo;
-        this.propertySet = propSet;
+  /** The event sink to use for profiling */
+  private ProfilerEventHandler eventSink;
 
-        this.gatherPerfMetrics = getPropertySet().getBooleanProperty(PropertyKey.gatherPerfMetrics);
-        this.characterEncoding = getPropertySet().getStringProperty(PropertyKey.characterEncoding);
-        this.disconnectOnExpiredPasswords = getPropertySet().getBooleanProperty(PropertyKey.disconnectOnExpiredPasswords);
-        this.cacheServerConfiguration = getPropertySet().getBooleanProperty(PropertyKey.cacheServerConfiguration);
-        this.autoReconnect = getPropertySet().getBooleanProperty(PropertyKey.autoReconnect);
-        this.autoReconnectForPools = getPropertySet().getBooleanProperty(PropertyKey.autoReconnectForPools);
-        this.maintainTimeStats = getPropertySet().getBooleanProperty(PropertyKey.maintainTimeStats);
+  public CoreSession(HostInfo hostInfo, PropertySet propSet) {
+    this.connectionCreationTimeMillis = System.currentTimeMillis();
+    this.hostInfo = hostInfo;
+    this.propertySet = propSet;
 
-        this.log = LogFactory.getLogger(getPropertySet().getStringProperty(PropertyKey.logger).getStringValue(), Log.LOGGER_INSTANCE_NAME);
+    this.gatherPerfMetrics = getPropertySet().getBooleanProperty(PropertyKey.gatherPerfMetrics);
+    this.characterEncoding = getPropertySet().getStringProperty(PropertyKey.characterEncoding);
+    this.disconnectOnExpiredPasswords =
+        getPropertySet().getBooleanProperty(PropertyKey.disconnectOnExpiredPasswords);
+    this.cacheServerConfiguration =
+        getPropertySet().getBooleanProperty(PropertyKey.cacheServerConfiguration);
+    this.autoReconnect = getPropertySet().getBooleanProperty(PropertyKey.autoReconnect);
+    this.autoReconnectForPools =
+        getPropertySet().getBooleanProperty(PropertyKey.autoReconnectForPools);
+    this.maintainTimeStats = getPropertySet().getBooleanProperty(PropertyKey.maintainTimeStats);
+
+    this.log =
+        LogFactory.getLogger(
+            getPropertySet().getStringProperty(PropertyKey.logger).getStringValue(),
+            Log.LOGGER_INSTANCE_NAME);
+  }
+
+  @Override
+  public void changeUser(String user, String password, String database) {
+    // reset maxRows to default value
+    this.sessionMaxRows = -1;
+
+    this.protocol.changeUser(user, password, database);
+  }
+
+  @Override
+  public PropertySet getPropertySet() {
+    return this.propertySet;
+  }
+
+  @Override
+  public ExceptionInterceptor getExceptionInterceptor() {
+    return this.exceptionInterceptor;
+  }
+
+  @Override
+  public void setExceptionInterceptor(ExceptionInterceptor exceptionInterceptor) {
+    this.exceptionInterceptor = exceptionInterceptor;
+  }
+
+  @Override
+  public Log getLog() {
+    return this.log;
+  }
+
+  public HostInfo getHostInfo() {
+    return this.hostInfo;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <M extends Message> MessageBuilder<M> getMessageBuilder() {
+    return (MessageBuilder<M>) this.messageBuilder;
+  }
+
+  @Override
+  public ServerSession getServerSession() {
+    return this.protocol.getServerSession();
+  }
+
+  @Override
+  public boolean versionMeetsMinimum(int major, int minor, int subminor) {
+    return this.protocol.versionMeetsMinimum(major, minor, subminor);
+  }
+
+  @Override
+  public long getThreadId() {
+    return this.protocol.getServerSession().getCapabilities().getThreadId();
+  }
+
+  @Override
+  public void quit() {
+    if (this.eventSink != null) {
+      this.eventSink.destroy();
+      this.eventSink = null;
     }
+  }
 
-    @Override
-    public void changeUser(String user, String password, String database) {
-        // reset maxRows to default value
-        this.sessionMaxRows = -1;
-
-        this.protocol.changeUser(user, password, database);
+  @Override
+  public void forceClose() {
+    if (this.eventSink != null) {
+      this.eventSink.destroy();
+      this.eventSink = null;
     }
+  }
 
-    @Override
-    public PropertySet getPropertySet() {
-        return this.propertySet;
-    }
+  public boolean isSetNeededForAutoCommitMode(boolean autoCommitFlag) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 
-    @Override
-    public ExceptionInterceptor getExceptionInterceptor() {
-        return this.exceptionInterceptor;
-    }
+  @Override
+  public ProfilerEventHandler getProfilerEventHandler() {
+    if (this.eventSink == null) {
+      synchronized (this) {
+        if (this.eventSink
+            == null) { // check again to ensure that other thread didn't set it already
+          this.eventSink =
+              (ProfilerEventHandler)
+                  Util.getInstance(
+                      this.propertySet
+                          .getStringProperty(PropertyKey.profilerEventHandler)
+                          .getStringValue(),
+                      new Class<?>[0],
+                      new Object[0],
+                      this.exceptionInterceptor);
 
-    @Override
-    public void setExceptionInterceptor(ExceptionInterceptor exceptionInterceptor) {
-        this.exceptionInterceptor = exceptionInterceptor;
-    }
-
-    @Override
-    public Log getLog() {
-        return this.log;
-    }
-
-    public HostInfo getHostInfo() {
-        return this.hostInfo;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <M extends Message> MessageBuilder<M> getMessageBuilder() {
-        return (MessageBuilder<M>) this.messageBuilder;
-    }
-
-    @Override
-    public ServerSession getServerSession() {
-        return this.protocol.getServerSession();
-    }
-
-    @Override
-    public boolean versionMeetsMinimum(int major, int minor, int subminor) {
-        return this.protocol.versionMeetsMinimum(major, minor, subminor);
-    }
-
-    @Override
-    public long getThreadId() {
-        return this.protocol.getServerSession().getCapabilities().getThreadId();
-    }
-
-    @Override
-    public void quit() {
-        if (this.eventSink != null) {
-            this.eventSink.destroy();
-            this.eventSink = null;
+          this.eventSink.init(this.log);
         }
+      }
     }
+    return this.eventSink;
+  }
 
-    @Override
-    public void forceClose() {
-        if (this.eventSink != null) {
-            this.eventSink.destroy();
-            this.eventSink = null;
-        }
-    }
+  @Override
+  public boolean isSSLEstablished() {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 
-    public boolean isSetNeededForAutoCommitMode(boolean autoCommitFlag) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
+  @Override
+  public SocketAddress getRemoteSocketAddress() {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 
-    @Override
-    public ProfilerEventHandler getProfilerEventHandler() {
-        if (this.eventSink == null) {
-            synchronized (this) {
-                if (this.eventSink == null) { // check again to ensure that other thread didn't set it already
-                    this.eventSink = (ProfilerEventHandler) Util.getInstance(
-                            this.propertySet.getStringProperty(PropertyKey.profilerEventHandler).getStringValue(), new Class<?>[0], new Object[0],
-                            this.exceptionInterceptor);
+  @Override
+  public void addListener(SessionEventListener l) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 
-                    this.eventSink.init(this.log);
-                }
-            }
-        }
-        return this.eventSink;
-    }
+  @Override
+  public void removeListener(SessionEventListener l) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 
-    @Override
-    public boolean isSSLEstablished() {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
+  @Override
+  public String getIdentifierQuoteString() {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
+  }
 
-    @Override
-    public SocketAddress getRemoteSocketAddress() {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
+  @Override
+  public DataStoreMetadata getDataStoreMetadata() {
+    return new DataStoreMetadataImpl(this);
+  }
 
-    @Override
-    public void addListener(SessionEventListener l) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
-
-    @Override
-    public void removeListener(SessionEventListener l) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
-
-    @Override
-    public String getIdentifierQuoteString() {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not supported");
-    }
-
-    @Override
-    public DataStoreMetadata getDataStoreMetadata() {
-        return new DataStoreMetadataImpl(this);
-    }
-
-    @Override
-    public String getQueryTimingUnits() {
-        return this.protocol.getQueryTimingUnits();
-    }
+  @Override
+  public String getQueryTimingUnits() {
+    return this.protocol.getQueryTimingUnits();
+  }
 }

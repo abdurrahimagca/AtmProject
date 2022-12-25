@@ -29,62 +29,65 @@
 
 package com.mysql.cj.protocol.a;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import com.mysql.cj.conf.PropertyKey;
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.conf.RuntimeProperty;
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 import com.mysql.cj.protocol.ProtocolEntityReader;
 import com.mysql.cj.protocol.ResultsetRow;
+import java.io.IOException;
+import java.util.Optional;
 
 public class ResultsetRowReader implements ProtocolEntityReader<ResultsetRow, NativePacketPayload> {
 
-    protected NativeProtocol protocol;
+  protected NativeProtocol protocol;
 
-    protected PropertySet propertySet;
+  protected PropertySet propertySet;
 
-    protected RuntimeProperty<Integer> useBufferRowSizeThreshold;
+  protected RuntimeProperty<Integer> useBufferRowSizeThreshold;
 
-    public ResultsetRowReader(NativeProtocol prot) {
-        this.protocol = prot;
+  public ResultsetRowReader(NativeProtocol prot) {
+    this.protocol = prot;
 
-        this.propertySet = this.protocol.getPropertySet();
-        this.useBufferRowSizeThreshold = this.propertySet.getMemorySizeProperty(PropertyKey.largeRowSizeThreshold);
+    this.propertySet = this.protocol.getPropertySet();
+    this.useBufferRowSizeThreshold =
+        this.propertySet.getMemorySizeProperty(PropertyKey.largeRowSizeThreshold);
+  }
+
+  /**
+   * Retrieve one row from the MySQL server. Note: this method is not thread-safe, but it is only
+   * called from methods that are guarded by synchronizing on this object.
+   *
+   * @param sf ProtocolEntityFactory
+   * @throws IOException if an error occurs
+   */
+  @Override
+  public ResultsetRow read(ProtocolEntityFactory<ResultsetRow, NativePacketPayload> sf)
+      throws IOException {
+    AbstractRowFactory rf = (AbstractRowFactory) sf;
+    NativePacketPayload rowPacket = null;
+    NativePacketHeader hdr = this.protocol.getPacketReader().readHeader();
+
+    // read the entire packet(s)
+    rowPacket =
+        this.protocol
+            .getPacketReader()
+            .readMessage(
+                rf.canReuseRowPacketForBufferRow()
+                    ? Optional.ofNullable(this.protocol.getReusablePacket())
+                    : Optional.empty(),
+                hdr);
+    this.protocol.checkErrorMessage(rowPacket);
+    // Didn't read an error, so re-position to beginning of packet in order to read result set data
+    rowPacket.setPosition(rowPacket.getPosition() - 1);
+
+    // exit early with null if there's an EOF packet
+    if (!this.protocol.getServerSession().isEOFDeprecated() && rowPacket.isEOFPacket()
+        || this.protocol.getServerSession().isEOFDeprecated() && rowPacket.isResultSetOKPacket()) {
+      this.protocol.readServerStatusForResultSets(rowPacket, true);
+      return null;
     }
 
-    /**
-     * Retrieve one row from the MySQL server. Note: this method is not
-     * thread-safe, but it is only called from methods that are guarded by
-     * synchronizing on this object.
-     * 
-     * @param sf
-     *            ProtocolEntityFactory
-     * @throws IOException
-     *             if an error occurs
-     */
-    @Override
-    public ResultsetRow read(ProtocolEntityFactory<ResultsetRow, NativePacketPayload> sf) throws IOException {
-        AbstractRowFactory rf = (AbstractRowFactory) sf;
-        NativePacketPayload rowPacket = null;
-        NativePacketHeader hdr = this.protocol.getPacketReader().readHeader();
-
-        // read the entire packet(s)
-        rowPacket = this.protocol.getPacketReader()
-                .readMessage(rf.canReuseRowPacketForBufferRow() ? Optional.ofNullable(this.protocol.getReusablePacket()) : Optional.empty(), hdr);
-        this.protocol.checkErrorMessage(rowPacket);
-        // Didn't read an error, so re-position to beginning of packet in order to read result set data
-        rowPacket.setPosition(rowPacket.getPosition() - 1);
-
-        // exit early with null if there's an EOF packet
-        if (!this.protocol.getServerSession().isEOFDeprecated() && rowPacket.isEOFPacket()
-                || this.protocol.getServerSession().isEOFDeprecated() && rowPacket.isResultSetOKPacket()) {
-            this.protocol.readServerStatusForResultSets(rowPacket, true);
-            return null;
-        }
-
-        return sf.createFromMessage(rowPacket);
-    }
-
+    return sf.createFromMessage(rowPacket);
+  }
 }

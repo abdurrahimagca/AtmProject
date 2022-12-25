@@ -29,23 +29,20 @@
 
 package com.mysql.cj.callback;
 
-/**
- * A callback that can be used to exchange username information to a callback handler owner.
- */
+/** A callback that can be used to exchange username information to a callback handler owner. */
 public class UsernameCallback implements MysqlCallback {
-    private String username;
+  private String username;
 
-    public UsernameCallback(String username) {
-        this.username = username;
-    }
+  public UsernameCallback(String username) {
+    this.username = username;
+  }
 
-    /**
-     * Get the username provided by the caller of {@link MysqlCallbackHandler#handle(MysqlCallback)}.
-     * 
-     * @return
-     *         the username to pass over to the callback handler.
-     */
-    public String getUsername() {
-        return this.username;
-    }
+  /**
+   * Get the username provided by the caller of {@link MysqlCallbackHandler#handle(MysqlCallback)}.
+   *
+   * @return the username to pass over to the callback handler.
+   */
+  public String getUsername() {
+    return this.username;
+  }
 }

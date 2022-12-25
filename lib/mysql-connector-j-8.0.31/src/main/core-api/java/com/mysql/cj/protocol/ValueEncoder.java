@@ -35,19 +35,20 @@ import com.mysql.cj.exceptions.ExceptionInterceptor;
 
 public interface ValueEncoder {
 
-    void init(PropertySet pset, ServerSession serverSession, ExceptionInterceptor exceptionInterceptor);
+  void init(
+      PropertySet pset, ServerSession serverSession, ExceptionInterceptor exceptionInterceptor);
 
-    byte[] getBytes(BindValue binding);
+  byte[] getBytes(BindValue binding);
 
-    String getString(BindValue binding);
+  String getString(BindValue binding);
 
-    long getTextLength(BindValue binding);
+  long getTextLength(BindValue binding);
 
-    long getBinaryLength(BindValue binding);
+  long getBinaryLength(BindValue binding);
 
-    void encodeAsText(Message msg, BindValue binding);
+  void encodeAsText(Message msg, BindValue binding);
 
-    void encodeAsBinary(Message msg, BindValue binding);
+  void encodeAsBinary(Message msg, BindValue binding);
 
-    void encodeAsQueryAttribute(Message msg, BindValue binding);
+  void encodeAsQueryAttribute(Message msg, BindValue binding);
 }

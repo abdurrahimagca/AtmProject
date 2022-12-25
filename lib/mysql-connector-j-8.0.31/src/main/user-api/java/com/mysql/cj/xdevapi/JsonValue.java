@@ -30,17 +30,18 @@
 package com.mysql.cj.xdevapi;
 
 /**
- * Common interface for classes representing standard JSON <b>object</b>, <b>array</b>, <b>number</b>, <b>string</b> and 'true', 'false' and 'null' literals
- * and non-standard extensions like mysqlx.expr() expressions.
+ * Common interface for classes representing standard JSON <b>object</b>, <b>array</b>,
+ * <b>number</b>, <b>string</b> and 'true', 'false' and 'null' literals and non-standard extensions
+ * like mysqlx.expr() expressions.
  */
 public interface JsonValue {
 
-    /**
-     * Get a human readable "pretty" JSON string.
-     * 
-     * @return human readable "pretty" JSON string
-     */
-    default String toFormattedString() {
-        return toString();
-    }
+  /**
+   * Get a human readable "pretty" JSON string.
+   *
+   * @return human readable "pretty" JSON string
+   */
+  default String toFormattedString() {
+    return toString();
+  }
 }

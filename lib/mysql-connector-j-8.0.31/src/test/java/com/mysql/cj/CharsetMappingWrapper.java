@@ -29,42 +29,41 @@
 
 package com.mysql.cj;
 
-/**
- * Exposes protected {@link CharsetMapping} methods for use in tests.
- */
+/** Exposes protected {@link CharsetMapping} methods for use in tests. */
 public class CharsetMappingWrapper {
 
-    public static boolean isStaticMultibyteCharset(String javaEncodingName) {
-        return CharsetMapping.isStaticMultibyteCharset(javaEncodingName);
-    }
+  public static boolean isStaticMultibyteCharset(String javaEncodingName) {
+    return CharsetMapping.isStaticMultibyteCharset(javaEncodingName);
+  }
 
-    public static int getStaticCollationIndexForJavaEncoding(String javaEncoding, ServerVersion version) {
-        return CharsetMapping.getStaticCollationIndexForJavaEncoding(javaEncoding, version);
-    }
+  public static int getStaticCollationIndexForJavaEncoding(
+      String javaEncoding, ServerVersion version) {
+    return CharsetMapping.getStaticCollationIndexForJavaEncoding(javaEncoding, version);
+  }
 
-    public static String getStaticCollationNameForCollationIndex(Integer collationIndex) {
-        return CharsetMapping.getStaticCollationNameForCollationIndex(collationIndex);
-    }
+  public static String getStaticCollationNameForCollationIndex(Integer collationIndex) {
+    return CharsetMapping.getStaticCollationNameForCollationIndex(collationIndex);
+  }
 
-    public static String getStaticJavaEncodingForCollationIndex(Integer collationIndex) {
-        return CharsetMapping.getStaticJavaEncodingForCollationIndex(collationIndex);
-    }
+  public static String getStaticJavaEncodingForCollationIndex(Integer collationIndex) {
+    return CharsetMapping.getStaticJavaEncodingForCollationIndex(collationIndex);
+  }
 
-    public static String getStaticJavaEncodingForMysqlCharset(String mysqlCharsetName) {
-        return CharsetMapping.getStaticJavaEncodingForMysqlCharset(mysqlCharsetName);
-    }
+  public static String getStaticJavaEncodingForMysqlCharset(String mysqlCharsetName) {
+    return CharsetMapping.getStaticJavaEncodingForMysqlCharset(mysqlCharsetName);
+  }
 
-    public static String getStaticMysqlCharsetByName(String mysqlCharsetName) {
-        Object cs = CharsetMapping.getStaticMysqlCharsetByName(mysqlCharsetName);
-        return cs == null ? null : cs.toString();
-    }
+  public static String getStaticMysqlCharsetByName(String mysqlCharsetName) {
+    Object cs = CharsetMapping.getStaticMysqlCharsetByName(mysqlCharsetName);
+    return cs == null ? null : cs.toString();
+  }
 
-    public static String getStaticMysqlCharsetForJavaEncoding(String javaEncoding, ServerVersion version) {
-        return CharsetMapping.getStaticMysqlCharsetForJavaEncoding(javaEncoding, version);
-    }
+  public static String getStaticMysqlCharsetForJavaEncoding(
+      String javaEncoding, ServerVersion version) {
+    return CharsetMapping.getStaticMysqlCharsetForJavaEncoding(javaEncoding, version);
+  }
 
-    public static String getStaticMysqlCharsetNameForCollationIndex(Integer collationIndex) {
-        return CharsetMapping.getStaticMysqlCharsetNameForCollationIndex(collationIndex);
-    }
-
+  public static String getStaticMysqlCharsetNameForCollationIndex(Integer collationIndex) {
+    return CharsetMapping.getStaticMysqlCharsetNameForCollationIndex(collationIndex);
+  }
 }

@@ -30,38 +30,38 @@
 package com.mysql.cj.exceptions;
 
 /**
- * Equivalent to SQLSTATE ER_MUST_CHANGE_PASSWORD = 1820
- * "You must SET PASSWORD before executing this statement"
- * 
- * Server entered to sandbox morde when this failure happens.
+ * Equivalent to SQLSTATE ER_MUST_CHANGE_PASSWORD = 1820 "You must SET PASSWORD before executing
+ * this statement"
+ *
+ * <p>Server entered to sandbox morde when this failure happens.
  */
 public class PasswordExpiredException extends CJException {
 
-    private static final long serialVersionUID = -3807215681364413250L;
+  private static final long serialVersionUID = -3807215681364413250L;
 
-    public PasswordExpiredException() {
-        super();
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
-    }
+  public PasswordExpiredException() {
+    super();
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
+  }
 
-    public PasswordExpiredException(String message) {
-        super(message);
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
-    }
+  public PasswordExpiredException(String message) {
+    super(message);
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
+  }
 
-    public PasswordExpiredException(String message, Throwable cause) {
-        super(message, cause);
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
-    }
+  public PasswordExpiredException(String message, Throwable cause) {
+    super(message, cause);
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
+  }
 
-    public PasswordExpiredException(Throwable cause) {
-        super(cause);
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
-    }
+  public PasswordExpiredException(Throwable cause) {
+    super(cause);
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
+  }
 
-    protected PasswordExpiredException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
-    }
-
+  protected PasswordExpiredException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+    setVendorCode(MysqlErrorNumbers.ER_MUST_CHANGE_PASSWORD);
+  }
 }

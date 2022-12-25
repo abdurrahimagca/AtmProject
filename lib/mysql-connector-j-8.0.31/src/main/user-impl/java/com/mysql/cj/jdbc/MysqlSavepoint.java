@@ -29,65 +29,61 @@
 
 package com.mysql.cj.jdbc;
 
-import java.sql.SQLException;
-import java.sql.Savepoint;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.exceptions.ExceptionInterceptor;
 import com.mysql.cj.exceptions.MysqlErrorNumbers;
 import com.mysql.cj.jdbc.exceptions.SQLError;
 import com.mysql.cj.util.StringUtils;
+import java.sql.SQLException;
+import java.sql.Savepoint;
 
-/**
- * Represents SQL SAVEPOINTS in MySQL.
- */
+/** Represents SQL SAVEPOINTS in MySQL. */
 public class MysqlSavepoint implements Savepoint {
 
-    private String savepointName;
+  private String savepointName;
 
-    private ExceptionInterceptor exceptionInterceptor;
+  private ExceptionInterceptor exceptionInterceptor;
 
-    /**
-     * Creates an unnamed savepoint.
-     * 
-     * @param exceptionInterceptor
-     *            exception interceptor
-     * 
-     * @throws SQLException
-     *             if an error occurs
-     */
-    MysqlSavepoint(ExceptionInterceptor exceptionInterceptor) throws SQLException {
-        this(StringUtils.getUniqueSavepointId(), exceptionInterceptor);
+  /**
+   * Creates an unnamed savepoint.
+   *
+   * @param exceptionInterceptor exception interceptor
+   * @throws SQLException if an error occurs
+   */
+  MysqlSavepoint(ExceptionInterceptor exceptionInterceptor) throws SQLException {
+    this(StringUtils.getUniqueSavepointId(), exceptionInterceptor);
+  }
+
+  /**
+   * Creates a named savepoint
+   *
+   * @param name the name of the savepoint.
+   * @param exceptionInterceptor exception interceptor
+   * @throws SQLException if name == null or is empty.
+   */
+  MysqlSavepoint(String name, ExceptionInterceptor exceptionInterceptor) throws SQLException {
+    if (name == null || name.length() == 0) {
+      throw SQLError.createSQLException(
+          Messages.getString("MysqlSavepoint.0"),
+          MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT,
+          exceptionInterceptor);
     }
 
-    /**
-     * Creates a named savepoint
-     * 
-     * @param name
-     *            the name of the savepoint.
-     * @param exceptionInterceptor
-     *            exception interceptor
-     * 
-     * @throws SQLException
-     *             if name == null or is empty.
-     */
-    MysqlSavepoint(String name, ExceptionInterceptor exceptionInterceptor) throws SQLException {
-        if (name == null || name.length() == 0) {
-            throw SQLError.createSQLException(Messages.getString("MysqlSavepoint.0"), MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT, exceptionInterceptor);
-        }
+    this.savepointName = name;
 
-        this.savepointName = name;
+    this.exceptionInterceptor = exceptionInterceptor;
+  }
 
-        this.exceptionInterceptor = exceptionInterceptor;
-    }
+  @Override
+  public int getSavepointId() throws SQLException {
+    throw SQLError.createSQLException(
+        Messages.getString("MysqlSavepoint.1"),
+        MysqlErrorNumbers.SQL_STATE_DRIVER_NOT_CAPABLE,
+        this.exceptionInterceptor);
+  }
 
-    @Override
-    public int getSavepointId() throws SQLException {
-        throw SQLError.createSQLException(Messages.getString("MysqlSavepoint.1"), MysqlErrorNumbers.SQL_STATE_DRIVER_NOT_CAPABLE, this.exceptionInterceptor);
-    }
-
-    @Override
-    public String getSavepointName() throws SQLException {
-        return this.savepointName;
-    }
+  @Override
+  public String getSavepointName() throws SQLException {
+    return this.savepointName;
+  }
 }

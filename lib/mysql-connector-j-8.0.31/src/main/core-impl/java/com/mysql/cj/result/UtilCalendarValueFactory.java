@@ -29,10 +29,6 @@
 
 package com.mysql.cj.result;
 
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.conf.PropertyKey;
 import com.mysql.cj.conf.PropertySet;
@@ -42,109 +38,130 @@ import com.mysql.cj.exceptions.WrongArgumentException;
 import com.mysql.cj.protocol.InternalDate;
 import com.mysql.cj.protocol.InternalTime;
 import com.mysql.cj.protocol.InternalTimestamp;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
-/**
- * Value factory to create {@link Calendar} instances.
- */
+/** Value factory to create {@link Calendar} instances. */
 public class UtilCalendarValueFactory extends AbstractDateTimeValueFactory<Calendar> {
-    private TimeZone defaultTimeZone;
-    private TimeZone connectionTimeZone;
+  private TimeZone defaultTimeZone;
+  private TimeZone connectionTimeZone;
 
-    /**
-     * @param pset
-     *            {@link PropertySet}
-     * @param defaultTimeZone
-     *            The local JVM time zone.
-     * @param connectionTimeZone
-     *            The server session time zone as defined by connectionTimeZone property.
-     */
-    public UtilCalendarValueFactory(PropertySet pset, TimeZone defaultTimeZone, TimeZone connectionTimeZone) {
-        super(pset);
-        this.defaultTimeZone = defaultTimeZone;
-        this.connectionTimeZone = connectionTimeZone;
+  /**
+   * @param pset {@link PropertySet}
+   * @param defaultTimeZone The local JVM time zone.
+   * @param connectionTimeZone The server session time zone as defined by connectionTimeZone
+   *     property.
+   */
+  public UtilCalendarValueFactory(
+      PropertySet pset, TimeZone defaultTimeZone, TimeZone connectionTimeZone) {
+    super(pset);
+    this.defaultTimeZone = defaultTimeZone;
+    this.connectionTimeZone = connectionTimeZone;
+  }
+
+  /**
+   * Create a Calendar from a DATE value.
+   *
+   * @return a Calendar at midnight on the day given by the DATE value
+   */
+  @Override
+  public Calendar localCreateFromDate(InternalDate idate) {
+    if (idate.getYear() == 0 && idate.getMonth() == 0 && idate.getDay() == 0) {
+      throw new DataReadException(Messages.getString("ResultSet.InvalidZeroDate"));
     }
 
-    /**
-     * Create a Calendar from a DATE value.
-     *
-     * @return a Calendar at midnight on the day given by the DATE value
-     */
-    @Override
-    public Calendar localCreateFromDate(InternalDate idate) {
-        if (idate.getYear() == 0 && idate.getMonth() == 0 && idate.getDay() == 0) {
-            throw new DataReadException(Messages.getString("ResultSet.InvalidZeroDate"));
-        }
+    try {
+      Calendar c = Calendar.getInstance(this.defaultTimeZone, Locale.US);
+      c.set(idate.getYear(), idate.getMonth() - 1, idate.getDay(), 0, 0, 0);
+      c.set(Calendar.MILLISECOND, 0);
+      c.setLenient(false);
+      return c;
+    } catch (IllegalArgumentException e) {
+      throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
+    }
+  }
 
-        try {
-            Calendar c = Calendar.getInstance(this.defaultTimeZone, Locale.US);
-            c.set(idate.getYear(), idate.getMonth() - 1, idate.getDay(), 0, 0, 0);
-            c.set(Calendar.MILLISECOND, 0);
-            c.setLenient(false);
-            return c;
-        } catch (IllegalArgumentException e) {
-            throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
-        }
+  /**
+   * Create a Calendar from a TIME value.
+   *
+   * @return a Calendar at the given time on 1970 Jan 1.
+   */
+  @Override
+  public Calendar localCreateFromTime(InternalTime it) {
+    if (it.getHours() < 0 || it.getHours() >= 24) {
+      throw new DataReadException(
+          Messages.getString("ResultSet.InvalidTimeValue", new Object[] {it.toString()}));
     }
 
-    /**
-     * Create a Calendar from a TIME value.
-     *
-     * @return a Calendar at the given time on 1970 Jan 1.
-     */
-    @Override
-    public Calendar localCreateFromTime(InternalTime it) {
-        if (it.getHours() < 0 || it.getHours() >= 24) {
-            throw new DataReadException(Messages.getString("ResultSet.InvalidTimeValue", new Object[] { it.toString() }));
-        }
+    try {
+      Calendar c = Calendar.getInstance(this.defaultTimeZone, Locale.US);
+      c.set(1970, 0, 1, it.getHours(), it.getMinutes(), it.getSeconds());
+      c.set(Calendar.MILLISECOND, it.getNanos() / 1000000);
+      c.setLenient(false);
+      return c;
+    } catch (IllegalArgumentException e) {
+      throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
+    }
+  }
 
-        try {
-            Calendar c = Calendar.getInstance(this.defaultTimeZone, Locale.US);
-            c.set(1970, 0, 1, it.getHours(), it.getMinutes(), it.getSeconds());
-            c.set(Calendar.MILLISECOND, it.getNanos() / 1000000);
-            c.setLenient(false);
-            return c;
-        } catch (IllegalArgumentException e) {
-            throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
-        }
+  @Override
+  public Calendar localCreateFromTimestamp(InternalTimestamp its) {
+    if (its.getYear() == 0 && its.getMonth() == 0 && its.getDay() == 0) {
+      throw new DataReadException(Messages.getString("ResultSet.InvalidZeroDate"));
     }
 
-    @Override
-    public Calendar localCreateFromTimestamp(InternalTimestamp its) {
-        if (its.getYear() == 0 && its.getMonth() == 0 && its.getDay() == 0) {
-            throw new DataReadException(Messages.getString("ResultSet.InvalidZeroDate"));
-        }
+    try {
+      Calendar c =
+          Calendar.getInstance(
+              this.pset.getBooleanProperty(PropertyKey.preserveInstants).getValue()
+                  ? this.connectionTimeZone
+                  : this.defaultTimeZone,
+              Locale.US);
+      c.set(
+          its.getYear(),
+          its.getMonth() - 1,
+          its.getDay(),
+          its.getHours(),
+          its.getMinutes(),
+          its.getSeconds());
+      c.set(Calendar.MILLISECOND, its.getNanos() / 1000000);
+      c.setLenient(false);
+      return c;
+    } catch (IllegalArgumentException e) {
+      throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
+    }
+  }
 
-        try {
-            Calendar c = Calendar.getInstance(
-                    this.pset.getBooleanProperty(PropertyKey.preserveInstants).getValue() ? this.connectionTimeZone : this.defaultTimeZone, Locale.US);
-            c.set(its.getYear(), its.getMonth() - 1, its.getDay(), its.getHours(), its.getMinutes(), its.getSeconds());
-            c.set(Calendar.MILLISECOND, its.getNanos() / 1000000);
-            c.setLenient(false);
-            return c;
-        } catch (IllegalArgumentException e) {
-            throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
-        }
+  @Override
+  public Calendar localCreateFromDatetime(InternalTimestamp its) {
+    if (its.getYear() == 0 && its.getMonth() == 0 && its.getDay() == 0) {
+      throw new DataReadException(Messages.getString("ResultSet.InvalidZeroDate"));
     }
 
-    @Override
-    public Calendar localCreateFromDatetime(InternalTimestamp its) {
-        if (its.getYear() == 0 && its.getMonth() == 0 && its.getDay() == 0) {
-            throw new DataReadException(Messages.getString("ResultSet.InvalidZeroDate"));
-        }
-
-        try {
-            Calendar c = Calendar.getInstance(
-                    this.pset.getBooleanProperty(PropertyKey.preserveInstants).getValue() ? this.connectionTimeZone : this.defaultTimeZone, Locale.US);
-            c.set(its.getYear(), its.getMonth() - 1, its.getDay(), its.getHours(), its.getMinutes(), its.getSeconds());
-            c.set(Calendar.MILLISECOND, its.getNanos() / 1000000);
-            c.setLenient(false);
-            return c;
-        } catch (IllegalArgumentException e) {
-            throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
-        }
+    try {
+      Calendar c =
+          Calendar.getInstance(
+              this.pset.getBooleanProperty(PropertyKey.preserveInstants).getValue()
+                  ? this.connectionTimeZone
+                  : this.defaultTimeZone,
+              Locale.US);
+      c.set(
+          its.getYear(),
+          its.getMonth() - 1,
+          its.getDay(),
+          its.getHours(),
+          its.getMinutes(),
+          its.getSeconds());
+      c.set(Calendar.MILLISECOND, its.getNanos() / 1000000);
+      c.setLenient(false);
+      return c;
+    } catch (IllegalArgumentException e) {
+      throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
     }
+  }
 
-    public String getTargetTypeName() {
-        return Calendar.class.getName();
-    }
+  public String getTargetTypeName() {
+    return Calendar.class.getName();
+  }
 }

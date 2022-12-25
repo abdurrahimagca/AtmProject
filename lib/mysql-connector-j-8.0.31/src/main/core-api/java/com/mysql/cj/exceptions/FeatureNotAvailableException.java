@@ -31,25 +31,26 @@ package com.mysql.cj.exceptions;
 
 public class FeatureNotAvailableException extends CJException {
 
-    private static final long serialVersionUID = -6649508222074639690L;
+  private static final long serialVersionUID = -6649508222074639690L;
 
-    public FeatureNotAvailableException() {
-        super();
-    }
+  public FeatureNotAvailableException() {
+    super();
+  }
 
-    public FeatureNotAvailableException(String message) {
-        super(message);
-    }
+  public FeatureNotAvailableException(String message) {
+    super(message);
+  }
 
-    public FeatureNotAvailableException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public FeatureNotAvailableException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public FeatureNotAvailableException(Throwable cause) {
-        super(cause);
-    }
+  public FeatureNotAvailableException(Throwable cause) {
+    super(cause);
+  }
 
-    public FeatureNotAvailableException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+  public FeatureNotAvailableException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }

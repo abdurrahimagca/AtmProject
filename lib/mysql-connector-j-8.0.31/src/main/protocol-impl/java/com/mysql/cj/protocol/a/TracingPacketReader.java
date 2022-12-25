@@ -29,98 +29,104 @@
 
 package com.mysql.cj.protocol.a;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.log.Log;
 import com.mysql.cj.protocol.MessageReader;
 import com.mysql.cj.util.StringUtils;
+import java.io.IOException;
+import java.util.Optional;
 
-/**
- * A decorating {@link MessageReader} which traces all received packets to the provided logger.
- */
+/** A decorating {@link MessageReader} which traces all received packets to the provided logger. */
 public class TracingPacketReader implements MessageReader<NativePacketHeader, NativePacketPayload> {
 
-    /** Max number of bytes to dump when tracing the protocol */
-    private final static int MAX_PACKET_DUMP_LENGTH = 1024;
+  /** Max number of bytes to dump when tracing the protocol */
+  private static final int MAX_PACKET_DUMP_LENGTH = 1024;
 
-    private MessageReader<NativePacketHeader, NativePacketPayload> packetReader;
-    private Log log;
+  private MessageReader<NativePacketHeader, NativePacketPayload> packetReader;
+  private Log log;
 
-    public TracingPacketReader(MessageReader<NativePacketHeader, NativePacketPayload> packetReader, Log log) {
-        this.packetReader = packetReader;
-        this.log = log;
+  public TracingPacketReader(
+      MessageReader<NativePacketHeader, NativePacketPayload> packetReader, Log log) {
+    this.packetReader = packetReader;
+    this.log = log;
+  }
+
+  @Override
+  public NativePacketHeader readHeader() throws IOException {
+    return traceHeader(this.packetReader.readHeader());
+  }
+
+  @Override
+  public NativePacketHeader probeHeader() throws IOException {
+    return traceHeader(this.packetReader.probeHeader());
+  }
+
+  private NativePacketHeader traceHeader(NativePacketHeader hdr) throws IOException {
+    StringBuilder traceMessageBuf = new StringBuilder();
+
+    traceMessageBuf.append(Messages.getString("PacketReader.3"));
+    traceMessageBuf.append(hdr.getMessageSize());
+    traceMessageBuf.append(Messages.getString("PacketReader.4"));
+    traceMessageBuf.append(
+        StringUtils.dumpAsHex(hdr.getBuffer().array(), NativeConstants.HEADER_LENGTH));
+
+    this.log.logTrace(traceMessageBuf.toString());
+
+    return hdr;
+  }
+
+  @Override
+  public NativePacketPayload readMessage(
+      Optional<NativePacketPayload> reuse, NativePacketHeader header) throws IOException {
+    return traceMessage(
+        this.packetReader.readMessage(reuse, header), header.getMessageSize(), reuse.isPresent());
+  }
+
+  @Override
+  public NativePacketPayload probeMessage(
+      Optional<NativePacketPayload> reuse, NativePacketHeader header) throws IOException {
+    return traceMessage(
+        this.packetReader.probeMessage(reuse, header), header.getMessageSize(), reuse.isPresent());
+  }
+
+  private NativePacketPayload traceMessage(NativePacketPayload buf, int packetLength, boolean reuse)
+      throws IOException {
+    StringBuilder traceMessageBuf = new StringBuilder();
+
+    traceMessageBuf.append(Messages.getString(reuse ? "PacketReader.5" : "PacketReader.6"));
+    traceMessageBuf.append(
+        StringUtils.dumpAsHex(
+            buf.getByteBuffer(),
+            packetLength < MAX_PACKET_DUMP_LENGTH ? packetLength : MAX_PACKET_DUMP_LENGTH));
+
+    if (packetLength > MAX_PACKET_DUMP_LENGTH) {
+      traceMessageBuf.append(Messages.getString("PacketReader.7"));
+      traceMessageBuf.append(MAX_PACKET_DUMP_LENGTH);
+      traceMessageBuf.append(Messages.getString("PacketReader.8"));
     }
 
-    @Override
-    public NativePacketHeader readHeader() throws IOException {
-        return traceHeader(this.packetReader.readHeader());
-    }
+    this.log.logTrace(traceMessageBuf.toString());
 
-    @Override
-    public NativePacketHeader probeHeader() throws IOException {
-        return traceHeader(this.packetReader.probeHeader());
-    }
+    return buf;
+  }
 
-    private NativePacketHeader traceHeader(NativePacketHeader hdr) throws IOException {
-        StringBuilder traceMessageBuf = new StringBuilder();
+  @Override
+  public byte getMessageSequence() {
+    return this.packetReader.getMessageSequence();
+  }
 
-        traceMessageBuf.append(Messages.getString("PacketReader.3"));
-        traceMessageBuf.append(hdr.getMessageSize());
-        traceMessageBuf.append(Messages.getString("PacketReader.4"));
-        traceMessageBuf.append(StringUtils.dumpAsHex(hdr.getBuffer().array(), NativeConstants.HEADER_LENGTH));
+  @Override
+  public void resetMessageSequence() {
+    this.packetReader.resetMessageSequence();
+  }
 
-        this.log.logTrace(traceMessageBuf.toString());
+  @Override
+  public MessageReader<NativePacketHeader, NativePacketPayload> undecorateAll() {
+    return this.packetReader.undecorateAll();
+  }
 
-        return hdr;
-    }
-
-    @Override
-    public NativePacketPayload readMessage(Optional<NativePacketPayload> reuse, NativePacketHeader header) throws IOException {
-        return traceMessage(this.packetReader.readMessage(reuse, header), header.getMessageSize(), reuse.isPresent());
-    }
-
-    @Override
-    public NativePacketPayload probeMessage(Optional<NativePacketPayload> reuse, NativePacketHeader header) throws IOException {
-        return traceMessage(this.packetReader.probeMessage(reuse, header), header.getMessageSize(), reuse.isPresent());
-    }
-
-    private NativePacketPayload traceMessage(NativePacketPayload buf, int packetLength, boolean reuse) throws IOException {
-        StringBuilder traceMessageBuf = new StringBuilder();
-
-        traceMessageBuf.append(Messages.getString(reuse ? "PacketReader.5" : "PacketReader.6"));
-        traceMessageBuf.append(StringUtils.dumpAsHex(buf.getByteBuffer(), packetLength < MAX_PACKET_DUMP_LENGTH ? packetLength : MAX_PACKET_DUMP_LENGTH));
-
-        if (packetLength > MAX_PACKET_DUMP_LENGTH) {
-            traceMessageBuf.append(Messages.getString("PacketReader.7"));
-            traceMessageBuf.append(MAX_PACKET_DUMP_LENGTH);
-            traceMessageBuf.append(Messages.getString("PacketReader.8"));
-        }
-
-        this.log.logTrace(traceMessageBuf.toString());
-
-        return buf;
-    }
-
-    @Override
-    public byte getMessageSequence() {
-        return this.packetReader.getMessageSequence();
-    }
-
-    @Override
-    public void resetMessageSequence() {
-        this.packetReader.resetMessageSequence();
-    }
-
-    @Override
-    public MessageReader<NativePacketHeader, NativePacketPayload> undecorateAll() {
-        return this.packetReader.undecorateAll();
-    }
-
-    @Override
-    public MessageReader<NativePacketHeader, NativePacketPayload> undecorate() {
-        return this.packetReader;
-    }
-
+  @Override
+  public MessageReader<NativePacketHeader, NativePacketPayload> undecorate() {
+    return this.packetReader;
+  }
 }

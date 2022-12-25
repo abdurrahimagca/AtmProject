@@ -29,26 +29,22 @@
 
 package com.mysql.cj.xdevapi;
 
+import com.mysql.cj.protocol.x.StatementExecuteOk;
 import java.util.List;
 
-import com.mysql.cj.protocol.x.StatementExecuteOk;
-
-/**
- * A result from the collection.add() statement.
- */
+/** A result from the collection.add() statement. */
 public class AddResultImpl extends UpdateResult implements AddResult {
-    /**
-     * Constructor.
-     *
-     * @param ok
-     *            the response from the server
-     */
-    public AddResultImpl(StatementExecuteOk ok) {
-        super(ok);
-    }
+  /**
+   * Constructor.
+   *
+   * @param ok the response from the server
+   */
+  public AddResultImpl(StatementExecuteOk ok) {
+    super(ok);
+  }
 
-    @Override
-    public List<String> getGeneratedIds() {
-        return this.ok.getGeneratedIds();
-    }
+  @Override
+  public List<String> getGeneratedIds() {
+    return this.ok.getGeneratedIds();
+  }
 }

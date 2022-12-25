@@ -33,15 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.Serializable;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.jdbc.ClientPreparedStatement;
 import com.mysql.cj.jdbc.ConnectionImpl;
 import com.mysql.cj.jdbc.JdbcConnection;
@@ -50,85 +41,92 @@ import com.mysql.cj.jdbc.StatementImpl;
 import com.mysql.cj.jdbc.ha.MultiHostConnectionProxy;
 import com.mysql.cj.jdbc.result.ResultSetImpl;
 import com.mysql.cj.util.Util;
-
+import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 import testsuite.BaseTestCase;
 
 public class UtilsTest extends BaseTestCase {
-    /**
-     * Tests Util.isJdbcInterface()
-     */
-    @Test
-    public void testIsJdbcInterface() {
-        // Classes directly or indirectly implementing JDBC interfaces.
-        assertTrue(Util.isJdbcInterface(ClientPreparedStatement.class));
-        assertTrue(Util.isJdbcInterface(StatementImpl.class));
-        assertTrue(Util.isJdbcInterface(JdbcStatement.class));
-        assertTrue(Util.isJdbcInterface(ResultSetImpl.class));
-        JdbcStatement s = (JdbcStatement) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class<?>[] { JdbcStatement.class },
+  /** Tests Util.isJdbcInterface() */
+  @Test
+  public void testIsJdbcInterface() {
+    // Classes directly or indirectly implementing JDBC interfaces.
+    assertTrue(Util.isJdbcInterface(ClientPreparedStatement.class));
+    assertTrue(Util.isJdbcInterface(StatementImpl.class));
+    assertTrue(Util.isJdbcInterface(JdbcStatement.class));
+    assertTrue(Util.isJdbcInterface(ResultSetImpl.class));
+    JdbcStatement s =
+        (JdbcStatement)
+            Proxy.newProxyInstance(
+                this.getClass().getClassLoader(),
+                new Class<?>[] {JdbcStatement.class},
                 new InvocationHandler() {
-                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                        return null;
-                    }
+                  public Object invoke(Object proxy, Method method, Object[] args)
+                      throws Throwable {
+                    return null;
+                  }
                 });
-        assertTrue(Util.isJdbcInterface(s.getClass()));
+    assertTrue(Util.isJdbcInterface(s.getClass()));
 
-        // Classes not implementing JDBC interfaces.
-        assertFalse(Util.isJdbcInterface(Util.class));
-        assertFalse(Util.isJdbcInterface(UtilsTest.class));
+    // Classes not implementing JDBC interfaces.
+    assertFalse(Util.isJdbcInterface(Util.class));
+    assertFalse(Util.isJdbcInterface(UtilsTest.class));
+  }
+
+  /** Tests Util.isJdbcPackage() */
+  @Test
+  public void testIsJdbcPackage() {
+    // JDBC packages.
+    assertTrue(Util.isJdbcPackage("java.sql"));
+    assertTrue(Util.isJdbcPackage("javax.sql"));
+    assertTrue(Util.isJdbcPackage("javax.sql.rowset"));
+    assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc"));
+    assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.admin"));
+    assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.exceptions"));
+    assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.ha"));
+    assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.interceptors"));
+    assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.jxm"));
+    assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.util"));
+
+    // Non-JDBC packages.
+    assertFalse(Util.isJdbcPackage("java"));
+    assertFalse(Util.isJdbcPackage("java.lang"));
+    assertFalse(Util.isJdbcPackage("com"));
+    assertFalse(Util.isJdbcPackage("com.mysql"));
+  }
+
+  /** Tests Util.isJdbcPackage() */
+  @Test
+  public void testGetImplementedInterfaces() {
+    Class<?>[] ifaces;
+    ifaces = Util.getImplementedInterfaces(JdbcStatement.class);
+    assertEquals(2, ifaces.length);
+    assertEquals(ifaces[0], java.sql.Statement.class);
+
+    ifaces = Util.getImplementedInterfaces(StatementImpl.class);
+    assertEquals(1, ifaces.length);
+    assertEquals(ifaces[0], JdbcStatement.class);
+
+    ifaces = Util.getImplementedInterfaces(ConnectionImpl.class);
+    assertEquals(3, ifaces.length);
+    List<Class<?>> ifacesList = Arrays.asList(ifaces);
+    for (Class<?> clazz : new Class<?>[] {JdbcConnection.class, Serializable.class}) {
+      assertTrue(ifacesList.contains(clazz));
     }
+  }
 
-    /**
-     * Tests Util.isJdbcPackage()
-     */
-    @Test
-    public void testIsJdbcPackage() {
-        // JDBC packages.
-        assertTrue(Util.isJdbcPackage("java.sql"));
-        assertTrue(Util.isJdbcPackage("javax.sql"));
-        assertTrue(Util.isJdbcPackage("javax.sql.rowset"));
-        assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc"));
-        assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.admin"));
-        assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.exceptions"));
-        assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.ha"));
-        assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.interceptors"));
-        assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.jxm"));
-        assertTrue(Util.isJdbcPackage("com.mysql.cj.jdbc.util"));
-
-        // Non-JDBC packages.
-        assertFalse(Util.isJdbcPackage("java"));
-        assertFalse(Util.isJdbcPackage("java.lang"));
-        assertFalse(Util.isJdbcPackage("com"));
-        assertFalse(Util.isJdbcPackage("com.mysql"));
-    }
-
-    /**
-     * Tests Util.isJdbcPackage()
-     */
-    @Test
-    public void testGetImplementedInterfaces() {
-        Class<?>[] ifaces;
-        ifaces = Util.getImplementedInterfaces(JdbcStatement.class);
-        assertEquals(2, ifaces.length);
-        assertEquals(ifaces[0], java.sql.Statement.class);
-
-        ifaces = Util.getImplementedInterfaces(StatementImpl.class);
-        assertEquals(1, ifaces.length);
-        assertEquals(ifaces[0], JdbcStatement.class);
-
-        ifaces = Util.getImplementedInterfaces(ConnectionImpl.class);
-        assertEquals(3, ifaces.length);
-        List<Class<?>> ifacesList = Arrays.asList(ifaces);
-        for (Class<?> clazz : new Class<?>[] { JdbcConnection.class, Serializable.class }) {
-            assertTrue(ifacesList.contains(clazz));
-        }
-    }
-
-    /**
-     * Tests Util.getPackageName()
-     */
-    @Test
-    public void testGetPackageName() {
-        assertEquals(MultiHostConnectionProxy.class.getPackage().getName(), Util.getPackageName(MultiHostConnectionProxy.class));
-        assertEquals(JdbcConnection.class.getPackage().getName(), Util.getPackageName(this.conn.getClass().getInterfaces()[0]));
-    }
+  /** Tests Util.getPackageName() */
+  @Test
+  public void testGetPackageName() {
+    assertEquals(
+        MultiHostConnectionProxy.class.getPackage().getName(),
+        Util.getPackageName(MultiHostConnectionProxy.class));
+    assertEquals(
+        JdbcConnection.class.getPackage().getName(),
+        Util.getPackageName(this.conn.getClass().getInterfaces()[0]));
+  }
 }

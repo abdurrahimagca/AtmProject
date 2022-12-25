@@ -34,75 +34,84 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 
 public class JUnitSummary implements TestExecutionListener {
-    private AtomicInteger numSkippedInTestSet = new AtomicInteger();
-    private AtomicInteger numAbortedInTestSet = new AtomicInteger();
-    private AtomicInteger numSucceededInTestSet = new AtomicInteger();
-    private AtomicInteger numFailedInTestSet = new AtomicInteger();
-    private Instant testSetStartTime;
+  private AtomicInteger numSkippedInTestSet = new AtomicInteger();
+  private AtomicInteger numAbortedInTestSet = new AtomicInteger();
+  private AtomicInteger numSucceededInTestSet = new AtomicInteger();
+  private AtomicInteger numFailedInTestSet = new AtomicInteger();
+  private Instant testSetStartTime;
 
-    PrintStream out = null;
+  PrintStream out = null;
 
-    public JUnitSummary() {
-        this.out = System.out;
+  public JUnitSummary() {
+    this.out = System.out;
+  }
+
+  private void resetCountsForNewTestSet() {
+    this.numSkippedInTestSet.set(0);
+    this.numAbortedInTestSet.set(0);
+    this.numSucceededInTestSet.set(0);
+    this.numFailedInTestSet.set(0);
+    this.testSetStartTime = Instant.now();
+  }
+
+  @Override
+  public void executionStarted(TestIdentifier testIdentifier) {
+    Optional<String> parentId = testIdentifier.getParentId();
+    if (parentId.isPresent() && parentId.get().indexOf('/') < 0) {
+      println("\nRunning " + testIdentifier.getLegacyReportingName());
+      resetCountsForNewTestSet();
     }
+  }
 
-    private void resetCountsForNewTestSet() {
-        this.numSkippedInTestSet.set(0);
-        this.numAbortedInTestSet.set(0);
-        this.numSucceededInTestSet.set(0);
-        this.numFailedInTestSet.set(0);
-        this.testSetStartTime = Instant.now();
-    }
+  @Override
+  public void executionSkipped(TestIdentifier testIdentifier, String reason) {
+    this.numSkippedInTestSet.incrementAndGet();
+  }
 
-    @Override
-    public void executionStarted(TestIdentifier testIdentifier) {
-        Optional<String> parentId = testIdentifier.getParentId();
-        if (parentId.isPresent() && parentId.get().indexOf('/') < 0) {
-            println("\nRunning " + testIdentifier.getLegacyReportingName());
-            resetCountsForNewTestSet();
-        }
+  @Override
+  public void executionFinished(
+      TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
+    Optional<String> parentId = testIdentifier.getParentId();
+    if (parentId.isPresent() && parentId.get().indexOf('/') < 0) {
+      int totalTestsInClass =
+          this.numSucceededInTestSet.get()
+              + this.numAbortedInTestSet.get()
+              + this.numFailedInTestSet.get()
+              + this.numSkippedInTestSet.get();
+      Duration duration = Duration.between(this.testSetStartTime, Instant.now());
+      double numSeconds = (double) duration.toMillis() / 1_000;
+      String summary =
+          String.format(
+              "Tests run: %d, Failures: %d, Aborted: %d, Skipped: %d, Time elapsed: %f sec",
+              totalTestsInClass,
+              this.numFailedInTestSet.get(),
+              this.numAbortedInTestSet.get(),
+              this.numSkippedInTestSet.get(),
+              numSeconds);
+      println(summary);
+    } else if (testIdentifier.isTest()) {
+      switch (testExecutionResult.getStatus()) {
+        case SUCCESSFUL:
+          this.numSucceededInTestSet.incrementAndGet();
+          break;
+        case ABORTED:
+          println("   Aborted: " + testIdentifier.getDisplayName());
+          this.numAbortedInTestSet.incrementAndGet();
+          break;
+        case FAILED:
+          println("   Failed: " + testIdentifier.getDisplayName());
+          this.numFailedInTestSet.incrementAndGet();
+          break;
+      }
     }
+  }
 
-    @Override
-    public void executionSkipped(TestIdentifier testIdentifier, String reason) {
-        this.numSkippedInTestSet.incrementAndGet();
-    }
-
-    @Override
-    public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-        Optional<String> parentId = testIdentifier.getParentId();
-        if (parentId.isPresent() && parentId.get().indexOf('/') < 0) {
-            int totalTestsInClass = this.numSucceededInTestSet.get() + this.numAbortedInTestSet.get() + this.numFailedInTestSet.get()
-                    + this.numSkippedInTestSet.get();
-            Duration duration = Duration.between(this.testSetStartTime, Instant.now());
-            double numSeconds = (double) duration.toMillis() / 1_000;
-            String summary = String.format("Tests run: %d, Failures: %d, Aborted: %d, Skipped: %d, Time elapsed: %f sec", totalTestsInClass,
-                    this.numFailedInTestSet.get(), this.numAbortedInTestSet.get(), this.numSkippedInTestSet.get(), numSeconds);
-            println(summary);
-        } else if (testIdentifier.isTest()) {
-            switch (testExecutionResult.getStatus()) {
-                case SUCCESSFUL:
-                    this.numSucceededInTestSet.incrementAndGet();
-                    break;
-                case ABORTED:
-                    println("   Aborted: " + testIdentifier.getDisplayName());
-                    this.numAbortedInTestSet.incrementAndGet();
-                    break;
-                case FAILED:
-                    println("   Failed: " + testIdentifier.getDisplayName());
-                    this.numFailedInTestSet.incrementAndGet();
-                    break;
-            }
-        }
-    }
-
-    private void println(String str) {
-        this.out.println(str);
-    }
+  private void println(String str) {
+    this.out.println(str);
+  }
 }

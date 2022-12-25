@@ -42,32 +42,31 @@ import com.mysql.cj.protocol.a.result.OkPacket;
 
 public class ResultsetFactory implements ProtocolEntityFactory<Resultset, NativePacketPayload> {
 
-    private Type type = Type.FORWARD_ONLY;
-    private Concurrency concurrency = Concurrency.READ_ONLY;
+  private Type type = Type.FORWARD_ONLY;
+  private Concurrency concurrency = Concurrency.READ_ONLY;
 
-    public ResultsetFactory(Type type, Concurrency concurrency) {
-        this.type = type;
-        this.concurrency = concurrency;
+  public ResultsetFactory(Type type, Concurrency concurrency) {
+    this.type = type;
+    this.concurrency = concurrency;
+  }
+
+  public Resultset.Type getResultSetType() {
+    return this.type;
+  }
+
+  public Resultset.Concurrency getResultSetConcurrency() {
+    return this.concurrency;
+  }
+
+  @Override
+  public Resultset createFromProtocolEntity(ProtocolEntity protocolEntity) {
+    if (protocolEntity instanceof OkPacket) {
+      return new NativeResultset((OkPacket) protocolEntity);
+
+    } else if (protocolEntity instanceof ResultsetRows) {
+      return new NativeResultset((ResultsetRows) protocolEntity);
     }
-
-    public Resultset.Type getResultSetType() {
-        return this.type;
-    }
-
-    public Resultset.Concurrency getResultSetConcurrency() {
-        return this.concurrency;
-    }
-
-    @Override
-    public Resultset createFromProtocolEntity(ProtocolEntity protocolEntity) {
-        if (protocolEntity instanceof OkPacket) {
-            return new NativeResultset((OkPacket) protocolEntity);
-
-        } else if (protocolEntity instanceof ResultsetRows) {
-            return new NativeResultset((ResultsetRows) protocolEntity);
-
-        }
-        throw ExceptionFactory.createException(WrongArgumentException.class, "Unknown ProtocolEntity class " + protocolEntity);
-    }
-
+    throw ExceptionFactory.createException(
+        WrongArgumentException.class, "Unknown ProtocolEntity class " + protocolEntity);
+  }
 }

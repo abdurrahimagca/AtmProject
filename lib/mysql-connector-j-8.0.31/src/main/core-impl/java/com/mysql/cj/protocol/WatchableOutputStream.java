@@ -32,25 +32,23 @@ package com.mysql.cj.protocol;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- * A java.io.OutputStream used to write ASCII data into Blobs and Clobs
- */
+/** A java.io.OutputStream used to write ASCII data into Blobs and Clobs */
 public class WatchableOutputStream extends ByteArrayOutputStream implements WatchableStream {
-    private OutputStreamWatcher watcher;
+  private OutputStreamWatcher watcher;
 
-    /**
-     * @see java.io.OutputStream#close()
-     */
-    @Override
-    public void close() throws IOException {
-        super.close();
+  /**
+   * @see java.io.OutputStream#close()
+   */
+  @Override
+  public void close() throws IOException {
+    super.close();
 
-        if (this.watcher != null) {
-            this.watcher.streamClosed(this);
-        }
+    if (this.watcher != null) {
+      this.watcher.streamClosed(this);
     }
+  }
 
-    public void setWatcher(OutputStreamWatcher watcher) {
-        this.watcher = watcher;
-    }
+  public void setWatcher(OutputStreamWatcher watcher) {
+    this.watcher = watcher;
+  }
 }

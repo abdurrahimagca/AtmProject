@@ -32,11 +32,8 @@ package com.mysql.cj.protocol.x;
 import com.mysql.cj.protocol.ProtocolEntity;
 import com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone;
 
-/**
- * ProtocolEntity representing a {@link FetchDone} message.
- */
+/** ProtocolEntity representing a {@link FetchDone} message. */
 public class FetchDoneEntity implements ProtocolEntity {
 
-    public FetchDoneEntity() {
-    }
+  public FetchDoneEntity() {}
 }

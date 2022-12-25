@@ -29,55 +29,73 @@
 
 package com.mysql.cj;
 
+import com.mysql.cj.result.LongValueFactory;
+import com.mysql.cj.xdevapi.ExprUnparser;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.mysql.cj.result.LongValueFactory;
-import com.mysql.cj.xdevapi.ExprUnparser;
-
 public class DataStoreMetadataImpl implements DataStoreMetadata {
 
-    private Session session;
+  private Session session;
 
-    public DataStoreMetadataImpl(Session sess) {
-        this.session = sess;
-    }
+  public DataStoreMetadataImpl(Session sess) {
+    this.session = sess;
+  }
 
-    public boolean schemaExists(String schemaName) {
-        StringBuilder stmt = new StringBuilder("select count(*) from information_schema.schemata where schema_name = '");
-        // TODO: verify quoting rules
-        stmt.append(schemaName.replaceAll("'", "\\'"));
-        stmt.append("'");
+  public boolean schemaExists(String schemaName) {
+    StringBuilder stmt =
+        new StringBuilder("select count(*) from information_schema.schemata where schema_name = '");
+    // TODO: verify quoting rules
+    stmt.append(schemaName.replaceAll("'", "\\'"));
+    stmt.append("'");
 
-        Function<com.mysql.cj.result.Row, Long> rowToLong = r -> r.getValue(0, new LongValueFactory(this.session.getPropertySet()));
-        List<Long> counters = this.session.query(this.session.getMessageBuilder().buildSqlStatement(stmt.toString()), null, rowToLong, Collectors.toList());
-        return 1 == counters.get(0);
-    }
+    Function<com.mysql.cj.result.Row, Long> rowToLong =
+        r -> r.getValue(0, new LongValueFactory(this.session.getPropertySet()));
+    List<Long> counters =
+        this.session.query(
+            this.session.getMessageBuilder().buildSqlStatement(stmt.toString()),
+            null,
+            rowToLong,
+            Collectors.toList());
+    return 1 == counters.get(0);
+  }
 
-    public boolean tableExists(String schemaName, String tableName) {
-        StringBuilder stmt = new StringBuilder("select count(*) from information_schema.tables where table_schema = '");
-        // TODO: verify quoting rules
-        stmt.append(schemaName.replaceAll("'", "\\'"));
-        stmt.append("' and table_name = '");
-        stmt.append(tableName.replaceAll("'", "\\'"));
-        stmt.append("'");
+  public boolean tableExists(String schemaName, String tableName) {
+    StringBuilder stmt =
+        new StringBuilder("select count(*) from information_schema.tables where table_schema = '");
+    // TODO: verify quoting rules
+    stmt.append(schemaName.replaceAll("'", "\\'"));
+    stmt.append("' and table_name = '");
+    stmt.append(tableName.replaceAll("'", "\\'"));
+    stmt.append("'");
 
-        Function<com.mysql.cj.result.Row, Long> rowToLong = r -> r.getValue(0, new LongValueFactory(this.session.getPropertySet()));
-        List<Long> counters = this.session.query(this.session.getMessageBuilder().buildSqlStatement(stmt.toString()), null, rowToLong, Collectors.toList());
-        return 1 == counters.get(0);
-    }
+    Function<com.mysql.cj.result.Row, Long> rowToLong =
+        r -> r.getValue(0, new LongValueFactory(this.session.getPropertySet()));
+    List<Long> counters =
+        this.session.query(
+            this.session.getMessageBuilder().buildSqlStatement(stmt.toString()),
+            null,
+            rowToLong,
+            Collectors.toList());
+    return 1 == counters.get(0);
+  }
 
-    @Override
-    public long getTableRowCount(String schemaName, String tableName) {
-        StringBuilder stmt = new StringBuilder("select count(*) from ");
-        stmt.append(ExprUnparser.quoteIdentifier(schemaName));
-        stmt.append(".");
-        stmt.append(ExprUnparser.quoteIdentifier(tableName));
+  @Override
+  public long getTableRowCount(String schemaName, String tableName) {
+    StringBuilder stmt = new StringBuilder("select count(*) from ");
+    stmt.append(ExprUnparser.quoteIdentifier(schemaName));
+    stmt.append(".");
+    stmt.append(ExprUnparser.quoteIdentifier(tableName));
 
-        Function<com.mysql.cj.result.Row, Long> rowToLong = r -> r.getValue(0, new LongValueFactory(this.session.getPropertySet()));
-        List<Long> counters = this.session.query(this.session.getMessageBuilder().buildSqlStatement(stmt.toString()), null, rowToLong, Collectors.toList());
-        return counters.get(0);
-    }
-
+    Function<com.mysql.cj.result.Row, Long> rowToLong =
+        r -> r.getValue(0, new LongValueFactory(this.session.getPropertySet()));
+    List<Long> counters =
+        this.session.query(
+            this.session.getMessageBuilder().buildSqlStatement(stmt.toString()),
+            null,
+            rowToLong,
+            Collectors.toList());
+    return counters.get(0);
+  }
 }

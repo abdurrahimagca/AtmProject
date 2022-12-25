@@ -33,24 +33,23 @@ import java.io.FilterOutputStream;
 import java.io.OutputStream;
 
 /**
- * An {@link OutputStream} wrapper that allows switching to different underlying {@link OutputStream}s under the same {@link OutputStream} instance.
+ * An {@link OutputStream} wrapper that allows switching to different underlying {@link
+ * OutputStream}s under the same {@link OutputStream} instance.
  */
 public class ReusableOutputStream extends FilterOutputStream {
-    protected ReusableOutputStream(OutputStream out) {
-        super(out);
-    }
+  protected ReusableOutputStream(OutputStream out) {
+    super(out);
+  }
 
-    /**
-     * Sets a new underlying {@link OutputStream} in this {@link ReusableOutputStream}.
-     * 
-     * @param newOut
-     *            the new {@link OutputStream} to set.
-     * @return
-     *         the previous underlying {@link OutputStream}.
-     */
-    public OutputStream setOutputStream(OutputStream newOut) {
-        OutputStream previousOut = this.out;
-        this.out = newOut;
-        return previousOut;
-    }
+  /**
+   * Sets a new underlying {@link OutputStream} in this {@link ReusableOutputStream}.
+   *
+   * @param newOut the new {@link OutputStream} to set.
+   * @return the previous underlying {@link OutputStream}.
+   */
+  public OutputStream setOutputStream(OutputStream newOut) {
+    OutputStream previousOut = this.out;
+    this.out = newOut;
+    return previousOut;
+  }
 }

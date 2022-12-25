@@ -29,54 +29,51 @@
 
 package com.mysql.cj;
 
-import java.util.Properties;
-
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.exceptions.ExceptionInterceptor;
 import com.mysql.cj.protocol.ServerSessionStateController;
+import java.util.Properties;
 
 public interface MysqlConnection {
 
-    PropertySet getPropertySet();
+  PropertySet getPropertySet();
 
-    /**
-     * Creates an IO channel to the server.
-     * 
-     * @param isForReconnect
-     *            is this request for a re-connect
-     */
-    void createNewIO(boolean isForReconnect);
+  /**
+   * Creates an IO channel to the server.
+   *
+   * @param isForReconnect is this request for a re-connect
+   */
+  void createNewIO(boolean isForReconnect);
 
-    long getId();
+  long getId();
 
-    /**
-     * Returns the parsed and passed in properties for this connection.
-     * 
-     * @return {@link Properties}
-     */
-    Properties getProperties();
+  /**
+   * Returns the parsed and passed in properties for this connection.
+   *
+   * @return {@link Properties}
+   */
+  Properties getProperties();
 
-    Object getConnectionMutex();
+  Object getConnectionMutex();
 
-    Session getSession();
+  Session getSession();
 
-    String getURL();
+  String getURL();
 
-    String getUser();
+  String getUser();
 
-    ExceptionInterceptor getExceptionInterceptor();
+  ExceptionInterceptor getExceptionInterceptor();
 
-    void checkClosed();
+  void checkClosed();
 
-    void normalClose();
+  void normalClose();
 
-    /**
-     * Destroys this connection and any underlying resources.
-     * 
-     * @param whyCleanedUp
-     *            exception caused the connection clean up
-     */
-    void cleanup(Throwable whyCleanedUp);
+  /**
+   * Destroys this connection and any underlying resources.
+   *
+   * @param whyCleanedUp exception caused the connection clean up
+   */
+  void cleanup(Throwable whyCleanedUp);
 
-    ServerSessionStateController getServerSessionStateController();
+  ServerSessionStateController getServerSessionStateController();
 }

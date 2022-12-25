@@ -31,124 +31,120 @@ package testsuite.simple;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.util.SequentialIdLease;
-
+import org.junit.jupiter.api.Test;
 import testsuite.BaseTestCase;
 
 public class SequentialIdLeaseTest extends BaseTestCase {
-    /**
-     * Tests the {@link SequentialIdLease} lease behavior.
-     */
-    @Test
-    public void testSequentialIdLease() {
-        SequentialIdLease seqIdLease;
+  /** Tests the {@link SequentialIdLease} lease behavior. */
+  @Test
+  public void testSequentialIdLease() {
+    SequentialIdLease seqIdLease;
 
-        // Release first.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(1);
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(4, seqIdLease.allocateSequentialId());
+    // Release first.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(1);
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(4, seqIdLease.allocateSequentialId());
 
-        // Release single id in middle.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(2);
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(4, seqIdLease.allocateSequentialId());
+    // Release single id in middle.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(2);
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(4, seqIdLease.allocateSequentialId());
 
-        // Release last.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(3);
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        assertEquals(4, seqIdLease.allocateSequentialId());
+    // Release last.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(3);
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    assertEquals(4, seqIdLease.allocateSequentialId());
 
-        // Release multiple in the beginning.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        assertEquals(4, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(1);
-        seqIdLease.releaseSequentialId(2);
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(5, seqIdLease.allocateSequentialId());
+    // Release multiple in the beginning.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    assertEquals(4, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(1);
+    seqIdLease.releaseSequentialId(2);
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(5, seqIdLease.allocateSequentialId());
 
-        // Release multiple in the middle.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        assertEquals(4, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(2);
-        seqIdLease.releaseSequentialId(3);
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        assertEquals(5, seqIdLease.allocateSequentialId());
+    // Release multiple in the middle.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    assertEquals(4, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(2);
+    seqIdLease.releaseSequentialId(3);
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    assertEquals(5, seqIdLease.allocateSequentialId());
 
-        // Release multiple in the end.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        assertEquals(4, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(3);
-        seqIdLease.releaseSequentialId(4);
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        assertEquals(4, seqIdLease.allocateSequentialId());
-        assertEquals(5, seqIdLease.allocateSequentialId());
+    // Release multiple in the end.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    assertEquals(4, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(3);
+    seqIdLease.releaseSequentialId(4);
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    assertEquals(4, seqIdLease.allocateSequentialId());
+    assertEquals(5, seqIdLease.allocateSequentialId());
 
-        // Release interleaved.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        assertEquals(4, seqIdLease.allocateSequentialId());
-        assertEquals(5, seqIdLease.allocateSequentialId());
-        assertEquals(6, seqIdLease.allocateSequentialId());
-        assertEquals(7, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(1);
-        seqIdLease.releaseSequentialId(3);
-        seqIdLease.releaseSequentialId(5);
-        seqIdLease.releaseSequentialId(7);
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        assertEquals(5, seqIdLease.allocateSequentialId());
-        assertEquals(7, seqIdLease.allocateSequentialId());
-        assertEquals(8, seqIdLease.allocateSequentialId());
+    // Release interleaved.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    assertEquals(4, seqIdLease.allocateSequentialId());
+    assertEquals(5, seqIdLease.allocateSequentialId());
+    assertEquals(6, seqIdLease.allocateSequentialId());
+    assertEquals(7, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(1);
+    seqIdLease.releaseSequentialId(3);
+    seqIdLease.releaseSequentialId(5);
+    seqIdLease.releaseSequentialId(7);
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    assertEquals(5, seqIdLease.allocateSequentialId());
+    assertEquals(7, seqIdLease.allocateSequentialId());
+    assertEquals(8, seqIdLease.allocateSequentialId());
 
-        // Release all.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(1);
-        seqIdLease.releaseSequentialId(2);
-        seqIdLease.releaseSequentialId(3);
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
+    // Release all.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(1);
+    seqIdLease.releaseSequentialId(2);
+    seqIdLease.releaseSequentialId(3);
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
 
-        // Release non-existing.
-        seqIdLease = new SequentialIdLease();
-        assertEquals(1, seqIdLease.allocateSequentialId());
-        assertEquals(2, seqIdLease.allocateSequentialId());
-        assertEquals(3, seqIdLease.allocateSequentialId());
-        seqIdLease.releaseSequentialId(4);
-        assertEquals(4, seqIdLease.allocateSequentialId());
+    // Release non-existing.
+    seqIdLease = new SequentialIdLease();
+    assertEquals(1, seqIdLease.allocateSequentialId());
+    assertEquals(2, seqIdLease.allocateSequentialId());
+    assertEquals(3, seqIdLease.allocateSequentialId());
+    seqIdLease.releaseSequentialId(4);
+    assertEquals(4, seqIdLease.allocateSequentialId());
 
-        // Release from empty SequentialIdLease.
-        seqIdLease = new SequentialIdLease();
-        seqIdLease.releaseSequentialId(1);
-    }
+    // Release from empty SequentialIdLease.
+    seqIdLease = new SequentialIdLease();
+    seqIdLease.releaseSequentialId(1);
+  }
 }

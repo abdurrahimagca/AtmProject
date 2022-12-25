@@ -29,36 +29,39 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.concurrent.CompletableFuture;
-
 import com.mysql.cj.MysqlxSession;
 import com.mysql.cj.protocol.x.XMessage;
+import java.util.concurrent.CompletableFuture;
 
-/**
- * {@link DeleteStatement} implementation.
- */
-public class DeleteStatementImpl extends FilterableStatement<DeleteStatement, Result> implements DeleteStatement {
-    /* package private */ DeleteStatementImpl(MysqlxSession mysqlxSession, String schema, String table) {
-        super(new TableFilterParams(schema, table, false));
-        this.mysqlxSession = mysqlxSession;
-    }
+/** {@link DeleteStatement} implementation. */
+public class DeleteStatementImpl extends FilterableStatement<DeleteStatement, Result>
+    implements DeleteStatement {
+  /* package private */ DeleteStatementImpl(
+      MysqlxSession mysqlxSession, String schema, String table) {
+    super(new TableFilterParams(schema, table, false));
+    this.mysqlxSession = mysqlxSession;
+  }
 
-    @Override
-    protected Result executeStatement() {
-        return this.mysqlxSession.query(getMessageBuilder().buildDelete(this.filterParams), new UpdateResultBuilder<>());
-    }
+  @Override
+  protected Result executeStatement() {
+    return this.mysqlxSession.query(
+        getMessageBuilder().buildDelete(this.filterParams), new UpdateResultBuilder<>());
+  }
 
-    @Override
-    protected XMessage getPrepareStatementXMessage() {
-        return getMessageBuilder().buildPrepareDelete(this.preparedStatementId, this.filterParams);
-    }
+  @Override
+  protected XMessage getPrepareStatementXMessage() {
+    return getMessageBuilder().buildPrepareDelete(this.preparedStatementId, this.filterParams);
+  }
 
-    @Override
-    protected Result executePreparedStatement() {
-        return this.mysqlxSession.query(getMessageBuilder().buildPrepareExecute(this.preparedStatementId, this.filterParams), new UpdateResultBuilder<>());
-    }
+  @Override
+  protected Result executePreparedStatement() {
+    return this.mysqlxSession.query(
+        getMessageBuilder().buildPrepareExecute(this.preparedStatementId, this.filterParams),
+        new UpdateResultBuilder<>());
+  }
 
-    public CompletableFuture<Result> executeAsync() {
-        return this.mysqlxSession.queryAsync(getMessageBuilder().buildDelete(this.filterParams), new UpdateResultBuilder<>());
-    }
+  public CompletableFuture<Result> executeAsync() {
+    return this.mysqlxSession.queryAsync(
+        getMessageBuilder().buildDelete(this.filterParams), new UpdateResultBuilder<>());
+  }
 }

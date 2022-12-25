@@ -29,91 +29,94 @@
 
 package com.mysql.cj.jdbc.integration.c3p0;
 
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import com.mchange.v2.c3p0.C3P0ProxyConnection;
 import com.mchange.v2.c3p0.QueryConnectionTester;
 import com.mysql.cj.exceptions.CJCommunicationsException;
 import com.mysql.cj.jdbc.JdbcConnection;
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
- * ConnectionTester for C3P0 connection pool that uses the more efficient COM_PING method of testing connection 'liveness' for MySQL, and 'sorts' exceptions
- * based on SQLState or class of 'CommunicationsException' for handling exceptions.
+ * ConnectionTester for C3P0 connection pool that uses the more efficient COM_PING method of testing
+ * connection 'liveness' for MySQL, and 'sorts' exceptions based on SQLState or class of
+ * 'CommunicationsException' for handling exceptions.
  */
 public final class MysqlConnectionTester implements QueryConnectionTester {
 
-    private static final long serialVersionUID = 3256444690067896368L;
+  private static final long serialVersionUID = 3256444690067896368L;
 
-    private static final Object[] NO_ARGS_ARRAY = new Object[0];
+  private static final Object[] NO_ARGS_ARRAY = new Object[0];
 
-    private transient Method pingMethod;
+  private transient Method pingMethod;
 
-    public MysqlConnectionTester() {
-        try {
-            this.pingMethod = JdbcConnection.class.getMethod("ping", (Class[]) null);
-        } catch (Exception ex) {
-            // punt, we have no way to recover, other than we now use 'SELECT 1' for handling the connection testing.
+  public MysqlConnectionTester() {
+    try {
+      this.pingMethod = JdbcConnection.class.getMethod("ping", (Class[]) null);
+    } catch (Exception ex) {
+      // punt, we have no way to recover, other than we now use 'SELECT 1' for handling the
+      // connection testing.
+    }
+  }
+
+  @Override
+  public int activeCheckConnection(Connection con) {
+    try {
+      if (this.pingMethod != null) {
+        if (con instanceof JdbcConnection) {
+          // We've been passed an instance of a MySQL connection -- no need for reflection
+          ((JdbcConnection) con).ping();
+        } else {
+          // Assume the connection is a C3P0 proxy
+          C3P0ProxyConnection castCon = (C3P0ProxyConnection) con;
+          castCon.rawConnectionOperation(
+              this.pingMethod, C3P0ProxyConnection.RAW_CONNECTION, NO_ARGS_ARRAY);
         }
+      } else {
+        Statement pingStatement = null;
+
+        try {
+          pingStatement = con.createStatement();
+          pingStatement.executeQuery("SELECT 1").close();
+        } finally {
+          if (pingStatement != null) {
+            pingStatement.close();
+          }
+        }
+      }
+
+      return CONNECTION_IS_OKAY;
+    } catch (Exception ex) {
+      return CONNECTION_IS_INVALID;
+    }
+  }
+
+  @Override
+  public int statusOnException(Connection arg0, Throwable throwable) {
+    if (throwable instanceof CommunicationsException
+        || throwable instanceof CJCommunicationsException) {
+      return CONNECTION_IS_INVALID;
     }
 
-    @Override
-    public int activeCheckConnection(Connection con) {
-        try {
-            if (this.pingMethod != null) {
-                if (con instanceof JdbcConnection) {
-                    // We've been passed an instance of a MySQL connection -- no need for reflection
-                    ((JdbcConnection) con).ping();
-                } else {
-                    // Assume the connection is a C3P0 proxy
-                    C3P0ProxyConnection castCon = (C3P0ProxyConnection) con;
-                    castCon.rawConnectionOperation(this.pingMethod, C3P0ProxyConnection.RAW_CONNECTION, NO_ARGS_ARRAY);
-                }
-            } else {
-                Statement pingStatement = null;
+    if (throwable instanceof SQLException) {
+      String sqlState = ((SQLException) throwable).getSQLState();
 
-                try {
-                    pingStatement = con.createStatement();
-                    pingStatement.executeQuery("SELECT 1").close();
-                } finally {
-                    if (pingStatement != null) {
-                        pingStatement.close();
-                    }
-                }
-            }
-
-            return CONNECTION_IS_OKAY;
-        } catch (Exception ex) {
-            return CONNECTION_IS_INVALID;
-        }
-    }
-
-    @Override
-    public int statusOnException(Connection arg0, Throwable throwable) {
-        if (throwable instanceof CommunicationsException || throwable instanceof CJCommunicationsException) {
-            return CONNECTION_IS_INVALID;
-        }
-
-        if (throwable instanceof SQLException) {
-            String sqlState = ((SQLException) throwable).getSQLState();
-
-            if (sqlState != null && sqlState.startsWith("08")) {
-                return CONNECTION_IS_INVALID;
-            }
-
-            return CONNECTION_IS_OKAY;
-        }
-
-        // Runtime/Unchecked?
-
+      if (sqlState != null && sqlState.startsWith("08")) {
         return CONNECTION_IS_INVALID;
+      }
+
+      return CONNECTION_IS_OKAY;
     }
 
-    @Override
-    public int activeCheckConnection(Connection arg0, String arg1) {
-        return CONNECTION_IS_OKAY;
-    }
+    // Runtime/Unchecked?
+
+    return CONNECTION_IS_INVALID;
+  }
+
+  @Override
+  public int activeCheckConnection(Connection arg0, String arg1) {
+    return CONNECTION_IS_OKAY;
+  }
 }

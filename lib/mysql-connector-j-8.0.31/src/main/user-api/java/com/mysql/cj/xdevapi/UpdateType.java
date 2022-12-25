@@ -29,10 +29,15 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * Update operation type.
- */
+/** Update operation type. */
 public enum UpdateType {
-    // these must mirror exactly the names of UpdateOperation.UpdateType in mysqlx_crud.proto
-    SET, ITEM_REMOVE, ITEM_SET, ITEM_REPLACE, ITEM_MERGE, ARRAY_INSERT, ARRAY_APPEND, MERGE_PATCH
+  // these must mirror exactly the names of UpdateOperation.UpdateType in mysqlx_crud.proto
+  SET,
+  ITEM_REMOVE,
+  ITEM_SET,
+  ITEM_REPLACE,
+  ITEM_MERGE,
+  ARRAY_INSERT,
+  ARRAY_APPEND,
+  MERGE_PATCH
 }

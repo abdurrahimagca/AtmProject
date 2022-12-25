@@ -29,14 +29,12 @@
 
 package com.mysql.cj.exceptions;
 
-/**
- * Indicates that data could not be converted according to the given request.
- */
+/** Indicates that data could not be converted according to the given request. */
 public class DataConversionException extends DataReadException {
-    private static final long serialVersionUID = -863576663404236982L;
+  private static final long serialVersionUID = -863576663404236982L;
 
-    public DataConversionException(String msg) {
-        super(msg);
-        setSQLState("22018");
-    }
+  public DataConversionException(String msg) {
+    super(msg);
+    setSQLState("22018");
+  }
 }

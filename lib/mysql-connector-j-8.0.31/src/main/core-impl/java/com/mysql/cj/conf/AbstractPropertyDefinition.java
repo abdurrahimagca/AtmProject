@@ -29,155 +29,182 @@
 
 package com.mysql.cj.conf;
 
-import java.io.Serializable;
-
 import com.mysql.cj.exceptions.ExceptionInterceptor;
+import java.io.Serializable;
 
 public abstract class AbstractPropertyDefinition<T> implements PropertyDefinition<T>, Serializable {
 
-    private static final long serialVersionUID = 2696624840927848766L;
+  private static final long serialVersionUID = 2696624840927848766L;
 
-    private PropertyKey key = null;
-    private String name;
-    private String ccAlias;
-    private T defaultValue;
-    private boolean isRuntimeModifiable;
-    private String description;
-    private String sinceVersion;
-    private String category;
-    private int order;
+  private PropertyKey key = null;
+  private String name;
+  private String ccAlias;
+  private T defaultValue;
+  private boolean isRuntimeModifiable;
+  private String description;
+  private String sinceVersion;
+  private String category;
+  private int order;
 
-    private int lowerBound;
-    private int upperBound;
+  private int lowerBound;
+  private int upperBound;
 
-    public AbstractPropertyDefinition(String name, String camelCaseAlias, T defaultValue, boolean isRuntimeModifiable, String description, String sinceVersion,
-            String category, int orderInCategory) {
+  public AbstractPropertyDefinition(
+      String name,
+      String camelCaseAlias,
+      T defaultValue,
+      boolean isRuntimeModifiable,
+      String description,
+      String sinceVersion,
+      String category,
+      int orderInCategory) {
 
-        this.name = name;
-        this.ccAlias = camelCaseAlias;
-        this.setDefaultValue(defaultValue);
-        this.setRuntimeModifiable(isRuntimeModifiable);
-        this.setDescription(description);
-        this.setSinceVersion(sinceVersion);
-        this.setCategory(category);
-        this.setOrder(orderInCategory);
-    }
+    this.name = name;
+    this.ccAlias = camelCaseAlias;
+    this.setDefaultValue(defaultValue);
+    this.setRuntimeModifiable(isRuntimeModifiable);
+    this.setDescription(description);
+    this.setSinceVersion(sinceVersion);
+    this.setCategory(category);
+    this.setOrder(orderInCategory);
+  }
 
-    public AbstractPropertyDefinition(PropertyKey key, T defaultValue, boolean isRuntimeModifiable, String description, String sinceVersion, String category,
-            int orderInCategory) {
+  public AbstractPropertyDefinition(
+      PropertyKey key,
+      T defaultValue,
+      boolean isRuntimeModifiable,
+      String description,
+      String sinceVersion,
+      String category,
+      int orderInCategory) {
 
-        this.key = key;
-        this.name = key.getKeyName();
-        this.ccAlias = key.getCcAlias();
-        this.setDefaultValue(defaultValue);
-        this.setRuntimeModifiable(isRuntimeModifiable);
-        this.setDescription(description);
-        this.setSinceVersion(sinceVersion);
-        this.setCategory(category);
-        this.setOrder(orderInCategory);
-    }
+    this.key = key;
+    this.name = key.getKeyName();
+    this.ccAlias = key.getCcAlias();
+    this.setDefaultValue(defaultValue);
+    this.setRuntimeModifiable(isRuntimeModifiable);
+    this.setDescription(description);
+    this.setSinceVersion(sinceVersion);
+    this.setCategory(category);
+    this.setOrder(orderInCategory);
+  }
 
-    public AbstractPropertyDefinition(PropertyKey key, T defaultValue, boolean isRuntimeModifiable, String description, String sinceVersion, String category,
-            int orderInCategory, int lowerBound, int upperBound) {
-        this(key, defaultValue, isRuntimeModifiable, description, sinceVersion, category, orderInCategory);
-        this.setLowerBound(lowerBound);
-        this.setUpperBound(upperBound);
-    }
+  public AbstractPropertyDefinition(
+      PropertyKey key,
+      T defaultValue,
+      boolean isRuntimeModifiable,
+      String description,
+      String sinceVersion,
+      String category,
+      int orderInCategory,
+      int lowerBound,
+      int upperBound) {
+    this(
+        key,
+        defaultValue,
+        isRuntimeModifiable,
+        description,
+        sinceVersion,
+        category,
+        orderInCategory);
+    this.setLowerBound(lowerBound);
+    this.setUpperBound(upperBound);
+  }
 
-    public boolean hasValueConstraints() {
-        return (getAllowableValues() != null) && (getAllowableValues().length > 0);
-    }
+  public boolean hasValueConstraints() {
+    return (getAllowableValues() != null) && (getAllowableValues().length > 0);
+  }
 
-    public boolean isRangeBased() {
-        return false;
-    }
+  public boolean isRangeBased() {
+    return false;
+  }
 
-    @Override
-    public PropertyKey getPropertyKey() {
-        return this.key;
-    }
+  @Override
+  public PropertyKey getPropertyKey() {
+    return this.key;
+  }
 
-    public String getName() {
-        return this.name;
-    }
+  public String getName() {
+    return this.name;
+  }
 
-    @Override
-    public String getCcAlias() {
-        return this.ccAlias;
-    }
+  @Override
+  public String getCcAlias() {
+    return this.ccAlias;
+  }
 
-    @Override
-    public boolean hasCcAlias() {
-        return this.ccAlias != null && this.ccAlias.length() > 0;
-    }
+  @Override
+  public boolean hasCcAlias() {
+    return this.ccAlias != null && this.ccAlias.length() > 0;
+  }
 
-    public T getDefaultValue() {
-        return this.defaultValue;
-    }
+  public T getDefaultValue() {
+    return this.defaultValue;
+  }
 
-    public void setDefaultValue(T defaultValue) {
-        this.defaultValue = defaultValue;
-    }
+  public void setDefaultValue(T defaultValue) {
+    this.defaultValue = defaultValue;
+  }
 
-    public boolean isRuntimeModifiable() {
-        return this.isRuntimeModifiable;
-    }
+  public boolean isRuntimeModifiable() {
+    return this.isRuntimeModifiable;
+  }
 
-    public void setRuntimeModifiable(boolean isRuntimeModifiable) {
-        this.isRuntimeModifiable = isRuntimeModifiable;
-    }
+  public void setRuntimeModifiable(boolean isRuntimeModifiable) {
+    this.isRuntimeModifiable = isRuntimeModifiable;
+  }
 
-    public String getDescription() {
-        return this.description;
-    }
+  public String getDescription() {
+    return this.description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public String getSinceVersion() {
-        return this.sinceVersion;
-    }
+  public String getSinceVersion() {
+    return this.sinceVersion;
+  }
 
-    public void setSinceVersion(String sinceVersion) {
-        this.sinceVersion = sinceVersion;
-    }
+  public void setSinceVersion(String sinceVersion) {
+    this.sinceVersion = sinceVersion;
+  }
 
-    public String getCategory() {
-        return this.category;
-    }
+  public String getCategory() {
+    return this.category;
+  }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+  public void setCategory(String category) {
+    this.category = category;
+  }
 
-    public int getOrder() {
-        return this.order;
-    }
+  public int getOrder() {
+    return this.order;
+  }
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
+  public void setOrder(int order) {
+    this.order = order;
+  }
 
-    public String[] getAllowableValues() {
-        return null;
-    }
+  public String[] getAllowableValues() {
+    return null;
+  }
 
-    public int getLowerBound() {
-        return this.lowerBound;
-    }
+  public int getLowerBound() {
+    return this.lowerBound;
+  }
 
-    public void setLowerBound(int lowerBound) {
-        this.lowerBound = lowerBound;
-    }
+  public void setLowerBound(int lowerBound) {
+    this.lowerBound = lowerBound;
+  }
 
-    public int getUpperBound() {
-        return this.upperBound;
-    }
+  public int getUpperBound() {
+    return this.upperBound;
+  }
 
-    public void setUpperBound(int upperBound) {
-        this.upperBound = upperBound;
-    }
+  public void setUpperBound(int upperBound) {
+    this.upperBound = upperBound;
+  }
 
-    public abstract T parseObject(String value, ExceptionInterceptor exceptionInterceptor);
+  public abstract T parseObject(String value, ExceptionInterceptor exceptionInterceptor);
 }

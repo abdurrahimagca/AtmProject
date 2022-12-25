@@ -29,9 +29,10 @@
 
 package com.mysql.cj;
 
-/**
- * The possible return types from executing queries.
- */
+/** The possible return types from executing queries. */
 public enum QueryReturnType {
-    PRODUCES_RESULT_SET, MAY_PRODUCE_RESULT_SET, DOES_NOT_PRODUCE_RESULT_SET, NONE;
+  PRODUCES_RESULT_SET,
+  MAY_PRODUCE_RESULT_SET,
+  DOES_NOT_PRODUCE_RESULT_SET,
+  NONE;
 }

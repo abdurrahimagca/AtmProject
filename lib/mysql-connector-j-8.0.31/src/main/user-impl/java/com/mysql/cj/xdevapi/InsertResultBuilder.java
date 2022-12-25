@@ -29,13 +29,11 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * Result builder producing an {@link InsertResult} instance.
- */
+/** Result builder producing an {@link InsertResult} instance. */
 public class InsertResultBuilder extends UpdateResultBuilder<InsertResult> {
 
-    @Override
-    public InsertResult build() {
-        return new InsertResultImpl(this.statementExecuteOkBuilder.build());
-    }
+  @Override
+  public InsertResult build() {
+    return new InsertResultImpl(this.statementExecuteOkBuilder.build());
+  }
 }

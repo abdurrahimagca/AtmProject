@@ -29,34 +29,29 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * A statement to delete rows from a table.
- */
+/** A statement to delete rows from a table. */
 public interface DeleteStatement extends Statement<DeleteStatement, Result> {
-    /**
-     * Add/replace the filter for the deletion.
-     * 
-     * @param searchCondition
-     *            condition expression
-     * @return {@link DeleteStatement}
-     */
-    DeleteStatement where(String searchCondition);
+  /**
+   * Add/replace the filter for the deletion.
+   *
+   * @param searchCondition condition expression
+   * @return {@link DeleteStatement}
+   */
+  DeleteStatement where(String searchCondition);
 
-    /**
-     * Add/replace the order by specification for the deletion.
-     * 
-     * @param sortFields
-     *            sort expression
-     * @return {@link DeleteStatement}
-     */
-    DeleteStatement orderBy(String... sortFields);
+  /**
+   * Add/replace the order by specification for the deletion.
+   *
+   * @param sortFields sort expression
+   * @return {@link DeleteStatement}
+   */
+  DeleteStatement orderBy(String... sortFields);
 
-    /**
-     * Add/replace the row limit for the deletion.
-     * 
-     * @param numberOfRows
-     *            limit
-     * @return {@link DeleteStatement}
-     */
-    DeleteStatement limit(long numberOfRows);
+  /**
+   * Add/replace the row limit for the deletion.
+   *
+   * @param numberOfRows limit
+   * @return {@link DeleteStatement}
+   */
+  DeleteStatement limit(long numberOfRows);
 }

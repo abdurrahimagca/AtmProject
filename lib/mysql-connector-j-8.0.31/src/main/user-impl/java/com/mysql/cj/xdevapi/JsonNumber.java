@@ -31,47 +31,43 @@ package com.mysql.cj.xdevapi;
 
 import java.math.BigDecimal;
 
-/**
- * Represents a JSON <b>number</b>.
- */
+/** Represents a JSON <b>number</b>. */
 public class JsonNumber implements JsonValue {
 
-    private String val = "null";
+  private String val = "null";
 
-    /**
-     * Get number as Integer.
-     * 
-     * @return Integer value
-     */
-    public Integer getInteger() {
-        return new BigDecimal(this.val).intValue();
-    }
+  /**
+   * Get number as Integer.
+   *
+   * @return Integer value
+   */
+  public Integer getInteger() {
+    return new BigDecimal(this.val).intValue();
+  }
 
-    /**
-     * Get number as BigDecimal.
-     * 
-     * @return BigDecimal value
-     */
-    public BigDecimal getBigDecimal() {
-        return new BigDecimal(this.val);
-    }
+  /**
+   * Get number as BigDecimal.
+   *
+   * @return BigDecimal value
+   */
+  public BigDecimal getBigDecimal() {
+    return new BigDecimal(this.val);
+  }
 
-    /**
-     * Set number value.
-     * 
-     * @param value
-     *            string number representation
-     * @return this JsonNumber
-     */
-    public JsonNumber setValue(String value) {
-        // validate with BigDecimal
-        this.val = new BigDecimal(value).toString();
-        return this;
-    }
+  /**
+   * Set number value.
+   *
+   * @param value string number representation
+   * @return this JsonNumber
+   */
+  public JsonNumber setValue(String value) {
+    // validate with BigDecimal
+    this.val = new BigDecimal(value).toString();
+    return this;
+  }
 
-    @Override
-    public String toString() {
-        return this.val;
-    }
-
+  @Override
+  public String toString() {
+    return this.val;
+  }
 }

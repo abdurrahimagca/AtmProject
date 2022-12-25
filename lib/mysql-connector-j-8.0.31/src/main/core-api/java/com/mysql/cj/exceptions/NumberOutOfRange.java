@@ -29,14 +29,12 @@
 
 package com.mysql.cj.exceptions;
 
-/**
- * Indicates that a number was out of the expected range.
- */
+/** Indicates that a number was out of the expected range. */
 public class NumberOutOfRange extends DataReadException {
-    private static final long serialVersionUID = -61091413023651438L;
+  private static final long serialVersionUID = -61091413023651438L;
 
-    public NumberOutOfRange(String msg) {
-        super(msg);
-        setSQLState("22003");
-    }
+  public NumberOutOfRange(String msg) {
+    super(msg);
+    setSQLState("22003");
+  }
 }

@@ -29,70 +29,74 @@
 
 package com.mysql.cj;
 
-import java.util.Properties;
-import java.util.function.Supplier;
-
 import com.mysql.cj.interceptors.QueryInterceptor;
 import com.mysql.cj.log.Log;
 import com.mysql.cj.protocol.Message;
 import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.protocol.ServerSession;
+import java.util.Properties;
+import java.util.function.Supplier;
 
 /**
- * Wraps query interceptors during driver startup so that they don't produce different result sets than we expect.
+ * Wraps query interceptors during driver startup so that they don't produce different result sets
+ * than we expect.
  */
 public class NoSubInterceptorWrapper implements QueryInterceptor {
 
-    private final QueryInterceptor underlyingInterceptor;
+  private final QueryInterceptor underlyingInterceptor;
 
-    public NoSubInterceptorWrapper(QueryInterceptor underlyingInterceptor) {
-        if (underlyingInterceptor == null) {
-            throw new RuntimeException(Messages.getString("NoSubInterceptorWrapper.0"));
-        }
-
-        this.underlyingInterceptor = underlyingInterceptor;
+  public NoSubInterceptorWrapper(QueryInterceptor underlyingInterceptor) {
+    if (underlyingInterceptor == null) {
+      throw new RuntimeException(Messages.getString("NoSubInterceptorWrapper.0"));
     }
 
-    public void destroy() {
-        this.underlyingInterceptor.destroy();
-    }
+    this.underlyingInterceptor = underlyingInterceptor;
+  }
 
-    public boolean executeTopLevelOnly() {
-        return this.underlyingInterceptor.executeTopLevelOnly();
-    }
+  public void destroy() {
+    this.underlyingInterceptor.destroy();
+  }
 
-    public QueryInterceptor init(MysqlConnection conn, Properties props, Log log) {
-        this.underlyingInterceptor.init(conn, props, log);
-        return this;
-    }
+  public boolean executeTopLevelOnly() {
+    return this.underlyingInterceptor.executeTopLevelOnly();
+  }
 
-    public <T extends Resultset> T postProcess(Supplier<String> sql, Query interceptedQuery, T originalResultSet, ServerSession serverSession) {
-        this.underlyingInterceptor.postProcess(sql, interceptedQuery, originalResultSet, serverSession);
+  public QueryInterceptor init(MysqlConnection conn, Properties props, Log log) {
+    this.underlyingInterceptor.init(conn, props, log);
+    return this;
+  }
 
-        return null; // don't allow result set substitution
-    }
+  public <T extends Resultset> T postProcess(
+      Supplier<String> sql,
+      Query interceptedQuery,
+      T originalResultSet,
+      ServerSession serverSession) {
+    this.underlyingInterceptor.postProcess(sql, interceptedQuery, originalResultSet, serverSession);
 
-    public <T extends Resultset> T preProcess(Supplier<String> sql, Query interceptedQuery) {
-        this.underlyingInterceptor.preProcess(sql, interceptedQuery);
+    return null; // don't allow result set substitution
+  }
 
-        return null; // don't allow result set substitution
-    }
+  public <T extends Resultset> T preProcess(Supplier<String> sql, Query interceptedQuery) {
+    this.underlyingInterceptor.preProcess(sql, interceptedQuery);
 
-    @Override
-    public <M extends Message> M preProcess(M queryPacket) {
-        this.underlyingInterceptor.preProcess(queryPacket);
+    return null; // don't allow result set substitution
+  }
 
-        return null; // don't allow PacketPayload substitution
-    }
+  @Override
+  public <M extends Message> M preProcess(M queryPacket) {
+    this.underlyingInterceptor.preProcess(queryPacket);
 
-    @Override
-    public <M extends Message> M postProcess(M queryPacket, M originalResponsePacket) {
-        this.underlyingInterceptor.postProcess(queryPacket, originalResponsePacket);
+    return null; // don't allow PacketPayload substitution
+  }
 
-        return null; // don't allow PacketPayload substitution
-    }
+  @Override
+  public <M extends Message> M postProcess(M queryPacket, M originalResponsePacket) {
+    this.underlyingInterceptor.postProcess(queryPacket, originalResponsePacket);
 
-    public QueryInterceptor getUnderlyingInterceptor() {
-        return this.underlyingInterceptor;
-    }
+    return null; // don't allow PacketPayload substitution
+  }
+
+  public QueryInterceptor getUnderlyingInterceptor() {
+    return this.underlyingInterceptor;
+  }
 }

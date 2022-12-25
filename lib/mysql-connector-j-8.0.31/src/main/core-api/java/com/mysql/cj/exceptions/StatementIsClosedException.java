@@ -29,36 +29,34 @@
 
 package com.mysql.cj.exceptions;
 
-/**
- * Operation attempted on already closed Statement
- */
+/** Operation attempted on already closed Statement */
 public class StatementIsClosedException extends CJException {
 
-    private static final long serialVersionUID = -4214028635985851906L;
+  private static final long serialVersionUID = -4214028635985851906L;
 
-    public StatementIsClosedException() {
-        super();
-        setSQLState("S1009");
-    }
+  public StatementIsClosedException() {
+    super();
+    setSQLState("S1009");
+  }
 
-    public StatementIsClosedException(String message) {
-        super(message);
-        setSQLState("S1009");
-    }
+  public StatementIsClosedException(String message) {
+    super(message);
+    setSQLState("S1009");
+  }
 
-    public StatementIsClosedException(String message, Throwable cause) {
-        super(message, cause);
-        setSQLState("S1009");
-    }
+  public StatementIsClosedException(String message, Throwable cause) {
+    super(message, cause);
+    setSQLState("S1009");
+  }
 
-    public StatementIsClosedException(Throwable cause) {
-        super(cause);
-        setSQLState("S1009");
-    }
+  public StatementIsClosedException(Throwable cause) {
+    super(cause);
+    setSQLState("S1009");
+  }
 
-    protected StatementIsClosedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        setSQLState("S1009");
-    }
-
+  protected StatementIsClosedException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+    setSQLState("S1009");
+  }
 }

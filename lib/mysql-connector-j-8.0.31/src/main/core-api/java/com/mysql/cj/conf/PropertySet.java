@@ -33,55 +33,52 @@ import java.util.Properties;
 
 public interface PropertySet {
 
-    void addProperty(RuntimeProperty<?> prop);
+  void addProperty(RuntimeProperty<?> prop);
 
-    void removeProperty(String name);
+  void removeProperty(String name);
 
-    void removeProperty(PropertyKey key);
+  void removeProperty(PropertyKey key);
 
-    <T> RuntimeProperty<T> getProperty(String name);
+  <T> RuntimeProperty<T> getProperty(String name);
 
-    <T> RuntimeProperty<T> getProperty(PropertyKey key);
+  <T> RuntimeProperty<T> getProperty(PropertyKey key);
 
-    RuntimeProperty<Boolean> getBooleanProperty(String name);
+  RuntimeProperty<Boolean> getBooleanProperty(String name);
 
-    RuntimeProperty<Boolean> getBooleanProperty(PropertyKey key);
+  RuntimeProperty<Boolean> getBooleanProperty(PropertyKey key);
 
-    RuntimeProperty<Integer> getIntegerProperty(String name);
+  RuntimeProperty<Integer> getIntegerProperty(String name);
 
-    RuntimeProperty<Integer> getIntegerProperty(PropertyKey key);
+  RuntimeProperty<Integer> getIntegerProperty(PropertyKey key);
 
-    RuntimeProperty<Long> getLongProperty(String name);
+  RuntimeProperty<Long> getLongProperty(String name);
 
-    RuntimeProperty<Long> getLongProperty(PropertyKey key);
+  RuntimeProperty<Long> getLongProperty(PropertyKey key);
 
-    RuntimeProperty<Integer> getMemorySizeProperty(String name);
+  RuntimeProperty<Integer> getMemorySizeProperty(String name);
 
-    RuntimeProperty<Integer> getMemorySizeProperty(PropertyKey key);
+  RuntimeProperty<Integer> getMemorySizeProperty(PropertyKey key);
 
-    RuntimeProperty<String> getStringProperty(String name);
+  RuntimeProperty<String> getStringProperty(String name);
 
-    RuntimeProperty<String> getStringProperty(PropertyKey key);
+  RuntimeProperty<String> getStringProperty(PropertyKey key);
 
-    <T extends Enum<T>> RuntimeProperty<T> getEnumProperty(String name);
+  <T extends Enum<T>> RuntimeProperty<T> getEnumProperty(String name);
 
-    <T extends Enum<T>> RuntimeProperty<T> getEnumProperty(PropertyKey key);
+  <T extends Enum<T>> RuntimeProperty<T> getEnumProperty(PropertyKey key);
 
-    /**
-     * Initializes the property set with driver properties that come from URL or passed to
-     * the driver manager.
-     * 
-     * @param props
-     *            properties
-     */
-    void initializeProperties(Properties props);
+  /**
+   * Initializes the property set with driver properties that come from URL or passed to the driver
+   * manager.
+   *
+   * @param props properties
+   */
+  void initializeProperties(Properties props);
 
-    void postInitialization();
+  void postInitialization();
 
-    Properties exposeAsProperties();
+  Properties exposeAsProperties();
 
-    /**
-     * Reset all properties to their initial values.
-     */
-    void reset();
+  /** Reset all properties to their initial values. */
+  void reset();
 }

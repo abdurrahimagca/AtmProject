@@ -36,32 +36,36 @@ import com.mysql.cj.protocol.ServerSession;
 
 public class CJCommunicationsException extends CJException {
 
-    private static final long serialVersionUID = 344035358493554245L;
+  private static final long serialVersionUID = 344035358493554245L;
 
-    public CJCommunicationsException() {
-        super();
-    }
+  public CJCommunicationsException() {
+    super();
+  }
 
-    public CJCommunicationsException(String message) {
-        super(message);
-    }
+  public CJCommunicationsException(String message) {
+    super(message);
+  }
 
-    public CJCommunicationsException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public CJCommunicationsException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public CJCommunicationsException(Throwable cause) {
-        super(cause);
-    }
+  public CJCommunicationsException(Throwable cause) {
+    super(cause);
+  }
 
-    protected CJCommunicationsException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+  protected CJCommunicationsException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 
-    public void init(PropertySet propertySet, ServerSession serverSession, PacketSentTimeHolder packetSentTimeHolder,
-            PacketReceivedTimeHolder packetReceivedTimeHolder) {
-        this.exceptionMessage = ExceptionFactory.createLinkFailureMessageBasedOnHeuristics(propertySet, serverSession, packetSentTimeHolder,
-                packetReceivedTimeHolder, getCause());
-    }
-
+  public void init(
+      PropertySet propertySet,
+      ServerSession serverSession,
+      PacketSentTimeHolder packetSentTimeHolder,
+      PacketReceivedTimeHolder packetReceivedTimeHolder) {
+    this.exceptionMessage =
+        ExceptionFactory.createLinkFailureMessageBasedOnHeuristics(
+            propertySet, serverSession, packetSentTimeHolder, packetReceivedTimeHolder, getCause());
+  }
 }

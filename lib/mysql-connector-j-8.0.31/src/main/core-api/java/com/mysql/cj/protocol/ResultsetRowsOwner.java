@@ -35,29 +35,28 @@ import com.mysql.cj.Session;
 
 public interface ResultsetRowsOwner {
 
-    void closeOwner(boolean calledExplicitly);
+  void closeOwner(boolean calledExplicitly);
 
-    MysqlConnection getConnection();
+  MysqlConnection getConnection();
 
-    Session getSession();
+  Session getSession();
 
-    Object getSyncMutex();
+  Object getSyncMutex();
 
-    /**
-     * StackTrace generated where ResultSet was created... used when profiling
-     * 
-     * @return string representation of a stack trace
-     */
-    String getPointOfOrigin();
+  /**
+   * StackTrace generated where ResultSet was created... used when profiling
+   *
+   * @return string representation of a stack trace
+   */
+  String getPointOfOrigin();
 
-    int getOwnerFetchSize();
+  int getOwnerFetchSize();
 
-    Query getOwningQuery();
+  Query getOwningQuery();
 
-    int getOwningStatementMaxRows();
+  int getOwningStatementMaxRows();
 
-    int getOwningStatementFetchSize();
+  int getOwningStatementFetchSize();
 
-    long getOwningStatementServerId();
-
+  long getOwningStatementServerId();
 }

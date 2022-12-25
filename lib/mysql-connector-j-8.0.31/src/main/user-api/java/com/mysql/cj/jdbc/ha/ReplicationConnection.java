@@ -29,162 +29,151 @@
 
 package com.mysql.cj.jdbc.ha;
 
+import com.mysql.cj.jdbc.JdbcConnection;
 import java.sql.SQLException;
 
-import com.mysql.cj.jdbc.JdbcConnection;
-
 public interface ReplicationConnection extends JdbcConnection {
-    public long getConnectionGroupId();
+  public long getConnectionGroupId();
 
-    public JdbcConnection getCurrentConnection();
+  public JdbcConnection getCurrentConnection();
 
-    public JdbcConnection getSourceConnection();
+  public JdbcConnection getSourceConnection();
 
-    /**
-     * Use {@link #getSourceConnection()} instead.
-     * 
-     * @return {@link JdbcConnection}
-     * @deprecated
-     */
-    @Deprecated
-    default public JdbcConnection getMasterConnection() {
-        return getSourceConnection();
-    }
+  /**
+   * Use {@link #getSourceConnection()} instead.
+   *
+   * @return {@link JdbcConnection}
+   * @deprecated
+   */
+  @Deprecated
+  public default JdbcConnection getMasterConnection() {
+    return getSourceConnection();
+  }
 
-    public void promoteReplicaToSource(String host) throws SQLException;
+  public void promoteReplicaToSource(String host) throws SQLException;
 
-    /**
-     * Use {@link #promoteReplicaToSource(String)} instead.
-     * 
-     * @param host
-     *            host name
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default public void promoteSlaveToMaster(String host) throws SQLException {
-        promoteReplicaToSource(host);
-    }
+  /**
+   * Use {@link #promoteReplicaToSource(String)} instead.
+   *
+   * @param host host name
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  public default void promoteSlaveToMaster(String host) throws SQLException {
+    promoteReplicaToSource(host);
+  }
 
-    public void removeSourceHost(String host) throws SQLException;
+  public void removeSourceHost(String host) throws SQLException;
 
-    /**
-     * Use {@link #removeSourceHost(String)} instead.
-     * 
-     * @param host
-     *            host name
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default public void removeMasterHost(String host) throws SQLException {
-        removeSourceHost(host);
-    }
+  /**
+   * Use {@link #removeSourceHost(String)} instead.
+   *
+   * @param host host name
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  public default void removeMasterHost(String host) throws SQLException {
+    removeSourceHost(host);
+  }
 
-    public void removeSourceHost(String host, boolean waitUntilNotInUse) throws SQLException;
+  public void removeSourceHost(String host, boolean waitUntilNotInUse) throws SQLException;
 
-    /**
-     * Use {@link #removeSourceHost(String, boolean)} instead.
-     * 
-     * @param host
-     *            host name
-     * @param waitUntilNotInUse
-     *            remove immediately or wait for it's release
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default public void removeMasterHost(String host, boolean waitUntilNotInUse) throws SQLException {
-        removeSourceHost(host, waitUntilNotInUse);
-    }
+  /**
+   * Use {@link #removeSourceHost(String, boolean)} instead.
+   *
+   * @param host host name
+   * @param waitUntilNotInUse remove immediately or wait for it's release
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  public default void removeMasterHost(String host, boolean waitUntilNotInUse) throws SQLException {
+    removeSourceHost(host, waitUntilNotInUse);
+  }
 
-    public boolean isHostSource(String host);
+  public boolean isHostSource(String host);
 
-    /**
-     * Use {@link #isHostSource(String)} instead.
-     * 
-     * @param host
-     *            host name
-     * @return true if it's a source host
-     * @deprecated
-     */
-    @Deprecated
-    default public boolean isHostMaster(String host) {
-        return isHostSource(host);
-    }
+  /**
+   * Use {@link #isHostSource(String)} instead.
+   *
+   * @param host host name
+   * @return true if it's a source host
+   * @deprecated
+   */
+  @Deprecated
+  public default boolean isHostMaster(String host) {
+    return isHostSource(host);
+  }
 
-    public JdbcConnection getReplicaConnection();
+  public JdbcConnection getReplicaConnection();
 
-    /**
-     * Use {@link #getReplicaConnection()} instead.
-     * 
-     * @return {@link JdbcConnection}
-     * @deprecated
-     */
-    @Deprecated
-    default public JdbcConnection getSlavesConnection() {
-        return getReplicaConnection();
-    }
+  /**
+   * Use {@link #getReplicaConnection()} instead.
+   *
+   * @return {@link JdbcConnection}
+   * @deprecated
+   */
+  @Deprecated
+  public default JdbcConnection getSlavesConnection() {
+    return getReplicaConnection();
+  }
 
-    public void addReplicaHost(String host) throws SQLException;
+  public void addReplicaHost(String host) throws SQLException;
 
-    /**
-     * Use {@link #addReplicaHost(String)} instead.
-     * 
-     * @param host
-     *            host name
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default public void addSlaveHost(String host) throws SQLException {
-        addReplicaHost(host);
-    }
+  /**
+   * Use {@link #addReplicaHost(String)} instead.
+   *
+   * @param host host name
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  public default void addSlaveHost(String host) throws SQLException {
+    addReplicaHost(host);
+  }
 
-    public void removeReplica(String host) throws SQLException;
+  public void removeReplica(String host) throws SQLException;
 
-    /**
-     * Use {@link #removeReplica(String)} instead.
-     * 
-     * @param host
-     *            host name
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default public void removeSlave(String host) throws SQLException {
-        removeReplica(host);
-    }
+  /**
+   * Use {@link #removeReplica(String)} instead.
+   *
+   * @param host host name
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  public default void removeSlave(String host) throws SQLException {
+    removeReplica(host);
+  }
 
-    public void removeReplica(String host, boolean closeGently) throws SQLException;
+  public void removeReplica(String host, boolean closeGently) throws SQLException;
 
-    /**
-     * Use {@link #removeReplica(String, boolean)} instead.
-     * 
-     * @param host
-     *            host name
-     * @param closeGently
-     *            mode
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default public void removeSlave(String host, boolean closeGently) throws SQLException {
-        removeReplica(host, closeGently);
-    }
+  /**
+   * Use {@link #removeReplica(String, boolean)} instead.
+   *
+   * @param host host name
+   * @param closeGently mode
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  public default void removeSlave(String host, boolean closeGently) throws SQLException {
+    removeReplica(host, closeGently);
+  }
 
-    public boolean isHostReplica(String host);
+  public boolean isHostReplica(String host);
 
-    /**
-     * Use {@link #isHostReplica(String)} instead.
-     * 
-     * @param host
-     *            host name
-     * @return true if it's a replica
-     * @deprecated
-     */
-    @Deprecated
-    default public boolean isHostSlave(String host) {
-        return isHostReplica(host);
-    }
+  /**
+   * Use {@link #isHostReplica(String)} instead.
+   *
+   * @param host host name
+   * @return true if it's a replica
+   * @deprecated
+   */
+  @Deprecated
+  public default boolean isHostSlave(String host) {
+    return isHostReplica(host);
+  }
 }

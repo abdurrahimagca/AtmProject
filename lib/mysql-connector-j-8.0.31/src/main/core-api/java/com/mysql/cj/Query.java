@@ -29,90 +29,91 @@
 
 package com.mysql.cj;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.mysql.cj.protocol.Message;
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 import com.mysql.cj.protocol.Resultset;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public interface Query {
 
-    public enum CancelStatus {
-        NOT_CANCELED, CANCELED_BY_USER, CANCELED_BY_TIMEOUT;
-    }
+  public enum CancelStatus {
+    NOT_CANCELED,
+    CANCELED_BY_USER,
+    CANCELED_BY_TIMEOUT;
+  }
 
-    /**
-     * Returns the query id used when profiling
-     * 
-     * @return id
-     */
-    int getId();
+  /**
+   * Returns the query id used when profiling
+   *
+   * @return id
+   */
+  int getId();
 
-    void setCancelStatus(CancelStatus cs);
+  void setCancelStatus(CancelStatus cs);
 
-    void checkCancelTimeout();
+  void checkCancelTimeout();
 
-    <T extends Resultset, M extends Message> ProtocolEntityFactory<T, M> getResultSetFactory();
+  <T extends Resultset, M extends Message> ProtocolEntityFactory<T, M> getResultSetFactory();
 
-    Session getSession();
+  Session getSession();
 
-    Object getCancelTimeoutMutex();
+  Object getCancelTimeoutMutex();
 
-    void resetCancelledState();
+  void resetCancelledState();
 
-    void closeQuery();
+  void closeQuery();
 
-    void addBatch(Object batch);
+  void addBatch(Object batch);
 
-    /**
-     * Get the batched args as added by the addBatch method(s).
-     * The list is unmodifiable and might contain any combination of String,
-     * ClientPreparedQueryBindings, or ServerPreparedQueryBindings depending on how the parameters were
-     * batched.
-     * 
-     * @return an unmodifiable List of batched args
-     */
-    List<Object> getBatchedArgs();
+  /**
+   * Get the batched args as added by the addBatch method(s). The list is unmodifiable and might
+   * contain any combination of String, ClientPreparedQueryBindings, or ServerPreparedQueryBindings
+   * depending on how the parameters were batched.
+   *
+   * @return an unmodifiable List of batched args
+   */
+  List<Object> getBatchedArgs();
 
-    void clearBatchedArgs();
+  void clearBatchedArgs();
 
-    QueryAttributesBindings getQueryAttributesBindings();
+  QueryAttributesBindings getQueryAttributesBindings();
 
-    int getResultFetchSize();
+  int getResultFetchSize();
 
-    void setResultFetchSize(int fetchSize);
+  void setResultFetchSize(int fetchSize);
 
-    Resultset.Type getResultType();
+  Resultset.Type getResultType();
 
-    void setResultType(Resultset.Type resultSetType);
+  void setResultType(Resultset.Type resultSetType);
 
-    int getTimeoutInMillis();
+  int getTimeoutInMillis();
 
-    void setTimeoutInMillis(int timeoutInMillis);
+  void setTimeoutInMillis(int timeoutInMillis);
 
-    void setExecuteTime(long executeTime);
+  void setExecuteTime(long executeTime);
 
-    /**
-     * Returns the elapsed time for the server to execute the query.
-     *
-     * @return the time it took for the server to execute the query.
-     */
-    long getExecuteTime();
+  /**
+   * Returns the elapsed time for the server to execute the query.
+   *
+   * @return the time it took for the server to execute the query.
+   */
+  long getExecuteTime();
 
-    CancelQueryTask startQueryTimer(Query stmtToCancel, int timeout);
+  CancelQueryTask startQueryTimer(Query stmtToCancel, int timeout);
 
-    AtomicBoolean getStatementExecuting();
+  AtomicBoolean getStatementExecuting();
 
-    String getCurrentDatabase();
+  String getCurrentDatabase();
 
-    void setCurrentDatabase(String currentDb);
+  void setCurrentDatabase(String currentDb);
 
-    boolean isClearWarningsCalled();
+  boolean isClearWarningsCalled();
 
-    void setClearWarningsCalled(boolean clearWarningsCalled);
+  void setClearWarningsCalled(boolean clearWarningsCalled);
 
-    void statementBegins();
+  void statementBegins();
 
-    void stopQueryTimer(CancelQueryTask timeoutTask, boolean rethrowCancelReason, boolean checkCancelTimeout);
+  void stopQueryTimer(
+      CancelQueryTask timeoutTask, boolean rethrowCancelReason, boolean checkCancelTimeout);
 }

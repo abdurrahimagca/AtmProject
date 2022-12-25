@@ -35,18 +35,30 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.concurrent.Callable;
 
 public class CommonAsserts {
-    protected static <EX extends Throwable> EX assertThrows(Class<EX> throwable, String msgMatchesRegex, Callable<?> testRoutine) {
-        try {
-            testRoutine.call();
-        } catch (Throwable t) {
-            assertTrue(throwable.isAssignableFrom(t.getClass()),
-                    "Expected exception of type '" + throwable.getName() + "' but instead a exception of type '" + t.getClass().getName() + "' was thrown.");
-            assertTrue(t.getMessage().matches(msgMatchesRegex), "The error message [" + t.getMessage() + "] was expected to match [" + msgMatchesRegex + "].");
-            return throwable.cast(t);
-        }
-        fail("Expected exception of type '" + throwable.getName() + "'.");
-
-        // never reaches here
-        return null;
+  protected static <EX extends Throwable> EX assertThrows(
+      Class<EX> throwable, String msgMatchesRegex, Callable<?> testRoutine) {
+    try {
+      testRoutine.call();
+    } catch (Throwable t) {
+      assertTrue(
+          throwable.isAssignableFrom(t.getClass()),
+          "Expected exception of type '"
+              + throwable.getName()
+              + "' but instead a exception of type '"
+              + t.getClass().getName()
+              + "' was thrown.");
+      assertTrue(
+          t.getMessage().matches(msgMatchesRegex),
+          "The error message ["
+              + t.getMessage()
+              + "] was expected to match ["
+              + msgMatchesRegex
+              + "].");
+      return throwable.cast(t);
     }
+    fail("Expected exception of type '" + throwable.getName() + "'.");
+
+    // never reaches here
+    return null;
+  }
 }

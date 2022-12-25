@@ -29,39 +29,39 @@
 
 package com.mysql.cj.protocol.a;
 
+import com.mysql.cj.protocol.MessageSender;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
-import com.mysql.cj.protocol.MessageSender;
-
 /**
- * Simple implementation of {@link MessageSender} which handles the transmission of logical MySQL packets to the provided output stream. Large packets will be
- * split into multiple chunks.
+ * Simple implementation of {@link MessageSender} which handles the transmission of logical MySQL
+ * packets to the provided output stream. Large packets will be split into multiple chunks.
  */
 public class SimplePacketSender implements MessageSender<NativePacketPayload> {
-    private BufferedOutputStream outputStream;
+  private BufferedOutputStream outputStream;
 
-    public SimplePacketSender(BufferedOutputStream outputStream) {
-        this.outputStream = outputStream;
-    }
+  public SimplePacketSender(BufferedOutputStream outputStream) {
+    this.outputStream = outputStream;
+  }
 
-    public void send(byte[] packet, int packetLen, byte packetSequence) throws IOException {
-        PacketSplitter packetSplitter = new PacketSplitter(packetLen);
-        while (packetSplitter.nextPacket()) {
-            this.outputStream.write(NativeUtils.encodeMysqlThreeByteInteger(packetSplitter.getPacketLen()));
-            this.outputStream.write(packetSequence++);
-            this.outputStream.write(packet, packetSplitter.getOffset(), packetSplitter.getPacketLen());
-        }
-        this.outputStream.flush();
+  public void send(byte[] packet, int packetLen, byte packetSequence) throws IOException {
+    PacketSplitter packetSplitter = new PacketSplitter(packetLen);
+    while (packetSplitter.nextPacket()) {
+      this.outputStream.write(
+          NativeUtils.encodeMysqlThreeByteInteger(packetSplitter.getPacketLen()));
+      this.outputStream.write(packetSequence++);
+      this.outputStream.write(packet, packetSplitter.getOffset(), packetSplitter.getPacketLen());
     }
+    this.outputStream.flush();
+  }
 
-    @Override
-    public MessageSender<NativePacketPayload> undecorateAll() {
-        return this;
-    }
+  @Override
+  public MessageSender<NativePacketPayload> undecorateAll() {
+    return this;
+  }
 
-    @Override
-    public MessageSender<NativePacketPayload> undecorate() {
-        return this;
-    }
+  @Override
+  public MessageSender<NativePacketPayload> undecorate() {
+    return this;
+  }
 }

@@ -29,18 +29,16 @@
 
 package com.mysql.cj.jdbc.ha;
 
-import java.sql.SQLException;
-
 import com.mysql.cj.jdbc.JdbcConnection;
+import java.sql.SQLException;
 
 public interface LoadBalancedConnection extends JdbcConnection {
 
-    boolean addHost(String host) throws SQLException;
+  boolean addHost(String host) throws SQLException;
 
-    void removeHost(String host) throws SQLException;
+  void removeHost(String host) throws SQLException;
 
-    void removeHostWhenNotInUse(String host) throws SQLException;
+  void removeHostWhenNotInUse(String host) throws SQLException;
 
-    void ping(boolean allConnections) throws SQLException;
-
+  void ping(boolean allConnections) throws SQLException;
 }

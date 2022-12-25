@@ -29,136 +29,141 @@
 
 package com.mysql.cj.jdbc.ha;
 
+import com.mysql.cj.jdbc.ConnectionImpl;
+import com.mysql.cj.jdbc.JdbcConnection;
 import java.lang.reflect.InvocationHandler;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import com.mysql.cj.jdbc.ConnectionImpl;
-import com.mysql.cj.jdbc.JdbcConnection;
-
 /**
- * A balancing strategy that starts at a random point, and then advances in the list (wrapping around) for each new pickConnection() call.
- * 
- * The initial point selection, and subsequent point selections are blocklist-aware.
+ * A balancing strategy that starts at a random point, and then advances in the list (wrapping
+ * around) for each new pickConnection() call.
+ *
+ * <p>The initial point selection, and subsequent point selections are blocklist-aware.
  */
 public class SequentialBalanceStrategy implements BalanceStrategy {
-    private int currentHostIndex = -1;
+  private int currentHostIndex = -1;
 
-    public SequentialBalanceStrategy() {
-    }
+  public SequentialBalanceStrategy() {}
 
-    @Override
-    public ConnectionImpl pickConnection(InvocationHandler proxy, List<String> configuredHosts, Map<String, JdbcConnection> liveConnections,
-            long[] responseTimes, int numRetries) throws SQLException {
-        int numHosts = configuredHosts.size();
+  @Override
+  public ConnectionImpl pickConnection(
+      InvocationHandler proxy,
+      List<String> configuredHosts,
+      Map<String, JdbcConnection> liveConnections,
+      long[] responseTimes,
+      int numRetries)
+      throws SQLException {
+    int numHosts = configuredHosts.size();
 
-        SQLException ex = null;
+    SQLException ex = null;
 
-        Map<String, Long> blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist();
+    Map<String, Long> blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist();
 
-        for (int attempts = 0; attempts < numRetries; attempts++) {
-            if (numHosts == 1) {
-                this.currentHostIndex = 0; // pathological case
-            } else if (this.currentHostIndex == -1) {
-                int random = (int) Math.floor((Math.random() * numHosts));
+    for (int attempts = 0; attempts < numRetries; attempts++) {
+      if (numHosts == 1) {
+        this.currentHostIndex = 0; // pathological case
+      } else if (this.currentHostIndex == -1) {
+        int random = (int) Math.floor((Math.random() * numHosts));
 
-                for (int i = random; i < numHosts; i++) {
-                    if (!blockList.containsKey(configuredHosts.get(i))) {
-                        this.currentHostIndex = i;
-                        break;
-                    }
-                }
-
-                if (this.currentHostIndex == -1) {
-                    for (int i = 0; i < random; i++) {
-                        if (!blockList.containsKey(configuredHosts.get(i))) {
-                            this.currentHostIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                if (this.currentHostIndex == -1) {
-                    blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist(); // it may have changed
-                    // and the proxy returns a copy
-
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                    }
-
-                    continue; // retry
-                }
-            } else {
-
-                int i = this.currentHostIndex + 1;
-                boolean foundGoodHost = false;
-
-                for (; i < numHosts; i++) {
-                    if (!blockList.containsKey(configuredHosts.get(i))) {
-                        this.currentHostIndex = i;
-                        foundGoodHost = true;
-                        break;
-                    }
-                }
-
-                if (!foundGoodHost) {
-                    for (i = 0; i < this.currentHostIndex; i++) {
-                        if (!blockList.containsKey(configuredHosts.get(i))) {
-                            this.currentHostIndex = i;
-                            foundGoodHost = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!foundGoodHost) {
-                    blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist(); // it may have changed
-                    // and the proxy returns a copy
-
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                    }
-
-                    continue; // retry
-                }
-            }
-
-            String hostPortSpec = configuredHosts.get(this.currentHostIndex);
-
-            ConnectionImpl conn = (ConnectionImpl) liveConnections.get(hostPortSpec);
-
-            if (conn == null) {
-                try {
-                    conn = ((LoadBalancedConnectionProxy) proxy).createConnectionForHost(hostPortSpec);
-                } catch (SQLException sqlEx) {
-                    ex = sqlEx;
-
-                    if (((LoadBalancedConnectionProxy) proxy).shouldExceptionTriggerConnectionSwitch(sqlEx)) {
-
-                        ((LoadBalancedConnectionProxy) proxy).addToGlobalBlocklist(hostPortSpec);
-
-                        try {
-                            Thread.sleep(250);
-                        } catch (InterruptedException e) {
-                        }
-
-                        continue;
-                    }
-                    throw sqlEx;
-                }
-            }
-
-            return conn;
+        for (int i = random; i < numHosts; i++) {
+          if (!blockList.containsKey(configuredHosts.get(i))) {
+            this.currentHostIndex = i;
+            break;
+          }
         }
 
-        if (ex != null) {
-            throw ex;
+        if (this.currentHostIndex == -1) {
+          for (int i = 0; i < random; i++) {
+            if (!blockList.containsKey(configuredHosts.get(i))) {
+              this.currentHostIndex = i;
+              break;
+            }
+          }
         }
 
-        return null; // we won't get here, compiler can't tell
+        if (this.currentHostIndex == -1) {
+          blockList =
+              ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist(); // it may have changed
+          // and the proxy returns a copy
+
+          try {
+            Thread.sleep(250);
+          } catch (InterruptedException e) {
+          }
+
+          continue; // retry
+        }
+      } else {
+
+        int i = this.currentHostIndex + 1;
+        boolean foundGoodHost = false;
+
+        for (; i < numHosts; i++) {
+          if (!blockList.containsKey(configuredHosts.get(i))) {
+            this.currentHostIndex = i;
+            foundGoodHost = true;
+            break;
+          }
+        }
+
+        if (!foundGoodHost) {
+          for (i = 0; i < this.currentHostIndex; i++) {
+            if (!blockList.containsKey(configuredHosts.get(i))) {
+              this.currentHostIndex = i;
+              foundGoodHost = true;
+              break;
+            }
+          }
+        }
+
+        if (!foundGoodHost) {
+          blockList =
+              ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist(); // it may have changed
+          // and the proxy returns a copy
+
+          try {
+            Thread.sleep(250);
+          } catch (InterruptedException e) {
+          }
+
+          continue; // retry
+        }
+      }
+
+      String hostPortSpec = configuredHosts.get(this.currentHostIndex);
+
+      ConnectionImpl conn = (ConnectionImpl) liveConnections.get(hostPortSpec);
+
+      if (conn == null) {
+        try {
+          conn = ((LoadBalancedConnectionProxy) proxy).createConnectionForHost(hostPortSpec);
+        } catch (SQLException sqlEx) {
+          ex = sqlEx;
+
+          if (((LoadBalancedConnectionProxy) proxy).shouldExceptionTriggerConnectionSwitch(sqlEx)) {
+
+            ((LoadBalancedConnectionProxy) proxy).addToGlobalBlocklist(hostPortSpec);
+
+            try {
+              Thread.sleep(250);
+            } catch (InterruptedException e) {
+            }
+
+            continue;
+          }
+          throw sqlEx;
+        }
+      }
+
+      return conn;
     }
 
+    if (ex != null) {
+      throw ex;
+    }
+
+    return null; // we won't get here, compiler can't tell
+  }
 }

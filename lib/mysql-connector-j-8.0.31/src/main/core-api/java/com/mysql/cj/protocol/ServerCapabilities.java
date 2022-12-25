@@ -32,21 +32,22 @@ package com.mysql.cj.protocol;
 import com.mysql.cj.ServerVersion;
 
 /**
- * Represents server capabilities, retrieved right after creating physical connection and before handshake.
+ * Represents server capabilities, retrieved right after creating physical connection and before
+ * handshake.
  */
 public interface ServerCapabilities {
 
-    int getCapabilityFlags();
+  int getCapabilityFlags();
 
-    void setCapabilityFlags(int capabilityFlags);
+  void setCapabilityFlags(int capabilityFlags);
 
-    ServerVersion getServerVersion();
+  ServerVersion getServerVersion();
 
-    long getThreadId();
+  long getThreadId();
 
-    void setThreadId(long threadId);
+  void setThreadId(long threadId);
 
-    boolean serverSupportsFracSecs();
+  boolean serverSupportsFracSecs();
 
-    int getServerDefaultCollationIndex();
+  int getServerDefaultCollationIndex();
 }

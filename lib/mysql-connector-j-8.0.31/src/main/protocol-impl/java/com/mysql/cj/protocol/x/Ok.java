@@ -32,12 +32,8 @@ package com.mysql.cj.protocol.x;
 import com.mysql.cj.QueryResult;
 import com.mysql.cj.protocol.ProtocolEntity;
 
-/**
- * ProtocolEntity representing an OK message.
- */
+/** ProtocolEntity representing an OK message. */
 public class Ok implements ProtocolEntity, QueryResult {
 
-    public Ok() {
-    }
-
+  public Ok() {}
 }

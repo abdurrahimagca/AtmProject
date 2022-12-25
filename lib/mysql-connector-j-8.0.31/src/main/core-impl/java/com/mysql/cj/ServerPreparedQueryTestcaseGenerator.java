@@ -29,105 +29,107 @@
 
 package com.mysql.cj;
 
-import java.io.IOException;
-
 import com.mysql.cj.protocol.ColumnDefinition;
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.protocol.a.NativePacketPayload;
 import com.mysql.cj.util.TestUtils;
+import java.io.IOException;
 
-//TODO should not be protocol-specific
+// TODO should not be protocol-specific
 
 public class ServerPreparedQueryTestcaseGenerator extends ServerPreparedQuery {
 
-    public ServerPreparedQueryTestcaseGenerator(NativeSession sess) {
-        super(sess);
+  public ServerPreparedQueryTestcaseGenerator(NativeSession sess) {
+    super(sess);
+  }
+
+  @Override
+  public void closeQuery() {
+    dumpCloseForTestcase();
+    super.closeQuery();
+  }
+
+  private void dumpCloseForTestcase() {
+    StringBuilder buf = new StringBuilder();
+    this.session.getProtocol().generateQueryCommentBlock(buf);
+    buf.append("DEALLOCATE PREPARE debug_stmt_");
+    buf.append(this.statementId);
+    buf.append(";\n");
+
+    TestUtils.dumpTestcaseQuery(buf.toString());
+  }
+
+  @Override
+  public void serverPrepare(String sql) throws IOException {
+    dumpPrepareForTestcase();
+    super.serverPrepare(sql);
+  }
+
+  private void dumpPrepareForTestcase() {
+    StringBuilder buf = new StringBuilder(this.getOriginalSql().length() + 64);
+
+    this.session.getProtocol().generateQueryCommentBlock(buf);
+
+    buf.append("PREPARE debug_stmt_");
+    buf.append(this.statementId);
+    buf.append(" FROM \"");
+    buf.append(this.getOriginalSql());
+    buf.append("\";\n");
+
+    TestUtils.dumpTestcaseQuery(buf.toString());
+  }
+
+  @Override
+  public <T extends Resultset> T serverExecute(
+      int maxRowsToRetrieve,
+      boolean createStreamingResultSet,
+      ColumnDefinition metadata,
+      ProtocolEntityFactory<T, NativePacketPayload> resultSetFactory) {
+    dumpExecuteForTestcase();
+    return super.serverExecute(
+        maxRowsToRetrieve, createStreamingResultSet, metadata, resultSetFactory);
+  }
+
+  private void dumpExecuteForTestcase() {
+    StringBuilder buf = new StringBuilder();
+
+    for (int i = 0; i < this.getParameterCount(); i++) {
+      this.session.getProtocol().generateQueryCommentBlock(buf);
+
+      buf.append("SET @debug_stmt_param");
+      buf.append(this.statementId);
+      buf.append("_");
+      buf.append(i);
+      buf.append("=");
+
+      BindValue bv = this.queryBindings.getBindValues()[i];
+      buf.append(bv.isNull() ? "NULL" : bv.getString());
+
+      buf.append(";\n");
     }
 
-    @Override
-    public void closeQuery() {
-        dumpCloseForTestcase();
-        super.closeQuery();
-    }
+    this.session.getProtocol().generateQueryCommentBlock(buf);
 
-    private void dumpCloseForTestcase() {
-        StringBuilder buf = new StringBuilder();
-        this.session.getProtocol().generateQueryCommentBlock(buf);
-        buf.append("DEALLOCATE PREPARE debug_stmt_");
-        buf.append(this.statementId);
-        buf.append(";\n");
+    buf.append("EXECUTE debug_stmt_");
+    buf.append(this.statementId);
 
-        TestUtils.dumpTestcaseQuery(buf.toString());
-    }
-
-    @Override
-    public void serverPrepare(String sql) throws IOException {
-        dumpPrepareForTestcase();
-        super.serverPrepare(sql);
-    }
-
-    private void dumpPrepareForTestcase() {
-        StringBuilder buf = new StringBuilder(this.getOriginalSql().length() + 64);
-
-        this.session.getProtocol().generateQueryCommentBlock(buf);
-
-        buf.append("PREPARE debug_stmt_");
-        buf.append(this.statementId);
-        buf.append(" FROM \"");
-        buf.append(this.getOriginalSql());
-        buf.append("\";\n");
-
-        TestUtils.dumpTestcaseQuery(buf.toString());
-    }
-
-    @Override
-    public <T extends Resultset> T serverExecute(int maxRowsToRetrieve, boolean createStreamingResultSet, ColumnDefinition metadata,
-            ProtocolEntityFactory<T, NativePacketPayload> resultSetFactory) {
-        dumpExecuteForTestcase();
-        return super.serverExecute(maxRowsToRetrieve, createStreamingResultSet, metadata, resultSetFactory);
-    }
-
-    private void dumpExecuteForTestcase() {
-        StringBuilder buf = new StringBuilder();
-
-        for (int i = 0; i < this.getParameterCount(); i++) {
-            this.session.getProtocol().generateQueryCommentBlock(buf);
-
-            buf.append("SET @debug_stmt_param");
-            buf.append(this.statementId);
-            buf.append("_");
-            buf.append(i);
-            buf.append("=");
-
-            BindValue bv = this.queryBindings.getBindValues()[i];
-            buf.append(bv.isNull() ? "NULL" : bv.getString());
-
-            buf.append(";\n");
+    if (this.getParameterCount() > 0) {
+      buf.append(" USING ");
+      for (int i = 0; i < this.getParameterCount(); i++) {
+        if (i > 0) {
+          buf.append(", ");
         }
 
-        this.session.getProtocol().generateQueryCommentBlock(buf);
-
-        buf.append("EXECUTE debug_stmt_");
+        buf.append("@debug_stmt_param");
         buf.append(this.statementId);
-
-        if (this.getParameterCount() > 0) {
-            buf.append(" USING ");
-            for (int i = 0; i < this.getParameterCount(); i++) {
-                if (i > 0) {
-                    buf.append(", ");
-                }
-
-                buf.append("@debug_stmt_param");
-                buf.append(this.statementId);
-                buf.append("_");
-                buf.append(i);
-
-            }
-        }
-
-        buf.append(";\n");
-
-        TestUtils.dumpTestcaseQuery(buf.toString());
+        buf.append("_");
+        buf.append(i);
+      }
     }
+
+    buf.append(";\n");
+
+    TestUtils.dumpTestcaseQuery(buf.toString());
+  }
 }

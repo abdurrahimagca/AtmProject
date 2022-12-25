@@ -4,13 +4,18 @@ import java.sql.SQLException;
 public class Card {
 
     protected static String cardNum;
+
+
     protected static String pin;
 
-    public Card(String cardNum, String pin) {
+    public Card(String cardNum) {
         this.cardNum = cardNum;
-        this.pin = pin;
+        this.pin = "0000";
     }
 
+    public static void setPin(String pin) {
+        Card.pin = pin;
+    }
 
     public static String getCardNum() {
         return cardNum;

@@ -11,8 +11,7 @@ public class SqlQuery {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/atm", "root", "root");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/atm", "root", "root");
             Statement stmt = con.createStatement();
             return stmt.executeQuery(query);
 
@@ -26,8 +25,7 @@ public class SqlQuery {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/atm", "root", "root");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/atm", "root", "root");
             Statement stmt = con.createStatement();
             stmt.executeUpdate(query);
 
@@ -42,8 +40,7 @@ public class SqlQuery {
         String temp = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/atm", "root", "root");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/atm", "root", "root");
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {

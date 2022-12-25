@@ -4,14 +4,33 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
+        String CardNum;
         do {
             System.out.println("Lutfen Kart Numaranizi giriniz... ");
-            String CardNum = sc.next();
-            System.out.println("Lutfen pininizi giriniz... ");
-            String Pin = sc.next();
+            CardNum = sc.next();
+            Card card = new Card(CardNum);
 
-            Card card = new Login(CardNum, Pin);
-        } while (!Login.login());
+        } while (!Login.isCardValid());
+        int attemps = -1;
+        do {
+
+            System.out.println("Hosgeldiniz! lutfen bir pin saglayin");
+            if (attemps > 3) {
+                SqlQuery.UpdateData("UPDATE clients SET PIN='BLOCKED' WHERE CardNum=" + CardNum);
+                System.out.println("Sifreniz bloke edilmistir lutfen musteri hizmetleri ile gorusun.. ");
+                System.exit(2);
+            } else {
+
+                System.out.println("Lutfen pininizi giriniz... ");
+                String Pin = sc.next();
+                Card.setPin(Pin);
+                attemps++;
+
+            }
+
+
+        } while (!Login.isPinTrue());
+
 
         String currentID = Card.returnID();
         int checker = -1;
@@ -56,8 +75,7 @@ public class Main {
                     amount = scd.nextDouble();
                     if (Transactions.transfer(currentID, IBAN, amount)) {
                         System.out.println("para gonderildi");
-                    }
-                    else
+                    } else
                         System.out.println("para gonderilemedi.");
                     break;
                 case 4:

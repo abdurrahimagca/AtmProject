@@ -73,6 +73,7 @@ public class Transactions {
 
     //todo: para gönder
     public static boolean transfer(String id, String IBAN, double amount) {
+        //todo: iban uzunlugunun kontrol edilmesi gerekli
         //todo: kullanici kendi ibanina transfer para
         double depositSender, depositReceiver;
         String temp = SqlQuery.StringGetSQL("SELECT deposit FROM clients WHERE id=" + id, "deposit");
@@ -81,7 +82,8 @@ public class Transactions {
         if (amount < 1) {
             System.out.println("Gondereceginiz tutar 0'dan buyuk olmalıdır. ");
             return false;
-        } if (depositSender < amount) {
+        }
+        if (depositSender < amount) {
             System.out.println("Bakiye yetersiz. ");
             return false;
         }
@@ -106,13 +108,10 @@ public class Transactions {
         debt = stringToDouble(temp);
         temp = SqlQuery.StringGetSQL("SELECT deposit FROM clients WHERE id=" + id, "deposit");
         deposit = stringToDouble(temp);
-        if (amount > deposit)
-        {
+        if (amount > deposit) {
             System.out.println("Odemek istediginiz tutar bakiyenizden fazla olamaz. ");
             return false;
-        }
-
-        else if (amount > debt) {
+        } else if (amount > debt) {
 
             deposit = deposit - debt;
             debt = 0;

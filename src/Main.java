@@ -11,17 +11,16 @@ public class Main {
             String Pin = sc.next();
 
             Card card = new Login(CardNum, Pin);
-        }while(!Login.login());
+        } while (!Login.login());
         //todo: sqlden veri alınan her fonksiyon sqlquery içine atılmalı
         String currentID = Card.returnID();
 
 
-
         //todo: do-while dongusu icinde opsiyonlar sunulacak
-        int checker=-1;
+        int checker = -1;
         do {
             //terminal her seferinde temizlenmeli
-            System.out.println("Kullanibilir bakiyeniz: "+ SqlQuery.StringGetSQL("SELECT deposit FROM clients WHERE id=" + currentID,"deposit"));
+            System.out.println("Kullanibilir bakiyeniz: " + SqlQuery.StringGetSQL("SELECT deposit FROM clients WHERE id=" + currentID, "deposit"));
             System.out.println("Lutfen yapmak istediginiz islemi seciniz. ");
             System.out.println("1: Para Cek     2: Para Yatir");
             System.out.println("3: Para Gonder  4: Borc Ode");
@@ -29,30 +28,25 @@ public class Main {
             checker = sc.nextInt();
             Scanner scd = new Scanner(System.in);
             double amount;
-            switch (checker){
+            switch (checker) {
                 case 0:
                     System.out.println("Yine Bekleriz");
                     break;
                 case 1:
                     System.out.println("lutfen cekmek istediginiz tutari giriniz, bu minimum 10 en fazla 1000'dir");
                     amount = scd.nextDouble();
-                    if(Transactions.withdraw(currentID,amount))
-                    {
+                    if (Transactions.withdraw(currentID, amount)) {
                         System.out.println("para cekme basarili");
-                    }
-                    else{
+                    } else {
                         System.out.println("para cekme islemi basarisiz");
                     }
                     break;
                 case 2:
                     System.out.println("Lutfen yatirmak istediginiz tutari giriniz. ");
                     amount = scd.nextDouble();
-                    if(Transactions.deposit(currentID,amount))
-                    {
+                    if (Transactions.deposit(currentID, amount)) {
                         System.out.println("para yatirma islemi basarili.");
-                    }
-                    else
-                    {
+                    } else {
                         System.out.println("para yatirma islemi basarisiz.");
                     }
                     break;
@@ -62,8 +56,7 @@ public class Main {
                     String IBAN = sc.next();
                     System.out.println("Gondermek istediginiz miktari giriniz.. ");
                     amount = scd.nextDouble();
-                    if(Transactions.transfer(currentID, IBAN, amount))
-                    {
+                    if (Transactions.transfer(currentID, IBAN, amount)) {
                         System.out.println("para gonderildi");
                     }
                     break;
@@ -72,7 +65,7 @@ public class Main {
                     System.out.printf(SqlQuery.StringGetSQL("SELECT debt FROM clients WHERE id=" + currentID, "debt"));
                     System.out.printf(" lutfen odemek istediginiz tutari giriniz.. ");
                     amount = scd.nextDouble();
-                    if(Transactions.payOffDebt(currentID,amount))
+                    if (Transactions.payOffDebt(currentID, amount))
                         System.out.println("borcunuz basariyla odendi");
                     break;
                 default:
@@ -80,7 +73,7 @@ public class Main {
 
             }
 
-        }while(checker != 0);
+        } while (checker != 0);
 
 
     }

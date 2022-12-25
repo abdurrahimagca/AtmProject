@@ -37,19 +37,18 @@ public class SqlQuery {
         }
 
     }
-    public static String StringGetSQL(String query, String label)
-    {
-        String temp=null;
+
+    public static String StringGetSQL(String query, String label) {
+        String temp = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/atm", "root", "root");
             Statement stmt = con.createStatement();
-            ResultSet rs  = stmt.executeQuery(query);
-            while (rs.next())
-                {
-                    temp = rs.getString(label);
-                }
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                temp = rs.getString(label);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

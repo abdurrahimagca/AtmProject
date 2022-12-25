@@ -4,14 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01ca9391-8f45-420c-b5f5-725b38e99d11" name="Changes" comment="para cekme fonksiyonu">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/69b12848-d3f2-4117-b868-1989933dbc32.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/69b12848-d3f2-4117-b868-1989933dbc32.xml" afterDir="false" />
+    <list default="true" id="01ca9391-8f45-420c-b5f5-725b38e99d11" name="Changes" comment="beautify">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Atm/Card.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/Card.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Atm/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/Login.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Atm/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Atm/SqlQuery.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Atm/SqlQuery.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Login.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SqlQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SqlQuery.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Transactions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Transactions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,6 +29,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$PROJECT_DIR$/../../Program Files/Java/jdk-19/lib/src.zip!/java.base/java/lang/Double.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -55,7 +59,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -79,7 +83,10 @@
       <workItem from="1671833701372" duration="17555000" />
       <workItem from="1671889851183" duration="4920000" />
       <workItem from="1671896809661" duration="989000" />
-      <workItem from="1671899063047" duration="11539000" />
+      <workItem from="1671899063047" duration="13557000" />
+      <workItem from="1671933313046" duration="97000" />
+      <workItem from="1671933462755" duration="295000" />
+      <workItem from="1671964082649" duration="1158000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1671806048989</created>
@@ -179,7 +186,21 @@
       <option name="project" value="LOCAL" />
       <updated>1671919427897</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="tranactions classı major guncelleme">
+      <created>1671931244650</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1671931244650</updated>
+    </task>
+    <task id="LOCAL-00016" summary="beautify">
+      <created>1671931444374</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1671931444374</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,7 +213,9 @@
     <MESSAGE value="login pre-finish" />
     <MESSAGE value="login pre-finish and added todos" />
     <MESSAGE value="para cekme fonksiyonu" />
-    <option name="LAST_COMMIT_MESSAGE" value="para cekme fonksiyonu" />
+    <MESSAGE value="tranactions classı major guncelleme" />
+    <MESSAGE value="beautify" />
+    <option name="LAST_COMMIT_MESSAGE" value="beautify" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

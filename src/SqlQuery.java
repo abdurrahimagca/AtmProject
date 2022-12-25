@@ -17,9 +17,9 @@ public class SqlQuery {
             return stmt.executeQuery(query);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
+
     }
 
     public static void UpdateData(String query) {

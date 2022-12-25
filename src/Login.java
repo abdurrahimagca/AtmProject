@@ -15,7 +15,7 @@ public class Login extends Card {
     private static boolean isCardValid(String cardNum) throws SQLException {
         ResultSet checkRs = SqlQuery.getResult(("SELECT Name FROM clients WHERE CardNum=" + cardNum));
 
-        if (!checkRs.next()) {
+        if (checkRs == null) {
             System.out.println("hatali bir kart numarasi girdiniz lutfen tekrar deneyiniz.. ");
             return false;
         }

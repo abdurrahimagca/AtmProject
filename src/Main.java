@@ -12,12 +12,10 @@ public class Main {
 
             Card card = new Login(CardNum, Pin);
         } while (!Login.login());
-        //todo: sqlden veri alınan her fonksiyon sqlquery içine atılmalı
+
         String currentID = Card.returnID();
-
-
-        //todo: do-while dongusu icinde opsiyonlar sunulacak
         int checker = -1;
+
         do {
             //terminal her seferinde temizlenmeli
             System.out.println("Kullanibilir bakiyeniz: " + SqlQuery.StringGetSQL("SELECT deposit FROM clients WHERE id=" + currentID, "deposit"));
@@ -59,6 +57,8 @@ public class Main {
                     if (Transactions.transfer(currentID, IBAN, amount)) {
                         System.out.println("para gonderildi");
                     }
+                    else
+                        System.out.println("para gonderilemedi.");
                     break;
                 case 4:
                     System.out.printf("Borcunuz: ");
@@ -67,6 +67,8 @@ public class Main {
                     amount = scd.nextDouble();
                     if (Transactions.payOffDebt(currentID, amount))
                         System.out.println("borcunuz basariyla odendi");
+                    else
+                        System.out.println("borc odenemedi");
                     break;
                 default:
                     System.out.println("Eksik ya da hatali bir tuslama yaptiniz lutfen tekrar deneyiniz..");

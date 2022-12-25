@@ -29,15 +29,6 @@
 
 package com.mysql.cj.jdbc.interceptors;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.sql.SQLException;
-import java.util.Properties;
-import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.MysqlConnection;
 import com.mysql.cj.Query;
@@ -48,81 +39,97 @@ import com.mysql.cj.jdbc.result.ResultSetInternalMethods;
 import com.mysql.cj.log.Log;
 import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.protocol.ServerSession;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.SQLException;
+import java.util.Properties;
+import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ResultSetScannerInterceptor implements QueryInterceptor {
 
-    public static final String PNAME_resultSetScannerRegex = "resultSetScannerRegex";
+  public static final String PNAME_resultSetScannerRegex = "resultSetScannerRegex";
 
-    protected Pattern regexP;
+  protected Pattern regexP;
 
-    @Override
-    public QueryInterceptor init(MysqlConnection conn, Properties props, Log log) {
-        String regexFromUser = props.getProperty(PNAME_resultSetScannerRegex);
+  @Override
+  public QueryInterceptor init(MysqlConnection conn, Properties props, Log log) {
+    String regexFromUser = props.getProperty(PNAME_resultSetScannerRegex);
 
-        if (regexFromUser == null || regexFromUser.length() == 0) {
-            throw ExceptionFactory.createException(WrongArgumentException.class, Messages.getString("ResultSetScannerInterceptor.0"));
-        }
-
-        try {
-            this.regexP = Pattern.compile(regexFromUser);
-        } catch (Throwable t) {
-            throw ExceptionFactory.createException(WrongArgumentException.class, Messages.getString("ResultSetScannerInterceptor.1"), t);
-        }
-        return this;
-
+    if (regexFromUser == null || regexFromUser.length() == 0) {
+      throw ExceptionFactory.createException(
+          WrongArgumentException.class, Messages.getString("ResultSetScannerInterceptor.0"));
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends Resultset> T postProcess(Supplier<String> sql, Query interceptedQuery, T originalResultSet, ServerSession serverSession) {
-
-        // requirement of anonymous class
-        final T finalResultSet = originalResultSet;
-
-        return (T) Proxy.newProxyInstance(originalResultSet.getClass().getClassLoader(), new Class<?>[] { Resultset.class, ResultSetInternalMethods.class },
-                new InvocationHandler() {
-
-                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-                        if ("equals".equals(method.getName())) {
-                            // Let args[0] "unwrap" to its InvocationHandler if it is a proxy.
-                            return args[0].equals(this);
-                        }
-
-                        Object invocationResult = method.invoke(finalResultSet, args);
-
-                        String methodName = method.getName();
-
-                        if (invocationResult != null && invocationResult instanceof String || "getString".equals(methodName) || "getObject".equals(methodName)
-                                || "getObjectStoredProc".equals(methodName)) {
-                            Matcher matcher = ResultSetScannerInterceptor.this.regexP.matcher(invocationResult.toString());
-
-                            if (matcher.matches()) {
-                                throw new SQLException(Messages.getString("ResultSetScannerInterceptor.2"));
-                            }
-                        }
-
-                        return invocationResult;
-                    }
-                });
-
+    try {
+      this.regexP = Pattern.compile(regexFromUser);
+    } catch (Throwable t) {
+      throw ExceptionFactory.createException(
+          WrongArgumentException.class, Messages.getString("ResultSetScannerInterceptor.1"), t);
     }
+    return this;
+  }
 
-    @Override
-    public <T extends Resultset> T preProcess(Supplier<String> sql, Query interceptedQuery) {
-        // we don't care about this event
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T extends Resultset> T postProcess(
+      Supplier<String> sql,
+      Query interceptedQuery,
+      T originalResultSet,
+      ServerSession serverSession) {
 
-        return null;
-    }
+    // requirement of anonymous class
+    final T finalResultSet = originalResultSet;
 
-    // we don't issue queries, so it should be safe to intercept at any point
-    @Override
-    public boolean executeTopLevelOnly() {
-        return false;
-    }
+    return (T)
+        Proxy.newProxyInstance(
+            originalResultSet.getClass().getClassLoader(),
+            new Class<?>[] {Resultset.class, ResultSetInternalMethods.class},
+            new InvocationHandler() {
 
-    @Override
-    public void destroy() {
+              public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-    }
+                if ("equals".equals(method.getName())) {
+                  // Let args[0] "unwrap" to its InvocationHandler if it is a proxy.
+                  return args[0].equals(this);
+                }
+
+                Object invocationResult = method.invoke(finalResultSet, args);
+
+                String methodName = method.getName();
+
+                if (invocationResult != null && invocationResult instanceof String
+                    || "getString".equals(methodName)
+                    || "getObject".equals(methodName)
+                    || "getObjectStoredProc".equals(methodName)) {
+                  Matcher matcher =
+                      ResultSetScannerInterceptor.this.regexP.matcher(invocationResult.toString());
+
+                  if (matcher.matches()) {
+                    throw new SQLException(Messages.getString("ResultSetScannerInterceptor.2"));
+                  }
+                }
+
+                return invocationResult;
+              }
+            });
+  }
+
+  @Override
+  public <T extends Resultset> T preProcess(Supplier<String> sql, Query interceptedQuery) {
+    // we don't care about this event
+
+    return null;
+  }
+
+  // we don't issue queries, so it should be safe to intercept at any point
+  @Override
+  public boolean executeTopLevelOnly() {
+    return false;
+  }
+
+  @Override
+  public void destroy() {}
 }

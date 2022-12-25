@@ -34,75 +34,69 @@ package com.mysql.cj.x.protobuf;
 
 public final class MysqlxExpect {
   private MysqlxExpect() {}
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
+
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {}
+
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
 
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
-  }
-  public interface OpenOrBuilder extends
+  public interface OpenOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:Mysqlx.Expect.Open)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];</code>
+     * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];
+     * </code>
+     *
      * @return Whether the op field is set.
      */
     boolean hasOp();
     /**
-     * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];</code>
+     * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];
+     * </code>
+     *
      * @return The op.
      */
     com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation getOp();
 
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
-    java.util.List<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition> 
-        getCondList();
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+    java.util.List<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition> getCondList();
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
     com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition getCond(int index);
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
     int getCondCount();
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
-    java.util.List<? extends com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder> 
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+    java.util.List<? extends com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder>
         getCondOrBuilderList();
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
-    com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder getCondOrBuilder(
-        int index);
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+    com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder getCondOrBuilder(int index);
   }
   /**
+   *
+   *
    * <pre>
-   **
-   *Open an Expect block and set/unset the conditions that have to
-   *be fulfilled.
-   *If any of the conditions fail, all enclosed messages will fail
-   *with a ``Mysqlx::Error`` message.
-   *&#64;returns &#64;ref Mysqlx::Ok on success, &#64;ref Mysqlx::Error on error
+   * *
+   * Open an Expect block and set/unset the conditions that have to
+   * be fulfilled.
+   * If any of the conditions fail, all enclosed messages will fail
+   * with a ``Mysqlx::Error`` message.
+   * &#64;returns &#64;ref Mysqlx::Ok on success, &#64;ref Mysqlx::Error on error
    * </pre>
    *
    * Protobuf type {@code Mysqlx.Expect.Open}
    */
-  public static final class Open extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class Open extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:Mysqlx.Expect.Open)
       OpenOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use Open.newBuilder() to construct.
     private Open(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private Open() {
       op_ = 0;
       cond_ = java.util.Collections.emptyList();
@@ -110,16 +104,15 @@ public final class MysqlxExpect {
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new Open();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private Open(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -139,41 +132,47 @@ public final class MysqlxExpect {
             case 0:
               done = true;
               break;
-            case 8: {
-              int rawValue = input.readEnum();
+            case 8:
+              {
+                int rawValue = input.readEnum();
                 @SuppressWarnings("deprecation")
-              com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation value = com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                op_ = rawValue;
+                com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation value =
+                    com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.valueOf(rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(1, rawValue);
+                } else {
+                  bitField0_ |= 0x00000001;
+                  op_ = rawValue;
+                }
+                break;
               }
-              break;
-            }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-                cond_ = new java.util.ArrayList<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition>();
-                mutable_bitField0_ |= 0x00000002;
+            case 18:
+              {
+                if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                  cond_ =
+                      new java.util.ArrayList<
+                          com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition>();
+                  mutable_bitField0_ |= 0x00000002;
+                }
+                cond_.add(
+                    input.readMessage(
+                        com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.PARSER,
+                        extensionRegistry));
+                break;
               }
-              cond_.add(
-                  input.readMessage(com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.PARSER, extensionRegistry));
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
               }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000002) != 0)) {
           cond_ = java.util.Collections.unmodifiableList(cond_);
@@ -182,35 +181,38 @@ public final class MysqlxExpect {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_fieldAccessorTable
+      return com.mysql.cj.x.protobuf.MysqlxExpect
+          .internal_static_Mysqlx_Expect_Open_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.mysql.cj.x.protobuf.MysqlxExpect.Open.class, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Builder.class);
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.class,
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.Builder.class);
     }
 
-    /**
-     * Protobuf enum {@code Mysqlx.Expect.Open.CtxOperation}
-     */
-    public enum CtxOperation
-        implements com.google.protobuf.ProtocolMessageEnum {
+    /** Protobuf enum {@code Mysqlx.Expect.Open.CtxOperation} */
+    public enum CtxOperation implements com.google.protobuf.ProtocolMessageEnum {
       /**
+       *
+       *
        * <pre>
-       ** copy the operations from the parent Expect-block 
+       * * copy the operations from the parent Expect-block
        * </pre>
        *
        * <code>EXPECT_CTX_COPY_PREV = 0;</code>
        */
       EXPECT_CTX_COPY_PREV(0),
       /**
+       *
+       *
        * <pre>
-       ** start with a empty set of operations 
+       * * start with a empty set of operations
        * </pre>
        *
        * <code>EXPECT_CTX_EMPTY = 1;</code>
@@ -219,22 +221,25 @@ public final class MysqlxExpect {
       ;
 
       /**
+       *
+       *
        * <pre>
-       ** copy the operations from the parent Expect-block 
+       * * copy the operations from the parent Expect-block
        * </pre>
        *
        * <code>EXPECT_CTX_COPY_PREV = 0;</code>
        */
       public static final int EXPECT_CTX_COPY_PREV_VALUE = 0;
       /**
+       *
+       *
        * <pre>
-       ** start with a empty set of operations 
+       * * start with a empty set of operations
        * </pre>
        *
        * <code>EXPECT_CTX_EMPTY = 1;</code>
        */
       public static final int EXPECT_CTX_EMPTY_VALUE = 1;
-
 
       public final int getNumber() {
         return value;
@@ -256,44 +261,43 @@ public final class MysqlxExpect {
        */
       public static CtxOperation forNumber(int value) {
         switch (value) {
-          case 0: return EXPECT_CTX_COPY_PREV;
-          case 1: return EXPECT_CTX_EMPTY;
-          default: return null;
+          case 0:
+            return EXPECT_CTX_COPY_PREV;
+          case 1:
+            return EXPECT_CTX_EMPTY;
+          default:
+            return null;
         }
       }
 
-      public static com.google.protobuf.Internal.EnumLiteMap<CtxOperation>
-          internalGetValueMap() {
+      public static com.google.protobuf.Internal.EnumLiteMap<CtxOperation> internalGetValueMap() {
         return internalValueMap;
       }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          CtxOperation> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<CtxOperation>() {
-              public CtxOperation findValueByNumber(int number) {
-                return CtxOperation.forNumber(number);
-              }
-            };
 
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      private static final com.google.protobuf.Internal.EnumLiteMap<CtxOperation> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<CtxOperation>() {
+            public CtxOperation findValueByNumber(int number) {
+              return CtxOperation.forNumber(number);
+            }
+          };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
         return com.mysql.cj.x.protobuf.MysqlxExpect.Open.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final CtxOperation[] VALUES = values();
 
-      public static CtxOperation valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      public static CtxOperation valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
@@ -307,55 +311,65 @@ public final class MysqlxExpect {
       // @@protoc_insertion_point(enum_scope:Mysqlx.Expect.Open.CtxOperation)
     }
 
-    public interface ConditionOrBuilder extends
+    public interface ConditionOrBuilder
+        extends
         // @@protoc_insertion_point(interface_extends:Mysqlx.Expect.Open.Condition)
         com.google.protobuf.MessageOrBuilder {
 
       /**
        * <code>required uint32 condition_key = 1;</code>
+       *
        * @return Whether the conditionKey field is set.
        */
       boolean hasConditionKey();
       /**
        * <code>required uint32 condition_key = 1;</code>
+       *
        * @return The conditionKey.
        */
       int getConditionKey();
 
       /**
        * <code>optional bytes condition_value = 2;</code>
+       *
        * @return Whether the conditionValue field is set.
        */
       boolean hasConditionValue();
       /**
        * <code>optional bytes condition_value = 2;</code>
+       *
        * @return The conditionValue.
        */
       com.google.protobuf.ByteString getConditionValue();
 
       /**
-       * <code>optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];</code>
+       * <code>
+       * optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];
+       * </code>
+       *
        * @return Whether the op field is set.
        */
       boolean hasOp();
       /**
-       * <code>optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];</code>
+       * <code>
+       * optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];
+       * </code>
+       *
        * @return The op.
        */
       com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation getOp();
     }
-    /**
-     * Protobuf type {@code Mysqlx.Expect.Open.Condition}
-     */
-    public static final class Condition extends
-        com.google.protobuf.GeneratedMessageV3 implements
+    /** Protobuf type {@code Mysqlx.Expect.Open.Condition} */
+    public static final class Condition extends com.google.protobuf.GeneratedMessageV3
+        implements
         // @@protoc_insertion_point(message_implements:Mysqlx.Expect.Open.Condition)
         ConditionOrBuilder {
-    private static final long serialVersionUID = 0L;
+      private static final long serialVersionUID = 0L;
       // Use Condition.newBuilder() to construct.
       private Condition(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
+
       private Condition() {
         conditionValue_ = com.google.protobuf.ByteString.EMPTY;
         op_ = 0;
@@ -363,16 +377,15 @@ public final class MysqlxExpect {
 
       @java.lang.Override
       @SuppressWarnings({"unused"})
-      protected java.lang.Object newInstance(
-          UnusedPrivateParameter unused) {
+      protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
         return new Condition();
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
-      getUnknownFields() {
+      public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
         return this.unknownFields;
       }
+
       private Condition(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -392,84 +405,95 @@ public final class MysqlxExpect {
               case 0:
                 done = true;
                 break;
-              case 8: {
-                bitField0_ |= 0x00000001;
-                conditionKey_ = input.readUInt32();
-                break;
-              }
-              case 18: {
-                bitField0_ |= 0x00000002;
-                conditionValue_ = input.readBytes();
-                break;
-              }
-              case 24: {
-                int rawValue = input.readEnum();
+              case 8:
+                {
+                  bitField0_ |= 0x00000001;
+                  conditionKey_ = input.readUInt32();
+                  break;
+                }
+              case 18:
+                {
+                  bitField0_ |= 0x00000002;
+                  conditionValue_ = input.readBytes();
+                  break;
+                }
+              case 24:
+                {
+                  int rawValue = input.readEnum();
                   @SuppressWarnings("deprecation")
-                com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation value = com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.valueOf(rawValue);
-                if (value == null) {
-                  unknownFields.mergeVarintField(3, rawValue);
-                } else {
-                  bitField0_ |= 0x00000004;
-                  op_ = rawValue;
+                  com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation value =
+                      com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation
+                          .valueOf(rawValue);
+                  if (value == null) {
+                    unknownFields.mergeVarintField(3, rawValue);
+                  } else {
+                    bitField0_ |= 0x00000004;
+                    op_ = rawValue;
+                  }
+                  break;
                 }
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
+              default:
+                {
+                  if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                    done = true;
+                  }
+                  break;
                 }
-                break;
-              }
             }
           }
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           throw e.setUnfinishedMessage(this);
         } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(this);
         } finally {
           this.unknownFields = unknownFields.build();
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_Condition_descriptor;
+
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.mysql.cj.x.protobuf.MysqlxExpect
+            .internal_static_Mysqlx_Expect_Open_Condition_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_Condition_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxExpect
+            .internal_static_Mysqlx_Expect_Open_Condition_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.class, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.class,
+                com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder.class);
       }
 
-      /**
-       * Protobuf enum {@code Mysqlx.Expect.Open.Condition.Key}
-       */
-      public enum Key
-          implements com.google.protobuf.ProtocolMessageEnum {
+      /** Protobuf enum {@code Mysqlx.Expect.Open.Condition.Key} */
+      public enum Key implements com.google.protobuf.ProtocolMessageEnum {
         /**
+         *
+         *
          * <pre>
-         ** Change error propagation behaviour 
+         * * Change error propagation behaviour
          * </pre>
          *
          * <code>EXPECT_NO_ERROR = 1;</code>
          */
         EXPECT_NO_ERROR(1),
         /**
+         *
+         *
          * <pre>
-         ** Check if X Protocol field exists 
+         * * Check if X Protocol field exists
          * </pre>
          *
          * <code>EXPECT_FIELD_EXIST = 2;</code>
          */
         EXPECT_FIELD_EXIST(2),
         /**
+         *
+         *
          * <pre>
-         ** Check if X Protocol supports document _id generation 
+         * * Check if X Protocol supports document _id generation
          * </pre>
          *
          * <code>EXPECT_DOCID_GENERATED = 3;</code>
@@ -478,30 +502,35 @@ public final class MysqlxExpect {
         ;
 
         /**
+         *
+         *
          * <pre>
-         ** Change error propagation behaviour 
+         * * Change error propagation behaviour
          * </pre>
          *
          * <code>EXPECT_NO_ERROR = 1;</code>
          */
         public static final int EXPECT_NO_ERROR_VALUE = 1;
         /**
+         *
+         *
          * <pre>
-         ** Check if X Protocol field exists 
+         * * Check if X Protocol field exists
          * </pre>
          *
          * <code>EXPECT_FIELD_EXIST = 2;</code>
          */
         public static final int EXPECT_FIELD_EXIST_VALUE = 2;
         /**
+         *
+         *
          * <pre>
-         ** Check if X Protocol supports document _id generation 
+         * * Check if X Protocol supports document _id generation
          * </pre>
          *
          * <code>EXPECT_DOCID_GENERATED = 3;</code>
          */
         public static final int EXPECT_DOCID_GENERATED_VALUE = 3;
-
 
         public final int getNumber() {
           return value;
@@ -523,45 +552,48 @@ public final class MysqlxExpect {
          */
         public static Key forNumber(int value) {
           switch (value) {
-            case 1: return EXPECT_NO_ERROR;
-            case 2: return EXPECT_FIELD_EXIST;
-            case 3: return EXPECT_DOCID_GENERATED;
-            default: return null;
+            case 1:
+              return EXPECT_NO_ERROR;
+            case 2:
+              return EXPECT_FIELD_EXIST;
+            case 3:
+              return EXPECT_DOCID_GENERATED;
+            default:
+              return null;
           }
         }
 
-        public static com.google.protobuf.Internal.EnumLiteMap<Key>
-            internalGetValueMap() {
+        public static com.google.protobuf.Internal.EnumLiteMap<Key> internalGetValueMap() {
           return internalValueMap;
         }
-        private static final com.google.protobuf.Internal.EnumLiteMap<
-            Key> internalValueMap =
-              new com.google.protobuf.Internal.EnumLiteMap<Key>() {
-                public Key findValueByNumber(int number) {
-                  return Key.forNumber(number);
-                }
-              };
 
-        public final com.google.protobuf.Descriptors.EnumValueDescriptor
-            getValueDescriptor() {
+        private static final com.google.protobuf.Internal.EnumLiteMap<Key> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Key>() {
+              public Key findValueByNumber(int number) {
+                return Key.forNumber(number);
+              }
+            };
+
+        public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
           return getDescriptor().getValues().get(ordinal());
         }
-        public final com.google.protobuf.Descriptors.EnumDescriptor
-            getDescriptorForType() {
+
+        public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
           return getDescriptor();
         }
-        public static final com.google.protobuf.Descriptors.EnumDescriptor
-            getDescriptor() {
-          return com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDescriptor().getEnumTypes().get(0);
+
+        public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+          return com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDescriptor()
+              .getEnumTypes()
+              .get(0);
         }
 
         private static final Key[] VALUES = values();
 
-        public static Key valueOf(
-            com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        public static Key valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
           if (desc.getType() != getDescriptor()) {
             throw new java.lang.IllegalArgumentException(
-              "EnumValueDescriptor is not for this type.");
+                "EnumValueDescriptor is not for this type.");
           }
           return VALUES[desc.getIndex()];
         }
@@ -575,22 +607,23 @@ public final class MysqlxExpect {
         // @@protoc_insertion_point(enum_scope:Mysqlx.Expect.Open.Condition.Key)
       }
 
-      /**
-       * Protobuf enum {@code Mysqlx.Expect.Open.Condition.ConditionOperation}
-       */
-      public enum ConditionOperation
-          implements com.google.protobuf.ProtocolMessageEnum {
+      /** Protobuf enum {@code Mysqlx.Expect.Open.Condition.ConditionOperation} */
+      public enum ConditionOperation implements com.google.protobuf.ProtocolMessageEnum {
         /**
+         *
+         *
          * <pre>
-         ** set the condition; set, if not set; overwrite, if set 
+         * * set the condition; set, if not set; overwrite, if set
          * </pre>
          *
          * <code>EXPECT_OP_SET = 0;</code>
          */
         EXPECT_OP_SET(0),
         /**
+         *
+         *
          * <pre>
-         ** unset the condition 
+         * * unset the condition
          * </pre>
          *
          * <code>EXPECT_OP_UNSET = 1;</code>
@@ -599,22 +632,25 @@ public final class MysqlxExpect {
         ;
 
         /**
+         *
+         *
          * <pre>
-         ** set the condition; set, if not set; overwrite, if set 
+         * * set the condition; set, if not set; overwrite, if set
          * </pre>
          *
          * <code>EXPECT_OP_SET = 0;</code>
          */
         public static final int EXPECT_OP_SET_VALUE = 0;
         /**
+         *
+         *
          * <pre>
-         ** unset the condition 
+         * * unset the condition
          * </pre>
          *
          * <code>EXPECT_OP_UNSET = 1;</code>
          */
         public static final int EXPECT_OP_UNSET_VALUE = 1;
-
 
         public final int getNumber() {
           return value;
@@ -636,9 +672,12 @@ public final class MysqlxExpect {
          */
         public static ConditionOperation forNumber(int value) {
           switch (value) {
-            case 0: return EXPECT_OP_SET;
-            case 1: return EXPECT_OP_UNSET;
-            default: return null;
+            case 0:
+              return EXPECT_OP_SET;
+            case 1:
+              return EXPECT_OP_UNSET;
+            default:
+              return null;
           }
         }
 
@@ -646,25 +685,27 @@ public final class MysqlxExpect {
             internalGetValueMap() {
           return internalValueMap;
         }
-        private static final com.google.protobuf.Internal.EnumLiteMap<
-            ConditionOperation> internalValueMap =
-              new com.google.protobuf.Internal.EnumLiteMap<ConditionOperation>() {
-                public ConditionOperation findValueByNumber(int number) {
-                  return ConditionOperation.forNumber(number);
-                }
-              };
 
-        public final com.google.protobuf.Descriptors.EnumValueDescriptor
-            getValueDescriptor() {
+        private static final com.google.protobuf.Internal.EnumLiteMap<ConditionOperation>
+            internalValueMap =
+                new com.google.protobuf.Internal.EnumLiteMap<ConditionOperation>() {
+                  public ConditionOperation findValueByNumber(int number) {
+                    return ConditionOperation.forNumber(number);
+                  }
+                };
+
+        public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
           return getDescriptor().getValues().get(ordinal());
         }
-        public final com.google.protobuf.Descriptors.EnumDescriptor
-            getDescriptorForType() {
+
+        public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
           return getDescriptor();
         }
-        public static final com.google.protobuf.Descriptors.EnumDescriptor
-            getDescriptor() {
-          return com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDescriptor().getEnumTypes().get(1);
+
+        public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+          return com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDescriptor()
+              .getEnumTypes()
+              .get(1);
         }
 
         private static final ConditionOperation[] VALUES = values();
@@ -673,7 +714,7 @@ public final class MysqlxExpect {
             com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
           if (desc.getType() != getDescriptor()) {
             throw new java.lang.IllegalArgumentException(
-              "EnumValueDescriptor is not for this type.");
+                "EnumValueDescriptor is not for this type.");
           }
           return VALUES[desc.getIndex()];
         }
@@ -692,6 +733,7 @@ public final class MysqlxExpect {
       private int conditionKey_;
       /**
        * <code>required uint32 condition_key = 1;</code>
+       *
        * @return Whether the conditionKey field is set.
        */
       @java.lang.Override
@@ -700,6 +742,7 @@ public final class MysqlxExpect {
       }
       /**
        * <code>required uint32 condition_key = 1;</code>
+       *
        * @return The conditionKey.
        */
       @java.lang.Override
@@ -711,6 +754,7 @@ public final class MysqlxExpect {
       private com.google.protobuf.ByteString conditionValue_;
       /**
        * <code>optional bytes condition_value = 2;</code>
+       *
        * @return Whether the conditionValue field is set.
        */
       @java.lang.Override
@@ -719,6 +763,7 @@ public final class MysqlxExpect {
       }
       /**
        * <code>optional bytes condition_value = 2;</code>
+       *
        * @return The conditionValue.
        */
       @java.lang.Override
@@ -729,23 +774,35 @@ public final class MysqlxExpect {
       public static final int OP_FIELD_NUMBER = 3;
       private int op_;
       /**
-       * <code>optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];</code>
+       * <code>
+       * optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];
+       * </code>
+       *
        * @return Whether the op field is set.
        */
-      @java.lang.Override public boolean hasOp() {
+      @java.lang.Override
+      public boolean hasOp() {
         return ((bitField0_ & 0x00000004) != 0);
       }
       /**
-       * <code>optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];</code>
+       * <code>
+       * optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];
+       * </code>
+       *
        * @return The op.
        */
-      @java.lang.Override public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation getOp() {
+      @java.lang.Override
+      public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation getOp() {
         @SuppressWarnings("deprecation")
-        com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation result = com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.valueOf(op_);
-        return result == null ? com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.EXPECT_OP_SET : result;
+        com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation result =
+            com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.valueOf(op_);
+        return result == null
+            ? com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.EXPECT_OP_SET
+            : result;
       }
 
       private byte memoizedIsInitialized = -1;
+
       @java.lang.Override
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
@@ -761,8 +818,7 @@ public final class MysqlxExpect {
       }
 
       @java.lang.Override
-      public void writeTo(com.google.protobuf.CodedOutputStream output)
-                          throws java.io.IOException {
+      public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
         if (((bitField0_ & 0x00000001) != 0)) {
           output.writeUInt32(1, conditionKey_);
         }
@@ -782,16 +838,13 @@ public final class MysqlxExpect {
 
         size = 0;
         if (((bitField0_ & 0x00000001) != 0)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeUInt32Size(1, conditionKey_);
+          size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1, conditionKey_);
         }
         if (((bitField0_ & 0x00000002) != 0)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(2, conditionValue_);
+          size += com.google.protobuf.CodedOutputStream.computeBytesSize(2, conditionValue_);
         }
         if (((bitField0_ & 0x00000004) != 0)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeEnumSize(3, op_);
+          size += com.google.protobuf.CodedOutputStream.computeEnumSize(3, op_);
         }
         size += unknownFields.getSerializedSize();
         memoizedSize = size;
@@ -801,22 +854,21 @@ public final class MysqlxExpect {
       @java.lang.Override
       public boolean equals(final java.lang.Object obj) {
         if (obj == this) {
-         return true;
+          return true;
         }
         if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition)) {
           return super.equals(obj);
         }
-        com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition other = (com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition) obj;
+        com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition other =
+            (com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition) obj;
 
         if (hasConditionKey() != other.hasConditionKey()) return false;
         if (hasConditionKey()) {
-          if (getConditionKey()
-              != other.getConditionKey()) return false;
+          if (getConditionKey() != other.getConditionKey()) return false;
         }
         if (hasConditionValue() != other.hasConditionValue()) return false;
         if (hasConditionValue()) {
-          if (!getConditionValue()
-              .equals(other.getConditionValue())) return false;
+          if (!getConditionValue().equals(other.getConditionValue())) return false;
         }
         if (hasOp() != other.hasOp()) return false;
         if (hasOp()) {
@@ -851,87 +903,94 @@ public final class MysqlxExpect {
       }
 
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
-          java.nio.ByteBuffer data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
-          java.nio.ByteBuffer data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
-          byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(java.io.InputStream input)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input);
-      }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
-          java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input, extensionRegistry);
+          java.io.InputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
       }
-      public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseDelimitedFrom(java.io.InputStream input)
+
+      public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
+          java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseDelimitedWithIOException(PARSER, input);
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+            PARSER, input, extensionRegistry);
       }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseDelimitedFrom(
-          java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+          java.io.InputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
       }
+
+      public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseDelimitedFrom(
+          java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+            PARSER, input, extensionRegistry);
+      }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
-          com.google.protobuf.CodedInputStream input)
-          throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input);
+          com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
       }
+
       public static com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-            .parseWithIOException(PARSER, input, extensionRegistry);
+        return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+            PARSER, input, extensionRegistry);
       }
 
       @java.lang.Override
-      public Builder newBuilderForType() { return newBuilder(); }
+      public Builder newBuilderForType() {
+        return newBuilder();
+      }
+
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-      public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition prototype) {
+
+      public static Builder newBuilder(
+          com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
+
       @java.lang.Override
       public Builder toBuilder() {
-        return this == DEFAULT_INSTANCE
-            ? new Builder() : new Builder().mergeFrom(this);
+        return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
       }
 
       @java.lang.Override
@@ -940,24 +999,25 @@ public final class MysqlxExpect {
         Builder builder = new Builder(parent);
         return builder;
       }
-      /**
-       * Protobuf type {@code Mysqlx.Expect.Open.Condition}
-       */
-      public static final class Builder extends
-          com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+      /** Protobuf type {@code Mysqlx.Expect.Open.Condition} */
+      public static final class Builder
+          extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+          implements
           // @@protoc_insertion_point(builder_implements:Mysqlx.Expect.Open.Condition)
           com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
-            getDescriptor() {
-          return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_Condition_descriptor;
+        public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+          return com.mysql.cj.x.protobuf.MysqlxExpect
+              .internal_static_Mysqlx_Expect_Open_Condition_descriptor;
         }
 
         @java.lang.Override
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_Condition_fieldAccessorTable
+          return com.mysql.cj.x.protobuf.MysqlxExpect
+              .internal_static_Mysqlx_Expect_Open_Condition_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                  com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.class, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder.class);
+                  com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.class,
+                  com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder.class);
         }
 
         // Construct using com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.newBuilder()
@@ -965,16 +1025,15 @@ public final class MysqlxExpect {
           maybeForceBuilderInitialization();
         }
 
-        private Builder(
-            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
+
         private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
+          if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
         }
+
         @java.lang.Override
         public Builder clear() {
           super.clear();
@@ -988,9 +1047,9 @@ public final class MysqlxExpect {
         }
 
         @java.lang.Override
-        public com.google.protobuf.Descriptors.Descriptor
-            getDescriptorForType() {
-          return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_Condition_descriptor;
+        public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+          return com.mysql.cj.x.protobuf.MysqlxExpect
+              .internal_static_Mysqlx_Expect_Open_Condition_descriptor;
         }
 
         @java.lang.Override
@@ -1009,7 +1068,8 @@ public final class MysqlxExpect {
 
         @java.lang.Override
         public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition buildPartial() {
-          com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition result = new com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition(this);
+          com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition result =
+              new com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition(this);
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -1033,38 +1093,41 @@ public final class MysqlxExpect {
         public Builder clone() {
           return super.clone();
         }
+
         @java.lang.Override
         public Builder setField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
-            java.lang.Object value) {
+            com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
           return super.setField(field, value);
         }
+
         @java.lang.Override
-        public Builder clearField(
-            com.google.protobuf.Descriptors.FieldDescriptor field) {
+        public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
           return super.clearField(field);
         }
+
         @java.lang.Override
-        public Builder clearOneof(
-            com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return super.clearOneof(oneof);
         }
+
         @java.lang.Override
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
-            int index, java.lang.Object value) {
+            int index,
+            java.lang.Object value) {
           return super.setRepeatedField(field, index, value);
         }
+
         @java.lang.Override
         public Builder addRepeatedField(
-            com.google.protobuf.Descriptors.FieldDescriptor field,
-            java.lang.Object value) {
+            com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
           return super.addRepeatedField(field, value);
         }
+
         @java.lang.Override
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition) {
-            return mergeFrom((com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition)other);
+            return mergeFrom((com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition) other);
           } else {
             super.mergeFrom(other);
             return this;
@@ -1072,7 +1135,8 @@ public final class MysqlxExpect {
         }
 
         public Builder mergeFrom(com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition other) {
-          if (other == com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDefaultInstance()) return this;
+          if (other == com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDefaultInstance())
+            return this;
           if (other.hasConditionKey()) {
             setConditionKey(other.getConditionKey());
           }
@@ -1104,7 +1168,8 @@ public final class MysqlxExpect {
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition) e.getUnfinishedMessage();
+            parsedMessage =
+                (com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
             if (parsedMessage != null) {
@@ -1113,11 +1178,13 @@ public final class MysqlxExpect {
           }
           return this;
         }
+
         private int bitField0_;
 
-        private int conditionKey_ ;
+        private int conditionKey_;
         /**
          * <code>required uint32 condition_key = 1;</code>
+         *
          * @return Whether the conditionKey field is set.
          */
         @java.lang.Override
@@ -1126,6 +1193,7 @@ public final class MysqlxExpect {
         }
         /**
          * <code>required uint32 condition_key = 1;</code>
+         *
          * @return The conditionKey.
          */
         @java.lang.Override
@@ -1134,6 +1202,7 @@ public final class MysqlxExpect {
         }
         /**
          * <code>required uint32 condition_key = 1;</code>
+         *
          * @param value The conditionKey to set.
          * @return This builder for chaining.
          */
@@ -1145,6 +1214,7 @@ public final class MysqlxExpect {
         }
         /**
          * <code>required uint32 condition_key = 1;</code>
+         *
          * @return This builder for chaining.
          */
         public Builder clearConditionKey() {
@@ -1154,9 +1224,11 @@ public final class MysqlxExpect {
           return this;
         }
 
-        private com.google.protobuf.ByteString conditionValue_ = com.google.protobuf.ByteString.EMPTY;
+        private com.google.protobuf.ByteString conditionValue_ =
+            com.google.protobuf.ByteString.EMPTY;
         /**
          * <code>optional bytes condition_value = 2;</code>
+         *
          * @return Whether the conditionValue field is set.
          */
         @java.lang.Override
@@ -1165,6 +1237,7 @@ public final class MysqlxExpect {
         }
         /**
          * <code>optional bytes condition_value = 2;</code>
+         *
          * @return The conditionValue.
          */
         @java.lang.Override
@@ -1173,20 +1246,22 @@ public final class MysqlxExpect {
         }
         /**
          * <code>optional bytes condition_value = 2;</code>
+         *
          * @param value The conditionValue to set.
          * @return This builder for chaining.
          */
         public Builder setConditionValue(com.google.protobuf.ByteString value) {
           if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+            throw new NullPointerException();
+          }
+          bitField0_ |= 0x00000002;
           conditionValue_ = value;
           onChanged();
           return this;
         }
         /**
          * <code>optional bytes condition_value = 2;</code>
+         *
          * @return This builder for chaining.
          */
         public Builder clearConditionValue() {
@@ -1198,28 +1273,42 @@ public final class MysqlxExpect {
 
         private int op_ = 0;
         /**
-         * <code>optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];</code>
+         * <code>
+         * optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];
+         * </code>
+         *
          * @return Whether the op field is set.
          */
-        @java.lang.Override public boolean hasOp() {
+        @java.lang.Override
+        public boolean hasOp() {
           return ((bitField0_ & 0x00000004) != 0);
         }
         /**
-         * <code>optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];</code>
+         * <code>
+         * optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];
+         * </code>
+         *
          * @return The op.
          */
         @java.lang.Override
         public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation getOp() {
           @SuppressWarnings("deprecation")
-          com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation result = com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.valueOf(op_);
-          return result == null ? com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.EXPECT_OP_SET : result;
+          com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation result =
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.valueOf(op_);
+          return result == null
+              ? com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation.EXPECT_OP_SET
+              : result;
         }
         /**
-         * <code>optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];</code>
+         * <code>
+         * optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];
+         * </code>
+         *
          * @param value The op to set.
          * @return This builder for chaining.
          */
-        public Builder setOp(com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation value) {
+        public Builder setOp(
+            com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.ConditionOperation value) {
           if (value == null) {
             throw new NullPointerException();
           }
@@ -1229,7 +1318,10 @@ public final class MysqlxExpect {
           return this;
         }
         /**
-         * <code>optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];</code>
+         * <code>
+         * optional .Mysqlx.Expect.Open.Condition.ConditionOperation op = 3 [default = EXPECT_OP_SET];
+         * </code>
+         *
          * @return This builder for chaining.
          */
         public Builder clearOp() {
@@ -1238,6 +1330,7 @@ public final class MysqlxExpect {
           onChanged();
           return this;
         }
+
         @java.lang.Override
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1250,12 +1343,12 @@ public final class MysqlxExpect {
           return super.mergeUnknownFields(unknownFields);
         }
 
-
         // @@protoc_insertion_point(builder_scope:Mysqlx.Expect.Open.Condition)
       }
 
       // @@protoc_insertion_point(class_scope:Mysqlx.Expect.Open.Condition)
       private static final com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition DEFAULT_INSTANCE;
+
       static {
         DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition();
       }
@@ -1264,16 +1357,17 @@ public final class MysqlxExpect {
         return DEFAULT_INSTANCE;
       }
 
-      @java.lang.Deprecated public static final com.google.protobuf.Parser<Condition>
-          PARSER = new com.google.protobuf.AbstractParser<Condition>() {
-        @java.lang.Override
-        public Condition parsePartialFrom(
-            com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Condition(input, extensionRegistry);
-        }
-      };
+      @java.lang.Deprecated
+      public static final com.google.protobuf.Parser<Condition> PARSER =
+          new com.google.protobuf.AbstractParser<Condition>() {
+            @java.lang.Override
+            public Condition parsePartialFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+              return new Condition(input, extensionRegistry);
+            }
+          };
 
       public static com.google.protobuf.Parser<Condition> parser() {
         return PARSER;
@@ -1288,63 +1382,61 @@ public final class MysqlxExpect {
       public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
-
     }
 
     private int bitField0_;
     public static final int OP_FIELD_NUMBER = 1;
     private int op_;
     /**
-     * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];</code>
+     * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];
+     * </code>
+     *
      * @return Whether the op field is set.
      */
-    @java.lang.Override public boolean hasOp() {
+    @java.lang.Override
+    public boolean hasOp() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
-     * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];</code>
+     * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];
+     * </code>
+     *
      * @return The op.
      */
-    @java.lang.Override public com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation getOp() {
+    @java.lang.Override
+    public com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation getOp() {
       @SuppressWarnings("deprecation")
-      com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation result = com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.valueOf(op_);
-      return result == null ? com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.EXPECT_CTX_COPY_PREV : result;
+      com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation result =
+          com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.valueOf(op_);
+      return result == null
+          ? com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.EXPECT_CTX_COPY_PREV
+          : result;
     }
 
     public static final int COND_FIELD_NUMBER = 2;
     private java.util.List<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition> cond_;
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
     @java.lang.Override
     public java.util.List<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition> getCondList() {
       return cond_;
     }
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
     @java.lang.Override
-    public java.util.List<? extends com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder> 
+    public java.util.List<? extends com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder>
         getCondOrBuilderList() {
       return cond_;
     }
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
     @java.lang.Override
     public int getCondCount() {
       return cond_.size();
     }
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
     @java.lang.Override
     public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition getCond(int index) {
       return cond_.get(index);
     }
-    /**
-     * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-     */
+    /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
     @java.lang.Override
     public com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder getCondOrBuilder(
         int index) {
@@ -1352,6 +1444,7 @@ public final class MysqlxExpect {
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1369,8 +1462,7 @@ public final class MysqlxExpect {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (((bitField0_ & 0x00000001) != 0)) {
         output.writeEnum(1, op_);
       }
@@ -1387,12 +1479,10 @@ public final class MysqlxExpect {
 
       size = 0;
       if (((bitField0_ & 0x00000001) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, op_);
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(1, op_);
       }
       for (int i = 0; i < cond_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, cond_.get(i));
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, cond_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1402,19 +1492,19 @@ public final class MysqlxExpect {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxExpect.Open)) {
         return super.equals(obj);
       }
-      com.mysql.cj.x.protobuf.MysqlxExpect.Open other = (com.mysql.cj.x.protobuf.MysqlxExpect.Open) obj;
+      com.mysql.cj.x.protobuf.MysqlxExpect.Open other =
+          (com.mysql.cj.x.protobuf.MysqlxExpect.Open) obj;
 
       if (hasOp() != other.hasOp()) return false;
       if (hasOp()) {
         if (op_ != other.op_) return false;
       }
-      if (!getCondList()
-          .equals(other.getCondList())) return false;
+      if (!getCondList().equals(other.getCondList())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -1439,88 +1529,94 @@ public final class MysqlxExpect {
       return hash;
     }
 
-    public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(
-        java.nio.ByteBuffer data)
+    public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Open parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
+
     public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxExpect.Open prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -1530,32 +1626,36 @@ public final class MysqlxExpect {
       return builder;
     }
     /**
+     *
+     *
      * <pre>
-     **
-     *Open an Expect block and set/unset the conditions that have to
-     *be fulfilled.
-     *If any of the conditions fail, all enclosed messages will fail
-     *with a ``Mysqlx::Error`` message.
-     *&#64;returns &#64;ref Mysqlx::Ok on success, &#64;ref Mysqlx::Error on error
+     * *
+     * Open an Expect block and set/unset the conditions that have to
+     * be fulfilled.
+     * If any of the conditions fail, all enclosed messages will fail
+     * with a ``Mysqlx::Error`` message.
+     * &#64;returns &#64;ref Mysqlx::Ok on success, &#64;ref Mysqlx::Error on error
      * </pre>
      *
      * Protobuf type {@code Mysqlx.Expect.Open}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:Mysqlx.Expect.Open)
         com.mysql.cj.x.protobuf.MysqlxExpect.OpenOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxExpect
+            .internal_static_Mysqlx_Expect_Open_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxExpect.Open.class, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxExpect.Open.class,
+                com.mysql.cj.x.protobuf.MysqlxExpect.Open.Builder.class);
       }
 
       // Construct using com.mysql.cj.x.protobuf.MysqlxExpect.Open.newBuilder()
@@ -1563,17 +1663,17 @@ public final class MysqlxExpect {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
           getCondFieldBuilder();
         }
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -1589,8 +1689,7 @@ public final class MysqlxExpect {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Open_descriptor;
       }
 
@@ -1610,7 +1709,8 @@ public final class MysqlxExpect {
 
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxExpect.Open buildPartial() {
-        com.mysql.cj.x.protobuf.MysqlxExpect.Open result = new com.mysql.cj.x.protobuf.MysqlxExpect.Open(this);
+        com.mysql.cj.x.protobuf.MysqlxExpect.Open result =
+            new com.mysql.cj.x.protobuf.MysqlxExpect.Open(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -1635,38 +1735,41 @@ public final class MysqlxExpect {
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.mysql.cj.x.protobuf.MysqlxExpect.Open) {
-          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxExpect.Open)other);
+          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxExpect.Open) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1696,9 +1799,10 @@ public final class MysqlxExpect {
               condBuilder_ = null;
               cond_ = other.cond_;
               bitField0_ = (bitField0_ & ~0x00000002);
-              condBuilder_ = 
-                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getCondFieldBuilder() : null;
+              condBuilder_ =
+                  com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders
+                      ? getCondFieldBuilder()
+                      : null;
             } else {
               condBuilder_.addAllMessages(other.cond_);
             }
@@ -1737,28 +1841,39 @@ public final class MysqlxExpect {
         }
         return this;
       }
+
       private int bitField0_;
 
       private int op_ = 0;
       /**
-       * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];</code>
+       * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];
+       * </code>
+       *
        * @return Whether the op field is set.
        */
-      @java.lang.Override public boolean hasOp() {
+      @java.lang.Override
+      public boolean hasOp() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
-       * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];</code>
+       * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];
+       * </code>
+       *
        * @return The op.
        */
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation getOp() {
         @SuppressWarnings("deprecation")
-        com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation result = com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.valueOf(op_);
-        return result == null ? com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.EXPECT_CTX_COPY_PREV : result;
+        com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation result =
+            com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.valueOf(op_);
+        return result == null
+            ? com.mysql.cj.x.protobuf.MysqlxExpect.Open.CtxOperation.EXPECT_CTX_COPY_PREV
+            : result;
       }
       /**
-       * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];</code>
+       * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];
+       * </code>
+       *
        * @param value The op to set.
        * @return This builder for chaining.
        */
@@ -1772,7 +1887,9 @@ public final class MysqlxExpect {
         return this;
       }
       /**
-       * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];</code>
+       * <code>optional .Mysqlx.Expect.Open.CtxOperation op = 1 [default = EXPECT_CTX_COPY_PREV];
+       * </code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearOp() {
@@ -1783,20 +1900,23 @@ public final class MysqlxExpect {
       }
 
       private java.util.List<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition> cond_ =
-        java.util.Collections.emptyList();
+          java.util.Collections.emptyList();
+
       private void ensureCondIsMutable() {
         if (!((bitField0_ & 0x00000002) != 0)) {
-          cond_ = new java.util.ArrayList<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition>(cond_);
+          cond_ =
+              new java.util.ArrayList<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition>(cond_);
           bitField0_ |= 0x00000002;
-         }
+        }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder, com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder> condBuilder_;
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition,
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder,
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder>
+          condBuilder_;
 
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public java.util.List<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition> getCondList() {
         if (condBuilder_ == null) {
           return java.util.Collections.unmodifiableList(cond_);
@@ -1804,9 +1924,7 @@ public final class MysqlxExpect {
           return condBuilder_.getMessageList();
         }
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public int getCondCount() {
         if (condBuilder_ == null) {
           return cond_.size();
@@ -1814,9 +1932,7 @@ public final class MysqlxExpect {
           return condBuilder_.getCount();
         }
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition getCond(int index) {
         if (condBuilder_ == null) {
           return cond_.get(index);
@@ -1824,11 +1940,8 @@ public final class MysqlxExpect {
           return condBuilder_.getMessage(index);
         }
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
-      public Builder setCond(
-          int index, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition value) {
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+      public Builder setCond(int index, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition value) {
         if (condBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1841,9 +1954,7 @@ public final class MysqlxExpect {
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public Builder setCond(
           int index, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder builderForValue) {
         if (condBuilder_ == null) {
@@ -1855,9 +1966,7 @@ public final class MysqlxExpect {
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public Builder addCond(com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition value) {
         if (condBuilder_ == null) {
           if (value == null) {
@@ -1871,11 +1980,8 @@ public final class MysqlxExpect {
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
-      public Builder addCond(
-          int index, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition value) {
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+      public Builder addCond(int index, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition value) {
         if (condBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1888,9 +1994,7 @@ public final class MysqlxExpect {
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public Builder addCond(
           com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder builderForValue) {
         if (condBuilder_ == null) {
@@ -1902,9 +2006,7 @@ public final class MysqlxExpect {
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public Builder addCond(
           int index, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder builderForValue) {
         if (condBuilder_ == null) {
@@ -1916,24 +2018,20 @@ public final class MysqlxExpect {
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public Builder addAllCond(
-          java.lang.Iterable<? extends com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition> values) {
+          java.lang.Iterable<? extends com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition>
+              values) {
         if (condBuilder_ == null) {
           ensureCondIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, cond_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(values, cond_);
           onChanged();
         } else {
           condBuilder_.addAllMessages(values);
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public Builder clearCond() {
         if (condBuilder_ == null) {
           cond_ = java.util.Collections.emptyList();
@@ -1944,9 +2042,7 @@ public final class MysqlxExpect {
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public Builder removeCond(int index) {
         if (condBuilder_ == null) {
           ensureCondIsMutable();
@@ -1957,70 +2053,62 @@ public final class MysqlxExpect {
         }
         return this;
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
-      public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder getCondBuilder(
-          int index) {
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+      public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder getCondBuilder(int index) {
         return getCondFieldBuilder().getBuilder(index);
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder getCondOrBuilder(
           int index) {
         if (condBuilder_ == null) {
-          return cond_.get(index);  } else {
+          return cond_.get(index);
+        } else {
           return condBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
-      public java.util.List<? extends com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder> 
-           getCondOrBuilderList() {
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+      public java.util.List<? extends com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder>
+          getCondOrBuilderList() {
         if (condBuilder_ != null) {
           return condBuilder_.getMessageOrBuilderList();
         } else {
           return java.util.Collections.unmodifiableList(cond_);
         }
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
       public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder addCondBuilder() {
-        return getCondFieldBuilder().addBuilder(
-            com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDefaultInstance());
+        return getCondFieldBuilder()
+            .addBuilder(com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDefaultInstance());
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
-      public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder addCondBuilder(
-          int index) {
-        return getCondFieldBuilder().addBuilder(
-            index, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDefaultInstance());
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+      public com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder addCondBuilder(int index) {
+        return getCondFieldBuilder()
+            .addBuilder(
+                index, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.getDefaultInstance());
       }
-      /**
-       * <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code>
-       */
-      public java.util.List<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder> 
-           getCondBuilderList() {
+      /** <code>repeated .Mysqlx.Expect.Open.Condition cond = 2;</code> */
+      public java.util.List<com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder>
+          getCondBuilderList() {
         return getCondFieldBuilder().getBuilderList();
       }
+
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder, com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder> 
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition,
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder,
+              com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder>
           getCondFieldBuilder() {
         if (condBuilder_ == null) {
-          condBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition, com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder, com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder>(
-                  cond_,
-                  ((bitField0_ & 0x00000002) != 0),
-                  getParentForChildren(),
-                  isClean());
+          condBuilder_ =
+              new com.google.protobuf.RepeatedFieldBuilderV3<
+                  com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition,
+                  com.mysql.cj.x.protobuf.MysqlxExpect.Open.Condition.Builder,
+                  com.mysql.cj.x.protobuf.MysqlxExpect.Open.ConditionOrBuilder>(
+                  cond_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
           cond_ = null;
         }
         return condBuilder_;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2033,12 +2121,12 @@ public final class MysqlxExpect {
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:Mysqlx.Expect.Open)
     }
 
     // @@protoc_insertion_point(class_scope:Mysqlx.Expect.Open)
     private static final com.mysql.cj.x.protobuf.MysqlxExpect.Open DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxExpect.Open();
     }
@@ -2047,16 +2135,17 @@ public final class MysqlxExpect {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<Open>
-        PARSER = new com.google.protobuf.AbstractParser<Open>() {
-      @java.lang.Override
-      public Open parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Open(input, extensionRegistry);
-      }
-    };
+    @java.lang.Deprecated
+    public static final com.google.protobuf.Parser<Open> PARSER =
+        new com.google.protobuf.AbstractParser<Open>() {
+          @java.lang.Override
+          public Open parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new Open(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<Open> parser() {
       return PARSER;
@@ -2071,48 +2160,48 @@ public final class MysqlxExpect {
     public com.mysql.cj.x.protobuf.MysqlxExpect.Open getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
-  public interface CloseOrBuilder extends
+  public interface CloseOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:Mysqlx.Expect.Close)
-      com.google.protobuf.MessageOrBuilder {
-  }
+      com.google.protobuf.MessageOrBuilder {}
   /**
+   *
+   *
    * <pre>
-   **
-   *Close a Expect block.
-   *Closing a Expect block restores the state of the previous Expect
-   *block for the following messages.
-   *&#64;returns &#64;ref Mysqlx::Ok on success,  &#64;ref Mysqlx::Error on error
+   * *
+   * Close a Expect block.
+   * Closing a Expect block restores the state of the previous Expect
+   * block for the following messages.
+   * &#64;returns &#64;ref Mysqlx::Ok on success,  &#64;ref Mysqlx::Error on error
    * </pre>
    *
    * Protobuf type {@code Mysqlx.Expect.Close}
    */
-  public static final class Close extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class Close extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:Mysqlx.Expect.Close)
       CloseOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use Close.newBuilder() to construct.
     private Close(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private Close() {
-    }
+
+    private Close() {}
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new Close();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private Close(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2131,39 +2220,41 @@ public final class MysqlxExpect {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
               }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Close_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Close_fieldAccessorTable
+      return com.mysql.cj.x.protobuf.MysqlxExpect
+          .internal_static_Mysqlx_Expect_Close_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.mysql.cj.x.protobuf.MysqlxExpect.Close.class, com.mysql.cj.x.protobuf.MysqlxExpect.Close.Builder.class);
+              com.mysql.cj.x.protobuf.MysqlxExpect.Close.class,
+              com.mysql.cj.x.protobuf.MysqlxExpect.Close.Builder.class);
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -2175,8 +2266,7 @@ public final class MysqlxExpect {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       unknownFields.writeTo(output);
     }
 
@@ -2194,12 +2284,13 @@ public final class MysqlxExpect {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxExpect.Close)) {
         return super.equals(obj);
       }
-      com.mysql.cj.x.protobuf.MysqlxExpect.Close other = (com.mysql.cj.x.protobuf.MysqlxExpect.Close) obj;
+      com.mysql.cj.x.protobuf.MysqlxExpect.Close other =
+          (com.mysql.cj.x.protobuf.MysqlxExpect.Close) obj;
 
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -2217,88 +2308,94 @@ public final class MysqlxExpect {
       return hash;
     }
 
-    public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(
-        java.nio.ByteBuffer data)
+    public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxExpect.Close parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
+
     public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxExpect.Close prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -2308,31 +2405,35 @@ public final class MysqlxExpect {
       return builder;
     }
     /**
+     *
+     *
      * <pre>
-     **
-     *Close a Expect block.
-     *Closing a Expect block restores the state of the previous Expect
-     *block for the following messages.
-     *&#64;returns &#64;ref Mysqlx::Ok on success,  &#64;ref Mysqlx::Error on error
+     * *
+     * Close a Expect block.
+     * Closing a Expect block restores the state of the previous Expect
+     * block for the following messages.
+     * &#64;returns &#64;ref Mysqlx::Ok on success,  &#64;ref Mysqlx::Error on error
      * </pre>
      *
      * Protobuf type {@code Mysqlx.Expect.Close}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:Mysqlx.Expect.Close)
         com.mysql.cj.x.protobuf.MysqlxExpect.CloseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Close_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Close_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxExpect
+            .internal_static_Mysqlx_Expect_Close_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxExpect.Close.class, com.mysql.cj.x.protobuf.MysqlxExpect.Close.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxExpect.Close.class,
+                com.mysql.cj.x.protobuf.MysqlxExpect.Close.Builder.class);
       }
 
       // Construct using com.mysql.cj.x.protobuf.MysqlxExpect.Close.newBuilder()
@@ -2340,16 +2441,15 @@ public final class MysqlxExpect {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -2357,8 +2457,7 @@ public final class MysqlxExpect {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.mysql.cj.x.protobuf.MysqlxExpect.internal_static_Mysqlx_Expect_Close_descriptor;
       }
 
@@ -2378,7 +2477,8 @@ public final class MysqlxExpect {
 
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxExpect.Close buildPartial() {
-        com.mysql.cj.x.protobuf.MysqlxExpect.Close result = new com.mysql.cj.x.protobuf.MysqlxExpect.Close(this);
+        com.mysql.cj.x.protobuf.MysqlxExpect.Close result =
+            new com.mysql.cj.x.protobuf.MysqlxExpect.Close(this);
         onBuilt();
         return result;
       }
@@ -2387,38 +2487,41 @@ public final class MysqlxExpect {
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.mysql.cj.x.protobuf.MysqlxExpect.Close) {
-          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxExpect.Close)other);
+          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxExpect.Close) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -2455,6 +2558,7 @@ public final class MysqlxExpect {
         }
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2467,12 +2571,12 @@ public final class MysqlxExpect {
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:Mysqlx.Expect.Close)
     }
 
     // @@protoc_insertion_point(class_scope:Mysqlx.Expect.Close)
     private static final com.mysql.cj.x.protobuf.MysqlxExpect.Close DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxExpect.Close();
     }
@@ -2481,16 +2585,17 @@ public final class MysqlxExpect {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<Close>
-        PARSER = new com.google.protobuf.AbstractParser<Close>() {
-      @java.lang.Override
-      public Close parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Close(input, extensionRegistry);
-      }
-    };
+    @java.lang.Deprecated
+    public static final com.google.protobuf.Parser<Close> PARSER =
+        new com.google.protobuf.AbstractParser<Close>() {
+          @java.lang.Override
+          public Close parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new Close(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<Close> parser() {
       return PARSER;
@@ -2505,77 +2610,75 @@ public final class MysqlxExpect {
     public com.mysql.cj.x.protobuf.MysqlxExpect.Close getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Expect_Open_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Expect_Open_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Expect_Open_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Expect_Open_Condition_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Expect_Open_Condition_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Expect_Open_Condition_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Expect_Close_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Expect_Close_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Expect_Close_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
-      "\n\023mysqlx_expect.proto\022\rMysqlx.Expect\032\014my" +
-      "sqlx.proto\"\326\003\n\004Open\022B\n\002op\030\001 \001(\0162 .Mysqlx" +
-      ".Expect.Open.CtxOperation:\024EXPECT_CTX_CO" +
-      "PY_PREV\022+\n\004cond\030\002 \003(\0132\035.Mysqlx.Expect.Op" +
-      "en.Condition\032\226\002\n\tCondition\022\025\n\rcondition_" +
-      "key\030\001 \002(\r\022\027\n\017condition_value\030\002 \001(\014\022K\n\002op" +
-      "\030\003 \001(\01620.Mysqlx.Expect.Open.Condition.Co" +
-      "nditionOperation:\rEXPECT_OP_SET\"N\n\003Key\022\023" +
-      "\n\017EXPECT_NO_ERROR\020\001\022\026\n\022EXPECT_FIELD_EXIS" +
-      "T\020\002\022\032\n\026EXPECT_DOCID_GENERATED\020\003\"<\n\022Condi" +
-      "tionOperation\022\021\n\rEXPECT_OP_SET\020\000\022\023\n\017EXPE" +
-      "CT_OP_UNSET\020\001\">\n\014CtxOperation\022\030\n\024EXPECT_" +
-      "CTX_COPY_PREV\020\000\022\024\n\020EXPECT_CTX_EMPTY\020\001:\004\210" +
-      "\3520\030\"\r\n\005Close:\004\210\3520\031B\031\n\027com.mysql.cj.x.pro" +
-      "tobuf"
+      "\n\023mysqlx_expect.proto\022\rMysqlx.Expect\032\014my"
+          + "sqlx.proto\"\326\003\n\004Open\022B\n\002op\030\001 \001(\0162 .Mysqlx"
+          + ".Expect.Open.CtxOperation:\024EXPECT_CTX_CO"
+          + "PY_PREV\022+\n\004cond\030\002 \003(\0132\035.Mysqlx.Expect.Op"
+          + "en.Condition\032\226\002\n\tCondition\022\025\n\rcondition_"
+          + "key\030\001 \002(\r\022\027\n\017condition_value\030\002 \001(\014\022K\n\002op"
+          + "\030\003 \001(\01620.Mysqlx.Expect.Open.Condition.Co"
+          + "nditionOperation:\rEXPECT_OP_SET\"N\n\003Key\022\023"
+          + "\n\017EXPECT_NO_ERROR\020\001\022\026\n\022EXPECT_FIELD_EXIS"
+          + "T\020\002\022\032\n\026EXPECT_DOCID_GENERATED\020\003\"<\n\022Condi"
+          + "tionOperation\022\021\n\rEXPECT_OP_SET\020\000\022\023\n\017EXPE"
+          + "CT_OP_UNSET\020\001\">\n\014CtxOperation\022\030\n\024EXPECT_"
+          + "CTX_COPY_PREV\020\000\022\024\n\020EXPECT_CTX_EMPTY\020\001:\004\210"
+          + "\3520\030\"\r\n\005Close:\004\210\3520\031B\031\n\027com.mysql.cj.x.pro"
+          + "tobuf"
     };
-    descriptor = com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.mysql.cj.x.protobuf.Mysqlx.getDescriptor(),
-        });
-    internal_static_Mysqlx_Expect_Open_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_Mysqlx_Expect_Open_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Expect_Open_descriptor,
-        new java.lang.String[] { "Op", "Cond", });
+    descriptor =
+        com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
+            descriptorData,
+            new com.google.protobuf.Descriptors.FileDescriptor[] {
+              com.mysql.cj.x.protobuf.Mysqlx.getDescriptor(),
+            });
+    internal_static_Mysqlx_Expect_Open_descriptor = getDescriptor().getMessageTypes().get(0);
+    internal_static_Mysqlx_Expect_Open_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Expect_Open_descriptor,
+            new java.lang.String[] {
+              "Op", "Cond",
+            });
     internal_static_Mysqlx_Expect_Open_Condition_descriptor =
-      internal_static_Mysqlx_Expect_Open_descriptor.getNestedTypes().get(0);
-    internal_static_Mysqlx_Expect_Open_Condition_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Expect_Open_Condition_descriptor,
-        new java.lang.String[] { "ConditionKey", "ConditionValue", "Op", });
-    internal_static_Mysqlx_Expect_Close_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_Mysqlx_Expect_Close_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Expect_Close_descriptor,
-        new java.lang.String[] { });
+        internal_static_Mysqlx_Expect_Open_descriptor.getNestedTypes().get(0);
+    internal_static_Mysqlx_Expect_Open_Condition_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Expect_Open_Condition_descriptor,
+            new java.lang.String[] {
+              "ConditionKey", "ConditionValue", "Op",
+            });
+    internal_static_Mysqlx_Expect_Close_descriptor = getDescriptor().getMessageTypes().get(1);
+    internal_static_Mysqlx_Expect_Close_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Expect_Close_descriptor, new java.lang.String[] {});
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
     registry.add(com.mysql.cj.x.protobuf.Mysqlx.clientMessageId);
-    com.google.protobuf.Descriptors.FileDescriptor
-        .internalUpdateFileDescriptor(descriptor, registry);
+    com.google.protobuf.Descriptors.FileDescriptor.internalUpdateFileDescriptor(
+        descriptor, registry);
     com.mysql.cj.x.protobuf.Mysqlx.getDescriptor();
   }
 

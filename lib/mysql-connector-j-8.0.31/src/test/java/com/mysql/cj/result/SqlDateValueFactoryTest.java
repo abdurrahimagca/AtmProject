@@ -32,15 +32,6 @@ package com.mysql.cj.result;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.TimeZone;
-import java.util.concurrent.Callable;
-
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.MysqlType;
 import com.mysql.cj.conf.DefaultPropertySet;
 import com.mysql.cj.conf.PropertyKey;
@@ -51,202 +42,277 @@ import com.mysql.cj.protocol.InternalDate;
 import com.mysql.cj.protocol.InternalTime;
 import com.mysql.cj.protocol.InternalTimestamp;
 import com.mysql.cj.util.TimeUtil;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.TimeZone;
+import java.util.concurrent.Callable;
+import org.junit.jupiter.api.Test;
 
-/**
- * Tests for JDBC {@link java.sql.Date} creation.
- */
+/** Tests for JDBC {@link java.sql.Date} creation. */
 public class SqlDateValueFactoryTest extends CommonAsserts {
-    PropertySet pset = new DefaultPropertySet();
-    SqlDateValueFactory vf = new SqlDateValueFactory(this.pset, null, TimeZone.getDefault());
+  PropertySet pset = new DefaultPropertySet();
+  SqlDateValueFactory vf = new SqlDateValueFactory(this.pset, null, TimeZone.getDefault());
 
-    @Test
-    public void testBasics() {
-        assertEquals("java.sql.Date", this.vf.getTargetTypeName());
-    }
+  @Test
+  public void testBasics() {
+    assertEquals("java.sql.Date", this.vf.getTargetTypeName());
+  }
 
-    @Test
-    public void testCreateFromDate() {
-        assertEquals("2015-05-01", this.vf.createFromDate(new InternalDate(2015, 5, 1)).toString()); // May 1st
-        assertEquals(Date.valueOf(LocalDate.of(2018, 1, 1)), this.vf.createFromDate(new InternalDate(2018, 1, 1)));
-    }
+  @Test
+  public void testCreateFromDate() {
+    assertEquals(
+        "2015-05-01", this.vf.createFromDate(new InternalDate(2015, 5, 1)).toString()); // May 1st
+    assertEquals(
+        Date.valueOf(LocalDate.of(2018, 1, 1)),
+        this.vf.createFromDate(new InternalDate(2018, 1, 1)));
+  }
 
-    @Test
-    public void testCreateFromTime() {
-        assertEquals("1970-01-01", this.vf.createFromTime(new InternalTime(12, 20, 02, 4, 9)).toString());
-        assertEquals("1970-01-01", this.vf.createFromTime(new InternalTime(1, 1, 1, 1, 9)).toString());
-        assertEquals("1970-01-01", this.vf.createFromTime(new InternalTime(-1, 1, 1, 1, 9)).toString());
-        assertEquals("1970-01-01", this.vf.createFromTime(new InternalTime(48, 1, 1, 1, 9)).toString());
-    }
+  @Test
+  public void testCreateFromTime() {
+    assertEquals(
+        "1970-01-01", this.vf.createFromTime(new InternalTime(12, 20, 02, 4, 9)).toString());
+    assertEquals("1970-01-01", this.vf.createFromTime(new InternalTime(1, 1, 1, 1, 9)).toString());
+    assertEquals("1970-01-01", this.vf.createFromTime(new InternalTime(-1, 1, 1, 1, 9)).toString());
+    assertEquals("1970-01-01", this.vf.createFromTime(new InternalTime(48, 1, 1, 1, 9)).toString());
+  }
 
-    @Test
-    public void testCreateFromTimestamp() {
-        Date d = this.vf.createFromTimestamp(new InternalTimestamp(2015, 05, 01, 12, 20, 02, 4, 9));
-        // should be the same (in system timezone)
-        assertEquals("2015-05-01", d.toString());
-        assertEquals(Date.valueOf(LocalDate.of(2018, 1, 1)), this.vf.createFromTimestamp(new InternalTimestamp(2018, 1, 1, 1, 1, 1, 1, 9)));
+  @Test
+  public void testCreateFromTimestamp() {
+    Date d = this.vf.createFromTimestamp(new InternalTimestamp(2015, 05, 01, 12, 20, 02, 4, 9));
+    // should be the same (in system timezone)
+    assertEquals("2015-05-01", d.toString());
+    assertEquals(
+        Date.valueOf(LocalDate.of(2018, 1, 1)),
+        this.vf.createFromTimestamp(new InternalTimestamp(2018, 1, 1, 1, 1, 1, 1, 9)));
 
-        assertThrows(WrongArgumentException.class, "YEAR", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(0, 0, 0, 1, 1, 1, 1, 9));
-                return null;
-            }
+    assertThrows(
+        WrongArgumentException.class,
+        "YEAR",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(0, 0, 0, 1, 1, 1, 1, 9));
+            return null;
+          }
         });
-        assertThrows(WrongArgumentException.class, "YEAR", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(0, 0, 1, 1, 1, 1, 1, 9));
-                return null;
-            }
+    assertThrows(
+        WrongArgumentException.class,
+        "YEAR",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(0, 0, 1, 1, 1, 1, 1, 9));
+            return null;
+          }
         });
-        assertThrows(WrongArgumentException.class, "YEAR", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(0, 1, 0, 1, 1, 1, 1, 9));
-                return null;
-            }
+    assertThrows(
+        WrongArgumentException.class,
+        "YEAR",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(0, 1, 0, 1, 1, 1, 1, 9));
+            return null;
+          }
         });
-        assertThrows(WrongArgumentException.class, "YEAR", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(0, 1, 1, 1, 1, 1, 1, 9));
-                return null;
-            }
-        });
-
-        assertThrows(WrongArgumentException.class, "MONTH", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(2018, 0, 0, 1, 1, 1, 1, 9));
-                return null;
-            }
-        });
-        assertThrows(WrongArgumentException.class, "MONTH", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(2018, 0, 1, 1, 1, 1, 1, 9));
-                return null;
-            }
-        });
-
-        assertThrows(WrongArgumentException.class, "DAY_OF_MONTH", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(2018, 1, 0, 1, 1, 1, 1, 9));
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromLong() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from LONG to java.sql.Date", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromLong(22L);
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromBigInteger() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from BIGINT to java.sql.Date", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromBigInteger(new BigInteger("2018"));
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromDouble() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from DOUBLE to java.sql.Date", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromDouble(new Double(2018));
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromBigDecimal() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from DECIMAL to java.sql.Date", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromBigDecimal(new BigDecimal("2018"));
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromBytes() {
-
-        Field f = new Field("test", "test", 33, "UTF-8", MysqlType.VARCHAR, 10);
-
-        this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(true);
-        assertThrows(DataConversionException.class, "Unsupported conversion from LONG to java.sql.Date", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
-                return null;
-            }
+    assertThrows(
+        WrongArgumentException.class,
+        "YEAR",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(0, 1, 1, 1, 1, 1, 1, 9));
+            return null;
+          }
         });
 
-        this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(false);
-        assertThrows(DataConversionException.class, "Cannot convert string '' to java.sql.Date value", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
-                return null;
-            }
+    assertThrows(
+        WrongArgumentException.class,
+        "MONTH",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(2018, 0, 0, 1, 1, 1, 1, 9));
+            return null;
+          }
+        });
+    assertThrows(
+        WrongArgumentException.class,
+        "MONTH",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(2018, 0, 1, 1, 1, 1, 1, 9));
+            return null;
+          }
         });
 
-        assertEquals(Date.valueOf(LocalDate.of(2018, 1, 2)), this.vf.createFromBytes("2018-01-02 03:04:05.6".getBytes(), 0, 21, f));
-        assertEquals(Date.valueOf(LocalDate.of(2018, 1, 2)), this.vf.createFromBytes("2018-01-02".getBytes(), 0, 10, f));
-        assertEquals(Date.valueOf(TimeUtil.DEFAULT_DATE).toString(), this.vf.createFromBytes("03:04:05.6".getBytes(), 0, 10, f).toString());
+    assertThrows(
+        WrongArgumentException.class,
+        "DAY_OF_MONTH",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(2018, 1, 0, 1, 1, 1, 1, 9));
+            return null;
+          }
+        });
+  }
 
-        assertThrows(DataConversionException.class, "Cannot convert string '1' to java.sql.Date value", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromBytes(new byte[] { '1' }, 0, 1, f);
-                return null;
-            }
+  @Test
+  public void testCreateFromLong() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from LONG to java.sql.Date",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromLong(22L);
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromBigInteger() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from BIGINT to java.sql.Date",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromBigInteger(new BigInteger("2018"));
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromDouble() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from DOUBLE to java.sql.Date",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromDouble(new Double(2018));
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromBigDecimal() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from DECIMAL to java.sql.Date",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromBigDecimal(new BigDecimal("2018"));
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromBytes() {
+
+    Field f = new Field("test", "test", 33, "UTF-8", MysqlType.VARCHAR, 10);
+
+    this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(true);
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from LONG to java.sql.Date",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
+            return null;
+          }
         });
 
-        assertThrows(DataConversionException.class, "Cannot convert string '-1.0' to java.sql.Date value", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromBytes("-1.0".getBytes(), 0, 4, f);
-                return null;
-            }
+    this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(false);
+    assertThrows(
+        DataConversionException.class,
+        "Cannot convert string '' to java.sql.Date value",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
+            return null;
+          }
         });
 
-        assertThrows(DataConversionException.class, "Cannot convert string 'just a string' to java.sql.Date value", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromBytes("just a string".getBytes(), 0, 13, f);
-                return null;
-            }
-        });
-    }
+    assertEquals(
+        Date.valueOf(LocalDate.of(2018, 1, 2)),
+        this.vf.createFromBytes("2018-01-02 03:04:05.6".getBytes(), 0, 21, f));
+    assertEquals(
+        Date.valueOf(LocalDate.of(2018, 1, 2)),
+        this.vf.createFromBytes("2018-01-02".getBytes(), 0, 10, f));
+    assertEquals(
+        Date.valueOf(TimeUtil.DEFAULT_DATE).toString(),
+        this.vf.createFromBytes("03:04:05.6".getBytes(), 0, 10, f).toString());
 
-    @Test
-    public void testCreateFromBit() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from BIT to java.sql.Date", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SqlDateValueFactoryTest.this.vf.createFromBit(new byte[] { 1 }, 0, 2);
-                return null;
-            }
+    assertThrows(
+        DataConversionException.class,
+        "Cannot convert string '1' to java.sql.Date value",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromBytes(new byte[] {'1'}, 0, 1, f);
+            return null;
+          }
         });
-    }
 
-    @Test
-    public void testCreateFromNull() {
-        assertNull(this.vf.createFromNull());
-    }
+    assertThrows(
+        DataConversionException.class,
+        "Cannot convert string '-1.0' to java.sql.Date value",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromBytes("-1.0".getBytes(), 0, 4, f);
+            return null;
+          }
+        });
+
+    assertThrows(
+        DataConversionException.class,
+        "Cannot convert string 'just a string' to java.sql.Date value",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromBytes("just a string".getBytes(), 0, 13, f);
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromBit() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from BIT to java.sql.Date",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            SqlDateValueFactoryTest.this.vf.createFromBit(new byte[] {1}, 0, 2);
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromNull() {
+    assertNull(this.vf.createFromNull());
+  }
 }

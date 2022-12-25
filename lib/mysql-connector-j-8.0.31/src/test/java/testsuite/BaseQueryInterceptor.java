@@ -29,35 +29,36 @@
 
 package testsuite;
 
-import java.util.Properties;
-import java.util.function.Supplier;
-
 import com.mysql.cj.MysqlConnection;
 import com.mysql.cj.Query;
 import com.mysql.cj.interceptors.QueryInterceptor;
 import com.mysql.cj.log.Log;
 import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.protocol.ServerSession;
+import java.util.Properties;
+import java.util.function.Supplier;
 
 public class BaseQueryInterceptor implements QueryInterceptor {
 
-    public QueryInterceptor init(MysqlConnection conn, Properties props, Log log) {
-        return this;
-    }
+  public QueryInterceptor init(MysqlConnection conn, Properties props, Log log) {
+    return this;
+  }
 
-    public <T extends Resultset> T preProcess(Supplier<String> sql, Query interceptedQuery) {
-        return null;
-    }
+  public <T extends Resultset> T preProcess(Supplier<String> sql, Query interceptedQuery) {
+    return null;
+  }
 
-    public boolean executeTopLevelOnly() {
-        return false;
-    }
+  public boolean executeTopLevelOnly() {
+    return false;
+  }
 
-    public void destroy() {
-    }
+  public void destroy() {}
 
-    public <T extends Resultset> T postProcess(Supplier<String> sql, Query interceptedQuery, T originalResultSet, ServerSession serverSession) {
-        return originalResultSet;
-    }
-
+  public <T extends Resultset> T postProcess(
+      Supplier<String> sql,
+      Query interceptedQuery,
+      T originalResultSet,
+      ServerSession serverSession) {
+    return originalResultSet;
+  }
 }

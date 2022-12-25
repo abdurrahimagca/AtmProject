@@ -29,17 +29,21 @@
 
 package com.mysql.cj;
 
-import java.util.List;
-
 import com.mysql.cj.protocol.Message;
+import java.util.List;
 
 public interface MessageBuilder<M extends Message> {
 
-    M buildSqlStatement(String statement);
+  M buildSqlStatement(String statement);
 
-    M buildSqlStatement(String statement, List<Object> args);
+  M buildSqlStatement(String statement, List<Object> args);
 
-    M buildClose();
+  M buildClose();
 
-    M buildComQuery(M sharedPacket, Session sess, PreparedQuery preparedQuery, QueryBindings bindings, String characterEncoding);
+  M buildComQuery(
+      M sharedPacket,
+      Session sess,
+      PreparedQuery preparedQuery,
+      QueryBindings bindings,
+      String characterEncoding);
 }

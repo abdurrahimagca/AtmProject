@@ -35,38 +35,38 @@ import javax.transaction.xa.XAException;
  * The stock XAException class isn't too friendly (i.e. no error messages), so we extend it a bit.
  */
 class MysqlXAException extends XAException {
-    private static final long serialVersionUID = -9075817535836563004L;
+  private static final long serialVersionUID = -9075817535836563004L;
 
-    private String message;
-    protected String xidAsString;
+  private String message;
+  protected String xidAsString;
 
-    public MysqlXAException(int errorCode, String message, String xidAsString) {
-        super(errorCode);
-        this.message = message;
-        this.xidAsString = xidAsString;
+  public MysqlXAException(int errorCode, String message, String xidAsString) {
+    super(errorCode);
+    this.message = message;
+    this.xidAsString = xidAsString;
+  }
+
+  public MysqlXAException(String message, String xidAsString) {
+    super();
+
+    this.message = message;
+    this.xidAsString = xidAsString;
+  }
+
+  @Override
+  public String getMessage() {
+    String superMessage = super.getMessage();
+    StringBuilder returnedMessage = new StringBuilder();
+
+    if (superMessage != null) {
+      returnedMessage.append(superMessage);
+      returnedMessage.append(":");
     }
 
-    public MysqlXAException(String message, String xidAsString) {
-        super();
-
-        this.message = message;
-        this.xidAsString = xidAsString;
+    if (this.message != null) {
+      returnedMessage.append(this.message);
     }
 
-    @Override
-    public String getMessage() {
-        String superMessage = super.getMessage();
-        StringBuilder returnedMessage = new StringBuilder();
-
-        if (superMessage != null) {
-            returnedMessage.append(superMessage);
-            returnedMessage.append(":");
-        }
-
-        if (this.message != null) {
-            returnedMessage.append(this.message);
-        }
-
-        return returnedMessage.toString();
-    }
+    return returnedMessage.toString();
+  }
 }

@@ -31,13 +31,11 @@ package com.mysql.cj.protocol.x;
 
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 
-/**
- * Factory producing {@link Ok} from protocol message.
- */
+/** Factory producing {@link Ok} from protocol message. */
 public class OkFactory implements ProtocolEntityFactory<Ok, XMessage> {
 
-    @Override
-    public Ok createFromMessage(XMessage message) {
-        return new Ok();
-    }
+  @Override
+  public Ok createFromMessage(XMessage message) {
+    return new Ok();
+  }
 }

@@ -32,39 +32,34 @@ package com.mysql.cj.xdevapi;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-/**
- * {@link FilterParams} implementation for {@link Table} syntax.
- */
+/** {@link FilterParams} implementation for {@link Table} syntax. */
 public class TableFilterParams extends AbstractFilterParams {
-    /**
-     * Constructor.
-     * 
-     * @param schemaName
-     *            Schema name
-     * @param collectionName
-     *            Collection name
-     */
-    public TableFilterParams(String schemaName, String collectionName) {
-        this(schemaName, collectionName, true);
-    }
+  /**
+   * Constructor.
+   *
+   * @param schemaName Schema name
+   * @param collectionName Collection name
+   */
+  public TableFilterParams(String schemaName, String collectionName) {
+    this(schemaName, collectionName, true);
+  }
 
-    /**
-     * Constructor.
-     * 
-     * @param schemaName
-     *            Schema name
-     * @param collectionName
-     *            Collection name
-     * @param supportsOffset
-     *            Whether <i>offset</i> is supported or not
-     */
-    public TableFilterParams(String schemaName, String collectionName, boolean supportsOffset) {
-        super(schemaName, collectionName, supportsOffset, true);
-    }
+  /**
+   * Constructor.
+   *
+   * @param schemaName Schema name
+   * @param collectionName Collection name
+   * @param supportsOffset Whether <i>offset</i> is supported or not
+   */
+  public TableFilterParams(String schemaName, String collectionName, boolean supportsOffset) {
+    super(schemaName, collectionName, supportsOffset, true);
+  }
 
-    @Override
-    public void setFields(String... projection) {
-        this.projection = projection;
-        this.fields = new ExprParser(Arrays.stream(projection).collect(Collectors.joining(", ")), true).parseTableSelectProjection();
-    }
+  @Override
+  public void setFields(String... projection) {
+    this.projection = projection;
+    this.fields =
+        new ExprParser(Arrays.stream(projection).collect(Collectors.joining(", ")), true)
+            .parseTableSelectProjection();
+  }
 }

@@ -29,48 +29,54 @@
 
 package com.mysql.cj.xdevapi;
 
+import com.mysql.cj.MysqlxSession;
+import com.mysql.cj.protocol.x.XMessage;
+import com.mysql.cj.protocol.x.XMessageBuilder;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import com.mysql.cj.MysqlxSession;
-import com.mysql.cj.protocol.x.XMessage;
-import com.mysql.cj.protocol.x.XMessageBuilder;
-
 public class InsertStatementImpl implements InsertStatement {
-    private MysqlxSession mysqlxSession;
-    private String schemaName;
-    private String tableName;
-    private InsertParams insertParams = new InsertParams();
+  private MysqlxSession mysqlxSession;
+  private String schemaName;
+  private String tableName;
+  private InsertParams insertParams = new InsertParams();
 
-    /* package private */ InsertStatementImpl(MysqlxSession mysqlxSession, String schema, String table, String[] fields) {
-        this.mysqlxSession = mysqlxSession;
-        this.schemaName = schema;
-        this.tableName = table;
-        this.insertParams.setProjection(fields);
-    }
+  /* package private */ InsertStatementImpl(
+      MysqlxSession mysqlxSession, String schema, String table, String[] fields) {
+    this.mysqlxSession = mysqlxSession;
+    this.schemaName = schema;
+    this.tableName = table;
+    this.insertParams.setProjection(fields);
+  }
 
-    /* package private */ InsertStatementImpl(MysqlxSession mysqlxSession, String schema, String table, Map<String, Object> fieldsAndValues) {
-        this.mysqlxSession = mysqlxSession;
-        this.schemaName = schema;
-        this.tableName = table;
-        this.insertParams.setFieldsAndValues(fieldsAndValues);
-    }
+  /* package private */ InsertStatementImpl(
+      MysqlxSession mysqlxSession,
+      String schema,
+      String table,
+      Map<String, Object> fieldsAndValues) {
+    this.mysqlxSession = mysqlxSession;
+    this.schemaName = schema;
+    this.tableName = table;
+    this.insertParams.setFieldsAndValues(fieldsAndValues);
+  }
 
-    public InsertResult execute() {
-        return this.mysqlxSession.query(
-                ((XMessageBuilder) this.mysqlxSession.<XMessage>getMessageBuilder()).buildRowInsert(this.schemaName, this.tableName, this.insertParams),
-                new InsertResultBuilder());
-    }
+  public InsertResult execute() {
+    return this.mysqlxSession.query(
+        ((XMessageBuilder) this.mysqlxSession.<XMessage>getMessageBuilder())
+            .buildRowInsert(this.schemaName, this.tableName, this.insertParams),
+        new InsertResultBuilder());
+  }
 
-    public CompletableFuture<InsertResult> executeAsync() {
-        return this.mysqlxSession.queryAsync(
-                ((XMessageBuilder) this.mysqlxSession.<XMessage>getMessageBuilder()).buildRowInsert(this.schemaName, this.tableName, this.insertParams),
-                new InsertResultBuilder());
-    }
+  public CompletableFuture<InsertResult> executeAsync() {
+    return this.mysqlxSession.queryAsync(
+        ((XMessageBuilder) this.mysqlxSession.<XMessage>getMessageBuilder())
+            .buildRowInsert(this.schemaName, this.tableName, this.insertParams),
+        new InsertResultBuilder());
+  }
 
-    public InsertStatement values(List<Object> row) {
-        this.insertParams.addRow(row);
-        return this;
-    }
+  public InsertStatement values(List<Object> row) {
+    this.insertParams.addRow(row);
+    return this;
+  }
 }

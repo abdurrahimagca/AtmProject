@@ -29,8 +29,6 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.ArrayList;
-
 import com.mysql.cj.MysqlxSession;
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.protocol.ColumnDefinition;
@@ -44,52 +42,64 @@ import com.mysql.cj.result.DefaultColumnDefinition;
 import com.mysql.cj.result.Field;
 import com.mysql.cj.result.Row;
 import com.mysql.cj.result.RowList;
+import java.util.ArrayList;
 
-/**
- * Result builder producing a streaming {@link DocResult} instance.
- */
+/** Result builder producing a streaming {@link DocResult} instance. */
 public class StreamingDocResultBuilder implements ResultBuilder<DocResult> {
-    private ArrayList<Field> fields = new ArrayList<>();
-    private ColumnDefinition metadata;
-    private RowList rowList = null;
+  private ArrayList<Field> fields = new ArrayList<>();
+  private ColumnDefinition metadata;
+  private RowList rowList = null;
 
-    PropertySet pset;
-    XProtocol protocol;
-    private StatementExecuteOkBuilder statementExecuteOkBuilder = new StatementExecuteOkBuilder();
+  PropertySet pset;
+  XProtocol protocol;
+  private StatementExecuteOkBuilder statementExecuteOkBuilder = new StatementExecuteOkBuilder();
 
-    public StreamingDocResultBuilder(MysqlxSession sess) {
-        this.pset = sess.getPropertySet();
-        this.protocol = sess.getProtocol();
+  public StreamingDocResultBuilder(MysqlxSession sess) {
+    this.pset = sess.getPropertySet();
+    this.protocol = sess.getProtocol();
+  }
+
+  @Override
+  public boolean addProtocolEntity(ProtocolEntity entity) {
+    if (entity instanceof Field) {
+      this.fields.add((Field) entity);
+      return false;
+
+    } else if (entity instanceof Notice) {
+      this.statementExecuteOkBuilder.addProtocolEntity(entity);
+      return false;
     }
 
-    @Override
-    public boolean addProtocolEntity(ProtocolEntity entity) {
-        if (entity instanceof Field) {
-            this.fields.add((Field) entity);
-            return false;
-
-        } else if (entity instanceof Notice) {
-            this.statementExecuteOkBuilder.addProtocolEntity(entity);
-            return false;
-        }
-
-        if (this.metadata == null) {
-            this.metadata = new DefaultColumnDefinition(this.fields.toArray(new Field[] {}));
-        }
-
-        this.rowList = entity instanceof Row ? new XProtocolRowInputStream(this.metadata, (Row) entity, this.protocol, (n) -> {
-            this.statementExecuteOkBuilder.addProtocolEntity(n);
-        }) : new XProtocolRowInputStream(this.metadata, this.protocol, (n) -> {
-            this.statementExecuteOkBuilder.addProtocolEntity(n);
-        });
-
-        return true;
+    if (this.metadata == null) {
+      this.metadata = new DefaultColumnDefinition(this.fields.toArray(new Field[] {}));
     }
 
-    @Override
-    public DocResult build() {
-        return new DocResultImpl(this.rowList, () -> {
-            return this.protocol.readQueryResult(this.statementExecuteOkBuilder);
-        }, this.pset);
-    }
+    this.rowList =
+        entity instanceof Row
+            ? new XProtocolRowInputStream(
+                this.metadata,
+                (Row) entity,
+                this.protocol,
+                (n) -> {
+                  this.statementExecuteOkBuilder.addProtocolEntity(n);
+                })
+            : new XProtocolRowInputStream(
+                this.metadata,
+                this.protocol,
+                (n) -> {
+                  this.statementExecuteOkBuilder.addProtocolEntity(n);
+                });
+
+    return true;
+  }
+
+  @Override
+  public DocResult build() {
+    return new DocResultImpl(
+        this.rowList,
+        () -> {
+          return this.protocol.readQueryResult(this.statementExecuteOkBuilder);
+        },
+        this.pset);
+  }
 }

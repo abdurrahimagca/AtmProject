@@ -32,5 +32,4 @@
  *
  * @since 6.0
  */
-
 package com.mysql.cj.xdevapi;

@@ -29,64 +29,66 @@
 
 package com.mysql.cj.protocol.x;
 
-import java.util.NoSuchElementException;
-import java.util.function.Consumer;
-
 import com.mysql.cj.protocol.ColumnDefinition;
 import com.mysql.cj.result.Row;
 import com.mysql.cj.result.RowList;
+import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 public class XProtocolRowInputStream implements RowList {
-    private ColumnDefinition metadata;
-    private XProtocol protocol;
-    private boolean isDone = false;
-    private int position = -1;
-    /** XProtocolRow */
-    private Row next; // TODO document
-    private Consumer<Notice> noticeConsumer;
+  private ColumnDefinition metadata;
+  private XProtocol protocol;
+  private boolean isDone = false;
+  private int position = -1;
+  /** XProtocolRow */
+  private Row next; // TODO document
 
-    public XProtocolRowInputStream(ColumnDefinition metadata, XProtocol protocol, Consumer<Notice> noticeConsumer) {
-        this.metadata = metadata;
-        this.protocol = protocol;
-        this.noticeConsumer = noticeConsumer;
-    }
+  private Consumer<Notice> noticeConsumer;
 
-    public XProtocolRowInputStream(ColumnDefinition metadata, Row row, XProtocol protocol, Consumer<Notice> noticeConsumer) {
-        this.metadata = metadata;
-        this.protocol = protocol;
-        this.next = row;
-        this.next.setMetadata(metadata);
-        this.noticeConsumer = noticeConsumer;
-    }
+  public XProtocolRowInputStream(
+      ColumnDefinition metadata, XProtocol protocol, Consumer<Notice> noticeConsumer) {
+    this.metadata = metadata;
+    this.protocol = protocol;
+    this.noticeConsumer = noticeConsumer;
+  }
 
-    public Row readRow() {
-        if (!hasNext()) {
-            this.isDone = true;
-            return null;
-        }
-        this.position++;
-        Row r = this.next;
-        this.next = null;
-        return r;
-    }
+  public XProtocolRowInputStream(
+      ColumnDefinition metadata, Row row, XProtocol protocol, Consumer<Notice> noticeConsumer) {
+    this.metadata = metadata;
+    this.protocol = protocol;
+    this.next = row;
+    this.next.setMetadata(metadata);
+    this.noticeConsumer = noticeConsumer;
+  }
 
-    public Row next() {
-        if (!hasNext()) {
-            throw new NoSuchElementException();
-        }
-        return readRow();
+  public Row readRow() {
+    if (!hasNext()) {
+      this.isDone = true;
+      return null;
     }
+    this.position++;
+    Row r = this.next;
+    this.next = null;
+    return r;
+  }
 
-    public boolean hasNext() {
-        if (this.isDone) {
-            return false;
-        } else if (this.next == null) {
-            this.next = this.protocol.readRowOrNull(this.metadata, this.noticeConsumer);
-        }
-        return this.next != null;
+  public Row next() {
+    if (!hasNext()) {
+      throw new NoSuchElementException();
     }
+    return readRow();
+  }
 
-    public int getPosition() {
-        return this.position;
+  public boolean hasNext() {
+    if (this.isDone) {
+      return false;
+    } else if (this.next == null) {
+      this.next = this.protocol.readRowOrNull(this.metadata, this.noticeConsumer);
     }
+    return this.next != null;
+  }
+
+  public int getPosition() {
+    return this.position;
+  }
 }

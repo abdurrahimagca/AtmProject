@@ -27,8 +27,5 @@
  * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
  */
 
-/**
- * Dev API test suite.
- */
-
+/** Dev API test suite. */
 package testsuite.x.devapi;

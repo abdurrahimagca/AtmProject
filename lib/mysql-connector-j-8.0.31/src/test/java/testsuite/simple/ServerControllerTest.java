@@ -29,35 +29,32 @@
 
 package testsuite.simple;
 
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.admin.ServerController;
 import com.mysql.cj.conf.PropertyDefinitions;
-
+import org.junit.jupiter.api.Test;
 import testsuite.BaseTestCase;
 
-/**
- * Demonstrates usage of the ServerController class.
- */
+/** Demonstrates usage of the ServerController class. */
 public class ServerControllerTest extends BaseTestCase {
-    /**
-     * Demonstrates usage of the ServerController class.
-     * 
-     * This test is only run if the property 'com.mysql.jdbc.test.ServerController.basedir' is set.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testServerController() throws Exception {
-        String baseDir = System.getProperty(PropertyDefinitions.SYSP_testsuite_serverController_basedir);
-        if (baseDir != null) {
-            System.out.println("Starting server @ " + baseDir);
+  /**
+   * Demonstrates usage of the ServerController class.
+   *
+   * <p>This test is only run if the property 'com.mysql.jdbc.test.ServerController.basedir' is set.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testServerController() throws Exception {
+    String baseDir =
+        System.getProperty(PropertyDefinitions.SYSP_testsuite_serverController_basedir);
+    if (baseDir != null) {
+      System.out.println("Starting server @ " + baseDir);
 
-            ServerController controller = new ServerController(baseDir);
-            System.out.println(controller.start());
-            System.out.println("Hit enter to stop server....");
-            System.in.read();
-            controller.stop(true);
-        }
+      ServerController controller = new ServerController(baseDir);
+      System.out.println(controller.start());
+      System.out.println("Hit enter to stop server....");
+      System.in.read();
+      controller.stop(true);
     }
+  }
 }

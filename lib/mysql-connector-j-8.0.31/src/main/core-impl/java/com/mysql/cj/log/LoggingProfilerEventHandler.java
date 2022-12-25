@@ -34,48 +34,53 @@ import com.mysql.cj.Query;
 import com.mysql.cj.Session;
 import com.mysql.cj.protocol.Resultset;
 
-/**
- * A profile event handler that just logs to the standard logging mechanism of the driver.
- */
+/** A profile event handler that just logs to the standard logging mechanism of the driver. */
 public class LoggingProfilerEventHandler implements ProfilerEventHandler {
-    private Log logger;
+  private Log logger;
 
-    public LoggingProfilerEventHandler() {
+  public LoggingProfilerEventHandler() {}
+
+  public void consumeEvent(ProfilerEvent evt) {
+    switch (evt.getEventType()) {
+      case ProfilerEvent.TYPE_USAGE:
+        this.logger.logWarn(evt);
+        break;
+
+      default:
+        this.logger.logInfo(evt);
+        break;
     }
+  }
 
-    public void consumeEvent(ProfilerEvent evt) {
-        switch (evt.getEventType()) {
-            case ProfilerEvent.TYPE_USAGE:
-                this.logger.logWarn(evt);
-                break;
+  public void destroy() {
+    this.logger = null;
+  }
 
-            default:
-                this.logger.logInfo(evt);
-                break;
-        }
-    }
+  public void init(Log log) {
+    this.logger = log;
+  }
 
-    public void destroy() {
-        this.logger = null;
-    }
+  @Override
+  public void processEvent(
+      byte eventType,
+      Session session,
+      Query query,
+      Resultset resultSet,
+      long eventDuration,
+      Throwable eventCreationPoint,
+      String message) {
 
-    public void init(Log log) {
-        this.logger = log;
-    }
-
-    @Override
-    public void processEvent(byte eventType, Session session, Query query, Resultset resultSet, long eventDuration, Throwable eventCreationPoint,
-            String message) {
-
-        consumeEvent(new ProfilerEventImpl(eventType, //
-                session == null ? "" : session.getHostInfo().getHost(), //
-                session == null ? "" : session.getHostInfo().getDatabase(), //
-                session == null ? ProfilerEvent.NA : session.getThreadId(), //
-                query == null ? ProfilerEvent.NA : query.getId(), //
-                resultSet == null ? ProfilerEvent.NA : resultSet.getResultId(), //
-                eventDuration, //
-                session == null ? Constants.MILLIS_I18N : session.getQueryTimingUnits(), //
-                eventCreationPoint, message));
-
-    }
+    consumeEvent(
+        new ProfilerEventImpl(
+            eventType, //
+            session == null ? "" : session.getHostInfo().getHost(), //
+            session == null ? "" : session.getHostInfo().getDatabase(), //
+            session == null ? ProfilerEvent.NA : session.getThreadId(), //
+            query == null ? ProfilerEvent.NA : query.getId(), //
+            resultSet == null ? ProfilerEvent.NA : resultSet.getResultId(), //
+            eventDuration, //
+            session == null ? Constants.MILLIS_I18N : session.getQueryTimingUnits(), //
+            eventCreationPoint,
+            message));
+  }
 }

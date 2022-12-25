@@ -29,11 +29,6 @@
 
 package com.mysql.cj.result;
 
-import java.sql.Date;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.WarningListener;
 import com.mysql.cj.conf.PropertySet;
@@ -44,82 +39,88 @@ import com.mysql.cj.protocol.InternalDate;
 import com.mysql.cj.protocol.InternalTime;
 import com.mysql.cj.protocol.InternalTimestamp;
 import com.mysql.cj.util.TimeUtil;
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
-/**
- * A value factory for creating {@link java.sql.Date} values.
- */
+/** A value factory for creating {@link java.sql.Date} values. */
 public class SqlDateValueFactory extends AbstractDateTimeValueFactory<Date> {
-    private WarningListener warningListener;
-    // cached per instance to avoid re-creation on every create*() call
-    private Calendar cal;
+  private WarningListener warningListener;
+  // cached per instance to avoid re-creation on every create*() call
+  private Calendar cal;
 
-    public SqlDateValueFactory(PropertySet pset, Calendar calendar, TimeZone tz) {
-        super(pset);
-        if (calendar != null) {
-            this.cal = (Calendar) calendar.clone();
-        } else {
-            // c.f. Bug#11540 for details on locale
-            this.cal = Calendar.getInstance(tz, Locale.US);
-            this.cal.set(Calendar.MILLISECOND, 0);
-            this.cal.setLenient(false);
-        }
+  public SqlDateValueFactory(PropertySet pset, Calendar calendar, TimeZone tz) {
+    super(pset);
+    if (calendar != null) {
+      this.cal = (Calendar) calendar.clone();
+    } else {
+      // c.f. Bug#11540 for details on locale
+      this.cal = Calendar.getInstance(tz, Locale.US);
+      this.cal.set(Calendar.MILLISECOND, 0);
+      this.cal.setLenient(false);
     }
+  }
 
-    public SqlDateValueFactory(PropertySet pset, Calendar calendar, TimeZone tz, WarningListener warningListener) {
-        this(pset, calendar, tz);
-        this.warningListener = warningListener;
-    }
+  public SqlDateValueFactory(
+      PropertySet pset, Calendar calendar, TimeZone tz, WarningListener warningListener) {
+    this(pset, calendar, tz);
+    this.warningListener = warningListener;
+  }
 
-    @Override
-    public Date localCreateFromDate(InternalDate idate) {
-        synchronized (this.cal) {
-            try {
-                if (idate.isZero()) {
-                    throw new DataReadException(Messages.getString("ResultSet.InvalidZeroDate"));
-                }
-
-                this.cal.clear();
-                this.cal.set(idate.getYear(), idate.getMonth() - 1, idate.getDay());
-                long ms = this.cal.getTimeInMillis();
-                return new Date(ms);
-            } catch (IllegalArgumentException e) {
-                throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
-            }
-        }
-    }
-
-    @Override
-    public Date localCreateFromTime(InternalTime it) {
-        if (this.warningListener != null) {
-            // TODO: need column context
-            this.warningListener.warningEncountered(Messages.getString("ResultSet.ImplicitDatePartWarning", new Object[] { "java.sql.Date" }));
-        }
-        return Date.valueOf(TimeUtil.DEFAULT_DATE);
-    }
-
-    @Override
-    public Date localCreateFromTimestamp(InternalTimestamp its) {
-        if (this.warningListener != null) {
-            // TODO: need column context
-            this.warningListener.warningEncountered(Messages.getString("ResultSet.PrecisionLostWarning", new Object[] { "java.sql.Date" }));
+  @Override
+  public Date localCreateFromDate(InternalDate idate) {
+    synchronized (this.cal) {
+      try {
+        if (idate.isZero()) {
+          throw new DataReadException(Messages.getString("ResultSet.InvalidZeroDate"));
         }
 
-        // truncate any time information
-        return createFromDate(its);
+        this.cal.clear();
+        this.cal.set(idate.getYear(), idate.getMonth() - 1, idate.getDay());
+        long ms = this.cal.getTimeInMillis();
+        return new Date(ms);
+      } catch (IllegalArgumentException e) {
+        throw ExceptionFactory.createException(WrongArgumentException.class, e.getMessage(), e);
+      }
+    }
+  }
+
+  @Override
+  public Date localCreateFromTime(InternalTime it) {
+    if (this.warningListener != null) {
+      // TODO: need column context
+      this.warningListener.warningEncountered(
+          Messages.getString("ResultSet.ImplicitDatePartWarning", new Object[] {"java.sql.Date"}));
+    }
+    return Date.valueOf(TimeUtil.DEFAULT_DATE);
+  }
+
+  @Override
+  public Date localCreateFromTimestamp(InternalTimestamp its) {
+    if (this.warningListener != null) {
+      // TODO: need column context
+      this.warningListener.warningEncountered(
+          Messages.getString("ResultSet.PrecisionLostWarning", new Object[] {"java.sql.Date"}));
     }
 
-    @Override
-    public Date localCreateFromDatetime(InternalTimestamp its) {
-        if (this.warningListener != null) {
-            // TODO: need column context
-            this.warningListener.warningEncountered(Messages.getString("ResultSet.PrecisionLostWarning", new Object[] { "java.sql.Date" }));
-        }
+    // truncate any time information
+    return createFromDate(its);
+  }
 
-        // truncate any time information
-        return createFromDate(its);
+  @Override
+  public Date localCreateFromDatetime(InternalTimestamp its) {
+    if (this.warningListener != null) {
+      // TODO: need column context
+      this.warningListener.warningEncountered(
+          Messages.getString("ResultSet.PrecisionLostWarning", new Object[] {"java.sql.Date"}));
     }
 
-    public String getTargetTypeName() {
-        return Date.class.getName();
-    }
+    // truncate any time information
+    return createFromDate(its);
+  }
+
+  public String getTargetTypeName() {
+    return Date.class.getName();
+  }
 }

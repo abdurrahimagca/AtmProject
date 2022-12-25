@@ -32,14 +32,6 @@ package com.mysql.cj.result;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.util.concurrent.Callable;
-
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.MysqlType;
 import com.mysql.cj.conf.DefaultPropertySet;
 import com.mysql.cj.conf.PropertyKey;
@@ -50,185 +42,252 @@ import com.mysql.cj.protocol.InternalDate;
 import com.mysql.cj.protocol.InternalTime;
 import com.mysql.cj.protocol.InternalTimestamp;
 import com.mysql.cj.util.TimeUtil;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.util.concurrent.Callable;
+import org.junit.jupiter.api.Test;
 
 public class LocalDateValueFactoryTest extends CommonAsserts {
-    PropertySet pset = new DefaultPropertySet();
-    ValueFactory<LocalDate> vf = new LocalDateValueFactory(this.pset);
+  PropertySet pset = new DefaultPropertySet();
+  ValueFactory<LocalDate> vf = new LocalDateValueFactory(this.pset);
 
-    @Test
-    public void testBasics() {
-        assertEquals("java.time.LocalDate", this.vf.getTargetTypeName());
-    }
+  @Test
+  public void testBasics() {
+    assertEquals("java.time.LocalDate", this.vf.getTargetTypeName());
+  }
 
-    @Test
-    public void testCreateFromDate() {
-        assertEquals(LocalDate.of(2018, 1, 1), this.vf.createFromDate(new InternalDate(2018, 1, 1)));
-    }
+  @Test
+  public void testCreateFromDate() {
+    assertEquals(LocalDate.of(2018, 1, 1), this.vf.createFromDate(new InternalDate(2018, 1, 1)));
+  }
 
-    @Test
-    public void testCreateFromTime() {
-        assertEquals(TimeUtil.DEFAULT_DATE, this.vf.createFromTime(new InternalTime(-1, 0, 0, 0, 0)));
-    }
+  @Test
+  public void testCreateFromTime() {
+    assertEquals(TimeUtil.DEFAULT_DATE, this.vf.createFromTime(new InternalTime(-1, 0, 0, 0, 0)));
+  }
 
-    @Test
-    public void testCreateFromTimestamp() {
-        assertThrows(DataReadException.class, "Zero date value prohibited", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(0, 0, 0, 1, 1, 1, 1, 9));
-                return null;
-            }
+  @Test
+  public void testCreateFromTimestamp() {
+    assertThrows(
+        DataReadException.class,
+        "Zero date value prohibited",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(0, 0, 0, 1, 1, 1, 1, 9));
+            return null;
+          }
         });
-        assertThrows(DateTimeException.class, "Invalid value for MonthOfYear \\(valid values 1 - 12\\): 0", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(0, 0, 1, 1, 1, 1, 1, 9));
-                return null;
-            }
+    assertThrows(
+        DateTimeException.class,
+        "Invalid value for MonthOfYear \\(valid values 1 - 12\\): 0",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(0, 0, 1, 1, 1, 1, 1, 9));
+            return null;
+          }
         });
-        assertThrows(DateTimeException.class, "Invalid value for DayOfMonth \\(valid values 1 - 28/31\\): 0", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(0, 1, 0, 1, 1, 1, 1, 9));
-                return null;
-            }
-        });
-
-        assertEquals(LocalDate.of(0, 1, 1), this.vf.createFromTimestamp(new InternalTimestamp(0, 1, 1, 1, 1, 1, 1, 9)));
-
-        assertThrows(DateTimeException.class, "Invalid value for MonthOfYear \\(valid values 1 - 12\\): 0", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(2018, 0, 0, 1, 1, 1, 1, 9));
-                return null;
-            }
-        });
-        assertThrows(DateTimeException.class, "Invalid value for MonthOfYear \\(valid values 1 - 12\\): 0", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(2018, 0, 1, 1, 1, 1, 1, 9));
-                return null;
-            }
-        });
-        assertThrows(DateTimeException.class, "Invalid value for DayOfMonth \\(valid values 1 - 28/31\\): 0", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromTimestamp(new InternalTimestamp(2018, 1, 0, 1, 1, 1, 1, 9));
-                return null;
-            }
-        });
-        assertEquals(LocalDate.of(2018, 1, 1), this.vf.createFromTimestamp(new InternalTimestamp(2018, 1, 1, 1, 1, 1, 1, 9)));
-    }
-
-    @Test
-    public void testCreateFromLong() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from LONG to java.time.LocalDate", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromLong(22L);
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromBigInteger() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from BIGINT to java.time.LocalDate", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromBigInteger(new BigInteger("2018"));
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromDouble() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from DOUBLE to java.time.LocalDate", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromDouble(new Double(2018));
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromBigDecimal() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from DECIMAL to java.time.LocalDate", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromBigDecimal(new BigDecimal("2018"));
-                return null;
-            }
-        });
-    }
-
-    @Test
-    public void testCreateFromBytes() {
-
-        Field f = new Field("test", "test", 33, "UTF-8", MysqlType.VARCHAR, 10);
-
-        this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(true);
-        assertThrows(DataConversionException.class, "Unsupported conversion from LONG to java.time.LocalDate", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
-                return null;
-            }
+    assertThrows(
+        DateTimeException.class,
+        "Invalid value for DayOfMonth \\(valid values 1 - 28/31\\): 0",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(0, 1, 0, 1, 1, 1, 1, 9));
+            return null;
+          }
         });
 
-        this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(false);
-        assertThrows(DataConversionException.class, "Cannot convert string '' to java.time.LocalDate value", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
-                return null;
-            }
+    assertEquals(
+        LocalDate.of(0, 1, 1),
+        this.vf.createFromTimestamp(new InternalTimestamp(0, 1, 1, 1, 1, 1, 1, 9)));
+
+    assertThrows(
+        DateTimeException.class,
+        "Invalid value for MonthOfYear \\(valid values 1 - 12\\): 0",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(2018, 0, 0, 1, 1, 1, 1, 9));
+            return null;
+          }
+        });
+    assertThrows(
+        DateTimeException.class,
+        "Invalid value for MonthOfYear \\(valid values 1 - 12\\): 0",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(2018, 0, 1, 1, 1, 1, 1, 9));
+            return null;
+          }
+        });
+    assertThrows(
+        DateTimeException.class,
+        "Invalid value for DayOfMonth \\(valid values 1 - 28/31\\): 0",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromTimestamp(
+                new InternalTimestamp(2018, 1, 0, 1, 1, 1, 1, 9));
+            return null;
+          }
+        });
+    assertEquals(
+        LocalDate.of(2018, 1, 1),
+        this.vf.createFromTimestamp(new InternalTimestamp(2018, 1, 1, 1, 1, 1, 1, 9)));
+  }
+
+  @Test
+  public void testCreateFromLong() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from LONG to java.time.LocalDate",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromLong(22L);
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromBigInteger() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from BIGINT to java.time.LocalDate",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromBigInteger(new BigInteger("2018"));
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromDouble() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from DOUBLE to java.time.LocalDate",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromDouble(new Double(2018));
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromBigDecimal() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from DECIMAL to java.time.LocalDate",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromBigDecimal(new BigDecimal("2018"));
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromBytes() {
+
+    Field f = new Field("test", "test", 33, "UTF-8", MysqlType.VARCHAR, 10);
+
+    this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(true);
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from LONG to java.time.LocalDate",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
+            return null;
+          }
         });
 
-        assertEquals(LocalDate.of(2018, 1, 2), this.vf.createFromBytes("2018-01-02 03:04:05.6".getBytes(), 0, 21, f));
-        assertEquals(LocalDate.of(2018, 1, 2), this.vf.createFromBytes("2018-01-02".getBytes(), 0, 10, f));
-        assertEquals(TimeUtil.DEFAULT_DATE, this.vf.createFromBytes("03:04:05.6".getBytes(), 0, 10, f));
-
-        assertThrows(DataConversionException.class, "Cannot convert string '1' to java.time.LocalDate value", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromBytes(new byte[] { '1' }, 0, 1, f);
-                return null;
-            }
+    this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).setValue(false);
+    assertThrows(
+        DataConversionException.class,
+        "Cannot convert string '' to java.time.LocalDate value",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromBytes("".getBytes(), 0, 0, f);
+            return null;
+          }
         });
 
-        assertThrows(DataConversionException.class, "Cannot convert string '-1.0' to java.time.LocalDate value", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromBytes("-1.0".getBytes(), 0, 4, f);
-                return null;
-            }
+    assertEquals(
+        LocalDate.of(2018, 1, 2),
+        this.vf.createFromBytes("2018-01-02 03:04:05.6".getBytes(), 0, 21, f));
+    assertEquals(
+        LocalDate.of(2018, 1, 2), this.vf.createFromBytes("2018-01-02".getBytes(), 0, 10, f));
+    assertEquals(TimeUtil.DEFAULT_DATE, this.vf.createFromBytes("03:04:05.6".getBytes(), 0, 10, f));
+
+    assertThrows(
+        DataConversionException.class,
+        "Cannot convert string '1' to java.time.LocalDate value",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromBytes(new byte[] {'1'}, 0, 1, f);
+            return null;
+          }
         });
 
-        assertThrows(DataConversionException.class, "Cannot convert string 'just a string' to java.time.LocalDate value", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromBytes("just a string".getBytes(), 0, 13, f);
-                return null;
-            }
+    assertThrows(
+        DataConversionException.class,
+        "Cannot convert string '-1.0' to java.time.LocalDate value",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromBytes("-1.0".getBytes(), 0, 4, f);
+            return null;
+          }
         });
-    }
 
-    @Test
-    public void testCreateFromBit() {
-        assertThrows(DataConversionException.class, "Unsupported conversion from BIT to java.time.LocalDate", new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocalDateValueFactoryTest.this.vf.createFromBit(new byte[] { 1 }, 0, 2);
-                return null;
-            }
+    assertThrows(
+        DataConversionException.class,
+        "Cannot convert string 'just a string' to java.time.LocalDate value",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromBytes("just a string".getBytes(), 0, 13, f);
+            return null;
+          }
         });
-    }
+  }
 
-    @Test
-    public void testCreateFromNull() {
-        assertNull(this.vf.createFromNull());
-    }
+  @Test
+  public void testCreateFromBit() {
+    assertThrows(
+        DataConversionException.class,
+        "Unsupported conversion from BIT to java.time.LocalDate",
+        new Callable<Void>() {
+          @Override
+          public Void call() throws Exception {
+            LocalDateValueFactoryTest.this.vf.createFromBit(new byte[] {1}, 0, 2);
+            return null;
+          }
+        });
+  }
+
+  @Test
+  public void testCreateFromNull() {
+    assertNull(this.vf.createFromNull());
+  }
 }

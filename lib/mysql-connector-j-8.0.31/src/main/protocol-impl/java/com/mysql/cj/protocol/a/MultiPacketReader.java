@@ -29,132 +29,133 @@
 
 package com.mysql.cj.protocol.a;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.protocol.MessageReader;
 import com.mysql.cj.protocol.a.NativeConstants.StringLengthDataType;
+import java.io.IOException;
+import java.util.Optional;
 
 /**
- * A {@link MessageReader} which reads a full packet
- * built from sequence of it's on-wire parts.
- * See http://dev.mysql.com/doc/internals/en/sending-more-than-16mbyte.html
+ * A {@link MessageReader} which reads a full packet built from sequence of it's on-wire parts. See
+ * http://dev.mysql.com/doc/internals/en/sending-more-than-16mbyte.html
  */
 public class MultiPacketReader implements MessageReader<NativePacketHeader, NativePacketPayload> {
 
-    private MessageReader<NativePacketHeader, NativePacketPayload> packetReader;
+  private MessageReader<NativePacketHeader, NativePacketPayload> packetReader;
 
-    public MultiPacketReader(MessageReader<NativePacketHeader, NativePacketPayload> packetReader) {
-        this.packetReader = packetReader;
-    }
+  public MultiPacketReader(MessageReader<NativePacketHeader, NativePacketPayload> packetReader) {
+    this.packetReader = packetReader;
+  }
 
-    @Override
-    public NativePacketHeader readHeader() throws IOException {
-        return this.packetReader.readHeader();
-    }
+  @Override
+  public NativePacketHeader readHeader() throws IOException {
+    return this.packetReader.readHeader();
+  }
 
-    @Override
-    public NativePacketHeader probeHeader() throws IOException {
-        return this.packetReader.probeHeader();
-    }
+  @Override
+  public NativePacketHeader probeHeader() throws IOException {
+    return this.packetReader.probeHeader();
+  }
 
-    @Override
-    public NativePacketPayload readMessage(Optional<NativePacketPayload> reuse, NativePacketHeader header) throws IOException {
+  @Override
+  public NativePacketPayload readMessage(
+      Optional<NativePacketPayload> reuse, NativePacketHeader header) throws IOException {
 
-        int packetLength = header.getMessageSize();
-        NativePacketPayload buf = this.packetReader.readMessage(reuse, header);
+    int packetLength = header.getMessageSize();
+    NativePacketPayload buf = this.packetReader.readMessage(reuse, header);
 
-        if (packetLength == NativeConstants.MAX_PACKET_SIZE) { // it's a multi-packet
+    if (packetLength == NativeConstants.MAX_PACKET_SIZE) { // it's a multi-packet
 
-            buf.setPosition(NativeConstants.MAX_PACKET_SIZE);
+      buf.setPosition(NativeConstants.MAX_PACKET_SIZE);
 
-            NativePacketPayload multiPacket = null;
-            int multiPacketLength = -1;
-            byte multiPacketSeq = getMessageSequence();
+      NativePacketPayload multiPacket = null;
+      int multiPacketLength = -1;
+      byte multiPacketSeq = getMessageSequence();
 
-            do {
-                NativePacketHeader hdr = readHeader();
-                multiPacketLength = hdr.getMessageSize();
+      do {
+        NativePacketHeader hdr = readHeader();
+        multiPacketLength = hdr.getMessageSize();
 
-                if (multiPacket == null) {
-                    multiPacket = new NativePacketPayload(multiPacketLength);
-                }
-
-                multiPacketSeq++;
-                if (multiPacketSeq != hdr.getMessageSequence()) {
-                    throw new IOException(Messages.getString("PacketReader.10"));
-                }
-
-                this.packetReader.readMessage(Optional.of(multiPacket), hdr);
-
-                buf.writeBytes(StringLengthDataType.STRING_FIXED, multiPacket.getByteBuffer(), 0, multiPacketLength);
-
-            } while (multiPacketLength == NativeConstants.MAX_PACKET_SIZE);
-
-            buf.setPosition(0);
+        if (multiPacket == null) {
+          multiPacket = new NativePacketPayload(multiPacketLength);
         }
 
-        return buf;
-    }
-
-    @Override
-    public NativePacketPayload probeMessage(Optional<NativePacketPayload> reuse, NativePacketHeader header) throws IOException {
-
-        int packetLength = header.getMessageSize();
-        NativePacketPayload buf = this.packetReader.probeMessage(reuse, header);
-
-        if (packetLength == NativeConstants.MAX_PACKET_SIZE) { // it's a multi-packet
-
-            buf.setPosition(NativeConstants.MAX_PACKET_SIZE);
-
-            NativePacketPayload multiPacket = null;
-            int multiPacketLength = -1;
-            byte multiPacketSeq = getMessageSequence();
-
-            do {
-                NativePacketHeader hdr = readHeader();
-                multiPacketLength = hdr.getMessageSize();
-
-                if (multiPacket == null) {
-                    multiPacket = new NativePacketPayload(multiPacketLength);
-                }
-
-                multiPacketSeq++;
-                if (multiPacketSeq != hdr.getMessageSequence()) {
-                    throw new IOException(Messages.getString("PacketReader.10"));
-                }
-
-                this.packetReader.probeMessage(Optional.of(multiPacket), hdr);
-
-                buf.writeBytes(StringLengthDataType.STRING_FIXED, multiPacket.getByteBuffer(), 0, multiPacketLength);
-
-            } while (multiPacketLength == NativeConstants.MAX_PACKET_SIZE);
-
-            buf.setPosition(0);
+        multiPacketSeq++;
+        if (multiPacketSeq != hdr.getMessageSequence()) {
+          throw new IOException(Messages.getString("PacketReader.10"));
         }
 
-        return buf;
+        this.packetReader.readMessage(Optional.of(multiPacket), hdr);
+
+        buf.writeBytes(
+            StringLengthDataType.STRING_FIXED, multiPacket.getByteBuffer(), 0, multiPacketLength);
+
+      } while (multiPacketLength == NativeConstants.MAX_PACKET_SIZE);
+
+      buf.setPosition(0);
     }
 
-    @Override
-    public byte getMessageSequence() {
-        return this.packetReader.getMessageSequence();
+    return buf;
+  }
+
+  @Override
+  public NativePacketPayload probeMessage(
+      Optional<NativePacketPayload> reuse, NativePacketHeader header) throws IOException {
+
+    int packetLength = header.getMessageSize();
+    NativePacketPayload buf = this.packetReader.probeMessage(reuse, header);
+
+    if (packetLength == NativeConstants.MAX_PACKET_SIZE) { // it's a multi-packet
+
+      buf.setPosition(NativeConstants.MAX_PACKET_SIZE);
+
+      NativePacketPayload multiPacket = null;
+      int multiPacketLength = -1;
+      byte multiPacketSeq = getMessageSequence();
+
+      do {
+        NativePacketHeader hdr = readHeader();
+        multiPacketLength = hdr.getMessageSize();
+
+        if (multiPacket == null) {
+          multiPacket = new NativePacketPayload(multiPacketLength);
+        }
+
+        multiPacketSeq++;
+        if (multiPacketSeq != hdr.getMessageSequence()) {
+          throw new IOException(Messages.getString("PacketReader.10"));
+        }
+
+        this.packetReader.probeMessage(Optional.of(multiPacket), hdr);
+
+        buf.writeBytes(
+            StringLengthDataType.STRING_FIXED, multiPacket.getByteBuffer(), 0, multiPacketLength);
+
+      } while (multiPacketLength == NativeConstants.MAX_PACKET_SIZE);
+
+      buf.setPosition(0);
     }
 
-    @Override
-    public void resetMessageSequence() {
-        this.packetReader.resetMessageSequence();
-    }
+    return buf;
+  }
 
-    @Override
-    public MessageReader<NativePacketHeader, NativePacketPayload> undecorateAll() {
-        return this.packetReader.undecorateAll();
-    }
+  @Override
+  public byte getMessageSequence() {
+    return this.packetReader.getMessageSequence();
+  }
 
-    @Override
-    public MessageReader<NativePacketHeader, NativePacketPayload> undecorate() {
-        return this.packetReader;
-    }
+  @Override
+  public void resetMessageSequence() {
+    this.packetReader.resetMessageSequence();
+  }
 
+  @Override
+  public MessageReader<NativePacketHeader, NativePacketPayload> undecorateAll() {
+    return this.packetReader.undecorateAll();
+  }
+
+  @Override
+  public MessageReader<NativePacketHeader, NativePacketPayload> undecorate() {
+    return this.packetReader;
+  }
 }

@@ -29,53 +29,52 @@
 
 package com.mysql.cj.jdbc;
 
+import com.mysql.cj.jdbc.DatabaseMetaData.IteratorWithCleanup;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-import com.mysql.cj.jdbc.DatabaseMetaData.IteratorWithCleanup;
-
 public abstract class IterateBlock<T> {
-    IteratorWithCleanup<T> iteratorWithCleanup;
-    Iterator<T> javaIterator;
-    boolean stopIterating = false;
+  IteratorWithCleanup<T> iteratorWithCleanup;
+  Iterator<T> javaIterator;
+  boolean stopIterating = false;
 
-    IterateBlock(IteratorWithCleanup<T> i) {
-        this.iteratorWithCleanup = i;
-        this.javaIterator = null;
-    }
+  IterateBlock(IteratorWithCleanup<T> i) {
+    this.iteratorWithCleanup = i;
+    this.javaIterator = null;
+  }
 
-    IterateBlock(Iterator<T> i) {
-        this.javaIterator = i;
-        this.iteratorWithCleanup = null;
-    }
+  IterateBlock(Iterator<T> i) {
+    this.javaIterator = i;
+    this.iteratorWithCleanup = null;
+  }
 
-    public void doForAll() throws SQLException {
-        if (this.iteratorWithCleanup != null) {
-            try {
-                while (this.iteratorWithCleanup.hasNext()) {
-                    forEach(this.iteratorWithCleanup.next());
+  public void doForAll() throws SQLException {
+    if (this.iteratorWithCleanup != null) {
+      try {
+        while (this.iteratorWithCleanup.hasNext()) {
+          forEach(this.iteratorWithCleanup.next());
 
-                    if (this.stopIterating) {
-                        break;
-                    }
-                }
-            } finally {
-                this.iteratorWithCleanup.close();
-            }
-        } else {
-            while (this.javaIterator.hasNext()) {
-                forEach(this.javaIterator.next());
-
-                if (this.stopIterating) {
-                    break;
-                }
-            }
+          if (this.stopIterating) {
+            break;
+          }
         }
-    }
+      } finally {
+        this.iteratorWithCleanup.close();
+      }
+    } else {
+      while (this.javaIterator.hasNext()) {
+        forEach(this.javaIterator.next());
 
-    abstract void forEach(T each) throws SQLException;
-
-    public final boolean fullIteration() {
-        return !this.stopIterating;
+        if (this.stopIterating) {
+          break;
+        }
+      }
     }
+  }
+
+  abstract void forEach(T each) throws SQLException;
+
+  public final boolean fullIteration() {
+    return !this.stopIterating;
+  }
 }

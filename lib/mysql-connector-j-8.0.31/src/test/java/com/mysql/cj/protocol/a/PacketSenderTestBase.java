@@ -33,42 +33,41 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.mysql.cj.protocol.MessageSender;
 
-/**
- * Common functionality for packet sender tests.
- */
+/** Common functionality for packet sender tests. */
 public class PacketSenderTestBase {
-    /**
-     * Get a no-op packet sender that can be used when testing decorators.
-     * 
-     * @return a MessageSender
-     */
-    protected MessageSender<NativePacketPayload> getNoopPacketSender() {
-        return new MessageSender<NativePacketPayload>() {
-            public void send(byte[] packet, int packetLen, byte packetSequence) throws java.io.IOException {
-                // no-op
-            }
+  /**
+   * Get a no-op packet sender that can be used when testing decorators.
+   *
+   * @return a MessageSender
+   */
+  protected MessageSender<NativePacketPayload> getNoopPacketSender() {
+    return new MessageSender<NativePacketPayload>() {
+      public void send(byte[] packet, int packetLen, byte packetSequence)
+          throws java.io.IOException {
+        // no-op
+      }
 
-            @Override
-            public MessageSender<NativePacketPayload> undecorateAll() {
-                return this;
-            }
+      @Override
+      public MessageSender<NativePacketPayload> undecorateAll() {
+        return this;
+      }
 
-            @Override
-            public MessageSender<NativePacketPayload> undecorate() {
-                return this;
-            }
-        };
+      @Override
+      public MessageSender<NativePacketPayload> undecorate() {
+        return this;
+      }
+    };
+  }
+
+  protected void fillPacketSequentially(byte[] packet) {
+    for (int i = 0; i < packet.length; ++i) {
+      packet[i] = (byte) i;
     }
+  }
 
-    protected void fillPacketSequentially(byte[] packet) {
-        for (int i = 0; i < packet.length; ++i) {
-            packet[i] = (byte) i;
-        }
+  protected void checkSequentiallyFilledPacket(byte[] packet, int offset, int len) {
+    for (int i = 0; i < len; ++i) {
+      assertEquals((byte) i, packet[offset + i]);
     }
-
-    protected void checkSequentiallyFilledPacket(byte[] packet, int offset, int len) {
-        for (int i = 0; i < len; ++i) {
-            assertEquals((byte) i, packet[offset + i]);
-        }
-    }
+  }
 }

@@ -29,12 +29,11 @@
 
 package com.mysql.cj;
 
-//TODO should not be protocol-specific
+// TODO should not be protocol-specific
 
 public class SimpleQuery extends AbstractQuery {
 
-    public SimpleQuery(NativeSession sess) {
-        super(sess);
-    }
-
+  public SimpleQuery(NativeSession sess) {
+    super(sess);
+  }
 }

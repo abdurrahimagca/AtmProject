@@ -29,258 +29,260 @@
 
 package com.mysql.cj.protocol;
 
+import com.mysql.cj.log.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import com.mysql.cj.log.Log;
-
 /**
- * A non-blocking buffered input stream. Reads more if it can, won't block to fill the buffer, only blocks to satisfy a request of read(byte[])
+ * A non-blocking buffered input stream. Reads more if it can, won't block to fill the buffer, only
+ * blocks to satisfy a request of read(byte[])
  */
 public class ReadAheadInputStream extends InputStream {
 
-    private final static int DEFAULT_BUFFER_SIZE = 4096;
+  private static final int DEFAULT_BUFFER_SIZE = 4096;
 
-    private InputStream underlyingStream;
+  private InputStream underlyingStream;
 
-    private byte buf[];
+  private byte buf[];
 
-    protected int endOfCurrentData;
+  protected int endOfCurrentData;
 
-    protected int currentPosition;
+  protected int currentPosition;
 
-    protected boolean doDebug = false;
+  protected boolean doDebug = false;
 
-    protected Log log;
+  protected Log log;
 
-    private void fill(int readAtLeastTheseManyBytes) throws IOException {
-        checkClosed();
+  private void fill(int readAtLeastTheseManyBytes) throws IOException {
+    checkClosed();
 
-        this.currentPosition = 0; /* no mark: throw away the buffer */
+    this.currentPosition = 0; /* no mark: throw away the buffer */
 
-        this.endOfCurrentData = this.currentPosition;
+    this.endOfCurrentData = this.currentPosition;
 
-        // Read at least as many bytes as the caller wants, but don't block to fill the whole buffer (like java.io.BufferdInputStream does)
+    // Read at least as many bytes as the caller wants, but don't block to fill the whole buffer
+    // (like java.io.BufferdInputStream does)
 
-        int bytesToRead = Math.min(this.buf.length - this.currentPosition, readAtLeastTheseManyBytes);
+    int bytesToRead = Math.min(this.buf.length - this.currentPosition, readAtLeastTheseManyBytes);
 
-        int bytesAvailable = this.underlyingStream.available();
+    int bytesAvailable = this.underlyingStream.available();
 
-        if (bytesAvailable > bytesToRead) {
+    if (bytesAvailable > bytesToRead) {
 
-            // Great, there's more available, let's grab those bytes too! (read-ahead)
+      // Great, there's more available, let's grab those bytes too! (read-ahead)
 
-            bytesToRead = Math.min(this.buf.length - this.currentPosition, bytesAvailable);
-        }
-
-        if (this.doDebug) {
-            StringBuilder debugBuf = new StringBuilder();
-            debugBuf.append("  ReadAheadInputStream.fill(");
-            debugBuf.append(readAtLeastTheseManyBytes);
-            debugBuf.append("), buffer_size=");
-            debugBuf.append(this.buf.length);
-            debugBuf.append(", current_position=");
-            debugBuf.append(this.currentPosition);
-            debugBuf.append(", need to read ");
-            debugBuf.append(Math.min(this.buf.length - this.currentPosition, readAtLeastTheseManyBytes));
-            debugBuf.append(" bytes to fill request,");
-
-            if (bytesAvailable > 0) {
-                debugBuf.append(" underlying InputStream reports ");
-                debugBuf.append(bytesAvailable);
-
-                debugBuf.append(" total bytes available,");
-            }
-
-            debugBuf.append(" attempting to read ");
-            debugBuf.append(bytesToRead);
-            debugBuf.append(" bytes.");
-
-            if (this.log != null) {
-                this.log.logTrace(debugBuf.toString());
-            } else {
-                System.err.println(debugBuf.toString());
-            }
-        }
-
-        int n = this.underlyingStream.read(this.buf, this.currentPosition, bytesToRead);
-
-        if (n > 0) {
-            this.endOfCurrentData = n + this.currentPosition;
-        }
+      bytesToRead = Math.min(this.buf.length - this.currentPosition, bytesAvailable);
     }
 
-    private int readFromUnderlyingStreamIfNecessary(byte[] b, int off, int len) throws IOException {
-        checkClosed();
+    if (this.doDebug) {
+      StringBuilder debugBuf = new StringBuilder();
+      debugBuf.append("  ReadAheadInputStream.fill(");
+      debugBuf.append(readAtLeastTheseManyBytes);
+      debugBuf.append("), buffer_size=");
+      debugBuf.append(this.buf.length);
+      debugBuf.append(", current_position=");
+      debugBuf.append(this.currentPosition);
+      debugBuf.append(", need to read ");
+      debugBuf.append(Math.min(this.buf.length - this.currentPosition, readAtLeastTheseManyBytes));
+      debugBuf.append(" bytes to fill request,");
 
-        int avail = this.endOfCurrentData - this.currentPosition;
+      if (bytesAvailable > 0) {
+        debugBuf.append(" underlying InputStream reports ");
+        debugBuf.append(bytesAvailable);
 
-        if (this.doDebug) {
-            StringBuilder debugBuf = new StringBuilder();
-            debugBuf.append("ReadAheadInputStream.readIfNecessary(");
-            debugBuf.append(Arrays.toString(b));
-            debugBuf.append(",");
-            debugBuf.append(off);
-            debugBuf.append(",");
-            debugBuf.append(len);
-            debugBuf.append(")");
+        debugBuf.append(" total bytes available,");
+      }
 
-            if (avail <= 0) {
-                debugBuf.append(" not all data available in buffer, must read from stream");
+      debugBuf.append(" attempting to read ");
+      debugBuf.append(bytesToRead);
+      debugBuf.append(" bytes.");
 
-                if (len >= this.buf.length) {
-                    debugBuf.append(", amount requested > buffer, returning direct read() from stream");
-                }
-            }
+      if (this.log != null) {
+        this.log.logTrace(debugBuf.toString());
+      } else {
+        System.err.println(debugBuf.toString());
+      }
+    }
 
-            if (this.log != null) {
-                this.log.logTrace(debugBuf.toString());
-            } else {
-                System.err.println(debugBuf.toString());
-            }
+    int n = this.underlyingStream.read(this.buf, this.currentPosition, bytesToRead);
+
+    if (n > 0) {
+      this.endOfCurrentData = n + this.currentPosition;
+    }
+  }
+
+  private int readFromUnderlyingStreamIfNecessary(byte[] b, int off, int len) throws IOException {
+    checkClosed();
+
+    int avail = this.endOfCurrentData - this.currentPosition;
+
+    if (this.doDebug) {
+      StringBuilder debugBuf = new StringBuilder();
+      debugBuf.append("ReadAheadInputStream.readIfNecessary(");
+      debugBuf.append(Arrays.toString(b));
+      debugBuf.append(",");
+      debugBuf.append(off);
+      debugBuf.append(",");
+      debugBuf.append(len);
+      debugBuf.append(")");
+
+      if (avail <= 0) {
+        debugBuf.append(" not all data available in buffer, must read from stream");
+
+        if (len >= this.buf.length) {
+          debugBuf.append(", amount requested > buffer, returning direct read() from stream");
+        }
+      }
+
+      if (this.log != null) {
+        this.log.logTrace(debugBuf.toString());
+      } else {
+        System.err.println(debugBuf.toString());
+      }
+    }
+
+    if (avail <= 0) {
+
+      if (len >= this.buf.length) {
+        return this.underlyingStream.read(b, off, len);
+      }
+
+      fill(len);
+
+      avail = this.endOfCurrentData - this.currentPosition;
+
+      if (avail <= 0) {
+        return -1;
+      }
+    }
+
+    int bytesActuallyRead = (avail < len) ? avail : len;
+
+    System.arraycopy(this.buf, this.currentPosition, b, off, bytesActuallyRead);
+
+    this.currentPosition += bytesActuallyRead;
+
+    return bytesActuallyRead;
+  }
+
+  @Override
+  public synchronized int read(byte b[], int off, int len) throws IOException {
+    checkClosed(); // Check for closed stream
+    if ((off | len | (off + len) | (b.length - (off + len))) < 0) {
+      throw new IndexOutOfBoundsException();
+    } else if (len == 0) {
+      return 0;
+    }
+
+    int totalBytesRead = 0;
+
+    while (true) {
+      int bytesReadThisRound =
+          readFromUnderlyingStreamIfNecessary(b, off + totalBytesRead, len - totalBytesRead);
+
+      // end-of-stream?
+      if (bytesReadThisRound <= 0) {
+        if (totalBytesRead == 0) {
+          totalBytesRead = bytesReadThisRound;
         }
 
-        if (avail <= 0) {
+        break;
+      }
 
-            if (len >= this.buf.length) {
-                return this.underlyingStream.read(b, off, len);
-            }
+      totalBytesRead += bytesReadThisRound;
 
-            fill(len);
+      // Read _at_least_ enough bytes
+      if (totalBytesRead >= len) {
+        break;
+      }
 
-            avail = this.endOfCurrentData - this.currentPosition;
-
-            if (avail <= 0) {
-                return -1;
-            }
-        }
-
-        int bytesActuallyRead = (avail < len) ? avail : len;
-
-        System.arraycopy(this.buf, this.currentPosition, b, off, bytesActuallyRead);
-
-        this.currentPosition += bytesActuallyRead;
-
-        return bytesActuallyRead;
+      // Nothing to read?
+      if (this.underlyingStream.available() <= 0) {
+        break;
+      }
     }
 
-    @Override
-    public synchronized int read(byte b[], int off, int len) throws IOException {
-        checkClosed(); // Check for closed stream
-        if ((off | len | (off + len) | (b.length - (off + len))) < 0) {
-            throw new IndexOutOfBoundsException();
-        } else if (len == 0) {
-            return 0;
-        }
+    return totalBytesRead;
+  }
 
-        int totalBytesRead = 0;
+  @Override
+  public int read() throws IOException {
+    checkClosed();
 
-        while (true) {
-            int bytesReadThisRound = readFromUnderlyingStreamIfNecessary(b, off + totalBytesRead, len - totalBytesRead);
-
-            // end-of-stream?
-            if (bytesReadThisRound <= 0) {
-                if (totalBytesRead == 0) {
-                    totalBytesRead = bytesReadThisRound;
-                }
-
-                break;
-            }
-
-            totalBytesRead += bytesReadThisRound;
-
-            // Read _at_least_ enough bytes
-            if (totalBytesRead >= len) {
-                break;
-            }
-
-            // Nothing to read?
-            if (this.underlyingStream.available() <= 0) {
-                break;
-            }
-        }
-
-        return totalBytesRead;
+    if (this.currentPosition >= this.endOfCurrentData) {
+      fill(1);
+      if (this.currentPosition >= this.endOfCurrentData) {
+        return -1;
+      }
     }
 
-    @Override
-    public int read() throws IOException {
-        checkClosed();
+    return this.buf[this.currentPosition++] & 0xff;
+  }
 
-        if (this.currentPosition >= this.endOfCurrentData) {
-            fill(1);
-            if (this.currentPosition >= this.endOfCurrentData) {
-                return -1;
-            }
-        }
+  @Override
+  public int available() throws IOException {
+    checkClosed();
 
-        return this.buf[this.currentPosition++] & 0xff;
+    return this.underlyingStream.available() + (this.endOfCurrentData - this.currentPosition);
+  }
+
+  private void checkClosed() throws IOException {
+
+    if (this.buf == null) {
+      throw new IOException("Stream closed");
+    }
+  }
+
+  public ReadAheadInputStream(InputStream toBuffer, boolean debug, Log logTo) {
+    this(toBuffer, DEFAULT_BUFFER_SIZE, debug, logTo);
+  }
+
+  public ReadAheadInputStream(InputStream toBuffer, int bufferSize, boolean debug, Log logTo) {
+    this.underlyingStream = toBuffer;
+    this.buf = new byte[bufferSize];
+    this.doDebug = debug;
+    this.log = logTo;
+  }
+
+  @Override
+  public void close() throws IOException {
+    if (this.underlyingStream != null) {
+      try {
+        this.underlyingStream.close();
+      } finally {
+        this.underlyingStream = null;
+        this.buf = null;
+        this.log = null;
+      }
+    }
+  }
+
+  @Override
+  public boolean markSupported() {
+    return false;
+  }
+
+  @Override
+  public long skip(long n) throws IOException {
+    checkClosed();
+    if (n <= 0) {
+      return 0;
     }
 
-    @Override
-    public int available() throws IOException {
-        checkClosed();
+    long bytesAvailInBuffer = this.endOfCurrentData - this.currentPosition;
 
-        return this.underlyingStream.available() + (this.endOfCurrentData - this.currentPosition);
+    if (bytesAvailInBuffer <= 0) {
+
+      fill((int) n);
+      bytesAvailInBuffer = this.endOfCurrentData - this.currentPosition;
+      if (bytesAvailInBuffer <= 0) {
+        return 0;
+      }
     }
 
-    private void checkClosed() throws IOException {
-
-        if (this.buf == null) {
-            throw new IOException("Stream closed");
-        }
-    }
-
-    public ReadAheadInputStream(InputStream toBuffer, boolean debug, Log logTo) {
-        this(toBuffer, DEFAULT_BUFFER_SIZE, debug, logTo);
-    }
-
-    public ReadAheadInputStream(InputStream toBuffer, int bufferSize, boolean debug, Log logTo) {
-        this.underlyingStream = toBuffer;
-        this.buf = new byte[bufferSize];
-        this.doDebug = debug;
-        this.log = logTo;
-    }
-
-    @Override
-    public void close() throws IOException {
-        if (this.underlyingStream != null) {
-            try {
-                this.underlyingStream.close();
-            } finally {
-                this.underlyingStream = null;
-                this.buf = null;
-                this.log = null;
-            }
-        }
-    }
-
-    @Override
-    public boolean markSupported() {
-        return false;
-    }
-
-    @Override
-    public long skip(long n) throws IOException {
-        checkClosed();
-        if (n <= 0) {
-            return 0;
-        }
-
-        long bytesAvailInBuffer = this.endOfCurrentData - this.currentPosition;
-
-        if (bytesAvailInBuffer <= 0) {
-
-            fill((int) n);
-            bytesAvailInBuffer = this.endOfCurrentData - this.currentPosition;
-            if (bytesAvailInBuffer <= 0) {
-                return 0;
-            }
-        }
-
-        long bytesSkipped = (bytesAvailInBuffer < n) ? bytesAvailInBuffer : n;
-        this.currentPosition += bytesSkipped;
-        return bytesSkipped;
-    }
+    long bytesSkipped = (bytesAvailInBuffer < n) ? bytesAvailInBuffer : n;
+    this.currentPosition += bytesSkipped;
+    return bytesSkipped;
+  }
 }

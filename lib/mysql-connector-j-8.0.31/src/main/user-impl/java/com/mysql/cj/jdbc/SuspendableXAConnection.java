@@ -29,165 +29,173 @@
 
 package com.mysql.cj.jdbc;
 
+import com.mysql.cj.conf.PropertyKey;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.sql.XAConnection;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
-import com.mysql.cj.conf.PropertyKey;
+public class SuspendableXAConnection extends MysqlPooledConnection
+    implements XAConnection, XAResource {
 
-public class SuspendableXAConnection extends MysqlPooledConnection implements XAConnection, XAResource {
+  protected static SuspendableXAConnection getInstance(JdbcConnection mysqlConnection)
+      throws SQLException {
+    return new SuspendableXAConnection(mysqlConnection);
+  }
 
-    protected static SuspendableXAConnection getInstance(JdbcConnection mysqlConnection) throws SQLException {
-        return new SuspendableXAConnection(mysqlConnection);
+  public SuspendableXAConnection(JdbcConnection connection) {
+    super(connection);
+    this.underlyingConnection = connection;
+  }
+
+  private static final Map<Xid, XAConnection> XIDS_TO_PHYSICAL_CONNECTIONS = new HashMap<>();
+
+  private Xid currentXid;
+
+  private XAConnection currentXAConnection;
+  private XAResource currentXAResource;
+
+  private JdbcConnection underlyingConnection;
+
+  private static synchronized XAConnection findConnectionForXid(
+      JdbcConnection connectionToWrap, Xid xid) throws SQLException {
+    // TODO: check for same GTRID, but different BQUALs...MySQL doesn't allow this yet
+
+    // Note, we don't need to check for XIDs here, because MySQL itself will complain with a
+    // XAER_NOTA if need be.
+
+    XAConnection conn = XIDS_TO_PHYSICAL_CONNECTIONS.get(xid);
+
+    if (conn == null) {
+      conn =
+          new MysqlXAConnection(
+              connectionToWrap,
+              connectionToWrap
+                  .getPropertySet()
+                  .getBooleanProperty(PropertyKey.logXaCommands)
+                  .getValue());
+      XIDS_TO_PHYSICAL_CONNECTIONS.put(xid, conn);
     }
 
-    public SuspendableXAConnection(JdbcConnection connection) {
-        super(connection);
-        this.underlyingConnection = connection;
+    return conn;
+  }
+
+  private static synchronized void removeXAConnectionMapping(Xid xid) {
+    XIDS_TO_PHYSICAL_CONNECTIONS.remove(xid);
+  }
+
+  private synchronized void switchToXid(Xid xid) throws XAException {
+    if (xid == null) {
+      throw new XAException();
     }
 
-    private static final Map<Xid, XAConnection> XIDS_TO_PHYSICAL_CONNECTIONS = new HashMap<>();
+    try {
+      if (!xid.equals(this.currentXid)) {
+        XAConnection toSwitchTo = findConnectionForXid(this.underlyingConnection, xid);
+        this.currentXAConnection = toSwitchTo;
+        this.currentXid = xid;
+        this.currentXAResource = toSwitchTo.getXAResource();
+      }
+    } catch (SQLException sqlEx) {
+      throw new XAException();
+    }
+  }
 
-    private Xid currentXid;
+  @Override
+  public XAResource getXAResource() throws SQLException {
+    return this;
+  }
 
-    private XAConnection currentXAConnection;
-    private XAResource currentXAResource;
+  @Override
+  public void commit(Xid xid, boolean arg1) throws XAException {
+    switchToXid(xid);
+    this.currentXAResource.commit(xid, arg1);
+    removeXAConnectionMapping(xid);
+  }
 
-    private JdbcConnection underlyingConnection;
+  @Override
+  public void end(Xid xid, int arg1) throws XAException {
+    switchToXid(xid);
+    this.currentXAResource.end(xid, arg1);
+  }
 
-    private static synchronized XAConnection findConnectionForXid(JdbcConnection connectionToWrap, Xid xid) throws SQLException {
-        // TODO: check for same GTRID, but different BQUALs...MySQL doesn't allow this yet
+  @Override
+  public void forget(Xid xid) throws XAException {
+    switchToXid(xid);
+    this.currentXAResource.forget(xid);
+    // remove?
+    removeXAConnectionMapping(xid);
+  }
 
-        // Note, we don't need to check for XIDs here, because MySQL itself will complain with a XAER_NOTA if need be.
+  @Override
+  public int getTransactionTimeout() throws XAException {
+    return 0;
+  }
 
-        XAConnection conn = XIDS_TO_PHYSICAL_CONNECTIONS.get(xid);
+  @Override
+  public boolean isSameRM(XAResource xaRes) throws XAException {
+    return xaRes == this;
+  }
 
-        if (conn == null) {
-            conn = new MysqlXAConnection(connectionToWrap, connectionToWrap.getPropertySet().getBooleanProperty(PropertyKey.logXaCommands).getValue());
-            XIDS_TO_PHYSICAL_CONNECTIONS.put(xid, conn);
-        }
+  @Override
+  public int prepare(Xid xid) throws XAException {
+    switchToXid(xid);
+    return this.currentXAResource.prepare(xid);
+  }
 
-        return conn;
+  @Override
+  public Xid[] recover(int flag) throws XAException {
+    return MysqlXAConnection.recover(this.underlyingConnection, flag);
+  }
+
+  @Override
+  public void rollback(Xid xid) throws XAException {
+    switchToXid(xid);
+    this.currentXAResource.rollback(xid);
+    removeXAConnectionMapping(xid);
+  }
+
+  @Override
+  public boolean setTransactionTimeout(int arg0) throws XAException {
+    return false;
+  }
+
+  @Override
+  public void start(Xid xid, int arg1) throws XAException {
+    switchToXid(xid);
+
+    if (arg1 != XAResource.TMJOIN) {
+      this.currentXAResource.start(xid, arg1);
+
+      return;
     }
 
-    private static synchronized void removeXAConnectionMapping(Xid xid) {
-        XIDS_TO_PHYSICAL_CONNECTIONS.remove(xid);
+    //
+    // Emulate join, by using resume on the same physical connection
+    //
+
+    this.currentXAResource.start(xid, XAResource.TMRESUME);
+  }
+
+  @Override
+  public synchronized java.sql.Connection getConnection() throws SQLException {
+    if (this.currentXAConnection == null) {
+      return getConnection(false, true);
     }
 
-    private synchronized void switchToXid(Xid xid) throws XAException {
-        if (xid == null) {
-            throw new XAException();
-        }
+    return this.currentXAConnection.getConnection();
+  }
 
-        try {
-            if (!xid.equals(this.currentXid)) {
-                XAConnection toSwitchTo = findConnectionForXid(this.underlyingConnection, xid);
-                this.currentXAConnection = toSwitchTo;
-                this.currentXid = xid;
-                this.currentXAResource = toSwitchTo.getXAResource();
-            }
-        } catch (SQLException sqlEx) {
-            throw new XAException();
-        }
+  @Override
+  public void close() throws SQLException {
+    if (this.currentXAConnection == null) {
+      super.close();
+    } else {
+      removeXAConnectionMapping(this.currentXid);
+      this.currentXAConnection.close();
     }
-
-    @Override
-    public XAResource getXAResource() throws SQLException {
-        return this;
-    }
-
-    @Override
-    public void commit(Xid xid, boolean arg1) throws XAException {
-        switchToXid(xid);
-        this.currentXAResource.commit(xid, arg1);
-        removeXAConnectionMapping(xid);
-    }
-
-    @Override
-    public void end(Xid xid, int arg1) throws XAException {
-        switchToXid(xid);
-        this.currentXAResource.end(xid, arg1);
-    }
-
-    @Override
-    public void forget(Xid xid) throws XAException {
-        switchToXid(xid);
-        this.currentXAResource.forget(xid);
-        // remove?
-        removeXAConnectionMapping(xid);
-    }
-
-    @Override
-    public int getTransactionTimeout() throws XAException {
-        return 0;
-    }
-
-    @Override
-    public boolean isSameRM(XAResource xaRes) throws XAException {
-        return xaRes == this;
-    }
-
-    @Override
-    public int prepare(Xid xid) throws XAException {
-        switchToXid(xid);
-        return this.currentXAResource.prepare(xid);
-    }
-
-    @Override
-    public Xid[] recover(int flag) throws XAException {
-        return MysqlXAConnection.recover(this.underlyingConnection, flag);
-    }
-
-    @Override
-    public void rollback(Xid xid) throws XAException {
-        switchToXid(xid);
-        this.currentXAResource.rollback(xid);
-        removeXAConnectionMapping(xid);
-    }
-
-    @Override
-    public boolean setTransactionTimeout(int arg0) throws XAException {
-        return false;
-    }
-
-    @Override
-    public void start(Xid xid, int arg1) throws XAException {
-        switchToXid(xid);
-
-        if (arg1 != XAResource.TMJOIN) {
-            this.currentXAResource.start(xid, arg1);
-
-            return;
-        }
-
-        //
-        // Emulate join, by using resume on the same physical connection
-        //
-
-        this.currentXAResource.start(xid, XAResource.TMRESUME);
-    }
-
-    @Override
-    public synchronized java.sql.Connection getConnection() throws SQLException {
-        if (this.currentXAConnection == null) {
-            return getConnection(false, true);
-        }
-
-        return this.currentXAConnection.getConnection();
-    }
-
-    @Override
-    public void close() throws SQLException {
-        if (this.currentXAConnection == null) {
-            super.close();
-        } else {
-            removeXAConnectionMapping(this.currentXid);
-            this.currentXAConnection.close();
-        }
-    }
+  }
 }

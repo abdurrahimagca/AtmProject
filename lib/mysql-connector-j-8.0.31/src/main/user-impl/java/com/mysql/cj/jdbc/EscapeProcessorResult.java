@@ -30,13 +30,14 @@
 package com.mysql.cj.jdbc;
 
 /**
- * Wraps output from EscapeProcessor, to help prevent multiple passes over the query string, to detect characters such as '@' (defining/using a variable),
- * which are used further up the call stack to handle failover.
+ * Wraps output from EscapeProcessor, to help prevent multiple passes over the query string, to
+ * detect characters such as '@' (defining/using a variable), which are used further up the call
+ * stack to handle failover.
  */
 class EscapeProcessorResult {
-    boolean callingStoredFunction = false;
+  boolean callingStoredFunction = false;
 
-    String escapedSql;
+  String escapedSql;
 
-    byte usesVariables = StatementImpl.USES_VARIABLES_FALSE;
+  byte usesVariables = StatementImpl.USES_VARIABLES_FALSE;
 }

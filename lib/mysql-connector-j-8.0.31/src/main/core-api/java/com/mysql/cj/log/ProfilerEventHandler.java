@@ -35,11 +35,18 @@ import com.mysql.cj.protocol.Resultset;
 
 public interface ProfilerEventHandler {
 
-    void init(Log log);
+  void init(Log log);
 
-    void destroy();
+  void destroy();
 
-    void consumeEvent(ProfilerEvent evt);
+  void consumeEvent(ProfilerEvent evt);
 
-    void processEvent(byte eventType, Session session, Query query, Resultset resultSet, long eventDuration, Throwable eventCreationPoint, String message);
+  void processEvent(
+      byte eventType,
+      Session session,
+      Query query,
+      Resultset resultSet,
+      long eventDuration,
+      Throwable eventCreationPoint,
+      String message);
 }

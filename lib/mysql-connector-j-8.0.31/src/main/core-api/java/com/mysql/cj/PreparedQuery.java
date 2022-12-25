@@ -33,31 +33,31 @@ import com.mysql.cj.protocol.Message;
 
 public interface PreparedQuery extends Query {
 
-    QueryInfo getQueryInfo();
+  QueryInfo getQueryInfo();
 
-    void setQueryInfo(QueryInfo queryInfo);
+  void setQueryInfo(QueryInfo queryInfo);
 
-    void checkNullOrEmptyQuery(String sql);
+  void checkNullOrEmptyQuery(String sql);
 
-    String getOriginalSql();
+  String getOriginalSql();
 
-    void setOriginalSql(String originalSql);
+  void setOriginalSql(String originalSql);
 
-    int getParameterCount();
+  int getParameterCount();
 
-    void setParameterCount(int parameterCount);
+  void setParameterCount(int parameterCount);
 
-    public QueryBindings getQueryBindings();
+  public QueryBindings getQueryBindings();
 
-    public void setQueryBindings(QueryBindings queryBindings);
+  public void setQueryBindings(QueryBindings queryBindings);
 
-    int computeBatchSize(int numBatchedArgs);
+  int computeBatchSize(int numBatchedArgs);
 
-    int getBatchCommandIndex();
+  int getBatchCommandIndex();
 
-    void setBatchCommandIndex(int batchCommandIndex);
+  void setBatchCommandIndex(int batchCommandIndex);
 
-    String asSql();
+  String asSql();
 
-    <M extends Message> M fillSendPacket(QueryBindings bindings);
+  <M extends Message> M fillSendPacket(QueryBindings bindings);
 }

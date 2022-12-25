@@ -42,100 +42,114 @@ import com.mysql.cj.util.StringUtils;
 
 public abstract class AbstractDateTimeValueFactory<T> extends DefaultValueFactory<T> {
 
-    public AbstractDateTimeValueFactory(PropertySet pset) {
-        super(pset);
+  public AbstractDateTimeValueFactory(PropertySet pset) {
+    super(pset);
+  }
+
+  abstract T localCreateFromDate(InternalDate idate);
+
+  abstract T localCreateFromTime(InternalTime it);
+
+  abstract T localCreateFromTimestamp(InternalTimestamp its);
+
+  abstract T localCreateFromDatetime(InternalTimestamp its);
+
+  @Override
+  public T createFromDate(InternalDate idate) {
+    if (idate.isZero()) {
+      switch (this.pset
+          .<PropertyDefinitions.ZeroDatetimeBehavior>getEnumProperty(
+              PropertyKey.zeroDateTimeBehavior)
+          .getValue()) {
+        case CONVERT_TO_NULL:
+          return null;
+        case ROUND:
+          return localCreateFromDate(new InternalDate(1, 1, 1));
+        default:
+          break;
+      }
     }
+    return localCreateFromDate(idate);
+  }
 
-    abstract T localCreateFromDate(InternalDate idate);
+  @Override
+  public T createFromTime(InternalTime it) {
+    return localCreateFromTime(it);
+  }
 
-    abstract T localCreateFromTime(InternalTime it);
+  @Override
+  public T createFromTimestamp(InternalTimestamp its) {
+    if (its.isZero()) {
+      switch (this.pset
+          .<PropertyDefinitions.ZeroDatetimeBehavior>getEnumProperty(
+              PropertyKey.zeroDateTimeBehavior)
+          .getValue()) {
+        case CONVERT_TO_NULL:
+          return null;
+        case ROUND:
+          return localCreateFromTimestamp(new InternalTimestamp(1, 1, 1, 0, 0, 0, 0, 0));
+        default:
+          break;
+      }
+    }
+    return localCreateFromTimestamp(its);
+  }
 
-    abstract T localCreateFromTimestamp(InternalTimestamp its);
+  @Override
+  public T createFromDatetime(InternalTimestamp its) {
+    if (its.isZero()) {
+      switch (this.pset
+          .<PropertyDefinitions.ZeroDatetimeBehavior>getEnumProperty(
+              PropertyKey.zeroDateTimeBehavior)
+          .getValue()) {
+        case CONVERT_TO_NULL:
+          return null;
+        case ROUND:
+          return localCreateFromDatetime(new InternalTimestamp(1, 1, 1, 0, 0, 0, 0, 0));
+        default:
+          break;
+      }
+    }
+    return localCreateFromDatetime(its);
+  }
 
-    abstract T localCreateFromDatetime(InternalTimestamp its);
-
-    @Override
-    public T createFromDate(InternalDate idate) {
-        if (idate.isZero()) {
-            switch (this.pset.<PropertyDefinitions.ZeroDatetimeBehavior>getEnumProperty(PropertyKey.zeroDateTimeBehavior).getValue()) {
-                case CONVERT_TO_NULL:
-                    return null;
-                case ROUND:
-                    return localCreateFromDate(new InternalDate(1, 1, 1));
-                default:
-                    break;
-            }
+  @Override
+  public T createFromYear(long year) {
+    if (this.pset.getBooleanProperty(PropertyKey.yearIsDateType).getValue()) {
+      if (year < 100) {
+        if (year <= 69) {
+          year += 100;
         }
-        return localCreateFromDate(idate);
+        year += 1900;
+      }
+      return createFromDate(new InternalDate((int) year, 1, 1));
+    }
+    return createFromLong(year);
+  }
+
+  @Override
+  public T createFromBytes(byte[] bytes, int offset, int length, Field f) {
+    if (length == 0
+        && this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).getValue()) {
+      return createFromLong(0);
     }
 
-    @Override
-    public T createFromTime(InternalTime it) {
-        return localCreateFromTime(it);
+    String s = StringUtils.toString(bytes, offset, length, f.getEncoding());
+    byte[] newBytes = s.getBytes();
+
+    if (MysqlTextValueDecoder.isDate(s)) {
+      return createFromDate(MysqlTextValueDecoder.getDate(newBytes, 0, newBytes.length));
+
+    } else if (MysqlTextValueDecoder.isTime(s)) {
+      return createFromTime(
+          MysqlTextValueDecoder.getTime(newBytes, 0, newBytes.length, f.getDecimals()));
+
+    } else if (MysqlTextValueDecoder.isTimestamp(s)) {
+      return createFromTimestamp(
+          MysqlTextValueDecoder.getTimestamp(newBytes, 0, newBytes.length, f.getDecimals()));
     }
-
-    @Override
-    public T createFromTimestamp(InternalTimestamp its) {
-        if (its.isZero()) {
-            switch (this.pset.<PropertyDefinitions.ZeroDatetimeBehavior>getEnumProperty(PropertyKey.zeroDateTimeBehavior).getValue()) {
-                case CONVERT_TO_NULL:
-                    return null;
-                case ROUND:
-                    return localCreateFromTimestamp(new InternalTimestamp(1, 1, 1, 0, 0, 0, 0, 0));
-                default:
-                    break;
-            }
-        }
-        return localCreateFromTimestamp(its);
-    }
-
-    @Override
-    public T createFromDatetime(InternalTimestamp its) {
-        if (its.isZero()) {
-            switch (this.pset.<PropertyDefinitions.ZeroDatetimeBehavior>getEnumProperty(PropertyKey.zeroDateTimeBehavior).getValue()) {
-                case CONVERT_TO_NULL:
-                    return null;
-                case ROUND:
-                    return localCreateFromDatetime(new InternalTimestamp(1, 1, 1, 0, 0, 0, 0, 0));
-                default:
-                    break;
-            }
-        }
-        return localCreateFromDatetime(its);
-    }
-
-    @Override
-    public T createFromYear(long year) {
-        if (this.pset.getBooleanProperty(PropertyKey.yearIsDateType).getValue()) {
-            if (year < 100) {
-                if (year <= 69) {
-                    year += 100;
-                }
-                year += 1900;
-            }
-            return createFromDate(new InternalDate((int) year, 1, 1));
-        }
-        return createFromLong(year);
-    }
-
-    @Override
-    public T createFromBytes(byte[] bytes, int offset, int length, Field f) {
-        if (length == 0 && this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).getValue()) {
-            return createFromLong(0);
-        }
-
-        String s = StringUtils.toString(bytes, offset, length, f.getEncoding());
-        byte[] newBytes = s.getBytes();
-
-        if (MysqlTextValueDecoder.isDate(s)) {
-            return createFromDate(MysqlTextValueDecoder.getDate(newBytes, 0, newBytes.length));
-
-        } else if (MysqlTextValueDecoder.isTime(s)) {
-            return createFromTime(MysqlTextValueDecoder.getTime(newBytes, 0, newBytes.length, f.getDecimals()));
-
-        } else if (MysqlTextValueDecoder.isTimestamp(s)) {
-            return createFromTimestamp(MysqlTextValueDecoder.getTimestamp(newBytes, 0, newBytes.length, f.getDecimals()));
-        }
-        throw new DataConversionException(Messages.getString("ResultSet.UnableToConvertString", new Object[] { s, getTargetTypeName() }));
-    }
+    throw new DataConversionException(
+        Messages.getString(
+            "ResultSet.UnableToConvertString", new Object[] {s, getTargetTypeName()}));
+  }
 }

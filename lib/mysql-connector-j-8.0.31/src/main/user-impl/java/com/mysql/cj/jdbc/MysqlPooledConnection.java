@@ -29,197 +29,193 @@
 
 package com.mysql.cj.jdbc;
 
+import com.mysql.cj.Messages;
+import com.mysql.cj.exceptions.ExceptionInterceptor;
+import com.mysql.cj.jdbc.exceptions.SQLError;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import javax.sql.ConnectionEvent;
 import javax.sql.ConnectionEventListener;
 import javax.sql.PooledConnection;
 import javax.sql.StatementEvent;
 import javax.sql.StatementEventListener;
 
-import com.mysql.cj.Messages;
-import com.mysql.cj.exceptions.ExceptionInterceptor;
-import com.mysql.cj.jdbc.exceptions.SQLError;
-
 /**
- * This class is used to wrap and return a physical connection within a logical handle. It also registers and notifies ConnectionEventListeners of any
- * ConnectionEvents
+ * This class is used to wrap and return a physical connection within a logical handle. It also
+ * registers and notifies ConnectionEventListeners of any ConnectionEvents
  */
 public class MysqlPooledConnection implements PooledConnection {
 
-    protected static MysqlPooledConnection getInstance(com.mysql.cj.jdbc.JdbcConnection connection) throws SQLException {
-        return new MysqlPooledConnection(connection);
+  protected static MysqlPooledConnection getInstance(com.mysql.cj.jdbc.JdbcConnection connection)
+      throws SQLException {
+    return new MysqlPooledConnection(connection);
+  }
+
+  /** The flag for an exception being thrown. */
+  public static final int CONNECTION_ERROR_EVENT = 1;
+
+  /** The flag for a connection being closed. */
+  public static final int CONNECTION_CLOSED_EVENT = 2;
+
+  private Map<ConnectionEventListener, ConnectionEventListener> connectionEventListeners;
+
+  private Connection logicalHandle;
+
+  private com.mysql.cj.jdbc.JdbcConnection physicalConn;
+
+  private ExceptionInterceptor exceptionInterceptor;
+
+  private final Map<StatementEventListener, StatementEventListener> statementEventListeners =
+      new HashMap<>();
+
+  /**
+   * Construct a new MysqlPooledConnection and set instance variables
+   *
+   * @param connection physical connection to db
+   */
+  public MysqlPooledConnection(com.mysql.cj.jdbc.JdbcConnection connection) {
+    this.logicalHandle = null;
+    this.physicalConn = connection;
+    this.connectionEventListeners = new HashMap<>();
+    this.exceptionInterceptor = this.physicalConn.getExceptionInterceptor();
+  }
+
+  @Override
+  public synchronized void addConnectionEventListener(
+      ConnectionEventListener connectioneventlistener) {
+
+    if (this.connectionEventListeners != null) {
+      this.connectionEventListeners.put(connectioneventlistener, connectioneventlistener);
+    }
+  }
+
+  @Override
+  public synchronized void removeConnectionEventListener(
+      ConnectionEventListener connectioneventlistener) {
+
+    if (this.connectionEventListeners != null) {
+      this.connectionEventListeners.remove(connectioneventlistener);
+    }
+  }
+
+  @Override
+  public synchronized Connection getConnection() throws SQLException {
+    return getConnection(true, false);
+  }
+
+  protected synchronized Connection getConnection(boolean resetServerState, boolean forXa)
+      throws SQLException {
+    if (this.physicalConn == null) {
+
+      SQLException sqlException =
+          SQLError.createSQLException(
+              Messages.getString("MysqlPooledConnection.0"), this.exceptionInterceptor);
+      callConnectionEventListeners(CONNECTION_ERROR_EVENT, sqlException);
+
+      throw sqlException;
     }
 
-    /**
-     * The flag for an exception being thrown.
-     */
-    public static final int CONNECTION_ERROR_EVENT = 1;
+    try {
 
-    /**
-     * The flag for a connection being closed.
-     */
-    public static final int CONNECTION_CLOSED_EVENT = 2;
+      if (this.logicalHandle != null) {
+        ((ConnectionWrapper) this.logicalHandle).close(false);
+      }
 
-    private Map<ConnectionEventListener, ConnectionEventListener> connectionEventListeners;
+      if (resetServerState) {
+        this.physicalConn.resetServerState();
+      }
 
-    private Connection logicalHandle;
+      this.logicalHandle = ConnectionWrapper.getInstance(this, this.physicalConn, forXa);
+    } catch (SQLException sqlException) {
+      callConnectionEventListeners(CONNECTION_ERROR_EVENT, sqlException);
 
-    private com.mysql.cj.jdbc.JdbcConnection physicalConn;
-
-    private ExceptionInterceptor exceptionInterceptor;
-
-    private final Map<StatementEventListener, StatementEventListener> statementEventListeners = new HashMap<>();
-
-    /**
-     * Construct a new MysqlPooledConnection and set instance variables
-     * 
-     * @param connection
-     *            physical connection to db
-     */
-    public MysqlPooledConnection(com.mysql.cj.jdbc.JdbcConnection connection) {
-        this.logicalHandle = null;
-        this.physicalConn = connection;
-        this.connectionEventListeners = new HashMap<>();
-        this.exceptionInterceptor = this.physicalConn.getExceptionInterceptor();
+      throw sqlException;
     }
 
-    @Override
-    public synchronized void addConnectionEventListener(ConnectionEventListener connectioneventlistener) {
+    return this.logicalHandle;
+  }
 
-        if (this.connectionEventListeners != null) {
-            this.connectionEventListeners.put(connectioneventlistener, connectioneventlistener);
-        }
+  /**
+   * Invoked by the container (not the client), and should close the physical connection. This will
+   * be called if the pool is destroyed or the connectionEventListener receives a
+   * connectionErrorOccurred event.
+   */
+  @Override
+  public synchronized void close() throws SQLException {
+    if (this.physicalConn != null) {
+      this.physicalConn.close();
+
+      this.physicalConn = null;
     }
 
-    @Override
-    public synchronized void removeConnectionEventListener(ConnectionEventListener connectioneventlistener) {
+    if (this.connectionEventListeners != null) {
+      this.connectionEventListeners.clear();
 
-        if (this.connectionEventListeners != null) {
-            this.connectionEventListeners.remove(connectioneventlistener);
-        }
+      this.connectionEventListeners = null;
     }
 
-    @Override
-    public synchronized Connection getConnection() throws SQLException {
-        return getConnection(true, false);
+    this.statementEventListeners.clear();
+  }
 
+  /**
+   * Notifies all registered ConnectionEventListeners of ConnectionEvents. Instantiates a new
+   * ConnectionEvent which wraps sqlException and invokes either connectionClose or
+   * connectionErrorOccurred on listener as appropriate.
+   *
+   * @param eventType value indicating whether connectionClosed or connectionErrorOccurred called
+   * @param sqlException the exception being thrown
+   */
+  protected synchronized void callConnectionEventListeners(
+      int eventType, SQLException sqlException) {
+
+    if (this.connectionEventListeners == null) {
+
+      return;
     }
 
-    protected synchronized Connection getConnection(boolean resetServerState, boolean forXa) throws SQLException {
-        if (this.physicalConn == null) {
+    Iterator<Map.Entry<ConnectionEventListener, ConnectionEventListener>> iterator =
+        this.connectionEventListeners.entrySet().iterator();
 
-            SQLException sqlException = SQLError.createSQLException(Messages.getString("MysqlPooledConnection.0"), this.exceptionInterceptor);
-            callConnectionEventListeners(CONNECTION_ERROR_EVENT, sqlException);
+    ConnectionEvent connectionevent = new ConnectionEvent(this, sqlException);
 
-            throw sqlException;
-        }
+    while (iterator.hasNext()) {
 
-        try {
+      ConnectionEventListener connectioneventlistener = iterator.next().getValue();
 
-            if (this.logicalHandle != null) {
-                ((ConnectionWrapper) this.logicalHandle).close(false);
-            }
-
-            if (resetServerState) {
-                this.physicalConn.resetServerState();
-            }
-
-            this.logicalHandle = ConnectionWrapper.getInstance(this, this.physicalConn, forXa);
-        } catch (SQLException sqlException) {
-            callConnectionEventListeners(CONNECTION_ERROR_EVENT, sqlException);
-
-            throw sqlException;
-        }
-
-        return this.logicalHandle;
+      if (eventType == CONNECTION_CLOSED_EVENT) {
+        connectioneventlistener.connectionClosed(connectionevent);
+      } else if (eventType == CONNECTION_ERROR_EVENT) {
+        connectioneventlistener.connectionErrorOccurred(connectionevent);
+      }
     }
+  }
 
-    /**
-     * Invoked by the container (not the client), and should close the physical
-     * connection. This will be called if the pool is destroyed or the
-     * connectionEventListener receives a connectionErrorOccurred event.
-     */
-    @Override
-    public synchronized void close() throws SQLException {
-        if (this.physicalConn != null) {
-            this.physicalConn.close();
+  protected ExceptionInterceptor getExceptionInterceptor() {
+    return this.exceptionInterceptor;
+  }
 
-            this.physicalConn = null;
-        }
-
-        if (this.connectionEventListeners != null) {
-            this.connectionEventListeners.clear();
-
-            this.connectionEventListeners = null;
-        }
-
-        this.statementEventListeners.clear();
+  @Override
+  public void addStatementEventListener(StatementEventListener listener) {
+    synchronized (this.statementEventListeners) {
+      this.statementEventListeners.put(listener, listener);
     }
+  }
 
-    /**
-     * Notifies all registered ConnectionEventListeners of ConnectionEvents.
-     * Instantiates a new ConnectionEvent which wraps sqlException and invokes
-     * either connectionClose or connectionErrorOccurred on listener as
-     * appropriate.
-     * 
-     * @param eventType
-     *            value indicating whether connectionClosed or
-     *            connectionErrorOccurred called
-     * @param sqlException
-     *            the exception being thrown
-     */
-    protected synchronized void callConnectionEventListeners(int eventType, SQLException sqlException) {
-
-        if (this.connectionEventListeners == null) {
-
-            return;
-        }
-
-        Iterator<Map.Entry<ConnectionEventListener, ConnectionEventListener>> iterator = this.connectionEventListeners.entrySet().iterator();
-
-        ConnectionEvent connectionevent = new ConnectionEvent(this, sqlException);
-
-        while (iterator.hasNext()) {
-
-            ConnectionEventListener connectioneventlistener = iterator.next().getValue();
-
-            if (eventType == CONNECTION_CLOSED_EVENT) {
-                connectioneventlistener.connectionClosed(connectionevent);
-            } else if (eventType == CONNECTION_ERROR_EVENT) {
-                connectioneventlistener.connectionErrorOccurred(connectionevent);
-            }
-        }
+  @Override
+  public void removeStatementEventListener(StatementEventListener listener) {
+    synchronized (this.statementEventListeners) {
+      this.statementEventListeners.remove(listener);
     }
+  }
 
-    protected ExceptionInterceptor getExceptionInterceptor() {
-        return this.exceptionInterceptor;
+  void fireStatementEvent(StatementEvent event) throws SQLException {
+    synchronized (this.statementEventListeners) {
+      for (StatementEventListener listener : this.statementEventListeners.keySet()) {
+        listener.statementClosed(event);
+      }
     }
-
-    @Override
-    public void addStatementEventListener(StatementEventListener listener) {
-        synchronized (this.statementEventListeners) {
-            this.statementEventListeners.put(listener, listener);
-        }
-    }
-
-    @Override
-    public void removeStatementEventListener(StatementEventListener listener) {
-        synchronized (this.statementEventListeners) {
-            this.statementEventListeners.remove(listener);
-        }
-    }
-
-    void fireStatementEvent(StatementEvent event) throws SQLException {
-        synchronized (this.statementEventListeners) {
-            for (StatementEventListener listener : this.statementEventListeners.keySet()) {
-                listener.statementClosed(event);
-            }
-        }
-    }
-
+  }
 }

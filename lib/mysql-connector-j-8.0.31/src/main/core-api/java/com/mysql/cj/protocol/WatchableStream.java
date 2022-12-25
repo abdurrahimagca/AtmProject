@@ -31,12 +31,11 @@ package com.mysql.cj.protocol;
 
 public interface WatchableStream {
 
-    void setWatcher(OutputStreamWatcher watcher);
+  void setWatcher(OutputStreamWatcher watcher);
 
-    int size();
+  int size();
 
-    byte toByteArray()[];
+  byte toByteArray()[];
 
-    void write(byte b[], int off, int len);
-
+  void write(byte b[], int off, int len);
 }

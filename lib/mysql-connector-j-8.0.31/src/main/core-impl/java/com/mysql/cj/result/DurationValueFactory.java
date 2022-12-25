@@ -29,46 +29,50 @@
 
 package com.mysql.cj.result;
 
-import java.time.Duration;
-
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.protocol.InternalDate;
 import com.mysql.cj.protocol.InternalTime;
 import com.mysql.cj.protocol.InternalTimestamp;
+import java.time.Duration;
 
-/**
- * A value factory to create {@link Duration} instances.
- */
+/** A value factory to create {@link Duration} instances. */
 public class DurationValueFactory extends AbstractDateTimeValueFactory<Duration> {
 
-    public DurationValueFactory(PropertySet pset) {
-        super(pset);
-    }
+  public DurationValueFactory(PropertySet pset) {
+    super(pset);
+  }
 
-    @Override
-    Duration localCreateFromDate(InternalDate idate) {
-        return unsupported("DATE");
-    }
+  @Override
+  Duration localCreateFromDate(InternalDate idate) {
+    return unsupported("DATE");
+  }
 
-    @Override
-    public Duration localCreateFromTime(InternalTime it) {
-        String ptn = (it.getHours() < 0 ? "-PT" : "PT") + (it.getHours() < 0 ? -it.getHours() : it.getHours()) + "H" + it.getMinutes() + "M" + it.getSeconds()
-                + "." + it.getNanos() + "S";
-        return Duration.parse(ptn);
-    }
+  @Override
+  public Duration localCreateFromTime(InternalTime it) {
+    String ptn =
+        (it.getHours() < 0 ? "-PT" : "PT")
+            + (it.getHours() < 0 ? -it.getHours() : it.getHours())
+            + "H"
+            + it.getMinutes()
+            + "M"
+            + it.getSeconds()
+            + "."
+            + it.getNanos()
+            + "S";
+    return Duration.parse(ptn);
+  }
 
-    @Override
-    public Duration localCreateFromTimestamp(InternalTimestamp its) {
-        return unsupported("TIMESTAMP");
-    }
+  @Override
+  public Duration localCreateFromTimestamp(InternalTimestamp its) {
+    return unsupported("TIMESTAMP");
+  }
 
-    @Override
-    public Duration localCreateFromDatetime(InternalTimestamp its) {
-        return unsupported("DATETIME");
-    }
+  @Override
+  public Duration localCreateFromDatetime(InternalTimestamp its) {
+    return unsupported("DATETIME");
+  }
 
-    public String getTargetTypeName() {
-        return Duration.class.getName();
-    }
-
+  public String getTargetTypeName() {
+    return Duration.class.getName();
+  }
 }

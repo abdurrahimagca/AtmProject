@@ -34,18 +34,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * An {@link OutputStream} wrapper that can't be closed and flushes data instead when {@link #close()} is called.
+ * An {@link OutputStream} wrapper that can't be closed and flushes data instead when {@link
+ * #close()} is called.
  */
 public class ContinuousOutputStream extends FilterOutputStream {
-    protected ContinuousOutputStream(OutputStream out) {
-        super(out);
-    }
+  protected ContinuousOutputStream(OutputStream out) {
+    super(out);
+  }
 
-    /**
-     * Instead of closing the {@link OutputStream} flushes its data.
-     */
-    @Override
-    public void close() throws IOException {
-        flush();
-    }
+  /** Instead of closing the {@link OutputStream} flushes its data. */
+  @Override
+  public void close() throws IOException {
+    flush();
+  }
 }

@@ -31,10 +31,9 @@ package com.mysql.cj;
 
 public interface DataStoreMetadata {
 
-    boolean schemaExists(String schemaName);
+  boolean schemaExists(String schemaName);
 
-    boolean tableExists(String schemaName, String tableName);
+  boolean tableExists(String schemaName, String tableName);
 
-    long getTableRowCount(String schemaName, String tableName);
-
+  long getTableRowCount(String schemaName, String tableName);
 }

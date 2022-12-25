@@ -29,9 +29,6 @@
 
 package com.mysql.cj.result;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.mysql.cj.Constants;
 import com.mysql.cj.Messages;
 import com.mysql.cj.conf.PropertyKey;
@@ -40,78 +37,92 @@ import com.mysql.cj.exceptions.DataConversionException;
 import com.mysql.cj.protocol.a.MysqlTextValueDecoder;
 import com.mysql.cj.util.DataTypeUtil;
 import com.mysql.cj.util.StringUtils;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
-/**
- * A value factory for creating {@link java.lang.Boolean} values.
- */
+/** A value factory for creating {@link java.lang.Boolean} values. */
 public class BooleanValueFactory extends DefaultValueFactory<Boolean> {
 
-    public BooleanValueFactory(PropertySet pset) {
-        super(pset);
+  public BooleanValueFactory(PropertySet pset) {
+    super(pset);
+  }
+
+  @Override
+  public Boolean createFromLong(long l) {
+    // Goes back to ODBC driver compatibility, and VB/Automation Languages/COM, where in Windows
+    // "-1" can mean true as well.
+    return (l == -1 || l > 0);
+  }
+
+  @Override
+  public Boolean createFromBigInteger(BigInteger i) {
+    return i.compareTo(Constants.BIG_INTEGER_ZERO) > 0
+        || i.compareTo(Constants.BIG_INTEGER_NEGATIVE_ONE) == 0;
+  }
+
+  @Override
+  // getBoolean() from DOUBLE, DECIMAL are required by JDBC spec....
+  public Boolean createFromDouble(double d) {
+    // this means that 0.1 or -1 will be TRUE
+    return d > 0 || d == -1.0d;
+  }
+
+  @Override
+  public Boolean createFromBigDecimal(BigDecimal d) {
+    // this means that 0.1 or -1 will be TRUE
+    return d.compareTo(Constants.BIG_DECIMAL_ZERO) > 0
+        || d.compareTo(Constants.BIG_DECIMAL_NEGATIVE_ONE) == 0;
+  }
+
+  @Override
+  public Boolean createFromBit(byte[] bytes, int offset, int length) {
+    return createFromLong(DataTypeUtil.bitToLong(bytes, offset, length));
+  }
+
+  @Override
+  public Boolean createFromYear(long l) {
+    return createFromLong(l);
+  }
+
+  public String getTargetTypeName() {
+    return Boolean.class.getName();
+  }
+
+  @Override
+  public Boolean createFromBytes(byte[] bytes, int offset, int length, Field f) {
+    if (length == 0
+        && this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).getValue()) {
+      return createFromLong(0);
     }
 
-    @Override
-    public Boolean createFromLong(long l) {
-        // Goes back to ODBC driver compatibility, and VB/Automation Languages/COM, where in Windows "-1" can mean true as well.
-        return (l == -1 || l > 0);
+    String s = StringUtils.toString(bytes, offset, length, f.getEncoding());
+    byte[] newBytes = s.getBytes();
+
+    if (s.equalsIgnoreCase("Y")
+        || s.equalsIgnoreCase("yes")
+        || s.equalsIgnoreCase("T")
+        || s.equalsIgnoreCase("true")) {
+      return createFromLong(1);
+    } else if (s.equalsIgnoreCase("N")
+        || s.equalsIgnoreCase("no")
+        || s.equalsIgnoreCase("F")
+        || s.equalsIgnoreCase("false")) {
+      return createFromLong(0);
+    } else if (s.contains("e") || s.contains("E") || s.matches("-?\\d*\\.\\d*")) {
+      // floating point
+      return createFromDouble(MysqlTextValueDecoder.getDouble(newBytes, 0, newBytes.length));
+    } else if (s.matches("-?\\d+")) {
+      // integer
+      if (s.charAt(0) == '-' // TODO shouldn't we check the length as well?
+          || length <= (MysqlTextValueDecoder.MAX_SIGNED_LONG_LEN - 1)
+              && newBytes[0] >= '0'
+              && newBytes[0] <= '8') {
+        return createFromLong(MysqlTextValueDecoder.getLong(newBytes, 0, newBytes.length));
+      }
+      return createFromBigInteger(
+          MysqlTextValueDecoder.getBigInteger(newBytes, 0, newBytes.length));
     }
-
-    @Override
-    public Boolean createFromBigInteger(BigInteger i) {
-        return i.compareTo(Constants.BIG_INTEGER_ZERO) > 0 || i.compareTo(Constants.BIG_INTEGER_NEGATIVE_ONE) == 0;
-    }
-
-    @Override
-    // getBoolean() from DOUBLE, DECIMAL are required by JDBC spec....
-    public Boolean createFromDouble(double d) {
-        // this means that 0.1 or -1 will be TRUE
-        return d > 0 || d == -1.0d;
-    }
-
-    @Override
-    public Boolean createFromBigDecimal(BigDecimal d) {
-        // this means that 0.1 or -1 will be TRUE
-        return d.compareTo(Constants.BIG_DECIMAL_ZERO) > 0 || d.compareTo(Constants.BIG_DECIMAL_NEGATIVE_ONE) == 0;
-    }
-
-    @Override
-    public Boolean createFromBit(byte[] bytes, int offset, int length) {
-        return createFromLong(DataTypeUtil.bitToLong(bytes, offset, length));
-    }
-
-    @Override
-    public Boolean createFromYear(long l) {
-        return createFromLong(l);
-    }
-
-    public String getTargetTypeName() {
-        return Boolean.class.getName();
-    }
-
-    @Override
-    public Boolean createFromBytes(byte[] bytes, int offset, int length, Field f) {
-        if (length == 0 && this.pset.getBooleanProperty(PropertyKey.emptyStringsConvertToZero).getValue()) {
-            return createFromLong(0);
-        }
-
-        String s = StringUtils.toString(bytes, offset, length, f.getEncoding());
-        byte[] newBytes = s.getBytes();
-
-        if (s.equalsIgnoreCase("Y") || s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("T") || s.equalsIgnoreCase("true")) {
-            return createFromLong(1);
-        } else if (s.equalsIgnoreCase("N") || s.equalsIgnoreCase("no") || s.equalsIgnoreCase("F") || s.equalsIgnoreCase("false")) {
-            return createFromLong(0);
-        } else if (s.contains("e") || s.contains("E") || s.matches("-?\\d*\\.\\d*")) {
-            // floating point
-            return createFromDouble(MysqlTextValueDecoder.getDouble(newBytes, 0, newBytes.length));
-        } else if (s.matches("-?\\d+")) {
-            // integer
-            if (s.charAt(0) == '-' // TODO shouldn't we check the length as well?
-                    || length <= (MysqlTextValueDecoder.MAX_SIGNED_LONG_LEN - 1) && newBytes[0] >= '0' && newBytes[0] <= '8') {
-                return createFromLong(MysqlTextValueDecoder.getLong(newBytes, 0, newBytes.length));
-            }
-            return createFromBigInteger(MysqlTextValueDecoder.getBigInteger(newBytes, 0, newBytes.length));
-        }
-        throw new DataConversionException(Messages.getString("ResultSet.UnableToInterpretString", new Object[] { s }));
-    }
+    throw new DataConversionException(
+        Messages.getString("ResultSet.UnableToInterpretString", new Object[] {s}));
+  }
 }

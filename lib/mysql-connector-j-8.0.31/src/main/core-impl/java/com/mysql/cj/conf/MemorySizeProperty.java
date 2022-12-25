@@ -29,52 +29,51 @@
 
 package com.mysql.cj.conf;
 
-import java.util.Properties;
-
-import javax.naming.Reference;
-
 import com.mysql.cj.exceptions.ExceptionInterceptor;
+import java.util.Properties;
+import javax.naming.Reference;
 
 public class MemorySizeProperty extends IntegerProperty {
 
-    private static final long serialVersionUID = 4200558564320133284L;
+  private static final long serialVersionUID = 4200558564320133284L;
 
-    private String initialValueAsString;
+  private String initialValueAsString;
 
-    protected String valueAsString;
+  protected String valueAsString;
 
-    protected MemorySizeProperty(PropertyDefinition<Integer> propertyDefinition) {
-        super(propertyDefinition);
-        this.valueAsString = propertyDefinition.getDefaultValue().toString();
-    }
+  protected MemorySizeProperty(PropertyDefinition<Integer> propertyDefinition) {
+    super(propertyDefinition);
+    this.valueAsString = propertyDefinition.getDefaultValue().toString();
+  }
 
-    @Override
-    public void initializeFrom(Properties extractFrom, ExceptionInterceptor exceptionInterceptor) {
-        super.initializeFrom(extractFrom, exceptionInterceptor);
-        this.initialValueAsString = this.valueAsString;
-    }
+  @Override
+  public void initializeFrom(Properties extractFrom, ExceptionInterceptor exceptionInterceptor) {
+    super.initializeFrom(extractFrom, exceptionInterceptor);
+    this.initialValueAsString = this.valueAsString;
+  }
 
-    @Override
-    public void initializeFrom(Reference ref, ExceptionInterceptor exceptionInterceptor) {
-        super.initializeFrom(ref, exceptionInterceptor);
-        this.initialValueAsString = this.valueAsString;
-    }
+  @Override
+  public void initializeFrom(Reference ref, ExceptionInterceptor exceptionInterceptor) {
+    super.initializeFrom(ref, exceptionInterceptor);
+    this.initialValueAsString = this.valueAsString;
+  }
 
-    @Override
-    public String getStringValue() {
-        return this.valueAsString;
-    }
+  @Override
+  public String getStringValue() {
+    return this.valueAsString;
+  }
 
-    @Override
-    public void setValueInternal(Integer value, String valueAsString, ExceptionInterceptor exceptionInterceptor) {
-        super.setValueInternal(value, valueAsString, exceptionInterceptor);
-        this.valueAsString = valueAsString == null ? String.valueOf(value.intValue()) : valueAsString;
-    }
+  @Override
+  public void setValueInternal(
+      Integer value, String valueAsString, ExceptionInterceptor exceptionInterceptor) {
+    super.setValueInternal(value, valueAsString, exceptionInterceptor);
+    this.valueAsString = valueAsString == null ? String.valueOf(value.intValue()) : valueAsString;
+  }
 
-    @Override
-    public void resetValue() {
-        this.value = this.initialValue;
-        this.valueAsString = this.initialValueAsString;
-        invokeListeners();
-    }
+  @Override
+  public void resetValue() {
+    this.value = this.initialValue;
+    this.valueAsString = this.initialValueAsString;
+    invokeListeners();
+  }
 }

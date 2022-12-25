@@ -29,51 +29,53 @@
 
 package com.mysql.jdbc;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.log.Log;
 import com.mysql.cj.protocol.ServerSession;
 import com.mysql.cj.protocol.SocketConnection;
 import com.mysql.cj.protocol.SocketFactory;
 import com.mysql.cj.protocol.StandardSocketFactory;
+import java.io.Closeable;
+import java.io.IOException;
 
 /**
- * Wraps the legacy com.mysql.jdbc.SocketFactory implementations so they can be used as {@link SocketFactory}
+ * Wraps the legacy com.mysql.jdbc.SocketFactory implementations so they can be used as {@link
+ * SocketFactory}
  */
 public class SocketFactoryWrapper extends StandardSocketFactory implements SocketFactory {
 
-    @SuppressWarnings("deprecation")
-    com.mysql.jdbc.SocketFactory socketFactory;
+  @SuppressWarnings("deprecation")
+  com.mysql.jdbc.SocketFactory socketFactory;
 
-    @SuppressWarnings("deprecation")
-    public SocketFactoryWrapper(Object legacyFactory) {
-        this.socketFactory = (com.mysql.jdbc.SocketFactory) legacyFactory;
-    }
+  @SuppressWarnings("deprecation")
+  public SocketFactoryWrapper(Object legacyFactory) {
+    this.socketFactory = (com.mysql.jdbc.SocketFactory) legacyFactory;
+  }
 
-    @SuppressWarnings({ "deprecation", "unchecked" })
-    @Override
-    public <T extends Closeable> T connect(String hostname, int portNumber, PropertySet pset, int loginTimeout) throws IOException {
-        this.rawSocket = this.socketFactory.connect(hostname, portNumber, pset.exposeAsProperties());
-        return (T) this.rawSocket;
-    }
+  @SuppressWarnings({"deprecation", "unchecked"})
+  @Override
+  public <T extends Closeable> T connect(
+      String hostname, int portNumber, PropertySet pset, int loginTimeout) throws IOException {
+    this.rawSocket = this.socketFactory.connect(hostname, portNumber, pset.exposeAsProperties());
+    return (T) this.rawSocket;
+  }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends Closeable> T performTlsHandshake(SocketConnection socketConnection, ServerSession serverSession, Log log) throws IOException {
-        return (T) super.performTlsHandshake(socketConnection, serverSession, log);
-    }
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T extends Closeable> T performTlsHandshake(
+      SocketConnection socketConnection, ServerSession serverSession, Log log) throws IOException {
+    return (T) super.performTlsHandshake(socketConnection, serverSession, log);
+  }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void beforeHandshake() throws IOException {
-        this.socketFactory.beforeHandshake();
-    }
+  @SuppressWarnings("deprecation")
+  @Override
+  public void beforeHandshake() throws IOException {
+    this.socketFactory.beforeHandshake();
+  }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void afterHandshake() throws IOException {
-        this.socketFactory.afterHandshake();
-    }
+  @SuppressWarnings("deprecation")
+  @Override
+  public void afterHandshake() throws IOException {
+    this.socketFactory.afterHandshake();
+  }
 }

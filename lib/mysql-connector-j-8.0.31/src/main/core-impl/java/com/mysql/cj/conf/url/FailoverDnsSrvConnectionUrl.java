@@ -29,10 +29,6 @@
 
 package com.mysql.cj.conf.url;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.conf.BooleanPropertyDefinition;
 import com.mysql.cj.conf.ConnectionUrl;
@@ -42,74 +38,83 @@ import com.mysql.cj.conf.HostsListView;
 import com.mysql.cj.conf.PropertyKey;
 import com.mysql.cj.exceptions.ExceptionFactory;
 import com.mysql.cj.exceptions.InvalidConnectionAttributeException;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public class FailoverDnsSrvConnectionUrl extends ConnectionUrl {
-    private static final String DEFAULT_HOST = "";
-    private static final int DEFAULT_PORT = HostInfo.NO_PORT;
+  private static final String DEFAULT_HOST = "";
+  private static final int DEFAULT_PORT = HostInfo.NO_PORT;
 
-    /**
-     * Constructs an instance of {@link FailoverDnsSrvConnectionUrl}, performing all the required initializations.
-     * 
-     * @param connStrParser
-     *            a {@link ConnectionUrlParser} instance containing the parsed version of the original connection string
-     * @param info
-     *            the connection arguments map
+  /**
+   * Constructs an instance of {@link FailoverDnsSrvConnectionUrl}, performing all the required
+   * initializations.
+   *
+   * @param connStrParser a {@link ConnectionUrlParser} instance containing the parsed version of
+   *     the original connection string
+   * @param info the connection arguments map
+   */
+  public FailoverDnsSrvConnectionUrl(ConnectionUrlParser connStrParser, Properties info) {
+    super(connStrParser, info);
+    this.type = Type.FAILOVER_DNS_SRV_CONNECTION;
+
+    /*
+     * Validate the hosts list:
+     * 1. One host (SRV service name) must be provided.
+     * 2. No more than one host (SRV service name) can be provided.
+     * 3. No port can be provided, i.e., port number must be equals to DEFAULT_PORT.
+     * 4. If property 'dnsSrv' is set then it cannot be "false".
+     * 5. Property 'protocol' cannot be "PIPE".
      */
-    public FailoverDnsSrvConnectionUrl(ConnectionUrlParser connStrParser, Properties info) {
-        super(connStrParser, info);
-        this.type = Type.FAILOVER_DNS_SRV_CONNECTION;
-
-        /*
-         * Validate the hosts list:
-         * 1. One host (SRV service name) must be provided.
-         * 2. No more than one host (SRV service name) can be provided.
-         * 3. No port can be provided, i.e., port number must be equals to DEFAULT_PORT.
-         * 4. If property 'dnsSrv' is set then it cannot be "false".
-         * 5. Property 'protocol' cannot be "PIPE".
-         */
-        HostInfo srvHost = super.getMainHost();
-        Map<String, String> hostProps = srvHost.getHostProperties();
-        if (DEFAULT_HOST.equals(srvHost.getHost())) {
-            throw ExceptionFactory.createException(InvalidConnectionAttributeException.class, Messages.getString("ConnectionString.18"));
-        }
-        if (this.hosts.size() != 1) {
-            throw ExceptionFactory.createException(InvalidConnectionAttributeException.class, Messages.getString("ConnectionString.19"));
-        }
-        if (srvHost.getPort() != DEFAULT_PORT) {
-            throw ExceptionFactory.createException(InvalidConnectionAttributeException.class, Messages.getString("ConnectionString.22"));
-        }
-        if (hostProps.containsKey(PropertyKey.dnsSrv.getKeyName())) {
-            if (!BooleanPropertyDefinition.booleanFrom(PropertyKey.dnsSrv.getKeyName(), hostProps.get(PropertyKey.dnsSrv.getKeyName()), null)) {
-                throw ExceptionFactory.createException(InvalidConnectionAttributeException.class,
-                        Messages.getString("ConnectionString.23", new Object[] { PropertyKey.dnsSrv.getKeyName() }));
-            }
-        }
-        if (hostProps.containsKey(PropertyKey.PROTOCOL.getKeyName()) && hostProps.get(PropertyKey.PROTOCOL.getKeyName()).equalsIgnoreCase("PIPE")) {
-            throw ExceptionFactory.createException(InvalidConnectionAttributeException.class, Messages.getString("ConnectionString.24"));
-        }
+    HostInfo srvHost = super.getMainHost();
+    Map<String, String> hostProps = srvHost.getHostProperties();
+    if (DEFAULT_HOST.equals(srvHost.getHost())) {
+      throw ExceptionFactory.createException(
+          InvalidConnectionAttributeException.class, Messages.getString("ConnectionString.18"));
     }
-
-    @Override
-    public String getDefaultHost() {
-        return DEFAULT_HOST;
+    if (this.hosts.size() != 1) {
+      throw ExceptionFactory.createException(
+          InvalidConnectionAttributeException.class, Messages.getString("ConnectionString.19"));
     }
-
-    @Override
-    public int getDefaultPort() {
-        return DEFAULT_PORT;
+    if (srvHost.getPort() != DEFAULT_PORT) {
+      throw ExceptionFactory.createException(
+          InvalidConnectionAttributeException.class, Messages.getString("ConnectionString.22"));
     }
-
-    /**
-     * Returns a hosts list built from the result of the DNS SRV lookup for the original host name.
-     * 
-     * @param view
-     *            the type of the view to use in the returned list of hosts. This argument is ignored in this implementation.
-     * 
-     * @return
-     *         the hosts list from the result of the DNS SRV lookup, filtered for the given view.
-     */
-    @Override
-    public List<HostInfo> getHostsList(HostsListView view) {
-        return getHostsListFromDnsSrv(getMainHost());
+    if (hostProps.containsKey(PropertyKey.dnsSrv.getKeyName())) {
+      if (!BooleanPropertyDefinition.booleanFrom(
+          PropertyKey.dnsSrv.getKeyName(), hostProps.get(PropertyKey.dnsSrv.getKeyName()), null)) {
+        throw ExceptionFactory.createException(
+            InvalidConnectionAttributeException.class,
+            Messages.getString(
+                "ConnectionString.23", new Object[] {PropertyKey.dnsSrv.getKeyName()}));
+      }
     }
+    if (hostProps.containsKey(PropertyKey.PROTOCOL.getKeyName())
+        && hostProps.get(PropertyKey.PROTOCOL.getKeyName()).equalsIgnoreCase("PIPE")) {
+      throw ExceptionFactory.createException(
+          InvalidConnectionAttributeException.class, Messages.getString("ConnectionString.24"));
+    }
+  }
+
+  @Override
+  public String getDefaultHost() {
+    return DEFAULT_HOST;
+  }
+
+  @Override
+  public int getDefaultPort() {
+    return DEFAULT_PORT;
+  }
+
+  /**
+   * Returns a hosts list built from the result of the DNS SRV lookup for the original host name.
+   *
+   * @param view the type of the view to use in the returned list of hosts. This argument is ignored
+   *     in this implementation.
+   * @return the hosts list from the result of the DNS SRV lookup, filtered for the given view.
+   */
+  @Override
+  public List<HostInfo> getHostsList(HostsListView view) {
+    return getHostsListFromDnsSrv(getMainHost());
+  }
 }

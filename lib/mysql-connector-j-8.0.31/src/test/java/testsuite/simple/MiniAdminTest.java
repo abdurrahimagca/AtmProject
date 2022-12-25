@@ -29,44 +29,39 @@
 
 package testsuite.simple;
 
-import java.util.Properties;
-
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.conf.PropertyDefinitions;
 import com.mysql.cj.conf.PropertyKey;
 import com.mysql.cj.jdbc.admin.MiniAdmin;
-
+import java.util.Properties;
+import org.junit.jupiter.api.Test;
 import testsuite.BaseTestCase;
 
-/**
- * Testsuite for MiniAdmin functionality.
- */
+/** Testsuite for MiniAdmin functionality. */
 public class MiniAdminTest extends BaseTestCase {
-    /**
-     * Tests whether or not you can shutdown the server with MiniAdmin.
-     * 
-     * Only runs if SHUTDOWN_PROP is defined.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testShutdown() throws Exception {
-        if (isSysPropDefined(PropertyDefinitions.SYSP_testsuite_miniAdminTest_runShutdown)) {
-            new MiniAdmin(this.conn).shutdown();
-        }
+  /**
+   * Tests whether or not you can shutdown the server with MiniAdmin.
+   *
+   * <p>Only runs if SHUTDOWN_PROP is defined.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testShutdown() throws Exception {
+    if (isSysPropDefined(PropertyDefinitions.SYSP_testsuite_miniAdminTest_runShutdown)) {
+      new MiniAdmin(this.conn).shutdown();
     }
+  }
 
-    /**
-     * Tests whether or not you can construct a MiniAdmin with a JDBC URL.
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testUrlConstructor() throws Exception {
-        Properties props = new Properties();
-        props.setProperty(PropertyKey.sslMode.getKeyName(), "DISABLED");
-        props.setProperty(PropertyKey.allowPublicKeyRetrieval.getKeyName(), "true");
-        new MiniAdmin(dbUrl, props);
-    }
+  /**
+   * Tests whether or not you can construct a MiniAdmin with a JDBC URL.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testUrlConstructor() throws Exception {
+    Properties props = new Properties();
+    props.setProperty(PropertyKey.sslMode.getKeyName(), "DISABLED");
+    props.setProperty(PropertyKey.allowPublicKeyRetrieval.getKeyName(), "true");
+    new MiniAdmin(dbUrl, props);
+  }
 }

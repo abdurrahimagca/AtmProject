@@ -32,27 +32,23 @@ package com.mysql.cj.xdevapi;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * A statement INSERTing new row(s) into a table.
- */
+/** A statement INSERTing new row(s) into a table. */
 public interface InsertStatement extends Statement<InsertStatement, InsertResult> {
-    /**
-     * Add a row (sequence of values) to this statement.
-     * 
-     * @param values
-     *            list of values to insert
-     * @return {@link InsertStatement}
-     */
-    InsertStatement values(List<Object> values);
+  /**
+   * Add a row (sequence of values) to this statement.
+   *
+   * @param values list of values to insert
+   * @return {@link InsertStatement}
+   */
+  InsertStatement values(List<Object> values);
 
-    /**
-     * Add a row (sequence of values) to this statement.
-     * 
-     * @param values
-     *            one or more values to insert
-     * @return {@link InsertStatement}
-     */
-    default InsertStatement values(Object... values) {
-        return values(Arrays.asList(values));
-    }
+  /**
+   * Add a row (sequence of values) to this statement.
+   *
+   * @param values one or more values to insert
+   * @return {@link InsertStatement}
+   */
+  default InsertStatement values(Object... values) {
+    return values(Arrays.asList(values));
+  }
 }

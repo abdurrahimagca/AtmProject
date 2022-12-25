@@ -29,76 +29,81 @@
 
 package com.mysql.cj.protocol.a;
 
-import java.io.IOException;
-import java.util.LinkedList;
-
 import com.mysql.cj.conf.RuntimeProperty;
 import com.mysql.cj.protocol.MessageSender;
 import com.mysql.cj.util.StringUtils;
+import java.io.IOException;
+import java.util.LinkedList;
 
 public class DebugBufferingPacketSender implements MessageSender<NativePacketPayload> {
-    private MessageSender<NativePacketPayload> packetSender;
-    private LinkedList<StringBuilder> packetDebugBuffer;
-    private RuntimeProperty<Integer> packetDebugBufferSize;
-    private int maxPacketDumpLength = 1024;
+  private MessageSender<NativePacketPayload> packetSender;
+  private LinkedList<StringBuilder> packetDebugBuffer;
+  private RuntimeProperty<Integer> packetDebugBufferSize;
+  private int maxPacketDumpLength = 1024;
 
-    private static final int DEBUG_MSG_LEN = 64;
+  private static final int DEBUG_MSG_LEN = 64;
 
-    public DebugBufferingPacketSender(MessageSender<NativePacketPayload> packetSender, LinkedList<StringBuilder> packetDebugBuffer,
-            RuntimeProperty<Integer> packetDebugBufferSize) {
-        this.packetSender = packetSender;
-        this.packetDebugBuffer = packetDebugBuffer;
-        this.packetDebugBufferSize = packetDebugBufferSize;
+  public DebugBufferingPacketSender(
+      MessageSender<NativePacketPayload> packetSender,
+      LinkedList<StringBuilder> packetDebugBuffer,
+      RuntimeProperty<Integer> packetDebugBufferSize) {
+    this.packetSender = packetSender;
+    this.packetDebugBuffer = packetDebugBuffer;
+    this.packetDebugBufferSize = packetDebugBufferSize;
+  }
+
+  public void setMaxPacketDumpLength(int maxPacketDumpLength) {
+    this.maxPacketDumpLength = maxPacketDumpLength;
+  }
+
+  /**
+   * Add a packet to the debug buffer.
+   *
+   * @param packet packet as bytes
+   * @param packetLen packet length
+   */
+  private void pushPacketToDebugBuffer(byte[] packet, int packetLen) {
+    int bytesToDump = Math.min(this.maxPacketDumpLength, packetLen);
+
+    String packetPayload = StringUtils.dumpAsHex(packet, bytesToDump);
+
+    StringBuilder packetDump =
+        new StringBuilder(DEBUG_MSG_LEN + NativeConstants.HEADER_LENGTH + packetPayload.length());
+
+    packetDump.append("Client ");
+    packetDump.append(packet.toString());
+    packetDump.append("--------------------> Server\n");
+    packetDump.append("\nPacket payload:\n\n");
+    packetDump.append(packetPayload);
+
+    if (packetLen > this.maxPacketDumpLength) {
+      packetDump.append(
+          "\nNote: Packet of "
+              + packetLen
+              + " bytes truncated to "
+              + this.maxPacketDumpLength
+              + " bytes.\n");
     }
 
-    public void setMaxPacketDumpLength(int maxPacketDumpLength) {
-        this.maxPacketDumpLength = maxPacketDumpLength;
+    if ((this.packetDebugBuffer.size() + 1) > this.packetDebugBufferSize.getValue()) {
+      this.packetDebugBuffer.removeFirst();
     }
 
-    /**
-     * Add a packet to the debug buffer.
-     * 
-     * @param packet
-     *            packet as bytes
-     * @param packetLen
-     *            packet length
-     */
-    private void pushPacketToDebugBuffer(byte[] packet, int packetLen) {
-        int bytesToDump = Math.min(this.maxPacketDumpLength, packetLen);
+    this.packetDebugBuffer.addLast(packetDump);
+  }
 
-        String packetPayload = StringUtils.dumpAsHex(packet, bytesToDump);
+  public void send(byte[] packet, int packetLen, byte packetSequence) throws IOException {
+    pushPacketToDebugBuffer(packet, packetLen);
+    this.packetSender.send(packet, packetLen, packetSequence);
+  }
 
-        StringBuilder packetDump = new StringBuilder(DEBUG_MSG_LEN + NativeConstants.HEADER_LENGTH + packetPayload.length());
+  @Override
+  public MessageSender<NativePacketPayload> undecorateAll() {
+    return this.packetSender.undecorateAll();
+  }
 
-        packetDump.append("Client ");
-        packetDump.append(packet.toString());
-        packetDump.append("--------------------> Server\n");
-        packetDump.append("\nPacket payload:\n\n");
-        packetDump.append(packetPayload);
-
-        if (packetLen > this.maxPacketDumpLength) {
-            packetDump.append("\nNote: Packet of " + packetLen + " bytes truncated to " + this.maxPacketDumpLength + " bytes.\n");
-        }
-
-        if ((this.packetDebugBuffer.size() + 1) > this.packetDebugBufferSize.getValue()) {
-            this.packetDebugBuffer.removeFirst();
-        }
-
-        this.packetDebugBuffer.addLast(packetDump);
-    }
-
-    public void send(byte[] packet, int packetLen, byte packetSequence) throws IOException {
-        pushPacketToDebugBuffer(packet, packetLen);
-        this.packetSender.send(packet, packetLen, packetSequence);
-    }
-
-    @Override
-    public MessageSender<NativePacketPayload> undecorateAll() {
-        return this.packetSender.undecorateAll();
-    }
-
-    @Override
-    public MessageSender<NativePacketPayload> undecorate() {
-        return this.packetSender;
-    }
+  @Override
+  public MessageSender<NativePacketPayload> undecorate() {
+    return this.packetSender;
+  }
 }

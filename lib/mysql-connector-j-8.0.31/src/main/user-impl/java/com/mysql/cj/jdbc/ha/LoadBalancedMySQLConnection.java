@@ -29,70 +29,72 @@
 
 package com.mysql.cj.jdbc.ha;
 
-import java.sql.SQLException;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.exceptions.MysqlErrorNumbers;
 import com.mysql.cj.jdbc.exceptions.SQLError;
+import java.sql.SQLException;
 
-public class LoadBalancedMySQLConnection extends MultiHostMySQLConnection implements LoadBalancedConnection {
-    public LoadBalancedMySQLConnection(LoadBalancedConnectionProxy proxy) {
-        super(proxy);
-    }
+public class LoadBalancedMySQLConnection extends MultiHostMySQLConnection
+    implements LoadBalancedConnection {
+  public LoadBalancedMySQLConnection(LoadBalancedConnectionProxy proxy) {
+    super(proxy);
+  }
 
-    @Override
-    public LoadBalancedConnectionProxy getThisAsProxy() {
-        return (LoadBalancedConnectionProxy) super.getThisAsProxy();
-    }
+  @Override
+  public LoadBalancedConnectionProxy getThisAsProxy() {
+    return (LoadBalancedConnectionProxy) super.getThisAsProxy();
+  }
 
-    @Override
-    public void close() throws SQLException {
-        getThisAsProxy().doClose();
-    }
+  @Override
+  public void close() throws SQLException {
+    getThisAsProxy().doClose();
+  }
 
-    @Override
-    public void ping() throws SQLException {
-        ping(true);
-    }
+  @Override
+  public void ping() throws SQLException {
+    ping(true);
+  }
 
-    @Override
-    public void ping(boolean allConnections) throws SQLException {
-        if (allConnections) {
-            getThisAsProxy().doPing();
-        } else {
-            getActiveMySQLConnection().ping();
-        }
+  @Override
+  public void ping(boolean allConnections) throws SQLException {
+    if (allConnections) {
+      getThisAsProxy().doPing();
+    } else {
+      getActiveMySQLConnection().ping();
     }
+  }
 
-    @Override
-    public boolean addHost(String host) throws SQLException {
-        return getThisAsProxy().addHost(host);
-    }
+  @Override
+  public boolean addHost(String host) throws SQLException {
+    return getThisAsProxy().addHost(host);
+  }
 
-    @Override
-    public void removeHost(String host) throws SQLException {
-        getThisAsProxy().removeHost(host);
-    }
+  @Override
+  public void removeHost(String host) throws SQLException {
+    getThisAsProxy().removeHost(host);
+  }
 
-    @Override
-    public void removeHostWhenNotInUse(String host) throws SQLException {
-        getThisAsProxy().removeHostWhenNotInUse(host);
-    }
+  @Override
+  public void removeHostWhenNotInUse(String host) throws SQLException {
+    getThisAsProxy().removeHostWhenNotInUse(host);
+  }
 
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // This works for classes that aren't actually wrapping anything
-        return iface.isInstance(this);
-    }
+  @Override
+  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    // This works for classes that aren't actually wrapping anything
+    return iface.isInstance(this);
+  }
 
-    @Override
-    public <T> T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException {
-        try {
-            // This works for classes that aren't actually wrapping anything
-            return iface.cast(this);
-        } catch (ClassCastException cce) {
-            throw SQLError.createSQLException(Messages.getString("Common.UnableToUnwrap", new Object[] { iface.toString() }),
-                    MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT, getExceptionInterceptor());
-        }
+  @Override
+  public <T> T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException {
+    try {
+      // This works for classes that aren't actually wrapping anything
+      return iface.cast(this);
+    } catch (ClassCastException cce) {
+      throw SQLError.createSQLException(
+          Messages.getString("Common.UnableToUnwrap", new Object[] {iface.toString()}),
+          MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT,
+          getExceptionInterceptor());
     }
+  }
 }

@@ -35,66 +35,71 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class NetworkResources {
-    private final Socket mysqlConnection;
-    private final InputStream mysqlInput;
-    private final OutputStream mysqlOutput;
+  private final Socket mysqlConnection;
+  private final InputStream mysqlInput;
+  private final OutputStream mysqlOutput;
 
-    public NetworkResources(Socket mysqlConnection, InputStream mysqlInput, OutputStream mysqlOutput) {
-        this.mysqlConnection = mysqlConnection;
-        this.mysqlInput = mysqlInput;
-        this.mysqlOutput = mysqlOutput;
+  public NetworkResources(
+      Socket mysqlConnection, InputStream mysqlInput, OutputStream mysqlOutput) {
+    this.mysqlConnection = mysqlConnection;
+    this.mysqlInput = mysqlInput;
+    this.mysqlOutput = mysqlOutput;
+  }
+
+  /** Forcibly closes the underlying socket to MySQL. */
+  public final void forceClose() {
+    try {
+      if (!ExportControlled.isSSLEstablished(
+          this.mysqlConnection)) { // Fix for Bug#56979 does not apply to secure sockets.
+        try {
+          if (this.mysqlInput != null) {
+            this.mysqlInput.close();
+          }
+        } finally {
+          if (this.mysqlConnection != null
+              && !this.mysqlConnection.isClosed()
+              && !this.mysqlConnection.isInputShutdown()) {
+            try {
+              this.mysqlConnection.shutdownInput();
+            } catch (UnsupportedOperationException e) {
+              // Ignore, some sockets do not support this method.
+            }
+          }
+        }
+      }
+    } catch (IOException e) {
+      // Can't do anything constructive about this.
     }
 
-    /**
-     * Forcibly closes the underlying socket to MySQL.
-     */
-    public final void forceClose() {
+    try {
+      if (!ExportControlled.isSSLEstablished(
+          this.mysqlConnection)) { // Fix for Bug#56979 does not apply to secure sockets.
         try {
-            if (!ExportControlled.isSSLEstablished(this.mysqlConnection)) { // Fix for Bug#56979 does not apply to secure sockets.
-                try {
-                    if (this.mysqlInput != null) {
-                        this.mysqlInput.close();
-                    }
-                } finally {
-                    if (this.mysqlConnection != null && !this.mysqlConnection.isClosed() && !this.mysqlConnection.isInputShutdown()) {
-                        try {
-                            this.mysqlConnection.shutdownInput();
-                        } catch (UnsupportedOperationException e) {
-                            // Ignore, some sockets do not support this method.
-                        }
-                    }
-                }
+          if (this.mysqlOutput != null) {
+            this.mysqlOutput.close();
+          }
+        } finally {
+          if (this.mysqlConnection != null
+              && !this.mysqlConnection.isClosed()
+              && !this.mysqlConnection.isOutputShutdown()) {
+            try {
+              this.mysqlConnection.shutdownOutput();
+            } catch (UnsupportedOperationException e) {
+              // Ignore, some sockets do not support this method.
             }
-        } catch (IOException e) {
-            // Can't do anything constructive about this.
+          }
         }
-
-        try {
-            if (!ExportControlled.isSSLEstablished(this.mysqlConnection)) { // Fix for Bug#56979 does not apply to secure sockets.
-                try {
-                    if (this.mysqlOutput != null) {
-                        this.mysqlOutput.close();
-                    }
-                } finally {
-                    if (this.mysqlConnection != null && !this.mysqlConnection.isClosed() && !this.mysqlConnection.isOutputShutdown()) {
-                        try {
-                            this.mysqlConnection.shutdownOutput();
-                        } catch (UnsupportedOperationException e) {
-                            // Ignore, some sockets do not support this method.
-                        }
-                    }
-                }
-            }
-        } catch (IOException e) {
-            // Can't do anything constructive about this.
-        }
-
-        try {
-            if (this.mysqlConnection != null) {
-                this.mysqlConnection.close();
-            }
-        } catch (IOException e) {
-            // Can't do anything constructive about this.
-        }
+      }
+    } catch (IOException e) {
+      // Can't do anything constructive about this.
     }
+
+    try {
+      if (this.mysqlConnection != null) {
+        this.mysqlConnection.close();
+      }
+    } catch (IOException e) {
+      // Can't do anything constructive about this.
+    }
+  }
 }

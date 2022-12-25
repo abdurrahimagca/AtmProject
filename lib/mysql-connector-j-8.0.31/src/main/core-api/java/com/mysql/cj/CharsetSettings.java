@@ -31,84 +31,87 @@ package com.mysql.cj;
 
 public interface CharsetSettings {
 
-    public static final String CHARACTER_SET_CLIENT = "character_set_client";
-    public static final String CHARACTER_SET_CONNECTION = "character_set_connection";
-    public static final String CHARACTER_SET_RESULTS = "character_set_results";
-    public static final String COLLATION_CONNECTION = "collation_connection";
+  public static final String CHARACTER_SET_CLIENT = "character_set_client";
+  public static final String CHARACTER_SET_CONNECTION = "character_set_connection";
+  public static final String CHARACTER_SET_RESULTS = "character_set_results";
+  public static final String COLLATION_CONNECTION = "collation_connection";
 
-    /**
-     * <p>
-     * Choose the MySQL collation index for the handshake packet and the corresponding Java encodings for the password and error messages.
-     * </p>
-     * <p>
-     * This index will be sent with HandshakeResponse setting server variables 'character_set_connection', 'collation_connection', 'character_set_client'
-     * and 'character_set_results' which will be used by the server for decoding passwords during the authentication phase and later on, if
-     * no SET NAMES are issued by {@link #configurePostHandshake(boolean)}.
-     * </p>
-     * <p>
-     * It also means that collation index should be set according to:
-     * <ol>
-     * <li>'passwordCharacterEncoding' if it's present, or
-     * <li>'connectionCollation' if it's present, or
-     * <li>'characterEncoding' if it's present
-     * </ol>
-     * otherwise it will be set to utf8mb4_general_ci or utf8mb4_0900_ai_ci depending on server version.
-     * <p>
-     * Since Protocol::HandshakeV10 and Protocol::HandshakeResponse41 has only one byte for the collation it's not possible to use indexes &gt; 255 during the
-     * handshake.
-     * Also, ucs2, utf16, utf16le and utf32 character sets are impermissible here. Connector/J will try to use utf8mb4 instead.
-     * </p>
-     * 
-     * @param reset
-     *            reset the charsets configuration; needed for changeUser call.
-     * 
-     * @return MySQL collation index to be used during the handshake.
-     */
-    int configurePreHandshake(boolean reset);
+  /**
+   * Choose the MySQL collation index for the handshake packet and the corresponding Java encodings
+   * for the password and error messages.
+   *
+   * <p>This index will be sent with HandshakeResponse setting server variables
+   * 'character_set_connection', 'collation_connection', 'character_set_client' and
+   * 'character_set_results' which will be used by the server for decoding passwords during the
+   * authentication phase and later on, if no SET NAMES are issued by {@link
+   * #configurePostHandshake(boolean)}.
+   *
+   * <p>It also means that collation index should be set according to:
+   *
+   * <ol>
+   *   <li>'passwordCharacterEncoding' if it's present, or
+   *   <li>'connectionCollation' if it's present, or
+   *   <li>'characterEncoding' if it's present
+   * </ol>
+   *
+   * otherwise it will be set to utf8mb4_general_ci or utf8mb4_0900_ai_ci depending on server
+   * version.
+   *
+   * <p>Since Protocol::HandshakeV10 and Protocol::HandshakeResponse41 has only one byte for the
+   * collation it's not possible to use indexes &gt; 255 during the handshake. Also, ucs2, utf16,
+   * utf16le and utf32 character sets are impermissible here. Connector/J will try to use utf8mb4
+   * instead.
+   *
+   * @param reset reset the charsets configuration; needed for changeUser call.
+   * @return MySQL collation index to be used during the handshake.
+   */
+  int configurePreHandshake(boolean reset);
 
-    /**
-     * Sets up client character set. This must be done before any further communication with the server!
-     * 
-     * The 'collation_connection', 'character_set_client', 'character_set_connection' and 'character_set_results' server variables are set
-     * according to the collation index selected by {@link #configurePreHandshake(boolean)} and sent in the Protocol::HandshakeV10 packet.
-     * Here Connector/J alters these server variables if needed.
-     * 
-     * @param dontCheckServerMatch
-     *            if true then send the SET NAMES query even if server charset already matches the new value; needed for changeUser call.
-     */
-    void configurePostHandshake(boolean dontCheckServerMatch);
+  /**
+   * Sets up client character set. This must be done before any further communication with the
+   * server!
+   *
+   * <p>The 'collation_connection', 'character_set_client', 'character_set_connection' and
+   * 'character_set_results' server variables are set according to the collation index selected by
+   * {@link #configurePreHandshake(boolean)} and sent in the Protocol::HandshakeV10 packet. Here
+   * Connector/J alters these server variables if needed.
+   *
+   * @param dontCheckServerMatch if true then send the SET NAMES query even if server charset
+   *     already matches the new value; needed for changeUser call.
+   */
+  void configurePostHandshake(boolean dontCheckServerMatch);
 
-    public boolean doesPlatformDbCharsetMatches();
+  public boolean doesPlatformDbCharsetMatches();
 
-    String getPasswordCharacterEncoding();
+  String getPasswordCharacterEncoding();
 
-    String getErrorMessageEncoding();
+  String getErrorMessageEncoding();
 
-    String getMetadataEncoding();
+  String getMetadataEncoding();
 
-    int getMetadataCollationIndex();
+  int getMetadataCollationIndex();
 
-    boolean getRequiresEscapingEncoder();
+  boolean getRequiresEscapingEncoder();
 
-    String getJavaEncodingForCollationIndex(int collationIndex);
+  String getJavaEncodingForCollationIndex(int collationIndex);
 
-    int getMaxBytesPerChar(String javaCharsetName);
+  int getMaxBytesPerChar(String javaCharsetName);
 
-    int getMaxBytesPerChar(Integer charsetIndex, String javaCharsetName);
+  int getMaxBytesPerChar(Integer charsetIndex, String javaCharsetName);
 
-    Integer getCollationIndexForCollationName(String collationName);
+  Integer getCollationIndexForCollationName(String collationName);
 
-    String getCollationNameForCollationIndex(Integer collationIndex);
+  String getCollationNameForCollationIndex(Integer collationIndex);
 
-    String getMysqlCharsetNameForCollationIndex(Integer collationIndex);
+  String getMysqlCharsetNameForCollationIndex(Integer collationIndex);
 
-    int getCollationIndexForJavaEncoding(String javaEncoding, ServerVersion version);
+  int getCollationIndexForJavaEncoding(String javaEncoding, ServerVersion version);
 
-    int getCollationIndexForMysqlCharsetName(String charsetName);
+  int getCollationIndexForMysqlCharsetName(String charsetName);
 
-    String getJavaEncodingForMysqlCharset(String mysqlCharsetName);
+  String getJavaEncodingForMysqlCharset(String mysqlCharsetName);
 
-    String getMysqlCharsetForJavaEncoding(String javaEncoding, ServerVersion version);
+  String getMysqlCharsetForJavaEncoding(String javaEncoding, ServerVersion version);
 
-    boolean isMultibyteCharset(String javaEncodingName);
+  boolean isMultibyteCharset(String javaEncodingName);
 }

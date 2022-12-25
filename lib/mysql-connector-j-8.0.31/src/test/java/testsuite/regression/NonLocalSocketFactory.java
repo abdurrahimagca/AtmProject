@@ -34,9 +34,9 @@ import com.mysql.cj.protocol.StandardSocketFactory;
 
 public class NonLocalSocketFactory extends StandardSocketFactory {
 
-    @Override
-    public boolean isLocallyConnected(Session sess) {
-        String processHost = "www.oracle.com:3306";
-        return isLocallyConnected(sess, processHost);
-    }
+  @Override
+  public boolean isLocallyConnected(Session sess) {
+    String processHost = "www.oracle.com:3306";
+    return isLocallyConnected(sess, processHost);
+  }
 }

@@ -29,125 +29,142 @@
 
 package com.mysql.cj.protocol.x;
 
+import com.mysql.cj.Messages;
+import com.mysql.cj.exceptions.ExceptionFactory;
+import com.mysql.cj.exceptions.WrongArgumentException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.InflaterInputStream;
 
-import com.mysql.cj.Messages;
-import com.mysql.cj.exceptions.ExceptionFactory;
-import com.mysql.cj.exceptions.WrongArgumentException;
-
 /**
- * Contains all information about a compression algorithm, its name, compression mode and classes that implement the inflating and deflating streams of data.
+ * Contains all information about a compression algorithm, its name, compression mode and classes
+ * that implement the inflating and deflating streams of data.
  */
 public class CompressionAlgorithm {
-    private static final Map<String, String> ALIASES = new HashMap<>();
-    static {
-        ALIASES.put("deflate", "deflate_stream");
-        ALIASES.put("lz4", "lz4_message");
-        ALIASES.put("zstd", "zstd_stream");
-    }
+  private static final Map<String, String> ALIASES = new HashMap<>();
 
-    private String algorithmIdentifier;
-    private CompressionMode compressionMode;
-    private String inputStreamClassFqn;
-    private Class<?> inputStreamClass = null;
-    private String outputStreamClassFqn;
-    private Class<?> outputStreamClass = null;
+  static {
+    ALIASES.put("deflate", "deflate_stream");
+    ALIASES.put("lz4", "lz4_message");
+    ALIASES.put("zstd", "zstd_stream");
+  }
 
-    /**
-     * Returns a list of the compression algorithms supported natively. Additional algorithms can be registered by user.
-     * 
-     * @return a list of the compression algorithms supported natively.
-     */
-    public static Map<String, CompressionAlgorithm> getDefaultInstances() {
-        HashMap<String, CompressionAlgorithm> defaultInstances = new HashMap<>();
-        defaultInstances.put("deflate_stream",
-                new CompressionAlgorithm("deflate_stream", InflaterInputStream.class.getName(), SyncFlushDeflaterOutputStream.class.getName()));
-        return defaultInstances;
-    }
+  private String algorithmIdentifier;
+  private CompressionMode compressionMode;
+  private String inputStreamClassFqn;
+  private Class<?> inputStreamClass = null;
+  private String outputStreamClassFqn;
+  private Class<?> outputStreamClass = null;
 
-    /**
-     * Returns the normalized compression algorithm identifier. A normalized identifier is composed by a compression algorithm name followed by '_' and then the
-     * the compression operation mode ("stream" vs "message").
-     * 
-     * @param name
-     *            the non-normalized compression algorithm identifier.
-     * @return
-     *         if {@code name} is an already normalized identifier or an unknown alias then the returned value is the same as the input, otherwise the
-     *         normalized algorithm identifier is returned.
-     */
-    public static String getNormalizedAlgorithmName(String name) {
-        return ALIASES.getOrDefault(name, name);
-    }
+  /**
+   * Returns a list of the compression algorithms supported natively. Additional algorithms can be
+   * registered by user.
+   *
+   * @return a list of the compression algorithms supported natively.
+   */
+  public static Map<String, CompressionAlgorithm> getDefaultInstances() {
+    HashMap<String, CompressionAlgorithm> defaultInstances = new HashMap<>();
+    defaultInstances.put(
+        "deflate_stream",
+        new CompressionAlgorithm(
+            "deflate_stream",
+            InflaterInputStream.class.getName(),
+            SyncFlushDeflaterOutputStream.class.getName()));
+    return defaultInstances;
+  }
 
-    public CompressionAlgorithm(String name, String inputStreamClassFqn, String outputStreamClassFqn) {
-        this.algorithmIdentifier = getNormalizedAlgorithmName(name);
-        String[] nameMode = this.algorithmIdentifier.split("_");
-        if (nameMode.length != 2) {
-            throw ExceptionFactory.createException(WrongArgumentException.class, Messages.getString("Protocol.Compression.4", new Object[] { name }));
-        }
-        try {
-            CompressionMode mode = CompressionMode.valueOf(nameMode[1].toUpperCase());
-            this.compressionMode = mode;
-        } catch (IllegalArgumentException e) {
-            throw ExceptionFactory.createException(WrongArgumentException.class, Messages.getString("Protocol.Compression.5", new Object[] { nameMode[1] }));
-        }
-        this.inputStreamClassFqn = inputStreamClassFqn;
-        this.outputStreamClassFqn = outputStreamClassFqn;
-    }
+  /**
+   * Returns the normalized compression algorithm identifier. A normalized identifier is composed by
+   * a compression algorithm name followed by '_' and then the the compression operation mode
+   * ("stream" vs "message").
+   *
+   * @param name the non-normalized compression algorithm identifier.
+   * @return if {@code name} is an already normalized identifier or an unknown alias then the
+   *     returned value is the same as the input, otherwise the normalized algorithm identifier is
+   *     returned.
+   */
+  public static String getNormalizedAlgorithmName(String name) {
+    return ALIASES.getOrDefault(name, name);
+  }
 
-    /**
-     * Gets this algorithm's identifier.
-     * 
-     * @return an algorithm identifier.
-     */
-    public String getAlgorithmIdentifier() {
-        return this.algorithmIdentifier;
+  public CompressionAlgorithm(
+      String name, String inputStreamClassFqn, String outputStreamClassFqn) {
+    this.algorithmIdentifier = getNormalizedAlgorithmName(name);
+    String[] nameMode = this.algorithmIdentifier.split("_");
+    if (nameMode.length != 2) {
+      throw ExceptionFactory.createException(
+          WrongArgumentException.class,
+          Messages.getString("Protocol.Compression.4", new Object[] {name}));
     }
+    try {
+      CompressionMode mode = CompressionMode.valueOf(nameMode[1].toUpperCase());
+      this.compressionMode = mode;
+    } catch (IllegalArgumentException e) {
+      throw ExceptionFactory.createException(
+          WrongArgumentException.class,
+          Messages.getString("Protocol.Compression.5", new Object[] {nameMode[1]}));
+    }
+    this.inputStreamClassFqn = inputStreamClassFqn;
+    this.outputStreamClassFqn = outputStreamClassFqn;
+  }
 
-    /**
-     * Gets this algorithm's compression mode.
-     * 
-     * @return an algorithm {@link CompressionMode}
-     */
-    public CompressionMode getCompressionMode() {
-        return this.compressionMode;
-    }
+  /**
+   * Gets this algorithm's identifier.
+   *
+   * @return an algorithm identifier.
+   */
+  public String getAlgorithmIdentifier() {
+    return this.algorithmIdentifier;
+  }
 
-    /**
-     * Gets this algorithm's {@link InputStream} implementation class that can be used to inflate data.
-     * 
-     * @return an {@link InputStream} that knows how to inflate data.
-     */
-    public Class<?> getInputStreamClass() {
-        if (this.inputStreamClass == null) {
-            try {
-                this.inputStreamClass = Class.forName(this.inputStreamClassFqn);
-            } catch (ClassNotFoundException e) {
-                throw ExceptionFactory.createException(WrongArgumentException.class,
-                        Messages.getString("Protocol.Compression.3", new Object[] { this.inputStreamClassFqn }), e);
-            }
-        }
-        return this.inputStreamClass;
-    }
+  /**
+   * Gets this algorithm's compression mode.
+   *
+   * @return an algorithm {@link CompressionMode}
+   */
+  public CompressionMode getCompressionMode() {
+    return this.compressionMode;
+  }
 
-    /**
-     * Gets this algorithm's {@link OutputStream} implementation class that can be used to deflate data.
-     * 
-     * @return an {@link OutputStream} that knows how to deflate data.
-     */
-    public Class<?> getOutputStreamClass() {
-        if (this.outputStreamClass == null) {
-            try {
-                this.outputStreamClass = Class.forName(this.outputStreamClassFqn);
-            } catch (ClassNotFoundException e) {
-                throw ExceptionFactory.createException(WrongArgumentException.class,
-                        Messages.getString("Protocol.Compression.3", new Object[] { this.outputStreamClassFqn }), e);
-            }
-        }
-        return this.outputStreamClass;
+  /**
+   * Gets this algorithm's {@link InputStream} implementation class that can be used to inflate
+   * data.
+   *
+   * @return an {@link InputStream} that knows how to inflate data.
+   */
+  public Class<?> getInputStreamClass() {
+    if (this.inputStreamClass == null) {
+      try {
+        this.inputStreamClass = Class.forName(this.inputStreamClassFqn);
+      } catch (ClassNotFoundException e) {
+        throw ExceptionFactory.createException(
+            WrongArgumentException.class,
+            Messages.getString("Protocol.Compression.3", new Object[] {this.inputStreamClassFqn}),
+            e);
+      }
     }
+    return this.inputStreamClass;
+  }
+
+  /**
+   * Gets this algorithm's {@link OutputStream} implementation class that can be used to deflate
+   * data.
+   *
+   * @return an {@link OutputStream} that knows how to deflate data.
+   */
+  public Class<?> getOutputStreamClass() {
+    if (this.outputStreamClass == null) {
+      try {
+        this.outputStreamClass = Class.forName(this.outputStreamClassFqn);
+      } catch (ClassNotFoundException e) {
+        throw ExceptionFactory.createException(
+            WrongArgumentException.class,
+            Messages.getString("Protocol.Compression.3", new Object[] {this.outputStreamClassFqn}),
+            e);
+      }
+    }
+    return this.outputStreamClass;
+  }
 }

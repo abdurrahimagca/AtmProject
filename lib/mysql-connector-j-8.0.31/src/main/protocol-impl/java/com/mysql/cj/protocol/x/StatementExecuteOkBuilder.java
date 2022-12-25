@@ -29,75 +29,85 @@
 
 package com.mysql.cj.protocol.x;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.mysql.cj.exceptions.ExceptionFactory;
 import com.mysql.cj.exceptions.WrongArgumentException;
 import com.mysql.cj.protocol.ProtocolEntity;
 import com.mysql.cj.protocol.ResultBuilder;
 import com.mysql.cj.protocol.x.Notice.XSessionStateChanged;
 import com.mysql.cj.protocol.x.Notice.XWarning;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Result builder producing a {@link StatementExecuteOk} instance. Handles state necessary to accumulate noticed and build a {@link StatementExecuteOk}
- * response.
+ * Result builder producing a {@link StatementExecuteOk} instance. Handles state necessary to
+ * accumulate noticed and build a {@link StatementExecuteOk} response.
  */
 public class StatementExecuteOkBuilder implements ResultBuilder<StatementExecuteOk> {
 
-    private long rowsAffected = 0;
-    private Long lastInsertId = null;
-    private List<String> generatedIds = Collections.emptyList();
-    private List<com.mysql.cj.protocol.Warning> warnings = new ArrayList<>();
+  private long rowsAffected = 0;
+  private Long lastInsertId = null;
+  private List<String> generatedIds = Collections.emptyList();
+  private List<com.mysql.cj.protocol.Warning> warnings = new ArrayList<>();
 
-    @Override
-    public boolean addProtocolEntity(ProtocolEntity entity) {
-        if (entity instanceof Notice) {
-            addNotice((Notice) entity);
-            return false;
+  @Override
+  public boolean addProtocolEntity(ProtocolEntity entity) {
+    if (entity instanceof Notice) {
+      addNotice((Notice) entity);
+      return false;
 
-        } else if (entity instanceof FetchDoneEntity) {
-            return false;
+    } else if (entity instanceof FetchDoneEntity) {
+      return false;
 
-        } else if (entity instanceof StatementExecuteOk) {
-            return true;
-        }
-        throw ExceptionFactory.createException(WrongArgumentException.class, "Unexpected protocol entity " + entity);
+    } else if (entity instanceof StatementExecuteOk) {
+      return true;
     }
+    throw ExceptionFactory.createException(
+        WrongArgumentException.class, "Unexpected protocol entity " + entity);
+  }
 
-    public StatementExecuteOk build() {
-        return new StatementExecuteOk(this.rowsAffected, this.lastInsertId, this.generatedIds, this.warnings);
+  public StatementExecuteOk build() {
+    return new StatementExecuteOk(
+        this.rowsAffected, this.lastInsertId, this.generatedIds, this.warnings);
+  }
+
+  private void addNotice(Notice notice) {
+    if (notice instanceof XWarning) {
+      this.warnings.add((XWarning) notice);
+
+    } else if (notice instanceof XSessionStateChanged) {
+      switch (((XSessionStateChanged) notice).getParamType()) {
+        case Notice.SessionStateChanged_GENERATED_INSERT_ID:
+          this.lastInsertId =
+              ((XSessionStateChanged) notice)
+                  .getValue()
+                  .getVUnsignedInt(); // TODO: handle > 2^63-1?
+          break;
+        case Notice.SessionStateChanged_ROWS_AFFECTED:
+          this.rowsAffected =
+              ((XSessionStateChanged) notice)
+                  .getValue()
+                  .getVUnsignedInt(); // TODO: handle > 2^63-1?
+          break;
+        case Notice.SessionStateChanged_GENERATED_DOCUMENT_IDS:
+          this.generatedIds =
+              ((XSessionStateChanged) notice)
+                  .getValueList().stream()
+                      .map(v -> v.getVOctets().getValue().toStringUtf8())
+                      .collect(Collectors.toList());
+          break;
+        case Notice.SessionStateChanged_PRODUCED_MESSAGE:
+        case Notice.SessionStateChanged_CURRENT_SCHEMA:
+        case Notice.SessionStateChanged_ACCOUNT_EXPIRED:
+        case Notice.SessionStateChanged_ROWS_FOUND:
+        case Notice.SessionStateChanged_ROWS_MATCHED:
+        case Notice.SessionStateChanged_TRX_COMMITTED:
+        case Notice.SessionStateChanged_TRX_ROLLEDBACK:
+        case Notice.SessionStateChanged_CLIENT_ID_ASSIGNED:
+        default:
+          // TODO do something with notices, expose them to client
+      }
     }
-
-    private void addNotice(Notice notice) {
-        if (notice instanceof XWarning) {
-            this.warnings.add((XWarning) notice);
-
-        } else if (notice instanceof XSessionStateChanged) {
-            switch (((XSessionStateChanged) notice).getParamType()) {
-                case Notice.SessionStateChanged_GENERATED_INSERT_ID:
-                    this.lastInsertId = ((XSessionStateChanged) notice).getValue().getVUnsignedInt(); // TODO: handle > 2^63-1?
-                    break;
-                case Notice.SessionStateChanged_ROWS_AFFECTED:
-                    this.rowsAffected = ((XSessionStateChanged) notice).getValue().getVUnsignedInt(); // TODO: handle > 2^63-1?
-                    break;
-                case Notice.SessionStateChanged_GENERATED_DOCUMENT_IDS:
-                    this.generatedIds = ((XSessionStateChanged) notice).getValueList().stream().map(v -> v.getVOctets().getValue().toStringUtf8())
-                            .collect(Collectors.toList());
-                    break;
-                case Notice.SessionStateChanged_PRODUCED_MESSAGE:
-                case Notice.SessionStateChanged_CURRENT_SCHEMA:
-                case Notice.SessionStateChanged_ACCOUNT_EXPIRED:
-                case Notice.SessionStateChanged_ROWS_FOUND:
-                case Notice.SessionStateChanged_ROWS_MATCHED:
-                case Notice.SessionStateChanged_TRX_COMMITTED:
-                case Notice.SessionStateChanged_TRX_ROLLEDBACK:
-                case Notice.SessionStateChanged_CLIENT_ID_ASSIGNED:
-                default:
-                    // TODO do something with notices, expose them to client
-            }
-        }
-    }
+  }
 }

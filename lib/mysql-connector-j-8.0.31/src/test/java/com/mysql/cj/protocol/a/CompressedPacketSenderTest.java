@@ -33,264 +33,310 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.mysql.cj.protocol.MessageSender;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.InflaterOutputStream;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import com.mysql.cj.protocol.MessageSender;
-
 public class CompressedPacketSenderTest extends PacketSenderTestBase {
-    private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    private MessageSender<NativePacketPayload> sender = new CompressedPacketSender(new BufferedOutputStream(this.outputStream));
+  private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+  private MessageSender<NativePacketPayload> sender =
+      new CompressedPacketSender(new BufferedOutputStream(this.outputStream));
 
-    /**
-     * Test utility to transform a buffer containing compressed packets into a sequence of payloads.
-     */
-    static class CompressedPackets {
-        byte[] packetData;
-        private ByteArrayOutputStream decompressedStream;
+  /**
+   * Test utility to transform a buffer containing compressed packets into a sequence of payloads.
+   */
+  static class CompressedPackets {
+    byte[] packetData;
+    private ByteArrayOutputStream decompressedStream;
 
-        byte[] payload;
-        int compressedPayloadLen;
-        int compressedSequenceId;
-        int uncompressedPayloadLen;
-        int offset = 0; // offset after all currently read data
+    byte[] payload;
+    int compressedPayloadLen;
+    int compressedSequenceId;
+    int uncompressedPayloadLen;
+    int offset = 0; // offset after all currently read data
 
-        public CompressedPackets(byte[] packetData) {
-            this.packetData = packetData;
-            this.decompressedStream = new ByteArrayOutputStream();
-        }
-
-        public boolean nextPayload() throws IOException {
-            if (this.offset == this.packetData.length) {
-                return false;
-            }
-            // read compressed packet header
-            this.compressedPayloadLen = NativeUtils.decodeMysqlThreeByteInteger(this.packetData, this.offset);
-            this.compressedSequenceId = this.packetData[this.offset + 3];
-            this.uncompressedPayloadLen = NativeUtils.decodeMysqlThreeByteInteger(this.packetData, this.offset + 4);
-            this.offset += CompressedPacketSender.COMP_HEADER_LENGTH;
-            if (this.uncompressedPayloadLen == 0) {
-                // uncompressed packet
-                this.payload = java.util.Arrays.copyOfRange(this.packetData, this.offset, this.offset + this.compressedPayloadLen);
-            } else {
-                // uncompress payload
-                InflaterOutputStream inflater = new InflaterOutputStream(this.decompressedStream);
-                inflater.write(this.packetData, this.offset, this.compressedPayloadLen);
-                inflater.finish();
-                inflater.flush();
-                this.payload = this.decompressedStream.toByteArray();
-                this.decompressedStream.reset();
-            }
-            this.offset += this.compressedPayloadLen;
-            return true;
-        }
+    public CompressedPackets(byte[] packetData) {
+      this.packetData = packetData;
+      this.decompressedStream = new ByteArrayOutputStream();
     }
 
-    @AfterEach
-    public void cleanupByteArrayOutputStream() {
-        this.outputStream.reset();
+    public boolean nextPayload() throws IOException {
+      if (this.offset == this.packetData.length) {
+        return false;
+      }
+      // read compressed packet header
+      this.compressedPayloadLen =
+          NativeUtils.decodeMysqlThreeByteInteger(this.packetData, this.offset);
+      this.compressedSequenceId = this.packetData[this.offset + 3];
+      this.uncompressedPayloadLen =
+          NativeUtils.decodeMysqlThreeByteInteger(this.packetData, this.offset + 4);
+      this.offset += CompressedPacketSender.COMP_HEADER_LENGTH;
+      if (this.uncompressedPayloadLen == 0) {
+        // uncompressed packet
+        this.payload =
+            java.util.Arrays.copyOfRange(
+                this.packetData, this.offset, this.offset + this.compressedPayloadLen);
+      } else {
+        // uncompress payload
+        InflaterOutputStream inflater = new InflaterOutputStream(this.decompressedStream);
+        inflater.write(this.packetData, this.offset, this.compressedPayloadLen);
+        inflater.finish();
+        inflater.flush();
+        this.payload = this.decompressedStream.toByteArray();
+        this.decompressedStream.reset();
+      }
+      this.offset += this.compressedPayloadLen;
+      return true;
     }
+  }
 
-    @Test
-    public void basicCompressedPacketTest() throws IOException {
-        final int packetLen = 3000; // needs to be big enough to compress
+  @AfterEach
+  public void cleanupByteArrayOutputStream() {
+    this.outputStream.reset();
+  }
 
-        byte[] packet = new byte[packetLen];
-        fillPacketSequentially(packet);
+  @Test
+  public void basicCompressedPacketTest() throws IOException {
+    final int packetLen = 3000; // needs to be big enough to compress
 
-        final byte packetSequence = 22;
-        this.sender.send(packet, packetLen, packetSequence);
+    byte[] packet = new byte[packetLen];
+    fillPacketSequentially(packet);
 
-        // check encoded packet
-        CompressedPackets packets = new CompressedPackets(this.outputStream.toByteArray());
+    final byte packetSequence = 22;
+    this.sender.send(packet, packetLen, packetSequence);
 
-        final int compressedPacketLen = 316; // expected value generated from this test case - compression is deterministic
-        assertEquals(compressedPacketLen, packets.packetData.length);
-        assertEquals(compressedPacketLen - CompressedPacketSender.COMP_HEADER_LENGTH, NativeUtils.decodeMysqlThreeByteInteger(packets.packetData));
-        assertEquals(packetSequence, packets.packetData[3]); // compressed sequence is independent
-        assertEquals(packetLen + NativeConstants.HEADER_LENGTH, NativeUtils.decodeMysqlThreeByteInteger(packets.packetData, 4));
+    // check encoded packet
+    CompressedPackets packets = new CompressedPackets(this.outputStream.toByteArray());
 
-        // decompress payload and check
-        assertTrue(packets.nextPayload());
-        assertEquals(packetLen, NativeUtils.decodeMysqlThreeByteInteger(packets.payload));
-        assertEquals(packetSequence, packets.payload[3]);
-        checkSequentiallyFilledPacket(packets.payload, 4, packetLen);
-        assertFalse(packets.nextPayload());
-    }
+    final int compressedPacketLen =
+        316; // expected value generated from this test case - compression is deterministic
+    assertEquals(compressedPacketLen, packets.packetData.length);
+    assertEquals(
+        compressedPacketLen - CompressedPacketSender.COMP_HEADER_LENGTH,
+        NativeUtils.decodeMysqlThreeByteInteger(packets.packetData));
+    assertEquals(packetSequence, packets.packetData[3]); // compressed sequence is independent
+    assertEquals(
+        packetLen + NativeConstants.HEADER_LENGTH,
+        NativeUtils.decodeMysqlThreeByteInteger(packets.packetData, 4));
 
-    /**
-     * Test the situation where a single packet is split into two and the second part doesn't exceed the capacity of the second compressed packet.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void basicTwoPartSplitPacketTest() throws IOException {
-        final int packetLen = NativeConstants.MAX_PACKET_SIZE + 20000;
-        byte[] packet = new byte[packetLen];
-        // mark key positions in packet to check split packet
-        packet[0] = 41;
-        packet[NativeConstants.MAX_PACKET_SIZE - 1] = 42;
-        packet[NativeConstants.MAX_PACKET_SIZE] = 43;
-        packet[packetLen - 1] = 44;
+    // decompress payload and check
+    assertTrue(packets.nextPayload());
+    assertEquals(packetLen, NativeUtils.decodeMysqlThreeByteInteger(packets.payload));
+    assertEquals(packetSequence, packets.payload[3]);
+    checkSequentiallyFilledPacket(packets.payload, 4, packetLen);
+    assertFalse(packets.nextPayload());
+  }
 
-        final byte packetSequence = 45;
-        this.sender.send(packet, packetLen, packetSequence);
+  /**
+   * Test the situation where a single packet is split into two and the second part doesn't exceed
+   * the capacity of the second compressed packet.
+   *
+   * @throws IOException
+   */
+  @Test
+  public void basicTwoPartSplitPacketTest() throws IOException {
+    final int packetLen = NativeConstants.MAX_PACKET_SIZE + 20000;
+    byte[] packet = new byte[packetLen];
+    // mark key positions in packet to check split packet
+    packet[0] = 41;
+    packet[NativeConstants.MAX_PACKET_SIZE - 1] = 42;
+    packet[NativeConstants.MAX_PACKET_SIZE] = 43;
+    packet[packetLen - 1] = 44;
 
-        // check encoded packet
-        CompressedPackets packets = new CompressedPackets(this.outputStream.toByteArray());
+    final byte packetSequence = 45;
+    this.sender.send(packet, packetLen, packetSequence);
 
-        // first packet
-        assertTrue(packets.nextPayload());
-        assertEquals(packetSequence, packets.compressedSequenceId);
-        assertEquals(NativeConstants.MAX_PACKET_SIZE, packets.uncompressedPayloadLen);
-        assertEquals(packets.uncompressedPayloadLen, packets.payload.length);
-        assertEquals(41, packets.payload[NativeConstants.HEADER_LENGTH]);
-        int firstPacketRawPacketLen = NativeUtils.decodeMysqlThreeByteInteger(packets.payload);
-        assertEquals(NativeConstants.MAX_PACKET_SIZE, firstPacketRawPacketLen);
-        int firstPacketUncompressedPayloadLen = packets.uncompressedPayloadLen;
+    // check encoded packet
+    CompressedPackets packets = new CompressedPackets(this.outputStream.toByteArray());
 
-        // second packet
-        assertTrue(packets.nextPayload());
-        assertEquals(packetSequence + 1, packets.compressedSequenceId);
-        assertEquals(packetLen - firstPacketUncompressedPayloadLen + (2 * NativeConstants.HEADER_LENGTH), packets.uncompressedPayloadLen);
-        assertEquals(packets.uncompressedPayloadLen, packets.payload.length);
-        assertEquals(43, packets.payload[NativeConstants.HEADER_LENGTH + NativeConstants.HEADER_LENGTH]);
-        assertEquals(42, packets.payload[NativeConstants.HEADER_LENGTH - 1]);
-        assertEquals(44, packets.payload[packets.uncompressedPayloadLen - 1]);
-        int secondPacketUncompressedPayloadLen = packets.uncompressedPayloadLen;
+    // first packet
+    assertTrue(packets.nextPayload());
+    assertEquals(packetSequence, packets.compressedSequenceId);
+    assertEquals(NativeConstants.MAX_PACKET_SIZE, packets.uncompressedPayloadLen);
+    assertEquals(packets.uncompressedPayloadLen, packets.payload.length);
+    assertEquals(41, packets.payload[NativeConstants.HEADER_LENGTH]);
+    int firstPacketRawPacketLen = NativeUtils.decodeMysqlThreeByteInteger(packets.payload);
+    assertEquals(NativeConstants.MAX_PACKET_SIZE, firstPacketRawPacketLen);
+    int firstPacketUncompressedPayloadLen = packets.uncompressedPayloadLen;
 
-        assertEquals(packetLen, firstPacketUncompressedPayloadLen + secondPacketUncompressedPayloadLen - (2 * NativeConstants.HEADER_LENGTH));
+    // second packet
+    assertTrue(packets.nextPayload());
+    assertEquals(packetSequence + 1, packets.compressedSequenceId);
+    assertEquals(
+        packetLen - firstPacketUncompressedPayloadLen + (2 * NativeConstants.HEADER_LENGTH),
+        packets.uncompressedPayloadLen);
+    assertEquals(packets.uncompressedPayloadLen, packets.payload.length);
+    assertEquals(
+        43, packets.payload[NativeConstants.HEADER_LENGTH + NativeConstants.HEADER_LENGTH]);
+    assertEquals(42, packets.payload[NativeConstants.HEADER_LENGTH - 1]);
+    assertEquals(44, packets.payload[packets.uncompressedPayloadLen - 1]);
+    int secondPacketUncompressedPayloadLen = packets.uncompressedPayloadLen;
 
-        // done
-        assertFalse(packets.nextPayload());
-    }
+    assertEquals(
+        packetLen,
+        firstPacketUncompressedPayloadLen
+            + secondPacketUncompressedPayloadLen
+            - (2 * NativeConstants.HEADER_LENGTH));
 
-    /**
-     * Test the situation where a single packet is split into two and the second part exceeds the capacity of the second compressed packet requiring a third
-     * compressed packet.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void twoPacketToThreeCompressedPacketNoBoundary() throws IOException {
-        final int packetLen = (NativeConstants.MAX_PACKET_SIZE * 2) - 1;
+    // done
+    assertFalse(packets.nextPayload());
+  }
 
-        byte[] packet = new byte[packetLen];
+  /**
+   * Test the situation where a single packet is split into two and the second part exceeds the
+   * capacity of the second compressed packet requiring a third compressed packet.
+   *
+   * @throws IOException
+   */
+  @Test
+  public void twoPacketToThreeCompressedPacketNoBoundary() throws IOException {
+    final int packetLen = (NativeConstants.MAX_PACKET_SIZE * 2) - 1;
 
-        this.sender.send(packet, packetLen, (byte) 0);
+    byte[] packet = new byte[packetLen];
 
-        // check encoded packet
-        CompressedPackets packets = new CompressedPackets(this.outputStream.toByteArray());
+    this.sender.send(packet, packetLen, (byte) 0);
 
-        assertTrue(packets.nextPayload());
+    // check encoded packet
+    CompressedPackets packets = new CompressedPackets(this.outputStream.toByteArray());
 
-        assertTrue(packets.nextPayload());
+    assertTrue(packets.nextPayload());
 
-        // last packet is uncompressed
-        // payload is 7 bytes: 4 (from first packet) + 3 (from second packet) bytes
-        assertEquals(7, NativeUtils.decodeMysqlThreeByteInteger(packets.packetData, packets.offset));
-        assertEquals(2, packets.packetData[packets.offset + 3]); // sequence
-        assertEquals(0, NativeUtils.decodeMysqlThreeByteInteger(packets.packetData, packets.offset + 4)); // uncompressed
+    assertTrue(packets.nextPayload());
 
-        assertEquals(CompressedPacketSender.COMP_HEADER_LENGTH + 7, packets.packetData.length - packets.offset);
-    }
+    // last packet is uncompressed
+    // payload is 7 bytes: 4 (from first packet) + 3 (from second packet) bytes
+    assertEquals(7, NativeUtils.decodeMysqlThreeByteInteger(packets.packetData, packets.offset));
+    assertEquals(2, packets.packetData[packets.offset + 3]); // sequence
+    assertEquals(
+        0,
+        NativeUtils.decodeMysqlThreeByteInteger(
+            packets.packetData, packets.offset + 4)); // uncompressed
 
-    /**
-     * This tests that the splitting of MySQL packets includes an additional empty packet to signal the end of the multi-packet sequence.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void twoPacketToThreeWithEmptyUncompressedPacket() throws IOException {
-        // it takes three mysql packets to represent a large packet that spans the exact capacity of two packets
-        final int packetLen = NativeConstants.MAX_PACKET_SIZE * 2;
+    assertEquals(
+        CompressedPacketSender.COMP_HEADER_LENGTH + 7, packets.packetData.length - packets.offset);
+  }
 
-        byte[] packet = new byte[packetLen];
-        // seed data to check packets after splitting & compression
-        packet[packetLen - 4] = 22;
-        packet[packetLen - 3] = 23;
-        packet[packetLen - 2] = 24;
-        packet[packetLen - 1] = 25;
+  /**
+   * This tests that the splitting of MySQL packets includes an additional empty packet to signal
+   * the end of the multi-packet sequence.
+   *
+   * @throws IOException
+   */
+  @Test
+  public void twoPacketToThreeWithEmptyUncompressedPacket() throws IOException {
+    // it takes three mysql packets to represent a large packet that spans the exact capacity of two
+    // packets
+    final int packetLen = NativeConstants.MAX_PACKET_SIZE * 2;
 
-        this.sender.send(packet, packetLen, (byte) 0);
+    byte[] packet = new byte[packetLen];
+    // seed data to check packets after splitting & compression
+    packet[packetLen - 4] = 22;
+    packet[packetLen - 3] = 23;
+    packet[packetLen - 2] = 24;
+    packet[packetLen - 1] = 25;
 
-        // check encoded packet
-        CompressedPackets packets = new CompressedPackets(this.outputStream.toByteArray());
+    this.sender.send(packet, packetLen, (byte) 0);
 
-        assertTrue(packets.nextPayload());
-        assertTrue(packets.nextPayload());
-        assertTrue(packets.nextPayload());
+    // check encoded packet
+    CompressedPackets packets = new CompressedPackets(this.outputStream.toByteArray());
 
-        // third packet includes remaining 8 bytes of data and the blank header for the third mysql packet
+    assertTrue(packets.nextPayload());
+    assertTrue(packets.nextPayload());
+    assertTrue(packets.nextPayload());
 
-        // last packet is uncompressed
-        // payload is: 4 (bumped from first packet) + 4 (bumped from second packet) bytes + empty header (4)
-        assertEquals(12, packets.compressedPayloadLen);
-        assertEquals(0, packets.uncompressedPayloadLen); // uncompressed indicator
-        // last four bytes of original packet should be second four bytes here
-        assertEquals(22, packets.payload[4]);
-        assertEquals(23, packets.payload[5]);
-        assertEquals(24, packets.payload[6]);
-        assertEquals(25, packets.payload[7]);
+    // third packet includes remaining 8 bytes of data and the blank header for the third mysql
+    // packet
 
-        // third MySQL packet is an empty header
-        assertEquals(2, packets.payload[11]); // sequence
-        assertEquals(0, NativeUtils.decodeMysqlThreeByteInteger(packets.payload, 8)); // payload len
-    }
+    // last packet is uncompressed
+    // payload is: 4 (bumped from first packet) + 4 (bumped from second packet) bytes + empty header
+    // (4)
+    assertEquals(12, packets.compressedPayloadLen);
+    assertEquals(0, packets.uncompressedPayloadLen); // uncompressed indicator
+    // last four bytes of original packet should be second four bytes here
+    assertEquals(22, packets.payload[4]);
+    assertEquals(23, packets.payload[5]);
+    assertEquals(24, packets.payload[6]);
+    assertEquals(25, packets.payload[7]);
 
-    @Test
-    public void smallPacketsArentCompressed() throws IOException {
-        final int packetLen = CompressedPacketSender.MIN_COMPRESS_LEN - 1; // needs to be big enough to compress
+    // third MySQL packet is an empty header
+    assertEquals(2, packets.payload[11]); // sequence
+    assertEquals(0, NativeUtils.decodeMysqlThreeByteInteger(packets.payload, 8)); // payload len
+  }
 
-        byte[] packet = new byte[packetLen];
-        fillPacketSequentially(packet);
+  @Test
+  public void smallPacketsArentCompressed() throws IOException {
+    final int packetLen =
+        CompressedPacketSender.MIN_COMPRESS_LEN - 1; // needs to be big enough to compress
 
-        final byte packetSequence = 33;
-        this.sender.send(packet, packetLen, packetSequence);
+    byte[] packet = new byte[packetLen];
+    fillPacketSequentially(packet);
 
-        // check encoded packet
-        byte[] sentPacket = this.outputStream.toByteArray();
+    final byte packetSequence = 33;
+    this.sender.send(packet, packetLen, packetSequence);
 
-        assertEquals(packetLen + NativeConstants.HEADER_LENGTH + CompressedPacketSender.COMP_HEADER_LENGTH, sentPacket.length);
-        // header field for compressed payload length should equal uncompressed len + header
-        assertEquals(packetLen + NativeConstants.HEADER_LENGTH, NativeUtils.decodeMysqlThreeByteInteger(sentPacket));
-        assertEquals(packetSequence, sentPacket[3]);
-        // header field for uncompressed payload length should be 0
-        assertEquals(0, NativeUtils.decodeMysqlThreeByteInteger(sentPacket, 4));
+    // check encoded packet
+    byte[] sentPacket = this.outputStream.toByteArray();
 
-        assertEquals(packetLen, NativeUtils.decodeMysqlThreeByteInteger(sentPacket, CompressedPacketSender.COMP_HEADER_LENGTH));
-        assertEquals(packetSequence, sentPacket[CompressedPacketSender.COMP_HEADER_LENGTH + 3]);
-        checkSequentiallyFilledPacket(sentPacket, CompressedPacketSender.COMP_HEADER_LENGTH + NativeConstants.HEADER_LENGTH, packetLen);
-    }
+    assertEquals(
+        packetLen + NativeConstants.HEADER_LENGTH + CompressedPacketSender.COMP_HEADER_LENGTH,
+        sentPacket.length);
+    // header field for compressed payload length should equal uncompressed len + header
+    assertEquals(
+        packetLen + NativeConstants.HEADER_LENGTH,
+        NativeUtils.decodeMysqlThreeByteInteger(sentPacket));
+    assertEquals(packetSequence, sentPacket[3]);
+    // header field for uncompressed payload length should be 0
+    assertEquals(0, NativeUtils.decodeMysqlThreeByteInteger(sentPacket, 4));
 
-    @Test
-    public void incompressiblePacketsArentCompressed() throws IOException {
-        final int packetLen = CompressedPacketSender.MIN_COMPRESS_LEN * 2; // needs to be big enough to compress
+    assertEquals(
+        packetLen,
+        NativeUtils.decodeMysqlThreeByteInteger(
+            sentPacket, CompressedPacketSender.COMP_HEADER_LENGTH));
+    assertEquals(packetSequence, sentPacket[CompressedPacketSender.COMP_HEADER_LENGTH + 3]);
+    checkSequentiallyFilledPacket(
+        sentPacket,
+        CompressedPacketSender.COMP_HEADER_LENGTH + NativeConstants.HEADER_LENGTH,
+        packetLen);
+  }
 
-        byte[] packet = new byte[packetLen];
-        // this sequential data is not easily compressible by the DEFLATE algorithm
-        fillPacketSequentially(packet);
+  @Test
+  public void incompressiblePacketsArentCompressed() throws IOException {
+    final int packetLen =
+        CompressedPacketSender.MIN_COMPRESS_LEN * 2; // needs to be big enough to compress
 
-        final byte packetSequence = 33;
-        this.sender.send(packet, packetLen, packetSequence);
+    byte[] packet = new byte[packetLen];
+    // this sequential data is not easily compressible by the DEFLATE algorithm
+    fillPacketSequentially(packet);
 
-        // check encoded packet
-        byte[] sentPacket = this.outputStream.toByteArray();
+    final byte packetSequence = 33;
+    this.sender.send(packet, packetLen, packetSequence);
 
-        assertEquals(packetLen + NativeConstants.HEADER_LENGTH + CompressedPacketSender.COMP_HEADER_LENGTH, sentPacket.length);
-        // header field for compressed payload length should equal uncompressed len + header
-        assertEquals(packetLen + NativeConstants.HEADER_LENGTH, NativeUtils.decodeMysqlThreeByteInteger(sentPacket));
-        assertEquals(packetSequence, sentPacket[3]);
-        // header field for uncompressed payload length should be 0
-        assertEquals(0, NativeUtils.decodeMysqlThreeByteInteger(sentPacket, 4));
+    // check encoded packet
+    byte[] sentPacket = this.outputStream.toByteArray();
 
-        assertEquals(packetLen, NativeUtils.decodeMysqlThreeByteInteger(sentPacket, CompressedPacketSender.COMP_HEADER_LENGTH));
-        assertEquals(packetSequence, sentPacket[CompressedPacketSender.COMP_HEADER_LENGTH + 3]);
-        checkSequentiallyFilledPacket(sentPacket, CompressedPacketSender.COMP_HEADER_LENGTH + NativeConstants.HEADER_LENGTH, packetLen);
-    }
+    assertEquals(
+        packetLen + NativeConstants.HEADER_LENGTH + CompressedPacketSender.COMP_HEADER_LENGTH,
+        sentPacket.length);
+    // header field for compressed payload length should equal uncompressed len + header
+    assertEquals(
+        packetLen + NativeConstants.HEADER_LENGTH,
+        NativeUtils.decodeMysqlThreeByteInteger(sentPacket));
+    assertEquals(packetSequence, sentPacket[3]);
+    // header field for uncompressed payload length should be 0
+    assertEquals(0, NativeUtils.decodeMysqlThreeByteInteger(sentPacket, 4));
+
+    assertEquals(
+        packetLen,
+        NativeUtils.decodeMysqlThreeByteInteger(
+            sentPacket, CompressedPacketSender.COMP_HEADER_LENGTH));
+    assertEquals(packetSequence, sentPacket[CompressedPacketSender.COMP_HEADER_LENGTH + 3]);
+    checkSequentiallyFilledPacket(
+        sentPacket,
+        CompressedPacketSender.COMP_HEADER_LENGTH + NativeConstants.HEADER_LENGTH,
+        packetLen);
+  }
 }

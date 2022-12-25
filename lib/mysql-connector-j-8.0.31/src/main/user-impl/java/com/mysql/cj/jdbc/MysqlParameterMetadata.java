@@ -29,9 +29,6 @@
 
 package com.mysql.cj.jdbc;
 
-import java.sql.ParameterMetaData;
-import java.sql.SQLException;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.MysqlType;
 import com.mysql.cj.Session;
@@ -40,164 +37,177 @@ import com.mysql.cj.exceptions.MysqlErrorNumbers;
 import com.mysql.cj.jdbc.exceptions.SQLError;
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 import com.mysql.cj.result.Field;
+import java.sql.ParameterMetaData;
+import java.sql.SQLException;
 
 public class MysqlParameterMetadata implements ParameterMetaData {
-    boolean returnSimpleMetadata = false;
+  boolean returnSimpleMetadata = false;
 
-    ResultSetMetaData metadata = null;
+  ResultSetMetaData metadata = null;
 
-    int parameterCount = 0;
+  int parameterCount = 0;
 
-    private ExceptionInterceptor exceptionInterceptor;
+  private ExceptionInterceptor exceptionInterceptor;
 
-    public MysqlParameterMetadata(Session session, Field[] fieldInfo, int parameterCount, ExceptionInterceptor exceptionInterceptor) {
-        this.metadata = new ResultSetMetaData(session, fieldInfo, false, true, exceptionInterceptor);
+  public MysqlParameterMetadata(
+      Session session,
+      Field[] fieldInfo,
+      int parameterCount,
+      ExceptionInterceptor exceptionInterceptor) {
+    this.metadata = new ResultSetMetaData(session, fieldInfo, false, true, exceptionInterceptor);
 
-        this.parameterCount = parameterCount;
-        this.exceptionInterceptor = exceptionInterceptor;
+    this.parameterCount = parameterCount;
+    this.exceptionInterceptor = exceptionInterceptor;
+  }
+
+  /**
+   * Used for "fake" basic metadata for client-side prepared statements when we don't know the
+   * parameter types.
+   *
+   * @param count parameters number
+   */
+  MysqlParameterMetadata(int count) {
+    this.parameterCount = count;
+    this.returnSimpleMetadata = true;
+  }
+
+  @Override
+  public int getParameterCount() throws SQLException {
+    return this.parameterCount;
+  }
+
+  @Override
+  public int isNullable(int arg0) throws SQLException {
+    checkAvailable();
+
+    return this.metadata.isNullable(arg0);
+  }
+
+  private void checkAvailable() throws SQLException {
+    if (this.metadata == null || this.metadata.getFields() == null) {
+      throw SQLError.createSQLException(
+          Messages.getString("MysqlParameterMetadata.0"),
+          MysqlErrorNumbers.SQL_STATE_DRIVER_NOT_CAPABLE,
+          this.exceptionInterceptor);
+    }
+  }
+
+  @Override
+  public boolean isSigned(int arg0) throws SQLException {
+    if (this.returnSimpleMetadata) {
+      checkBounds(arg0);
+
+      return false;
     }
 
-    /**
-     * Used for "fake" basic metadata for client-side prepared statements when
-     * we don't know the parameter types.
-     * 
-     * @param count
-     *            parameters number
-     */
-    MysqlParameterMetadata(int count) {
-        this.parameterCount = count;
-        this.returnSimpleMetadata = true;
+    checkAvailable();
+
+    return (this.metadata.isSigned(arg0));
+  }
+
+  @Override
+  public int getPrecision(int arg0) throws SQLException {
+    if (this.returnSimpleMetadata) {
+      checkBounds(arg0);
+
+      return 0;
     }
 
-    @Override
-    public int getParameterCount() throws SQLException {
-        return this.parameterCount;
+    checkAvailable();
+
+    return (this.metadata.getPrecision(arg0));
+  }
+
+  @Override
+  public int getScale(int arg0) throws SQLException {
+    if (this.returnSimpleMetadata) {
+      checkBounds(arg0);
+
+      return 0;
     }
 
-    @Override
-    public int isNullable(int arg0) throws SQLException {
-        checkAvailable();
+    checkAvailable();
 
-        return this.metadata.isNullable(arg0);
+    return (this.metadata.getScale(arg0));
+  }
+
+  @Override
+  public int getParameterType(int arg0) throws SQLException {
+    if (this.returnSimpleMetadata) {
+      checkBounds(arg0);
+
+      return MysqlType.VARCHAR.getJdbcType();
     }
 
-    private void checkAvailable() throws SQLException {
-        if (this.metadata == null || this.metadata.getFields() == null) {
-            throw SQLError.createSQLException(Messages.getString("MysqlParameterMetadata.0"), MysqlErrorNumbers.SQL_STATE_DRIVER_NOT_CAPABLE,
-                    this.exceptionInterceptor);
-        }
+    checkAvailable();
+
+    return (this.metadata.getColumnType(arg0));
+  }
+
+  @Override
+  public String getParameterTypeName(int arg0) throws SQLException {
+    if (this.returnSimpleMetadata) {
+      checkBounds(arg0);
+
+      return MysqlType.VARCHAR.getName();
     }
 
-    @Override
-    public boolean isSigned(int arg0) throws SQLException {
-        if (this.returnSimpleMetadata) {
-            checkBounds(arg0);
+    checkAvailable();
 
-            return false;
-        }
+    return (this.metadata.getColumnTypeName(arg0));
+  }
 
-        checkAvailable();
+  @Override
+  public String getParameterClassName(int arg0) throws SQLException {
+    if (this.returnSimpleMetadata) {
+      checkBounds(arg0);
 
-        return (this.metadata.isSigned(arg0));
+      return "java.lang.String";
     }
 
-    @Override
-    public int getPrecision(int arg0) throws SQLException {
-        if (this.returnSimpleMetadata) {
-            checkBounds(arg0);
+    checkAvailable();
 
-            return 0;
-        }
+    return (this.metadata.getColumnClassName(arg0));
+  }
 
-        checkAvailable();
+  @Override
+  public int getParameterMode(int arg0) throws SQLException {
+    return parameterModeIn;
+  }
 
-        return (this.metadata.getPrecision(arg0));
+  private void checkBounds(int paramNumber) throws SQLException {
+    if (paramNumber < 1) {
+      throw SQLError.createSQLException(
+          Messages.getString("MysqlParameterMetadata.1", new Object[] {paramNumber}),
+          MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT,
+          this.exceptionInterceptor);
     }
 
-    @Override
-    public int getScale(int arg0) throws SQLException {
-        if (this.returnSimpleMetadata) {
-            checkBounds(arg0);
-
-            return 0;
-        }
-
-        checkAvailable();
-
-        return (this.metadata.getScale(arg0));
+    if (paramNumber > this.parameterCount) {
+      throw SQLError.createSQLException(
+          Messages.getString(
+              "MysqlParameterMetadata.2", new Object[] {paramNumber, this.parameterCount}),
+          MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT,
+          this.exceptionInterceptor);
     }
+  }
 
-    @Override
-    public int getParameterType(int arg0) throws SQLException {
-        if (this.returnSimpleMetadata) {
-            checkBounds(arg0);
+  @Override
+  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    // This works for classes that aren't actually wrapping anything
+    return iface.isInstance(this);
+  }
 
-            return MysqlType.VARCHAR.getJdbcType();
-        }
-
-        checkAvailable();
-
-        return (this.metadata.getColumnType(arg0));
+  @Override
+  public <T> T unwrap(Class<T> iface) throws SQLException {
+    try {
+      // This works for classes that aren't actually wrapping anything
+      return iface.cast(this);
+    } catch (ClassCastException cce) {
+      throw SQLError.createSQLException(
+          Messages.getString("Common.UnableToUnwrap", new Object[] {iface.toString()}),
+          MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT,
+          this.exceptionInterceptor);
     }
-
-    @Override
-    public String getParameterTypeName(int arg0) throws SQLException {
-        if (this.returnSimpleMetadata) {
-            checkBounds(arg0);
-
-            return MysqlType.VARCHAR.getName();
-        }
-
-        checkAvailable();
-
-        return (this.metadata.getColumnTypeName(arg0));
-    }
-
-    @Override
-    public String getParameterClassName(int arg0) throws SQLException {
-        if (this.returnSimpleMetadata) {
-            checkBounds(arg0);
-
-            return "java.lang.String";
-        }
-
-        checkAvailable();
-
-        return (this.metadata.getColumnClassName(arg0));
-    }
-
-    @Override
-    public int getParameterMode(int arg0) throws SQLException {
-        return parameterModeIn;
-    }
-
-    private void checkBounds(int paramNumber) throws SQLException {
-        if (paramNumber < 1) {
-            throw SQLError.createSQLException(Messages.getString("MysqlParameterMetadata.1", new Object[] { paramNumber }),
-                    MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT, this.exceptionInterceptor);
-        }
-
-        if (paramNumber > this.parameterCount) {
-            throw SQLError.createSQLException(Messages.getString("MysqlParameterMetadata.2", new Object[] { paramNumber, this.parameterCount }),
-                    MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT, this.exceptionInterceptor);
-
-        }
-    }
-
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // This works for classes that aren't actually wrapping anything
-        return iface.isInstance(this);
-    }
-
-    @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        try {
-            // This works for classes that aren't actually wrapping anything
-            return iface.cast(this);
-        } catch (ClassCastException cce) {
-            throw SQLError.createSQLException(Messages.getString("Common.UnableToUnwrap", new Object[] { iface.toString() }),
-                    MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT, this.exceptionInterceptor);
-        }
-    }
+  }
 }

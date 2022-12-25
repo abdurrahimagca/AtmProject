@@ -29,64 +29,69 @@
 
 package com.mysql.cj.result;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
-
 import com.mysql.cj.Constants;
 import com.mysql.cj.Messages;
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.exceptions.NumberOutOfRange;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
-/**
- * A value factory for creating float values.
- */
+/** A value factory for creating float values. */
 public class FloatValueFactory extends AbstractNumericValueFactory<Float> {
 
-    public FloatValueFactory(PropertySet pset) {
-        super(pset);
-    }
+  public FloatValueFactory(PropertySet pset) {
+    super(pset);
+  }
 
-    @Override
-    public Float createFromBigInteger(BigInteger i) {
-        if (this.jdbcCompliantTruncationForReads && (new BigDecimal(i).compareTo(Constants.BIG_DECIMAL_MAX_NEGATIVE_FLOAT_VALUE) < 0
-                || new BigDecimal(i).compareTo(Constants.BIG_DECIMAL_MAX_FLOAT_VALUE) > 0)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { i, getTargetTypeName() }));
-        }
-        return (float) i.doubleValue();
+  @Override
+  public Float createFromBigInteger(BigInteger i) {
+    if (this.jdbcCompliantTruncationForReads
+        && (new BigDecimal(i).compareTo(Constants.BIG_DECIMAL_MAX_NEGATIVE_FLOAT_VALUE) < 0
+            || new BigDecimal(i).compareTo(Constants.BIG_DECIMAL_MAX_FLOAT_VALUE) > 0)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {i, getTargetTypeName()}));
     }
+    return (float) i.doubleValue();
+  }
 
-    @Override
-    public Float createFromLong(long l) {
-        if (this.jdbcCompliantTruncationForReads && (l < -Float.MAX_VALUE || l > Float.MAX_VALUE)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { l, getTargetTypeName() }));
-        }
-        return (float) l;
+  @Override
+  public Float createFromLong(long l) {
+    if (this.jdbcCompliantTruncationForReads && (l < -Float.MAX_VALUE || l > Float.MAX_VALUE)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {l, getTargetTypeName()}));
     }
+    return (float) l;
+  }
 
-    @Override
-    public Float createFromBigDecimal(BigDecimal d) {
-        if (this.jdbcCompliantTruncationForReads
-                && (d.compareTo(Constants.BIG_DECIMAL_MAX_NEGATIVE_FLOAT_VALUE) < 0 || d.compareTo(Constants.BIG_DECIMAL_MAX_FLOAT_VALUE) > 0)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { d, getTargetTypeName() }));
-        }
-        return (float) d.doubleValue();
+  @Override
+  public Float createFromBigDecimal(BigDecimal d) {
+    if (this.jdbcCompliantTruncationForReads
+        && (d.compareTo(Constants.BIG_DECIMAL_MAX_NEGATIVE_FLOAT_VALUE) < 0
+            || d.compareTo(Constants.BIG_DECIMAL_MAX_FLOAT_VALUE) > 0)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {d, getTargetTypeName()}));
     }
+    return (float) d.doubleValue();
+  }
 
-    @Override
-    public Float createFromDouble(double d) {
-        if (this.jdbcCompliantTruncationForReads && (d < -Float.MAX_VALUE || d > Float.MAX_VALUE)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { d, getTargetTypeName() }));
-        }
-        return (float) d;
+  @Override
+  public Float createFromDouble(double d) {
+    if (this.jdbcCompliantTruncationForReads && (d < -Float.MAX_VALUE || d > Float.MAX_VALUE)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {d, getTargetTypeName()}));
     }
+    return (float) d;
+  }
 
-    @Override
-    public Float createFromBit(byte[] bytes, int offset, int length) {
-        return new BigInteger(ByteBuffer.allocate(length + 1).put((byte) 0).put(bytes, offset, length).array()).floatValue();
-    }
+  @Override
+  public Float createFromBit(byte[] bytes, int offset, int length) {
+    return new BigInteger(
+            ByteBuffer.allocate(length + 1).put((byte) 0).put(bytes, offset, length).array())
+        .floatValue();
+  }
 
-    public String getTargetTypeName() {
-        return Float.class.getName();
-    }
+  public String getTargetTypeName() {
+    return Float.class.getName();
+  }
 }

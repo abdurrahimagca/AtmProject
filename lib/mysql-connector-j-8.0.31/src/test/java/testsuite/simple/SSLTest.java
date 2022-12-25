@@ -31,51 +31,57 @@ package testsuite.simple;
 
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.MysqlConnection;
 import com.mysql.cj.protocol.a.NativeServerSession;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import testsuite.BaseTestCase;
 
-/**
- * Tests SSL functionality in the driver.
- */
+/** Tests SSL functionality in the driver. */
 public class SSLTest extends BaseTestCase {
-    @BeforeEach
-    public void setUp() {
+  @BeforeEach
+  public void setUp() {}
+
+  /**
+   * Tests SSL Connection
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testConnect() throws Exception {
+    assumeTrue(
+        (((MysqlConnection) this.conn)
+                    .getSession()
+                    .getServerSession()
+                    .getCapabilities()
+                    .getCapabilityFlags()
+                & NativeServerSession.CLIENT_SSL)
+            != 0,
+        "This test requires server with SSL support.");
+    assumeTrue(
+        supportsTLSv1_2(
+            ((MysqlConnection) this.conn).getSession().getServerSession().getServerVersion()),
+        "This test requires server with TLSv1.2+ support.");
+    assumeTrue(
+        supportsTestCertificates(this.stmt),
+        "This test requires the server configured with SSL certificates from"
+            + " ConnectorJ/src/test/config/ssl-test-certs");
+
+    System.setProperty("javax.net.debug", "all");
+
+    String dbUrlLocal = dbUrl;
+    dbUrlLocal = dbUrlLocal.replaceAll("(?i)useSSL", "deletedProp");
+    dbUrlLocal = dbUrlLocal.replaceAll("(?i)sslMode", "deletedProp");
+    StringBuilder sslUrl = new StringBuilder(dbUrlLocal);
+    if (dbUrl.indexOf("?") == -1) {
+      sslUrl.append("?");
+    } else {
+      sslUrl.append("&");
     }
+    sslUrl.append("sslMode=REQUIRED");
 
-    /**
-     * Tests SSL Connection
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testConnect() throws Exception {
-        assumeTrue((((MysqlConnection) this.conn).getSession().getServerSession().getCapabilities().getCapabilityFlags() & NativeServerSession.CLIENT_SSL) != 0,
-                "This test requires server with SSL support.");
-        assumeTrue(supportsTLSv1_2(((MysqlConnection) this.conn).getSession().getServerSession().getServerVersion()),
-                "This test requires server with TLSv1.2+ support.");
-        assumeTrue(supportsTestCertificates(this.stmt),
-                "This test requires the server configured with SSL certificates from ConnectorJ/src/test/config/ssl-test-certs");
+    getConnectionWithProps(sslUrl.toString(), "");
 
-        System.setProperty("javax.net.debug", "all");
-
-        String dbUrlLocal = dbUrl;
-        dbUrlLocal = dbUrlLocal.replaceAll("(?i)useSSL", "deletedProp");
-        dbUrlLocal = dbUrlLocal.replaceAll("(?i)sslMode", "deletedProp");
-        StringBuilder sslUrl = new StringBuilder(dbUrlLocal);
-        if (dbUrl.indexOf("?") == -1) {
-            sslUrl.append("?");
-        } else {
-            sslUrl.append("&");
-        }
-        sslUrl.append("sslMode=REQUIRED");
-
-        getConnectionWithProps(sslUrl.toString(), "");
-
-        System.out.println("<<<<<<<<<<< Look for SSL debug output >>>>>>>>>>>");
-    }
+    System.out.println("<<<<<<<<<<< Look for SSL debug output >>>>>>>>>>>");
+  }
 }

@@ -34,63 +34,48 @@ package com.mysql.cj.x.protobuf;
 
 public final class MysqlxResultset {
   private MysqlxResultset() {}
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
-  }
 
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {}
+
+  public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
   /**
+   *
+   *
    * <pre>
-   **
-   *A hint about the higher-level encoding of a BYTES field
-   *|type  | value  | description             |
-   *|------| -------|-------------------------|
-   *|BYTES | 0x0001 | GEOMETRY (WKB encoding) |
-   *|BYTES | 0x0002 | JSON (text encoding)    |
-   *|BYTES | 0x0003 | XML (text encoding)     |
-   *&#64;note
-   *this list isn't comprehensive. As a guideline: the field's value is expected
-   *to pass a validator check on client and server if this field is set.
-   *If the server adds more internal datatypes that rely on BLOB storage
-   *like image manipulation, seeking into complex types in BLOBs, ... more
-   *types will be added.
+   * *
+   * A hint about the higher-level encoding of a BYTES field
+   * |type  | value  | description             |
+   * |------| -------|-------------------------|
+   * |BYTES | 0x0001 | GEOMETRY (WKB encoding) |
+   * |BYTES | 0x0002 | JSON (text encoding)    |
+   * |BYTES | 0x0003 | XML (text encoding)     |
+   * &#64;note
+   * this list isn't comprehensive. As a guideline: the field's value is expected
+   * to pass a validator check on client and server if this field is set.
+   * If the server adds more internal datatypes that rely on BLOB storage
+   * like image manipulation, seeking into complex types in BLOBs, ... more
+   * types will be added.
    * </pre>
    *
    * Protobuf enum {@code Mysqlx.Resultset.ContentType_BYTES}
    */
-  public enum ContentType_BYTES
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <code>GEOMETRY = 1;</code>
-     */
+  public enum ContentType_BYTES implements com.google.protobuf.ProtocolMessageEnum {
+    /** <code>GEOMETRY = 1;</code> */
     GEOMETRY(1),
-    /**
-     * <code>JSON = 2;</code>
-     */
+    /** <code>JSON = 2;</code> */
     JSON(2),
-    /**
-     * <code>XML = 3;</code>
-     */
+    /** <code>XML = 3;</code> */
     XML(3),
     ;
 
-    /**
-     * <code>GEOMETRY = 1;</code>
-     */
+    /** <code>GEOMETRY = 1;</code> */
     public static final int GEOMETRY_VALUE = 1;
-    /**
-     * <code>JSON = 2;</code>
-     */
+    /** <code>JSON = 2;</code> */
     public static final int JSON_VALUE = 2;
-    /**
-     * <code>XML = 3;</code>
-     */
+    /** <code>XML = 3;</code> */
     public static final int XML_VALUE = 3;
-
 
     public final int getNumber() {
       return value;
@@ -112,10 +97,14 @@ public final class MysqlxResultset {
      */
     public static ContentType_BYTES forNumber(int value) {
       switch (value) {
-        case 1: return GEOMETRY;
-        case 2: return JSON;
-        case 3: return XML;
-        default: return null;
+        case 1:
+          return GEOMETRY;
+        case 2:
+          return JSON;
+        case 3:
+          return XML;
+        default:
+          return null;
       }
     }
 
@@ -123,24 +112,24 @@ public final class MysqlxResultset {
         internalGetValueMap() {
       return internalValueMap;
     }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        ContentType_BYTES> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<ContentType_BYTES>() {
-            public ContentType_BYTES findValueByNumber(int number) {
-              return ContentType_BYTES.forNumber(number);
-            }
-          };
 
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    private static final com.google.protobuf.Internal.EnumLiteMap<ContentType_BYTES>
+        internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<ContentType_BYTES>() {
+              public ContentType_BYTES findValueByNumber(int number) {
+                return ContentType_BYTES.forNumber(number);
+              }
+            };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
       return getDescriptor();
     }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
       return com.mysql.cj.x.protobuf.MysqlxResultset.getDescriptor().getEnumTypes().get(0);
     }
 
@@ -149,8 +138,7 @@ public final class MysqlxResultset {
     public static ContentType_BYTES valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
       }
       return VALUES[desc.getIndex()];
     }
@@ -165,38 +153,30 @@ public final class MysqlxResultset {
   }
 
   /**
+   *
+   *
    * <pre>
-   **
-   *A hint about the higher-level encoding of a DATETIME field
-   *|type     |value  |description                                |
-   *|---------|-------|-------------------------------------------|
-   *|DATE     |0x0001 |DATETIME contains only date part           |
-   *|DATETIME |0x0002 |DATETIME contains both date and time parts |
+   * *
+   * A hint about the higher-level encoding of a DATETIME field
+   * |type     |value  |description                                |
+   * |---------|-------|-------------------------------------------|
+   * |DATE     |0x0001 |DATETIME contains only date part           |
+   * |DATETIME |0x0002 |DATETIME contains both date and time parts |
    * </pre>
    *
    * Protobuf enum {@code Mysqlx.Resultset.ContentType_DATETIME}
    */
-  public enum ContentType_DATETIME
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <code>DATE = 1;</code>
-     */
+  public enum ContentType_DATETIME implements com.google.protobuf.ProtocolMessageEnum {
+    /** <code>DATE = 1;</code> */
     DATE(1),
-    /**
-     * <code>DATETIME = 2;</code>
-     */
+    /** <code>DATETIME = 2;</code> */
     DATETIME(2),
     ;
 
-    /**
-     * <code>DATE = 1;</code>
-     */
+    /** <code>DATE = 1;</code> */
     public static final int DATE_VALUE = 1;
-    /**
-     * <code>DATETIME = 2;</code>
-     */
+    /** <code>DATETIME = 2;</code> */
     public static final int DATETIME_VALUE = 2;
-
 
     public final int getNumber() {
       return value;
@@ -218,9 +198,12 @@ public final class MysqlxResultset {
      */
     public static ContentType_DATETIME forNumber(int value) {
       switch (value) {
-        case 1: return DATE;
-        case 2: return DATETIME;
-        default: return null;
+        case 1:
+          return DATE;
+        case 2:
+          return DATETIME;
+        default:
+          return null;
       }
     }
 
@@ -228,24 +211,24 @@ public final class MysqlxResultset {
         internalGetValueMap() {
       return internalValueMap;
     }
-    private static final com.google.protobuf.Internal.EnumLiteMap<
-        ContentType_DATETIME> internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<ContentType_DATETIME>() {
-            public ContentType_DATETIME findValueByNumber(int number) {
-              return ContentType_DATETIME.forNumber(number);
-            }
-          };
 
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    private static final com.google.protobuf.Internal.EnumLiteMap<ContentType_DATETIME>
+        internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<ContentType_DATETIME>() {
+              public ContentType_DATETIME findValueByNumber(int number) {
+                return ContentType_DATETIME.forNumber(number);
+              }
+            };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
       return getDescriptor().getValues().get(ordinal());
     }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
       return getDescriptor();
     }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
       return com.mysql.cj.x.protobuf.MysqlxResultset.getDescriptor().getEnumTypes().get(1);
     }
 
@@ -254,8 +237,7 @@ public final class MysqlxResultset {
     public static ContentType_DATETIME valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+        throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
       }
       return VALUES[desc.getIndex()];
     }
@@ -269,42 +251,43 @@ public final class MysqlxResultset {
     // @@protoc_insertion_point(enum_scope:Mysqlx.Resultset.ContentType_DATETIME)
   }
 
-  public interface FetchDoneMoreOutParamsOrBuilder extends
+  public interface FetchDoneMoreOutParamsOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:Mysqlx.Resultset.FetchDoneMoreOutParams)
-      com.google.protobuf.MessageOrBuilder {
-  }
+      com.google.protobuf.MessageOrBuilder {}
   /**
+   *
+   *
    * <pre>
-   **
-   *Resultsets are finished, OUT paramset is next:
+   * *
+   * Resultsets are finished, OUT paramset is next:
    * </pre>
    *
    * Protobuf type {@code Mysqlx.Resultset.FetchDoneMoreOutParams}
    */
-  public static final class FetchDoneMoreOutParams extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class FetchDoneMoreOutParams extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:Mysqlx.Resultset.FetchDoneMoreOutParams)
       FetchDoneMoreOutParamsOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use FetchDoneMoreOutParams.newBuilder() to construct.
     private FetchDoneMoreOutParams(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private FetchDoneMoreOutParams() {
-    }
+
+    private FetchDoneMoreOutParams() {}
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new FetchDoneMoreOutParams();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private FetchDoneMoreOutParams(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -323,39 +306,42 @@ public final class MysqlxResultset {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
               }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_fieldAccessorTable
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.class, com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.Builder.class);
+              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.class,
+              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.Builder.class);
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -367,8 +353,7 @@ public final class MysqlxResultset {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       unknownFields.writeTo(output);
     }
 
@@ -386,12 +371,13 @@ public final class MysqlxResultset {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams)) {
         return super.equals(obj);
       }
-      com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams other = (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams) obj;
+      com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams other =
+          (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams) obj;
 
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -410,87 +396,94 @@ public final class MysqlxResultset {
     }
 
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams prototype) {
+
+    public static Builder newBuilder(
+        com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -500,28 +493,33 @@ public final class MysqlxResultset {
       return builder;
     }
     /**
+     *
+     *
      * <pre>
-     **
-     *Resultsets are finished, OUT paramset is next:
+     * *
+     * Resultsets are finished, OUT paramset is next:
      * </pre>
      *
      * Protobuf type {@code Mysqlx.Resultset.FetchDoneMoreOutParams}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:Mysqlx.Resultset.FetchDoneMoreOutParams)
         com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParamsOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.class, com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.class,
+                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.Builder.class);
       }
 
       // Construct using com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.newBuilder()
@@ -529,16 +527,15 @@ public final class MysqlxResultset {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -546,13 +543,14 @@ public final class MysqlxResultset {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor;
       }
 
       @java.lang.Override
-      public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams getDefaultInstanceForType() {
+      public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams
+          getDefaultInstanceForType() {
         return com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.getDefaultInstance();
       }
 
@@ -567,7 +565,8 @@ public final class MysqlxResultset {
 
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams buildPartial() {
-        com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams result = new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams(this);
+        com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams result =
+            new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams(this);
         onBuilt();
         return result;
       }
@@ -576,46 +575,52 @@ public final class MysqlxResultset {
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams) {
-          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams)other);
+          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams other) {
-        if (other == com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.getDefaultInstance()) return this;
+      public Builder mergeFrom(
+          com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams other) {
+        if (other
+            == com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams.getDefaultInstance())
+          return this;
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -635,7 +640,9 @@ public final class MysqlxResultset {
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams) e.getUnfinishedMessage();
+          parsedMessage =
+              (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams)
+                  e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -644,6 +651,7 @@ public final class MysqlxResultset {
         }
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -656,30 +664,33 @@ public final class MysqlxResultset {
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:Mysqlx.Resultset.FetchDoneMoreOutParams)
     }
 
     // @@protoc_insertion_point(class_scope:Mysqlx.Resultset.FetchDoneMoreOutParams)
-    private static final com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams DEFAULT_INSTANCE;
+    private static final com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams
+        DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams();
     }
 
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams getDefaultInstance() {
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams
+        getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<FetchDoneMoreOutParams>
-        PARSER = new com.google.protobuf.AbstractParser<FetchDoneMoreOutParams>() {
-      @java.lang.Override
-      public FetchDoneMoreOutParams parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FetchDoneMoreOutParams(input, extensionRegistry);
-      }
-    };
+    @java.lang.Deprecated
+    public static final com.google.protobuf.Parser<FetchDoneMoreOutParams> PARSER =
+        new com.google.protobuf.AbstractParser<FetchDoneMoreOutParams>() {
+          @java.lang.Override
+          public FetchDoneMoreOutParams parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new FetchDoneMoreOutParams(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<FetchDoneMoreOutParams> parser() {
       return PARSER;
@@ -691,48 +702,49 @@ public final class MysqlxResultset {
     }
 
     @java.lang.Override
-    public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams getDefaultInstanceForType() {
+    public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreOutParams
+        getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
-  public interface FetchDoneMoreResultsetsOrBuilder extends
+  public interface FetchDoneMoreResultsetsOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:Mysqlx.Resultset.FetchDoneMoreResultsets)
-      com.google.protobuf.MessageOrBuilder {
-  }
+      com.google.protobuf.MessageOrBuilder {}
   /**
+   *
+   *
    * <pre>
-   **
-   *Resultset and out-params are finished, but more resultsets available
+   * *
+   * Resultset and out-params are finished, but more resultsets available
    * </pre>
    *
    * Protobuf type {@code Mysqlx.Resultset.FetchDoneMoreResultsets}
    */
-  public static final class FetchDoneMoreResultsets extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class FetchDoneMoreResultsets extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:Mysqlx.Resultset.FetchDoneMoreResultsets)
       FetchDoneMoreResultsetsOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use FetchDoneMoreResultsets.newBuilder() to construct.
     private FetchDoneMoreResultsets(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private FetchDoneMoreResultsets() {
-    }
+
+    private FetchDoneMoreResultsets() {}
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new FetchDoneMoreResultsets();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private FetchDoneMoreResultsets(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -751,39 +763,42 @@ public final class MysqlxResultset {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
               }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_fieldAccessorTable
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.class, com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.Builder.class);
+              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.class,
+              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.Builder.class);
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -795,8 +810,7 @@ public final class MysqlxResultset {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       unknownFields.writeTo(output);
     }
 
@@ -814,12 +828,13 @@ public final class MysqlxResultset {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets)) {
         return super.equals(obj);
       }
-      com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets other = (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets) obj;
+      com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets other =
+          (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets) obj;
 
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -838,87 +853,95 @@ public final class MysqlxResultset {
     }
 
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
-        com.google.protobuf.CodedInputStream input)
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets
+        parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets
+        parseDelimitedFrom(
+            java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
+    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets prototype) {
+
+    public static Builder newBuilder(
+        com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -928,45 +951,50 @@ public final class MysqlxResultset {
       return builder;
     }
     /**
+     *
+     *
      * <pre>
-     **
-     *Resultset and out-params are finished, but more resultsets available
+     * *
+     * Resultset and out-params are finished, but more resultsets available
      * </pre>
      *
      * Protobuf type {@code Mysqlx.Resultset.FetchDoneMoreResultsets}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:Mysqlx.Resultset.FetchDoneMoreResultsets)
         com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsetsOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.class, com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.class,
+                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.Builder.class);
       }
 
-      // Construct using com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.newBuilder()
+      // Construct using
+      // com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -974,13 +1002,14 @@ public final class MysqlxResultset {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor;
       }
 
       @java.lang.Override
-      public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets getDefaultInstanceForType() {
+      public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets
+          getDefaultInstanceForType() {
         return com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.getDefaultInstance();
       }
 
@@ -995,7 +1024,8 @@ public final class MysqlxResultset {
 
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets buildPartial() {
-        com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets result = new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets(this);
+        com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets result =
+            new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets(this);
         onBuilt();
         return result;
       }
@@ -1004,46 +1034,52 @@ public final class MysqlxResultset {
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets) {
-          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets)other);
+          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets other) {
-        if (other == com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.getDefaultInstance()) return this;
+      public Builder mergeFrom(
+          com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets other) {
+        if (other
+            == com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets.getDefaultInstance())
+          return this;
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1063,7 +1099,9 @@ public final class MysqlxResultset {
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets) e.getUnfinishedMessage();
+          parsedMessage =
+              (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets)
+                  e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1072,6 +1110,7 @@ public final class MysqlxResultset {
         }
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1084,30 +1123,33 @@ public final class MysqlxResultset {
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:Mysqlx.Resultset.FetchDoneMoreResultsets)
     }
 
     // @@protoc_insertion_point(class_scope:Mysqlx.Resultset.FetchDoneMoreResultsets)
-    private static final com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets DEFAULT_INSTANCE;
+    private static final com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets
+        DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets();
     }
 
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets getDefaultInstance() {
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets
+        getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<FetchDoneMoreResultsets>
-        PARSER = new com.google.protobuf.AbstractParser<FetchDoneMoreResultsets>() {
-      @java.lang.Override
-      public FetchDoneMoreResultsets parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FetchDoneMoreResultsets(input, extensionRegistry);
-      }
-    };
+    @java.lang.Deprecated
+    public static final com.google.protobuf.Parser<FetchDoneMoreResultsets> PARSER =
+        new com.google.protobuf.AbstractParser<FetchDoneMoreResultsets>() {
+          @java.lang.Override
+          public FetchDoneMoreResultsets parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new FetchDoneMoreResultsets(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<FetchDoneMoreResultsets> parser() {
       return PARSER;
@@ -1119,48 +1161,49 @@ public final class MysqlxResultset {
     }
 
     @java.lang.Override
-    public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets getDefaultInstanceForType() {
+    public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneMoreResultsets
+        getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
-  public interface FetchDoneOrBuilder extends
+  public interface FetchDoneOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:Mysqlx.Resultset.FetchDone)
-      com.google.protobuf.MessageOrBuilder {
-  }
+      com.google.protobuf.MessageOrBuilder {}
   /**
+   *
+   *
    * <pre>
-   **
-   *All resultsets are finished
+   * *
+   * All resultsets are finished
    * </pre>
    *
    * Protobuf type {@code Mysqlx.Resultset.FetchDone}
    */
-  public static final class FetchDone extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class FetchDone extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:Mysqlx.Resultset.FetchDone)
       FetchDoneOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use FetchDone.newBuilder() to construct.
     private FetchDone(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private FetchDone() {
-    }
+
+    private FetchDone() {}
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new FetchDone();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private FetchDone(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1179,39 +1222,42 @@ public final class MysqlxResultset {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
               }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDone_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_FetchDone_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDone_fieldAccessorTable
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_FetchDone_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.class, com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.Builder.class);
+              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.class,
+              com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.Builder.class);
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1223,8 +1269,7 @@ public final class MysqlxResultset {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       unknownFields.writeTo(output);
     }
 
@@ -1242,12 +1287,13 @@ public final class MysqlxResultset {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone)) {
         return super.equals(obj);
       }
-      com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone other = (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone) obj;
+      com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone other =
+          (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone) obj;
 
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -1266,87 +1312,93 @@ public final class MysqlxResultset {
     }
 
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
+
     public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -1356,28 +1408,33 @@ public final class MysqlxResultset {
       return builder;
     }
     /**
+     *
+     *
      * <pre>
-     **
-     *All resultsets are finished
+     * *
+     * All resultsets are finished
      * </pre>
      *
      * Protobuf type {@code Mysqlx.Resultset.FetchDone}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:Mysqlx.Resultset.FetchDone)
         com.mysql.cj.x.protobuf.MysqlxResultset.FetchDoneOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDone_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDone_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDone_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDone_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.class, com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.class,
+                com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.Builder.class);
       }
 
       // Construct using com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.newBuilder()
@@ -1385,16 +1442,15 @@ public final class MysqlxResultset {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -1402,9 +1458,9 @@ public final class MysqlxResultset {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchDone_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchDone_descriptor;
       }
 
       @java.lang.Override
@@ -1423,7 +1479,8 @@ public final class MysqlxResultset {
 
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone buildPartial() {
-        com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone result = new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone(this);
+        com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone result =
+            new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone(this);
         onBuilt();
         return result;
       }
@@ -1432,38 +1489,41 @@ public final class MysqlxResultset {
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone) {
-          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone)other);
+          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1471,7 +1531,8 @@ public final class MysqlxResultset {
       }
 
       public Builder mergeFrom(com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone other) {
-        if (other == com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.getDefaultInstance()) return this;
+        if (other == com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone.getDefaultInstance())
+          return this;
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1491,7 +1552,8 @@ public final class MysqlxResultset {
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone) e.getUnfinishedMessage();
+          parsedMessage =
+              (com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1500,6 +1562,7 @@ public final class MysqlxResultset {
         }
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1512,12 +1575,12 @@ public final class MysqlxResultset {
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:Mysqlx.Resultset.FetchDone)
     }
 
     // @@protoc_insertion_point(class_scope:Mysqlx.Resultset.FetchDone)
     private static final com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone();
     }
@@ -1526,16 +1589,17 @@ public final class MysqlxResultset {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<FetchDone>
-        PARSER = new com.google.protobuf.AbstractParser<FetchDone>() {
-      @java.lang.Override
-      public FetchDone parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FetchDone(input, extensionRegistry);
-      }
-    };
+    @java.lang.Deprecated
+    public static final com.google.protobuf.Parser<FetchDone> PARSER =
+        new com.google.protobuf.AbstractParser<FetchDone>() {
+          @java.lang.Override
+          public FetchDone parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new FetchDone(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<FetchDone> parser() {
       return PARSER;
@@ -1550,45 +1614,45 @@ public final class MysqlxResultset {
     public com.mysql.cj.x.protobuf.MysqlxResultset.FetchDone getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
-  public interface FetchSuspendedOrBuilder extends
+  public interface FetchSuspendedOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:Mysqlx.Resultset.FetchSuspended)
-      com.google.protobuf.MessageOrBuilder {
-  }
+      com.google.protobuf.MessageOrBuilder {}
   /**
+   *
+   *
    * <pre>
-   **
-   *Cursor is opened; still, the execution of PrepFetch or PrepExecute ended
+   * *
+   * Cursor is opened; still, the execution of PrepFetch or PrepExecute ended
    * </pre>
    *
    * Protobuf type {@code Mysqlx.Resultset.FetchSuspended}
    */
-  public static final class FetchSuspended extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class FetchSuspended extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:Mysqlx.Resultset.FetchSuspended)
       FetchSuspendedOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use FetchSuspended.newBuilder() to construct.
     private FetchSuspended(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private FetchSuspended() {
-    }
+
+    private FetchSuspended() {}
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new FetchSuspended();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private FetchSuspended(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1607,39 +1671,42 @@ public final class MysqlxResultset {
             case 0:
               done = true;
               break;
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
               }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchSuspended_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_FetchSuspended_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchSuspended_fieldAccessorTable
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_FetchSuspended_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.class, com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.Builder.class);
+              com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.class,
+              com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.Builder.class);
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1651,8 +1718,7 @@ public final class MysqlxResultset {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       unknownFields.writeTo(output);
     }
 
@@ -1670,12 +1736,13 @@ public final class MysqlxResultset {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended)) {
         return super.equals(obj);
       }
-      com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended other = (com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended) obj;
+      com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended other =
+          (com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended) obj;
 
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -1694,87 +1761,94 @@ public final class MysqlxResultset {
     }
 
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended prototype) {
+
+    public static Builder newBuilder(
+        com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -1784,28 +1858,33 @@ public final class MysqlxResultset {
       return builder;
     }
     /**
+     *
+     *
      * <pre>
-     **
-     *Cursor is opened; still, the execution of PrepFetch or PrepExecute ended
+     * *
+     * Cursor is opened; still, the execution of PrepFetch or PrepExecute ended
      * </pre>
      *
      * Protobuf type {@code Mysqlx.Resultset.FetchSuspended}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:Mysqlx.Resultset.FetchSuspended)
         com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspendedOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchSuspended_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchSuspended_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchSuspended_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchSuspended_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.class, com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.class,
+                com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.Builder.class);
       }
 
       // Construct using com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.newBuilder()
@@ -1813,16 +1892,15 @@ public final class MysqlxResultset {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -1830,9 +1908,9 @@ public final class MysqlxResultset {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_FetchSuspended_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_FetchSuspended_descriptor;
       }
 
       @java.lang.Override
@@ -1851,7 +1929,8 @@ public final class MysqlxResultset {
 
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended buildPartial() {
-        com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended result = new com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended(this);
+        com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended result =
+            new com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended(this);
         onBuilt();
         return result;
       }
@@ -1860,38 +1939,41 @@ public final class MysqlxResultset {
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended) {
-          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended)other);
+          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1899,7 +1981,8 @@ public final class MysqlxResultset {
       }
 
       public Builder mergeFrom(com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended other) {
-        if (other == com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.getDefaultInstance()) return this;
+        if (other == com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended.getDefaultInstance())
+          return this;
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1919,7 +2002,8 @@ public final class MysqlxResultset {
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended) e.getUnfinishedMessage();
+          parsedMessage =
+              (com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1928,6 +2012,7 @@ public final class MysqlxResultset {
         }
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1940,12 +2025,12 @@ public final class MysqlxResultset {
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:Mysqlx.Resultset.FetchSuspended)
     }
 
     // @@protoc_insertion_point(class_scope:Mysqlx.Resultset.FetchSuspended)
     private static final com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended();
     }
@@ -1954,16 +2039,17 @@ public final class MysqlxResultset {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<FetchSuspended>
-        PARSER = new com.google.protobuf.AbstractParser<FetchSuspended>() {
-      @java.lang.Override
-      public FetchSuspended parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new FetchSuspended(input, extensionRegistry);
-      }
-    };
+    @java.lang.Deprecated
+    public static final com.google.protobuf.Parser<FetchSuspended> PARSER =
+        new com.google.protobuf.AbstractParser<FetchSuspended>() {
+          @java.lang.Override
+          public FetchSuspended parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new FetchSuspended(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<FetchSuspended> parser() {
       return PARSER;
@@ -1978,557 +2064,628 @@ public final class MysqlxResultset {
     public com.mysql.cj.x.protobuf.MysqlxResultset.FetchSuspended getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
-  public interface ColumnMetaDataOrBuilder extends
+  public interface ColumnMetaDataOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:Mysqlx.Resultset.ColumnMetaData)
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     *
+     *
      * <pre>
-     ** datatype of the field in a row 
+     * * datatype of the field in a row
      * </pre>
      *
      * <code>required .Mysqlx.Resultset.ColumnMetaData.FieldType type = 1;</code>
+     *
      * @return Whether the type field is set.
      */
     boolean hasType();
     /**
+     *
+     *
      * <pre>
-     ** datatype of the field in a row 
+     * * datatype of the field in a row
      * </pre>
      *
      * <code>required .Mysqlx.Resultset.ColumnMetaData.FieldType type = 1;</code>
+     *
      * @return The type.
      */
     com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType getType();
 
     /**
+     *
+     *
      * <pre>
-     ** name of the column 
+     * * name of the column
      * </pre>
      *
      * <code>optional bytes name = 2;</code>
+     *
      * @return Whether the name field is set.
      */
     boolean hasName();
     /**
+     *
+     *
      * <pre>
-     ** name of the column 
+     * * name of the column
      * </pre>
      *
      * <code>optional bytes name = 2;</code>
+     *
      * @return The name.
      */
     com.google.protobuf.ByteString getName();
 
     /**
+     *
+     *
      * <pre>
-     ** name of the column before an alias was applied 
+     * * name of the column before an alias was applied
      * </pre>
      *
      * <code>optional bytes original_name = 3;</code>
+     *
      * @return Whether the originalName field is set.
      */
     boolean hasOriginalName();
     /**
+     *
+     *
      * <pre>
-     ** name of the column before an alias was applied 
+     * * name of the column before an alias was applied
      * </pre>
      *
      * <code>optional bytes original_name = 3;</code>
+     *
      * @return The originalName.
      */
     com.google.protobuf.ByteString getOriginalName();
 
     /**
+     *
+     *
      * <pre>
-     ** name of the table the column originates from 
+     * * name of the table the column originates from
      * </pre>
      *
      * <code>optional bytes table = 4;</code>
+     *
      * @return Whether the table field is set.
      */
     boolean hasTable();
     /**
+     *
+     *
      * <pre>
-     ** name of the table the column originates from 
+     * * name of the table the column originates from
      * </pre>
      *
      * <code>optional bytes table = 4;</code>
+     *
      * @return The table.
      */
     com.google.protobuf.ByteString getTable();
 
     /**
+     *
+     *
      * <pre>
-     ** name of the table the column originates from before an alias was applied 
+     * * name of the table the column originates from before an alias was applied
      * </pre>
      *
      * <code>optional bytes original_table = 5;</code>
+     *
      * @return Whether the originalTable field is set.
      */
     boolean hasOriginalTable();
     /**
+     *
+     *
      * <pre>
-     ** name of the table the column originates from before an alias was applied 
+     * * name of the table the column originates from before an alias was applied
      * </pre>
      *
      * <code>optional bytes original_table = 5;</code>
+     *
      * @return The originalTable.
      */
     com.google.protobuf.ByteString getOriginalTable();
 
     /**
+     *
+     *
      * <pre>
-     ** schema the column originates from 
+     * * schema the column originates from
      * </pre>
      *
      * <code>optional bytes schema = 6;</code>
+     *
      * @return Whether the schema field is set.
      */
     boolean hasSchema();
     /**
+     *
+     *
      * <pre>
-     ** schema the column originates from 
+     * * schema the column originates from
      * </pre>
      *
      * <code>optional bytes schema = 6;</code>
+     *
      * @return The schema.
      */
     com.google.protobuf.ByteString getSchema();
 
     /**
+     *
+     *
      * <pre>
-     ** catalog the schema originates from
-     *&#64;note
-     *As there is currently no support for catalogs in MySQL,
-     *don't expect this field to be set. In the MySQL C/S
-     *protocol the field had the value ``def`` all the time 
+     * * catalog the schema originates from
+     * &#64;note
+     * As there is currently no support for catalogs in MySQL,
+     * don't expect this field to be set. In the MySQL C/S
+     * protocol the field had the value ``def`` all the time
      * </pre>
      *
      * <code>optional bytes catalog = 7;</code>
+     *
      * @return Whether the catalog field is set.
      */
     boolean hasCatalog();
     /**
+     *
+     *
      * <pre>
-     ** catalog the schema originates from
-     *&#64;note
-     *As there is currently no support for catalogs in MySQL,
-     *don't expect this field to be set. In the MySQL C/S
-     *protocol the field had the value ``def`` all the time 
+     * * catalog the schema originates from
+     * &#64;note
+     * As there is currently no support for catalogs in MySQL,
+     * don't expect this field to be set. In the MySQL C/S
+     * protocol the field had the value ``def`` all the time
      * </pre>
      *
      * <code>optional bytes catalog = 7;</code>
+     *
      * @return The catalog.
      */
     com.google.protobuf.ByteString getCatalog();
 
     /**
      * <code>optional uint64 collation = 8;</code>
+     *
      * @return Whether the collation field is set.
      */
     boolean hasCollation();
     /**
      * <code>optional uint64 collation = 8;</code>
+     *
      * @return The collation.
      */
     long getCollation();
 
     /**
+     *
+     *
      * <pre>
-     ** displayed factional decimal digits for floating point and
-     *fixed point numbers 
+     * * displayed factional decimal digits for floating point and
+     * fixed point numbers
      * </pre>
      *
      * <code>optional uint32 fractional_digits = 9;</code>
+     *
      * @return Whether the fractionalDigits field is set.
      */
     boolean hasFractionalDigits();
     /**
+     *
+     *
      * <pre>
-     ** displayed factional decimal digits for floating point and
-     *fixed point numbers 
+     * * displayed factional decimal digits for floating point and
+     * fixed point numbers
      * </pre>
      *
      * <code>optional uint32 fractional_digits = 9;</code>
+     *
      * @return The fractionalDigits.
      */
     int getFractionalDigits();
 
     /**
+     *
+     *
      * <pre>
-     ** maximum count of displayable characters of .type 
+     * * maximum count of displayable characters of .type
      * </pre>
      *
      * <code>optional uint32 length = 10;</code>
+     *
      * @return Whether the length field is set.
      */
     boolean hasLength();
     /**
+     *
+     *
      * <pre>
-     ** maximum count of displayable characters of .type 
+     * * maximum count of displayable characters of .type
      * </pre>
      *
      * <code>optional uint32 length = 10;</code>
+     *
      * @return The length.
      */
     int getLength();
 
     /**
+     *
+     *
      * <pre>
-     ** ``.type`` specific flags
-     *| Type    | Value  | Description  |
-     *|---------|--------|--------------|
-     *| UINT    | 0x0001 | zerofill     |
-     *| DOUBLE  | 0x0001 | unsigned     |
-     *| FLOAT   | 0x0001 | unsigned     |
-     *| DECIMAL | 0x0001 | unsigned     |
-     *| BYTES   | 0x0001 | rightpad     |
-     *| Value  | Description     |
-     *|--------|-----------------|
-     *| 0x0010 | NOT&#92;_NULL       |
-     *| 0x0020 | PRIMARY&#92;_KEY    |
-     *| 0x0040 | UNIQUE&#92;_KEY     |
-     *| 0x0080 | MULTIPLE&#92;_KEY   |
-     *| 0x0100 | AUTO&#92;_INCREMENT |
-     *default: 0 
+     * * ``.type`` specific flags
+     * | Type    | Value  | Description  |
+     * |---------|--------|--------------|
+     * | UINT    | 0x0001 | zerofill     |
+     * | DOUBLE  | 0x0001 | unsigned     |
+     * | FLOAT   | 0x0001 | unsigned     |
+     * | DECIMAL | 0x0001 | unsigned     |
+     * | BYTES   | 0x0001 | rightpad     |
+     * | Value  | Description     |
+     * |--------|-----------------|
+     * | 0x0010 | NOT&#92;_NULL       |
+     * | 0x0020 | PRIMARY&#92;_KEY    |
+     * | 0x0040 | UNIQUE&#92;_KEY     |
+     * | 0x0080 | MULTIPLE&#92;_KEY   |
+     * | 0x0100 | AUTO&#92;_INCREMENT |
+     * default: 0
      * </pre>
      *
      * <code>optional uint32 flags = 11;</code>
+     *
      * @return Whether the flags field is set.
      */
     boolean hasFlags();
     /**
+     *
+     *
      * <pre>
-     ** ``.type`` specific flags
-     *| Type    | Value  | Description  |
-     *|---------|--------|--------------|
-     *| UINT    | 0x0001 | zerofill     |
-     *| DOUBLE  | 0x0001 | unsigned     |
-     *| FLOAT   | 0x0001 | unsigned     |
-     *| DECIMAL | 0x0001 | unsigned     |
-     *| BYTES   | 0x0001 | rightpad     |
-     *| Value  | Description     |
-     *|--------|-----------------|
-     *| 0x0010 | NOT&#92;_NULL       |
-     *| 0x0020 | PRIMARY&#92;_KEY    |
-     *| 0x0040 | UNIQUE&#92;_KEY     |
-     *| 0x0080 | MULTIPLE&#92;_KEY   |
-     *| 0x0100 | AUTO&#92;_INCREMENT |
-     *default: 0 
+     * * ``.type`` specific flags
+     * | Type    | Value  | Description  |
+     * |---------|--------|--------------|
+     * | UINT    | 0x0001 | zerofill     |
+     * | DOUBLE  | 0x0001 | unsigned     |
+     * | FLOAT   | 0x0001 | unsigned     |
+     * | DECIMAL | 0x0001 | unsigned     |
+     * | BYTES   | 0x0001 | rightpad     |
+     * | Value  | Description     |
+     * |--------|-----------------|
+     * | 0x0010 | NOT&#92;_NULL       |
+     * | 0x0020 | PRIMARY&#92;_KEY    |
+     * | 0x0040 | UNIQUE&#92;_KEY     |
+     * | 0x0080 | MULTIPLE&#92;_KEY   |
+     * | 0x0100 | AUTO&#92;_INCREMENT |
+     * default: 0
      * </pre>
      *
      * <code>optional uint32 flags = 11;</code>
+     *
      * @return The flags.
      */
     int getFlags();
 
     /**
+     *
+     *
      * <pre>
-     ** a hint about the higher-level encoding of a BYTES field
-     *| Type   | Value  | Description             |
-     *|--------|--------|-------------------------|
-     *| BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
-     *| BYTES  | 0x0002 | JSON (text encoding)    |
-     *| BYTES  | 0x0003 | XML (text encoding)     |
-     *&#64;note
-     *This list isn't comprehensive. As a guideline: the field's
-     *value is expected to pass a validator check on client
-     *and server if this field is set. If the server adds more
-     *internal data types that rely on BLOB storage like image
-     *manipulation, seeking into complex types in BLOBs, and
-     *more types will be added 
+     * * a hint about the higher-level encoding of a BYTES field
+     * | Type   | Value  | Description             |
+     * |--------|--------|-------------------------|
+     * | BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
+     * | BYTES  | 0x0002 | JSON (text encoding)    |
+     * | BYTES  | 0x0003 | XML (text encoding)     |
+     * &#64;note
+     * This list isn't comprehensive. As a guideline: the field's
+     * value is expected to pass a validator check on client
+     * and server if this field is set. If the server adds more
+     * internal data types that rely on BLOB storage like image
+     * manipulation, seeking into complex types in BLOBs, and
+     * more types will be added
      * </pre>
      *
      * <code>optional uint32 content_type = 12;</code>
+     *
      * @return Whether the contentType field is set.
      */
     boolean hasContentType();
     /**
+     *
+     *
      * <pre>
-     ** a hint about the higher-level encoding of a BYTES field
-     *| Type   | Value  | Description             |
-     *|--------|--------|-------------------------|
-     *| BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
-     *| BYTES  | 0x0002 | JSON (text encoding)    |
-     *| BYTES  | 0x0003 | XML (text encoding)     |
-     *&#64;note
-     *This list isn't comprehensive. As a guideline: the field's
-     *value is expected to pass a validator check on client
-     *and server if this field is set. If the server adds more
-     *internal data types that rely on BLOB storage like image
-     *manipulation, seeking into complex types in BLOBs, and
-     *more types will be added 
+     * * a hint about the higher-level encoding of a BYTES field
+     * | Type   | Value  | Description             |
+     * |--------|--------|-------------------------|
+     * | BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
+     * | BYTES  | 0x0002 | JSON (text encoding)    |
+     * | BYTES  | 0x0003 | XML (text encoding)     |
+     * &#64;note
+     * This list isn't comprehensive. As a guideline: the field's
+     * value is expected to pass a validator check on client
+     * and server if this field is set. If the server adds more
+     * internal data types that rely on BLOB storage like image
+     * manipulation, seeking into complex types in BLOBs, and
+     * more types will be added
      * </pre>
      *
      * <code>optional uint32 content_type = 12;</code>
+     *
      * @return The contentType.
      */
     int getContentType();
   }
   /**
+   *
+   *
    * <pre>
-   **
-   *Meta data of a column
-   *&#64;note
-   *The encoding used for the different ``bytes`` fields in the
-   *meta data is externally controlled. See also:
-   *https://dev.mysql.com/doc/refman/5.0/en/charset-connection.html
-   *&#64;par
-   *&#64;note
-   *The server may not set the ``original_{table|name}`` fields
-   *if they are equal to the plain ``{table|name}`` field.
-   *&#64;par
-   *&#64;note
-   *A client has to reconstruct it like:
-   *&#64;code{py}
-   *if .original_name is empty and .name is not empty:
-   *.original_name = .name
-   *if .original_table is empty and .table is not empty:
-   *.original_table = .table
-   *&#64;endcode
-   *&#64;par
-   *&#64;note
-   *``Compact metadata format`` can be requested by the client.
-   *In that case, only ``.type`` is set and all other fields are  empty.
-   *Expected data type of Mysqlx.Resultset.Row per SQL Type for
-   *non-NULL values:
-   *| SQL Type          | .type     | .length | .frac&#92;_dig | .flags | .charset |
-   *|-------------------|-----------|---------|------------|--------|----------|
-   *| TINY              | SINT      | x       |            |        |          |
-   *| TINY UNSIGNED     | UINT      | x       |            | x      |          |
-   *| SHORT             | SINT      | x       |            |        |          |
-   *| SHORT UNSIGNED    | UINT      | x       |            | x      |          |
-   *| INT24             | SINT      | x       |            |        |          |
-   *| INT24 UNSIGNED    | UINT      | x       |            | x      |          |
-   *| INT               | SINT      | x       |            |        |          |
-   *| INT UNSIGNED      | UINT      | x       |            | x      |          |
-   *| LONGLONG          | SINT      | x       |            |        |          |
-   *| LONGLONG UNSIGNED | UINT      | x       |            | x      |          |
-   *| DOUBLE            | DOUBLE    | x       | x          | x      |          |
-   *| FLOAT             | FLOAT     | x       | x          | x      |          |
-   *| DECIMAL           | DECIMAL   | x       | x          | x      |          |
-   *| VARCHAR,CHAR,...  | BYTES     | x       |            | x      | x        |
-   *| GEOMETRY          | BYTES     |         |            |        |          |
-   *| TIME              | TIME      | x       |            |        |          |
-   *| DATE              | DATETIME  | x       |            |        |          |
-   *| DATETIME          | DATETIME  | x       |            |        |          |
-   *| YEAR              | UINT      | x       |            | x      |          |
-   *| TIMESTAMP         | DATETIME  | x       |            |        |          |
-   *| SET               | SET       |         |            |        | x        |
-   *| ENUM              | ENUM      |         |            |        | x        |
-   *| NULL              | BYTES     |         |            |        |          |
-   *| BIT               | BIT       | x       |            |        |          |
-   *&#64;note
-   *The SQL "NULL" value is sent as an empty field value in
-   *&#64;ref Mysqlx::Resultset::Row.
-   *&#64;par Tip
-   *The protobuf encoding of primitive data types is described in
-   *https://developers.google.com/protocol-buffers/docs/encoding
-   *+ SINT
-   *- ``.length`` &#64;n
-   *Maximum number of displayable decimal digits (including
-   *minus sign) of the type.
-   *&#64;note
-   *The valid range is 0-255, but usually you'll see 1-20.
-   *| SQL Type         | Maximum Digits per Type |
-   *|------------------|-------------------------|
-   *| TINY SIGNED      | 4                       |
-   *| SHORT SIGNED     | 6                       |
-   *| INT24 SIGNED     | 8                       |
-   *| INT SIGNED       | 11                      |
-   *| LONGLONG SIGNED  | 20                      |
-   *&#64;par Tip
-   *Definition of ``M`` are in
-   *https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html.
-   *- ``value``&#64;n
-   *Variable length encoded signed 64 integer.
-   *+ UINT
-   *- ``.flags &amp; 1`` (zerofill) &#64;n
-   *The client has to left pad with 0's up to .length.
-   *- ``.length`` &#64;n
-   *Maximum number of displayable decimal digits of the
-   *type.
-   *&#64;note
-   *The valid range is 0-255, but usually you'll see
-   *1-20.
-   *| SQL Type             | max digits per type |
-   *|----------------------|---------------------|
-   *| TINY UNSIGNED        | 3                   |
-   *| SHORT UNSIGNED       | 5                   |
-   *| INT24 UNSIGNED       | 8                   |
-   *| INT UNSIGNED         | 10                  |
-   *| LONGLONG UNSIGNED    | 20                  |
-   *&#64;par Tip
-   *Definition of ``M`` are in
-   *https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html.
-   *- ``value`` &#64;n
-   *Variable length encoded unsigned 64 integer.
-   *+ BIT
-   *- ``.length`` &#64;n
-   *Maximum number of displayable binary digits.
-   *&#64;note
-   *The valid range for M of the ``BIT`` type is 1 - 64.
-   *&#64;par Tip
-   *https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html
-   *- ``value`` &#64;n
-   *Variable length encoded unsigned 64 integer.
-   *+ DOUBLE
-   *- ``.length`` &#64;n
-   *Maximum number of displayable decimal digits (including
-   *the decimal point and ``.fractional_digits``).
-   *- ``.fractional_digits`` &#64;n
-   *Maximum number of displayable decimal digits following
-   *the decimal point.
-   *- ``value``&#64;n
-   *Encoded as protobuf's 'double'.
-   *+ FLOAT
-   *- ``.length``&#64;n
-   *Maximum number of displayable decimal digits (including
-   *the decimal point and ``.fractional_digits``).
-   *- ``.fractional_digits``&#64;n
-   *Maximum number of displayable decimal digits following
-   *the decimal point.
-   *- ``value``&#64;n
-   *Encoded as protobuf's 'float'.
-   *+ BYTES, ENUM
-   *&#64;note
-   *BYTES is used for all opaque byte strings that may have a charset:
-   *-  TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB
-   *-  TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT
-   *-  VARCHAR, VARBINARY
-   *-  CHAR, BINARY
-   *-  ENUM
-   *- ``.length``&#64;n
-   *Maximum length of characters of the underlying type.
-   *- ``.flags &amp; 1`` (rightpad) &#64;n
-   *If the length of the field is less than ``.length``, the
-   *receiver is supposed to add padding characters to the
-   *right end of the string. If the ``.charset`` is
-   *"binary", the padding character is ``0x00``, otherwise
-   *it is a space character as defined by that character
-   *set.
-   *| SQL Type      | .length  | .charset  | .flags   |
-   *|---------------|----------|-----------|----------|
-   *| TINYBLOB      | 256      | binary    |          |
-   *| BLOB          | 65535    | binary    |          |
-   *| VARCHAR(32)   | 32       | utf8      |          |
-   *| VARBINARY(32) | 32       | utf8&#92;_bin |          |
-   *| BINARY(32)    | 32       | binary    | rightpad |
-   *| CHAR(32)      | 32       | utf8      | rightpad |
-   *- ``value``
-   *Sequence of bytes with added one extra ``0x00`` byte at
-   *the end. To obtain the original string, the extra
-   *``0x00`` should be removed. The length of the string can
-   *be acquired with protobuf's field ``length()`` method:
-   *``length of sequence-of-bytes = length-of-field - 1``
-   *&#64;note
-   *The extra byte allows to distinguish between a NULL
-   *and empty byte sequence.
-   *+ TIME
-   *A time value.
-   *- ``value``&#64;n
-   *The following bytes sequence:
-   *``negate [ hour [ minutes [ seconds [ useconds ]]]]``
-   *-  negate - one byte, should be one of: 0x00 for "+",
-   *0x01 for "-"
-   *-  hour - optional variable length encoded unsigned64
-   *value for the hour
-   *-  minutes - optional variable length encoded unsigned64
-   *value for the minutes
-   *-  seconds - optional variable length encoded unsigned64
-   *value for the seconds
-   *-  useconds - optional variable length encoded
-   *unsigned64 value for the microseconds
-   *&#64;par Tip
-   *The protobuf encoding in
-   *https://developers.google.com/protocol-buffers/docs/encoding.
-   *&#64;note
-   *Hour, minutes, seconds, and useconds are optional if
-   *all the values to the right are 0.
-   *Example: ``0x00 -&gt; +00:00:00.000000``
-   *+ DATETIME
-   *A date or date and time value.
-   *- ``value`` &#64;n
-   *A sequence of variants, arranged as follows:
-   *``| year | month | day | [ | hour | [ | minutes | [ | seconds | [ | useconds | ]]]]``
-   *-  year - variable length encoded unsigned64 value for
-   *the year
-   *-  month - variable length encoded unsigned64 value for
-   *the month
-   *-  day - variable length encoded unsigned64 value for
-   *the day
-   *-  hour - optional variable length encoded unsigned64
-   *value for the hour
-   *-  minutes - optional variable length encoded unsigned64
-   *value for the minutes
-   *-  seconds - optional variable length encoded unsigned64
-   *value for the seconds
-   *-  useconds - optional variable length encoded
-   *unsigned64 value for the microseconds
-   *&#64;note
-   *Hour, minutes, seconds, useconds are optional if all
-   *the values to the right are 0.
-   *- ``.flags``&#64;n
-   *| Name          | Position |
-   *|---------------|----------|
-   *| is&#92;_timestamp | 1        |
-   *+ DECIMAL
-   *An arbitrary length number. The number is encoded as a
-   *single byte indicating the position of the decimal point
-   *followed by the Packed BCD encoded number. Packed BCD is
-   *used to simplify conversion to and from strings and other
-   *native arbitrary precision math data types. See also: packed
-   *BCD in https://en.wikipedia.org/wiki/Binary-coded_decimal
-   *- ``.length``
-   *Maximum number of displayable decimal digits
-   *(*excluding* the decimal point and sign, but including
-   *``.fractional_digits``).
-   *&#64;note
-   *Should be in the range of 1 - 65.
-   *- ``.fractional_digits``
-   *The decimal digits to display out of length.
-   *&#64;note
-   *Should be in the range of 0 - 30.
-   *``value``
-   *The following bytes sequence:
-   *``scale | BCD+ sign [0x00]?``
-   *-  scale - 8bit scale value (number of decimal digit after the '.')
-   *-  BCD - BCD encoded digits (4 bits for each digit)
-   *-  sign - sign encoded on 4 bits (0xc = "+", 0xd = "-")
-   *-  0x0 - last 4bits if length(digits) % 2 == 0
-   *Example: ``x04 0x12 0x34 0x01
-   *0xd0 -&gt; -12.3401``
-   *+ SET
-   *A list of strings representing a SET of values.
-   *- ``value``&#64;n
-   *A sequence of 0 or more of protobuf's bytes (length
-   *prepended octets) or one of the special sequences with a
-   *predefined meaning listed below.
-   *Example (length of the bytes array shown in brackets):
-   *-  ``[0]`` - the NULL value
-   *-  ``[1] 0x00`` - a set containing a blank string ''
-   *-  ``[1] 0x01`` - this would be an invalid value,
-   *but is to be treated as the empty set
-   *-  ``[2] 0x01 0x00`` - a set with a single item, which is the '0'
-   *character
-   *-  ``[8] 0x03 F O O 0x03 B A R`` - a set with 2 items: FOO,BAR
+   * *
+   * Meta data of a column
+   * &#64;note
+   * The encoding used for the different ``bytes`` fields in the
+   * meta data is externally controlled. See also:
+   * https://dev.mysql.com/doc/refman/5.0/en/charset-connection.html
+   * &#64;par
+   * &#64;note
+   * The server may not set the ``original_{table|name}`` fields
+   * if they are equal to the plain ``{table|name}`` field.
+   * &#64;par
+   * &#64;note
+   * A client has to reconstruct it like:
+   * &#64;code{py}
+   * if .original_name is empty and .name is not empty:
+   * .original_name = .name
+   * if .original_table is empty and .table is not empty:
+   * .original_table = .table
+   * &#64;endcode
+   * &#64;par
+   * &#64;note
+   * ``Compact metadata format`` can be requested by the client.
+   * In that case, only ``.type`` is set and all other fields are  empty.
+   * Expected data type of Mysqlx.Resultset.Row per SQL Type for
+   * non-NULL values:
+   * | SQL Type          | .type     | .length | .frac&#92;_dig | .flags | .charset |
+   * |-------------------|-----------|---------|------------|--------|----------|
+   * | TINY              | SINT      | x       |            |        |          |
+   * | TINY UNSIGNED     | UINT      | x       |            | x      |          |
+   * | SHORT             | SINT      | x       |            |        |          |
+   * | SHORT UNSIGNED    | UINT      | x       |            | x      |          |
+   * | INT24             | SINT      | x       |            |        |          |
+   * | INT24 UNSIGNED    | UINT      | x       |            | x      |          |
+   * | INT               | SINT      | x       |            |        |          |
+   * | INT UNSIGNED      | UINT      | x       |            | x      |          |
+   * | LONGLONG          | SINT      | x       |            |        |          |
+   * | LONGLONG UNSIGNED | UINT      | x       |            | x      |          |
+   * | DOUBLE            | DOUBLE    | x       | x          | x      |          |
+   * | FLOAT             | FLOAT     | x       | x          | x      |          |
+   * | DECIMAL           | DECIMAL   | x       | x          | x      |          |
+   * | VARCHAR,CHAR,...  | BYTES     | x       |            | x      | x        |
+   * | GEOMETRY          | BYTES     |         |            |        |          |
+   * | TIME              | TIME      | x       |            |        |          |
+   * | DATE              | DATETIME  | x       |            |        |          |
+   * | DATETIME          | DATETIME  | x       |            |        |          |
+   * | YEAR              | UINT      | x       |            | x      |          |
+   * | TIMESTAMP         | DATETIME  | x       |            |        |          |
+   * | SET               | SET       |         |            |        | x        |
+   * | ENUM              | ENUM      |         |            |        | x        |
+   * | NULL              | BYTES     |         |            |        |          |
+   * | BIT               | BIT       | x       |            |        |          |
+   * &#64;note
+   * The SQL "NULL" value is sent as an empty field value in
+   * &#64;ref Mysqlx::Resultset::Row.
+   * &#64;par Tip
+   * The protobuf encoding of primitive data types is described in
+   * https://developers.google.com/protocol-buffers/docs/encoding
+   * + SINT
+   * - ``.length`` &#64;n
+   * Maximum number of displayable decimal digits (including
+   * minus sign) of the type.
+   * &#64;note
+   * The valid range is 0-255, but usually you'll see 1-20.
+   * | SQL Type         | Maximum Digits per Type |
+   * |------------------|-------------------------|
+   * | TINY SIGNED      | 4                       |
+   * | SHORT SIGNED     | 6                       |
+   * | INT24 SIGNED     | 8                       |
+   * | INT SIGNED       | 11                      |
+   * | LONGLONG SIGNED  | 20                      |
+   * &#64;par Tip
+   * Definition of ``M`` are in
+   * https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html.
+   * - ``value``&#64;n
+   * Variable length encoded signed 64 integer.
+   * + UINT
+   * - ``.flags &amp; 1`` (zerofill) &#64;n
+   * The client has to left pad with 0's up to .length.
+   * - ``.length`` &#64;n
+   * Maximum number of displayable decimal digits of the
+   * type.
+   * &#64;note
+   * The valid range is 0-255, but usually you'll see
+   * 1-20.
+   * | SQL Type             | max digits per type |
+   * |----------------------|---------------------|
+   * | TINY UNSIGNED        | 3                   |
+   * | SHORT UNSIGNED       | 5                   |
+   * | INT24 UNSIGNED       | 8                   |
+   * | INT UNSIGNED         | 10                  |
+   * | LONGLONG UNSIGNED    | 20                  |
+   * &#64;par Tip
+   * Definition of ``M`` are in
+   * https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html.
+   * - ``value`` &#64;n
+   * Variable length encoded unsigned 64 integer.
+   * + BIT
+   * - ``.length`` &#64;n
+   * Maximum number of displayable binary digits.
+   * &#64;note
+   * The valid range for M of the ``BIT`` type is 1 - 64.
+   * &#64;par Tip
+   * https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html
+   * - ``value`` &#64;n
+   * Variable length encoded unsigned 64 integer.
+   * + DOUBLE
+   * - ``.length`` &#64;n
+   * Maximum number of displayable decimal digits (including
+   * the decimal point and ``.fractional_digits``).
+   * - ``.fractional_digits`` &#64;n
+   * Maximum number of displayable decimal digits following
+   * the decimal point.
+   * - ``value``&#64;n
+   * Encoded as protobuf's 'double'.
+   * + FLOAT
+   * - ``.length``&#64;n
+   * Maximum number of displayable decimal digits (including
+   * the decimal point and ``.fractional_digits``).
+   * - ``.fractional_digits``&#64;n
+   * Maximum number of displayable decimal digits following
+   * the decimal point.
+   * - ``value``&#64;n
+   * Encoded as protobuf's 'float'.
+   * + BYTES, ENUM
+   * &#64;note
+   * BYTES is used for all opaque byte strings that may have a charset:
+   * -  TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB
+   * -  TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT
+   * -  VARCHAR, VARBINARY
+   * -  CHAR, BINARY
+   * -  ENUM
+   * - ``.length``&#64;n
+   * Maximum length of characters of the underlying type.
+   * - ``.flags &amp; 1`` (rightpad) &#64;n
+   * If the length of the field is less than ``.length``, the
+   * receiver is supposed to add padding characters to the
+   * right end of the string. If the ``.charset`` is
+   * "binary", the padding character is ``0x00``, otherwise
+   * it is a space character as defined by that character
+   * set.
+   * | SQL Type      | .length  | .charset  | .flags   |
+   * |---------------|----------|-----------|----------|
+   * | TINYBLOB      | 256      | binary    |          |
+   * | BLOB          | 65535    | binary    |          |
+   * | VARCHAR(32)   | 32       | utf8      |          |
+   * | VARBINARY(32) | 32       | utf8&#92;_bin |          |
+   * | BINARY(32)    | 32       | binary    | rightpad |
+   * | CHAR(32)      | 32       | utf8      | rightpad |
+   * - ``value``
+   * Sequence of bytes with added one extra ``0x00`` byte at
+   * the end. To obtain the original string, the extra
+   * ``0x00`` should be removed. The length of the string can
+   * be acquired with protobuf's field ``length()`` method:
+   * ``length of sequence-of-bytes = length-of-field - 1``
+   * &#64;note
+   * The extra byte allows to distinguish between a NULL
+   * and empty byte sequence.
+   * + TIME
+   * A time value.
+   * - ``value``&#64;n
+   * The following bytes sequence:
+   * ``negate [ hour [ minutes [ seconds [ useconds ]]]]``
+   * -  negate - one byte, should be one of: 0x00 for "+",
+   * 0x01 for "-"
+   * -  hour - optional variable length encoded unsigned64
+   * value for the hour
+   * -  minutes - optional variable length encoded unsigned64
+   * value for the minutes
+   * -  seconds - optional variable length encoded unsigned64
+   * value for the seconds
+   * -  useconds - optional variable length encoded
+   * unsigned64 value for the microseconds
+   * &#64;par Tip
+   * The protobuf encoding in
+   * https://developers.google.com/protocol-buffers/docs/encoding.
+   * &#64;note
+   * Hour, minutes, seconds, and useconds are optional if
+   * all the values to the right are 0.
+   * Example: ``0x00 -&gt; +00:00:00.000000``
+   * + DATETIME
+   * A date or date and time value.
+   * - ``value`` &#64;n
+   * A sequence of variants, arranged as follows:
+   * ``| year | month | day | [ | hour | [ | minutes | [ | seconds | [ | useconds | ]]]]``
+   * -  year - variable length encoded unsigned64 value for
+   * the year
+   * -  month - variable length encoded unsigned64 value for
+   * the month
+   * -  day - variable length encoded unsigned64 value for
+   * the day
+   * -  hour - optional variable length encoded unsigned64
+   * value for the hour
+   * -  minutes - optional variable length encoded unsigned64
+   * value for the minutes
+   * -  seconds - optional variable length encoded unsigned64
+   * value for the seconds
+   * -  useconds - optional variable length encoded
+   * unsigned64 value for the microseconds
+   * &#64;note
+   * Hour, minutes, seconds, useconds are optional if all
+   * the values to the right are 0.
+   * - ``.flags``&#64;n
+   * | Name          | Position |
+   * |---------------|----------|
+   * | is&#92;_timestamp | 1        |
+   * + DECIMAL
+   * An arbitrary length number. The number is encoded as a
+   * single byte indicating the position of the decimal point
+   * followed by the Packed BCD encoded number. Packed BCD is
+   * used to simplify conversion to and from strings and other
+   * native arbitrary precision math data types. See also: packed
+   * BCD in https://en.wikipedia.org/wiki/Binary-coded_decimal
+   * - ``.length``
+   * Maximum number of displayable decimal digits
+   * (*excluding* the decimal point and sign, but including
+   * ``.fractional_digits``).
+   * &#64;note
+   * Should be in the range of 1 - 65.
+   * - ``.fractional_digits``
+   * The decimal digits to display out of length.
+   * &#64;note
+   * Should be in the range of 0 - 30.
+   * ``value``
+   * The following bytes sequence:
+   * ``scale | BCD+ sign [0x00]?``
+   * -  scale - 8bit scale value (number of decimal digit after the '.')
+   * -  BCD - BCD encoded digits (4 bits for each digit)
+   * -  sign - sign encoded on 4 bits (0xc = "+", 0xd = "-")
+   * -  0x0 - last 4bits if length(digits) % 2 == 0
+   * Example: ``x04 0x12 0x34 0x01
+   * 0xd0 -&gt; -12.3401``
+   * + SET
+   * A list of strings representing a SET of values.
+   * - ``value``&#64;n
+   * A sequence of 0 or more of protobuf's bytes (length
+   * prepended octets) or one of the special sequences with a
+   * predefined meaning listed below.
+   * Example (length of the bytes array shown in brackets):
+   * -  ``[0]`` - the NULL value
+   * -  ``[1] 0x00`` - a set containing a blank string ''
+   * -  ``[1] 0x01`` - this would be an invalid value,
+   * but is to be treated as the empty set
+   * -  ``[2] 0x01 0x00`` - a set with a single item, which is the '0'
+   * character
+   * -  ``[8] 0x03 F O O 0x03 B A R`` - a set with 2 items: FOO,BAR
    * </pre>
    *
    * Protobuf type {@code Mysqlx.Resultset.ColumnMetaData}
    */
-  public static final class ColumnMetaData extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class ColumnMetaData extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:Mysqlx.Resultset.ColumnMetaData)
       ColumnMetaDataOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use ColumnMetaData.newBuilder() to construct.
     private ColumnMetaData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private ColumnMetaData() {
       type_ = 1;
       name_ = com.google.protobuf.ByteString.EMPTY;
@@ -2541,16 +2698,15 @@ public final class MysqlxResultset {
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new ColumnMetaData();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private ColumnMetaData(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2570,201 +2726,169 @@ public final class MysqlxResultset {
             case 0:
               done = true;
               break;
-            case 8: {
-              int rawValue = input.readEnum();
+            case 8:
+              {
+                int rawValue = input.readEnum();
                 @SuppressWarnings("deprecation")
-              com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType value = com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                type_ = rawValue;
+                com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType value =
+                    com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.valueOf(
+                        rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(1, rawValue);
+                } else {
+                  bitField0_ |= 0x00000001;
+                  type_ = rawValue;
+                }
+                break;
               }
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              name_ = input.readBytes();
-              break;
-            }
-            case 26: {
-              bitField0_ |= 0x00000004;
-              originalName_ = input.readBytes();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000008;
-              table_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000010;
-              originalTable_ = input.readBytes();
-              break;
-            }
-            case 50: {
-              bitField0_ |= 0x00000020;
-              schema_ = input.readBytes();
-              break;
-            }
-            case 58: {
-              bitField0_ |= 0x00000040;
-              catalog_ = input.readBytes();
-              break;
-            }
-            case 64: {
-              bitField0_ |= 0x00000080;
-              collation_ = input.readUInt64();
-              break;
-            }
-            case 72: {
-              bitField0_ |= 0x00000100;
-              fractionalDigits_ = input.readUInt32();
-              break;
-            }
-            case 80: {
-              bitField0_ |= 0x00000200;
-              length_ = input.readUInt32();
-              break;
-            }
-            case 88: {
-              bitField0_ |= 0x00000400;
-              flags_ = input.readUInt32();
-              break;
-            }
-            case 96: {
-              bitField0_ |= 0x00000800;
-              contentType_ = input.readUInt32();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+            case 18:
+              {
+                bitField0_ |= 0x00000002;
+                name_ = input.readBytes();
+                break;
               }
-              break;
-            }
+            case 26:
+              {
+                bitField0_ |= 0x00000004;
+                originalName_ = input.readBytes();
+                break;
+              }
+            case 34:
+              {
+                bitField0_ |= 0x00000008;
+                table_ = input.readBytes();
+                break;
+              }
+            case 42:
+              {
+                bitField0_ |= 0x00000010;
+                originalTable_ = input.readBytes();
+                break;
+              }
+            case 50:
+              {
+                bitField0_ |= 0x00000020;
+                schema_ = input.readBytes();
+                break;
+              }
+            case 58:
+              {
+                bitField0_ |= 0x00000040;
+                catalog_ = input.readBytes();
+                break;
+              }
+            case 64:
+              {
+                bitField0_ |= 0x00000080;
+                collation_ = input.readUInt64();
+                break;
+              }
+            case 72:
+              {
+                bitField0_ |= 0x00000100;
+                fractionalDigits_ = input.readUInt32();
+                break;
+              }
+            case 80:
+              {
+                bitField0_ |= 0x00000200;
+                length_ = input.readUInt32();
+                break;
+              }
+            case 88:
+              {
+                bitField0_ |= 0x00000400;
+                flags_ = input.readUInt32();
+                break;
+              }
+            case 96:
+              {
+                bitField0_ |= 0x00000800;
+                contentType_ = input.readUInt32();
+                break;
+              }
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_ColumnMetaData_fieldAccessorTable
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_ColumnMetaData_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.class, com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.Builder.class);
+              com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.class,
+              com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.Builder.class);
     }
 
-    /**
-     * Protobuf enum {@code Mysqlx.Resultset.ColumnMetaData.FieldType}
-     */
-    public enum FieldType
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>SINT = 1;</code>
-       */
+    /** Protobuf enum {@code Mysqlx.Resultset.ColumnMetaData.FieldType} */
+    public enum FieldType implements com.google.protobuf.ProtocolMessageEnum {
+      /** <code>SINT = 1;</code> */
       SINT(1),
-      /**
-       * <code>UINT = 2;</code>
-       */
+      /** <code>UINT = 2;</code> */
       UINT(2),
-      /**
-       * <code>DOUBLE = 5;</code>
-       */
+      /** <code>DOUBLE = 5;</code> */
       DOUBLE(5),
-      /**
-       * <code>FLOAT = 6;</code>
-       */
+      /** <code>FLOAT = 6;</code> */
       FLOAT(6),
-      /**
-       * <code>BYTES = 7;</code>
-       */
+      /** <code>BYTES = 7;</code> */
       BYTES(7),
-      /**
-       * <code>TIME = 10;</code>
-       */
+      /** <code>TIME = 10;</code> */
       TIME(10),
-      /**
-       * <code>DATETIME = 12;</code>
-       */
+      /** <code>DATETIME = 12;</code> */
       DATETIME(12),
-      /**
-       * <code>SET = 15;</code>
-       */
+      /** <code>SET = 15;</code> */
       SET(15),
-      /**
-       * <code>ENUM = 16;</code>
-       */
+      /** <code>ENUM = 16;</code> */
       ENUM(16),
-      /**
-       * <code>BIT = 17;</code>
-       */
+      /** <code>BIT = 17;</code> */
       BIT(17),
-      /**
-       * <code>DECIMAL = 18;</code>
-       */
+      /** <code>DECIMAL = 18;</code> */
       DECIMAL(18),
       ;
 
-      /**
-       * <code>SINT = 1;</code>
-       */
+      /** <code>SINT = 1;</code> */
       public static final int SINT_VALUE = 1;
-      /**
-       * <code>UINT = 2;</code>
-       */
+      /** <code>UINT = 2;</code> */
       public static final int UINT_VALUE = 2;
-      /**
-       * <code>DOUBLE = 5;</code>
-       */
+      /** <code>DOUBLE = 5;</code> */
       public static final int DOUBLE_VALUE = 5;
-      /**
-       * <code>FLOAT = 6;</code>
-       */
+      /** <code>FLOAT = 6;</code> */
       public static final int FLOAT_VALUE = 6;
-      /**
-       * <code>BYTES = 7;</code>
-       */
+      /** <code>BYTES = 7;</code> */
       public static final int BYTES_VALUE = 7;
-      /**
-       * <code>TIME = 10;</code>
-       */
+      /** <code>TIME = 10;</code> */
       public static final int TIME_VALUE = 10;
-      /**
-       * <code>DATETIME = 12;</code>
-       */
+      /** <code>DATETIME = 12;</code> */
       public static final int DATETIME_VALUE = 12;
-      /**
-       * <code>SET = 15;</code>
-       */
+      /** <code>SET = 15;</code> */
       public static final int SET_VALUE = 15;
-      /**
-       * <code>ENUM = 16;</code>
-       */
+      /** <code>ENUM = 16;</code> */
       public static final int ENUM_VALUE = 16;
-      /**
-       * <code>BIT = 17;</code>
-       */
+      /** <code>BIT = 17;</code> */
       public static final int BIT_VALUE = 17;
-      /**
-       * <code>DECIMAL = 18;</code>
-       */
+      /** <code>DECIMAL = 18;</code> */
       public static final int DECIMAL_VALUE = 18;
-
 
       public final int getNumber() {
         return value;
@@ -2786,53 +2910,63 @@ public final class MysqlxResultset {
        */
       public static FieldType forNumber(int value) {
         switch (value) {
-          case 1: return SINT;
-          case 2: return UINT;
-          case 5: return DOUBLE;
-          case 6: return FLOAT;
-          case 7: return BYTES;
-          case 10: return TIME;
-          case 12: return DATETIME;
-          case 15: return SET;
-          case 16: return ENUM;
-          case 17: return BIT;
-          case 18: return DECIMAL;
-          default: return null;
+          case 1:
+            return SINT;
+          case 2:
+            return UINT;
+          case 5:
+            return DOUBLE;
+          case 6:
+            return FLOAT;
+          case 7:
+            return BYTES;
+          case 10:
+            return TIME;
+          case 12:
+            return DATETIME;
+          case 15:
+            return SET;
+          case 16:
+            return ENUM;
+          case 17:
+            return BIT;
+          case 18:
+            return DECIMAL;
+          default:
+            return null;
         }
       }
 
-      public static com.google.protobuf.Internal.EnumLiteMap<FieldType>
-          internalGetValueMap() {
+      public static com.google.protobuf.Internal.EnumLiteMap<FieldType> internalGetValueMap() {
         return internalValueMap;
       }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          FieldType> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<FieldType>() {
-              public FieldType findValueByNumber(int number) {
-                return FieldType.forNumber(number);
-              }
-            };
 
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      private static final com.google.protobuf.Internal.EnumLiteMap<FieldType> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<FieldType>() {
+            public FieldType findValueByNumber(int number) {
+              return FieldType.forNumber(number);
+            }
+          };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.getDescriptor().getEnumTypes().get(0);
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.getDescriptor()
+            .getEnumTypes()
+            .get(0);
       }
 
       private static final FieldType[] VALUES = values();
 
-      public static FieldType valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      public static FieldType valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
@@ -2850,38 +2984,52 @@ public final class MysqlxResultset {
     public static final int TYPE_FIELD_NUMBER = 1;
     private int type_;
     /**
+     *
+     *
      * <pre>
-     ** datatype of the field in a row 
+     * * datatype of the field in a row
      * </pre>
      *
      * <code>required .Mysqlx.Resultset.ColumnMetaData.FieldType type = 1;</code>
+     *
      * @return Whether the type field is set.
      */
-    @java.lang.Override public boolean hasType() {
+    @java.lang.Override
+    public boolean hasType() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** datatype of the field in a row 
+     * * datatype of the field in a row
      * </pre>
      *
      * <code>required .Mysqlx.Resultset.ColumnMetaData.FieldType type = 1;</code>
+     *
      * @return The type.
      */
-    @java.lang.Override public com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType getType() {
+    @java.lang.Override
+    public com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType getType() {
       @SuppressWarnings("deprecation")
-      com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType result = com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.valueOf(type_);
-      return result == null ? com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.SINT : result;
+      com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType result =
+          com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.valueOf(type_);
+      return result == null
+          ? com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.SINT
+          : result;
     }
 
     public static final int NAME_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString name_;
     /**
+     *
+     *
      * <pre>
-     ** name of the column 
+     * * name of the column
      * </pre>
      *
      * <code>optional bytes name = 2;</code>
+     *
      * @return Whether the name field is set.
      */
     @java.lang.Override
@@ -2889,11 +3037,14 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** name of the column 
+     * * name of the column
      * </pre>
      *
      * <code>optional bytes name = 2;</code>
+     *
      * @return The name.
      */
     @java.lang.Override
@@ -2904,11 +3055,14 @@ public final class MysqlxResultset {
     public static final int ORIGINAL_NAME_FIELD_NUMBER = 3;
     private com.google.protobuf.ByteString originalName_;
     /**
+     *
+     *
      * <pre>
-     ** name of the column before an alias was applied 
+     * * name of the column before an alias was applied
      * </pre>
      *
      * <code>optional bytes original_name = 3;</code>
+     *
      * @return Whether the originalName field is set.
      */
     @java.lang.Override
@@ -2916,11 +3070,14 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000004) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** name of the column before an alias was applied 
+     * * name of the column before an alias was applied
      * </pre>
      *
      * <code>optional bytes original_name = 3;</code>
+     *
      * @return The originalName.
      */
     @java.lang.Override
@@ -2931,11 +3088,14 @@ public final class MysqlxResultset {
     public static final int TABLE_FIELD_NUMBER = 4;
     private com.google.protobuf.ByteString table_;
     /**
+     *
+     *
      * <pre>
-     ** name of the table the column originates from 
+     * * name of the table the column originates from
      * </pre>
      *
      * <code>optional bytes table = 4;</code>
+     *
      * @return Whether the table field is set.
      */
     @java.lang.Override
@@ -2943,11 +3103,14 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000008) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** name of the table the column originates from 
+     * * name of the table the column originates from
      * </pre>
      *
      * <code>optional bytes table = 4;</code>
+     *
      * @return The table.
      */
     @java.lang.Override
@@ -2958,11 +3121,14 @@ public final class MysqlxResultset {
     public static final int ORIGINAL_TABLE_FIELD_NUMBER = 5;
     private com.google.protobuf.ByteString originalTable_;
     /**
+     *
+     *
      * <pre>
-     ** name of the table the column originates from before an alias was applied 
+     * * name of the table the column originates from before an alias was applied
      * </pre>
      *
      * <code>optional bytes original_table = 5;</code>
+     *
      * @return Whether the originalTable field is set.
      */
     @java.lang.Override
@@ -2970,11 +3136,14 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000010) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** name of the table the column originates from before an alias was applied 
+     * * name of the table the column originates from before an alias was applied
      * </pre>
      *
      * <code>optional bytes original_table = 5;</code>
+     *
      * @return The originalTable.
      */
     @java.lang.Override
@@ -2985,11 +3154,14 @@ public final class MysqlxResultset {
     public static final int SCHEMA_FIELD_NUMBER = 6;
     private com.google.protobuf.ByteString schema_;
     /**
+     *
+     *
      * <pre>
-     ** schema the column originates from 
+     * * schema the column originates from
      * </pre>
      *
      * <code>optional bytes schema = 6;</code>
+     *
      * @return Whether the schema field is set.
      */
     @java.lang.Override
@@ -2997,11 +3169,14 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000020) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** schema the column originates from 
+     * * schema the column originates from
      * </pre>
      *
      * <code>optional bytes schema = 6;</code>
+     *
      * @return The schema.
      */
     @java.lang.Override
@@ -3012,15 +3187,18 @@ public final class MysqlxResultset {
     public static final int CATALOG_FIELD_NUMBER = 7;
     private com.google.protobuf.ByteString catalog_;
     /**
+     *
+     *
      * <pre>
-     ** catalog the schema originates from
-     *&#64;note
-     *As there is currently no support for catalogs in MySQL,
-     *don't expect this field to be set. In the MySQL C/S
-     *protocol the field had the value ``def`` all the time 
+     * * catalog the schema originates from
+     * &#64;note
+     * As there is currently no support for catalogs in MySQL,
+     * don't expect this field to be set. In the MySQL C/S
+     * protocol the field had the value ``def`` all the time
      * </pre>
      *
      * <code>optional bytes catalog = 7;</code>
+     *
      * @return Whether the catalog field is set.
      */
     @java.lang.Override
@@ -3028,15 +3206,18 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000040) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** catalog the schema originates from
-     *&#64;note
-     *As there is currently no support for catalogs in MySQL,
-     *don't expect this field to be set. In the MySQL C/S
-     *protocol the field had the value ``def`` all the time 
+     * * catalog the schema originates from
+     * &#64;note
+     * As there is currently no support for catalogs in MySQL,
+     * don't expect this field to be set. In the MySQL C/S
+     * protocol the field had the value ``def`` all the time
      * </pre>
      *
      * <code>optional bytes catalog = 7;</code>
+     *
      * @return The catalog.
      */
     @java.lang.Override
@@ -3048,6 +3229,7 @@ public final class MysqlxResultset {
     private long collation_;
     /**
      * <code>optional uint64 collation = 8;</code>
+     *
      * @return Whether the collation field is set.
      */
     @java.lang.Override
@@ -3056,6 +3238,7 @@ public final class MysqlxResultset {
     }
     /**
      * <code>optional uint64 collation = 8;</code>
+     *
      * @return The collation.
      */
     @java.lang.Override
@@ -3066,12 +3249,15 @@ public final class MysqlxResultset {
     public static final int FRACTIONAL_DIGITS_FIELD_NUMBER = 9;
     private int fractionalDigits_;
     /**
+     *
+     *
      * <pre>
-     ** displayed factional decimal digits for floating point and
-     *fixed point numbers 
+     * * displayed factional decimal digits for floating point and
+     * fixed point numbers
      * </pre>
      *
      * <code>optional uint32 fractional_digits = 9;</code>
+     *
      * @return Whether the fractionalDigits field is set.
      */
     @java.lang.Override
@@ -3079,12 +3265,15 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000100) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** displayed factional decimal digits for floating point and
-     *fixed point numbers 
+     * * displayed factional decimal digits for floating point and
+     * fixed point numbers
      * </pre>
      *
      * <code>optional uint32 fractional_digits = 9;</code>
+     *
      * @return The fractionalDigits.
      */
     @java.lang.Override
@@ -3095,11 +3284,14 @@ public final class MysqlxResultset {
     public static final int LENGTH_FIELD_NUMBER = 10;
     private int length_;
     /**
+     *
+     *
      * <pre>
-     ** maximum count of displayable characters of .type 
+     * * maximum count of displayable characters of .type
      * </pre>
      *
      * <code>optional uint32 length = 10;</code>
+     *
      * @return Whether the length field is set.
      */
     @java.lang.Override
@@ -3107,11 +3299,14 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000200) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** maximum count of displayable characters of .type 
+     * * maximum count of displayable characters of .type
      * </pre>
      *
      * <code>optional uint32 length = 10;</code>
+     *
      * @return The length.
      */
     @java.lang.Override
@@ -3122,26 +3317,29 @@ public final class MysqlxResultset {
     public static final int FLAGS_FIELD_NUMBER = 11;
     private int flags_;
     /**
+     *
+     *
      * <pre>
-     ** ``.type`` specific flags
-     *| Type    | Value  | Description  |
-     *|---------|--------|--------------|
-     *| UINT    | 0x0001 | zerofill     |
-     *| DOUBLE  | 0x0001 | unsigned     |
-     *| FLOAT   | 0x0001 | unsigned     |
-     *| DECIMAL | 0x0001 | unsigned     |
-     *| BYTES   | 0x0001 | rightpad     |
-     *| Value  | Description     |
-     *|--------|-----------------|
-     *| 0x0010 | NOT&#92;_NULL       |
-     *| 0x0020 | PRIMARY&#92;_KEY    |
-     *| 0x0040 | UNIQUE&#92;_KEY     |
-     *| 0x0080 | MULTIPLE&#92;_KEY   |
-     *| 0x0100 | AUTO&#92;_INCREMENT |
-     *default: 0 
+     * * ``.type`` specific flags
+     * | Type    | Value  | Description  |
+     * |---------|--------|--------------|
+     * | UINT    | 0x0001 | zerofill     |
+     * | DOUBLE  | 0x0001 | unsigned     |
+     * | FLOAT   | 0x0001 | unsigned     |
+     * | DECIMAL | 0x0001 | unsigned     |
+     * | BYTES   | 0x0001 | rightpad     |
+     * | Value  | Description     |
+     * |--------|-----------------|
+     * | 0x0010 | NOT&#92;_NULL       |
+     * | 0x0020 | PRIMARY&#92;_KEY    |
+     * | 0x0040 | UNIQUE&#92;_KEY     |
+     * | 0x0080 | MULTIPLE&#92;_KEY   |
+     * | 0x0100 | AUTO&#92;_INCREMENT |
+     * default: 0
      * </pre>
      *
      * <code>optional uint32 flags = 11;</code>
+     *
      * @return Whether the flags field is set.
      */
     @java.lang.Override
@@ -3149,26 +3347,29 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000400) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** ``.type`` specific flags
-     *| Type    | Value  | Description  |
-     *|---------|--------|--------------|
-     *| UINT    | 0x0001 | zerofill     |
-     *| DOUBLE  | 0x0001 | unsigned     |
-     *| FLOAT   | 0x0001 | unsigned     |
-     *| DECIMAL | 0x0001 | unsigned     |
-     *| BYTES   | 0x0001 | rightpad     |
-     *| Value  | Description     |
-     *|--------|-----------------|
-     *| 0x0010 | NOT&#92;_NULL       |
-     *| 0x0020 | PRIMARY&#92;_KEY    |
-     *| 0x0040 | UNIQUE&#92;_KEY     |
-     *| 0x0080 | MULTIPLE&#92;_KEY   |
-     *| 0x0100 | AUTO&#92;_INCREMENT |
-     *default: 0 
+     * * ``.type`` specific flags
+     * | Type    | Value  | Description  |
+     * |---------|--------|--------------|
+     * | UINT    | 0x0001 | zerofill     |
+     * | DOUBLE  | 0x0001 | unsigned     |
+     * | FLOAT   | 0x0001 | unsigned     |
+     * | DECIMAL | 0x0001 | unsigned     |
+     * | BYTES   | 0x0001 | rightpad     |
+     * | Value  | Description     |
+     * |--------|-----------------|
+     * | 0x0010 | NOT&#92;_NULL       |
+     * | 0x0020 | PRIMARY&#92;_KEY    |
+     * | 0x0040 | UNIQUE&#92;_KEY     |
+     * | 0x0080 | MULTIPLE&#92;_KEY   |
+     * | 0x0100 | AUTO&#92;_INCREMENT |
+     * default: 0
      * </pre>
      *
      * <code>optional uint32 flags = 11;</code>
+     *
      * @return The flags.
      */
     @java.lang.Override
@@ -3179,23 +3380,26 @@ public final class MysqlxResultset {
     public static final int CONTENT_TYPE_FIELD_NUMBER = 12;
     private int contentType_;
     /**
+     *
+     *
      * <pre>
-     ** a hint about the higher-level encoding of a BYTES field
-     *| Type   | Value  | Description             |
-     *|--------|--------|-------------------------|
-     *| BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
-     *| BYTES  | 0x0002 | JSON (text encoding)    |
-     *| BYTES  | 0x0003 | XML (text encoding)     |
-     *&#64;note
-     *This list isn't comprehensive. As a guideline: the field's
-     *value is expected to pass a validator check on client
-     *and server if this field is set. If the server adds more
-     *internal data types that rely on BLOB storage like image
-     *manipulation, seeking into complex types in BLOBs, and
-     *more types will be added 
+     * * a hint about the higher-level encoding of a BYTES field
+     * | Type   | Value  | Description             |
+     * |--------|--------|-------------------------|
+     * | BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
+     * | BYTES  | 0x0002 | JSON (text encoding)    |
+     * | BYTES  | 0x0003 | XML (text encoding)     |
+     * &#64;note
+     * This list isn't comprehensive. As a guideline: the field's
+     * value is expected to pass a validator check on client
+     * and server if this field is set. If the server adds more
+     * internal data types that rely on BLOB storage like image
+     * manipulation, seeking into complex types in BLOBs, and
+     * more types will be added
      * </pre>
      *
      * <code>optional uint32 content_type = 12;</code>
+     *
      * @return Whether the contentType field is set.
      */
     @java.lang.Override
@@ -3203,23 +3407,26 @@ public final class MysqlxResultset {
       return ((bitField0_ & 0x00000800) != 0);
     }
     /**
+     *
+     *
      * <pre>
-     ** a hint about the higher-level encoding of a BYTES field
-     *| Type   | Value  | Description             |
-     *|--------|--------|-------------------------|
-     *| BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
-     *| BYTES  | 0x0002 | JSON (text encoding)    |
-     *| BYTES  | 0x0003 | XML (text encoding)     |
-     *&#64;note
-     *This list isn't comprehensive. As a guideline: the field's
-     *value is expected to pass a validator check on client
-     *and server if this field is set. If the server adds more
-     *internal data types that rely on BLOB storage like image
-     *manipulation, seeking into complex types in BLOBs, and
-     *more types will be added 
+     * * a hint about the higher-level encoding of a BYTES field
+     * | Type   | Value  | Description             |
+     * |--------|--------|-------------------------|
+     * | BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
+     * | BYTES  | 0x0002 | JSON (text encoding)    |
+     * | BYTES  | 0x0003 | XML (text encoding)     |
+     * &#64;note
+     * This list isn't comprehensive. As a guideline: the field's
+     * value is expected to pass a validator check on client
+     * and server if this field is set. If the server adds more
+     * internal data types that rely on BLOB storage like image
+     * manipulation, seeking into complex types in BLOBs, and
+     * more types will be added
      * </pre>
      *
      * <code>optional uint32 content_type = 12;</code>
+     *
      * @return The contentType.
      */
     @java.lang.Override
@@ -3228,6 +3435,7 @@ public final class MysqlxResultset {
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -3243,8 +3451,7 @@ public final class MysqlxResultset {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       if (((bitField0_ & 0x00000001) != 0)) {
         output.writeEnum(1, type_);
       }
@@ -3291,52 +3498,40 @@ public final class MysqlxResultset {
 
       size = 0;
       if (((bitField0_ & 0x00000001) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, type_);
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(1, type_);
       }
       if (((bitField0_ & 0x00000002) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, name_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(2, name_);
       }
       if (((bitField0_ & 0x00000004) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, originalName_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(3, originalName_);
       }
       if (((bitField0_ & 0x00000008) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, table_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(4, table_);
       }
       if (((bitField0_ & 0x00000010) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, originalTable_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(5, originalTable_);
       }
       if (((bitField0_ & 0x00000020) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, schema_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(6, schema_);
       }
       if (((bitField0_ & 0x00000040) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(7, catalog_);
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(7, catalog_);
       }
       if (((bitField0_ & 0x00000080) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(8, collation_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(8, collation_);
       }
       if (((bitField0_ & 0x00000100) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(9, fractionalDigits_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(9, fractionalDigits_);
       }
       if (((bitField0_ & 0x00000200) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(10, length_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(10, length_);
       }
       if (((bitField0_ & 0x00000400) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(11, flags_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(11, flags_);
       }
       if (((bitField0_ & 0x00000800) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(12, contentType_);
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(12, contentType_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -3346,12 +3541,13 @@ public final class MysqlxResultset {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData)) {
         return super.equals(obj);
       }
-      com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData other = (com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData) obj;
+      com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData other =
+          (com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData) obj;
 
       if (hasType() != other.hasType()) return false;
       if (hasType()) {
@@ -3359,58 +3555,47 @@ public final class MysqlxResultset {
       }
       if (hasName() != other.hasName()) return false;
       if (hasName()) {
-        if (!getName()
-            .equals(other.getName())) return false;
+        if (!getName().equals(other.getName())) return false;
       }
       if (hasOriginalName() != other.hasOriginalName()) return false;
       if (hasOriginalName()) {
-        if (!getOriginalName()
-            .equals(other.getOriginalName())) return false;
+        if (!getOriginalName().equals(other.getOriginalName())) return false;
       }
       if (hasTable() != other.hasTable()) return false;
       if (hasTable()) {
-        if (!getTable()
-            .equals(other.getTable())) return false;
+        if (!getTable().equals(other.getTable())) return false;
       }
       if (hasOriginalTable() != other.hasOriginalTable()) return false;
       if (hasOriginalTable()) {
-        if (!getOriginalTable()
-            .equals(other.getOriginalTable())) return false;
+        if (!getOriginalTable().equals(other.getOriginalTable())) return false;
       }
       if (hasSchema() != other.hasSchema()) return false;
       if (hasSchema()) {
-        if (!getSchema()
-            .equals(other.getSchema())) return false;
+        if (!getSchema().equals(other.getSchema())) return false;
       }
       if (hasCatalog() != other.hasCatalog()) return false;
       if (hasCatalog()) {
-        if (!getCatalog()
-            .equals(other.getCatalog())) return false;
+        if (!getCatalog().equals(other.getCatalog())) return false;
       }
       if (hasCollation() != other.hasCollation()) return false;
       if (hasCollation()) {
-        if (getCollation()
-            != other.getCollation()) return false;
+        if (getCollation() != other.getCollation()) return false;
       }
       if (hasFractionalDigits() != other.hasFractionalDigits()) return false;
       if (hasFractionalDigits()) {
-        if (getFractionalDigits()
-            != other.getFractionalDigits()) return false;
+        if (getFractionalDigits() != other.getFractionalDigits()) return false;
       }
       if (hasLength() != other.hasLength()) return false;
       if (hasLength()) {
-        if (getLength()
-            != other.getLength()) return false;
+        if (getLength() != other.getLength()) return false;
       }
       if (hasFlags() != other.hasFlags()) return false;
       if (hasFlags()) {
-        if (getFlags()
-            != other.getFlags()) return false;
+        if (getFlags() != other.getFlags()) return false;
       }
       if (hasContentType() != other.hasContentType()) return false;
       if (hasContentType()) {
-        if (getContentType()
-            != other.getContentType()) return false;
+        if (getContentType() != other.getContentType()) return false;
       }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
@@ -3453,8 +3638,7 @@ public final class MysqlxResultset {
       }
       if (hasCollation()) {
         hash = (37 * hash) + COLLATION_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getCollation());
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getCollation());
       }
       if (hasFractionalDigits()) {
         hash = (37 * hash) + FRACTIONAL_DIGITS_FIELD_NUMBER;
@@ -3478,87 +3662,94 @@ public final class MysqlxResultset {
     }
 
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData prototype) {
+
+    public static Builder newBuilder(
+        com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -3568,271 +3759,276 @@ public final class MysqlxResultset {
       return builder;
     }
     /**
+     *
+     *
      * <pre>
-     **
-     *Meta data of a column
-     *&#64;note
-     *The encoding used for the different ``bytes`` fields in the
-     *meta data is externally controlled. See also:
-     *https://dev.mysql.com/doc/refman/5.0/en/charset-connection.html
-     *&#64;par
-     *&#64;note
-     *The server may not set the ``original_{table|name}`` fields
-     *if they are equal to the plain ``{table|name}`` field.
-     *&#64;par
-     *&#64;note
-     *A client has to reconstruct it like:
-     *&#64;code{py}
-     *if .original_name is empty and .name is not empty:
-     *.original_name = .name
-     *if .original_table is empty and .table is not empty:
-     *.original_table = .table
-     *&#64;endcode
-     *&#64;par
-     *&#64;note
-     *``Compact metadata format`` can be requested by the client.
-     *In that case, only ``.type`` is set and all other fields are  empty.
-     *Expected data type of Mysqlx.Resultset.Row per SQL Type for
-     *non-NULL values:
-     *| SQL Type          | .type     | .length | .frac&#92;_dig | .flags | .charset |
-     *|-------------------|-----------|---------|------------|--------|----------|
-     *| TINY              | SINT      | x       |            |        |          |
-     *| TINY UNSIGNED     | UINT      | x       |            | x      |          |
-     *| SHORT             | SINT      | x       |            |        |          |
-     *| SHORT UNSIGNED    | UINT      | x       |            | x      |          |
-     *| INT24             | SINT      | x       |            |        |          |
-     *| INT24 UNSIGNED    | UINT      | x       |            | x      |          |
-     *| INT               | SINT      | x       |            |        |          |
-     *| INT UNSIGNED      | UINT      | x       |            | x      |          |
-     *| LONGLONG          | SINT      | x       |            |        |          |
-     *| LONGLONG UNSIGNED | UINT      | x       |            | x      |          |
-     *| DOUBLE            | DOUBLE    | x       | x          | x      |          |
-     *| FLOAT             | FLOAT     | x       | x          | x      |          |
-     *| DECIMAL           | DECIMAL   | x       | x          | x      |          |
-     *| VARCHAR,CHAR,...  | BYTES     | x       |            | x      | x        |
-     *| GEOMETRY          | BYTES     |         |            |        |          |
-     *| TIME              | TIME      | x       |            |        |          |
-     *| DATE              | DATETIME  | x       |            |        |          |
-     *| DATETIME          | DATETIME  | x       |            |        |          |
-     *| YEAR              | UINT      | x       |            | x      |          |
-     *| TIMESTAMP         | DATETIME  | x       |            |        |          |
-     *| SET               | SET       |         |            |        | x        |
-     *| ENUM              | ENUM      |         |            |        | x        |
-     *| NULL              | BYTES     |         |            |        |          |
-     *| BIT               | BIT       | x       |            |        |          |
-     *&#64;note
-     *The SQL "NULL" value is sent as an empty field value in
-     *&#64;ref Mysqlx::Resultset::Row.
-     *&#64;par Tip
-     *The protobuf encoding of primitive data types is described in
-     *https://developers.google.com/protocol-buffers/docs/encoding
-     *+ SINT
-     *- ``.length`` &#64;n
-     *Maximum number of displayable decimal digits (including
-     *minus sign) of the type.
-     *&#64;note
-     *The valid range is 0-255, but usually you'll see 1-20.
-     *| SQL Type         | Maximum Digits per Type |
-     *|------------------|-------------------------|
-     *| TINY SIGNED      | 4                       |
-     *| SHORT SIGNED     | 6                       |
-     *| INT24 SIGNED     | 8                       |
-     *| INT SIGNED       | 11                      |
-     *| LONGLONG SIGNED  | 20                      |
-     *&#64;par Tip
-     *Definition of ``M`` are in
-     *https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html.
-     *- ``value``&#64;n
-     *Variable length encoded signed 64 integer.
-     *+ UINT
-     *- ``.flags &amp; 1`` (zerofill) &#64;n
-     *The client has to left pad with 0's up to .length.
-     *- ``.length`` &#64;n
-     *Maximum number of displayable decimal digits of the
-     *type.
-     *&#64;note
-     *The valid range is 0-255, but usually you'll see
-     *1-20.
-     *| SQL Type             | max digits per type |
-     *|----------------------|---------------------|
-     *| TINY UNSIGNED        | 3                   |
-     *| SHORT UNSIGNED       | 5                   |
-     *| INT24 UNSIGNED       | 8                   |
-     *| INT UNSIGNED         | 10                  |
-     *| LONGLONG UNSIGNED    | 20                  |
-     *&#64;par Tip
-     *Definition of ``M`` are in
-     *https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html.
-     *- ``value`` &#64;n
-     *Variable length encoded unsigned 64 integer.
-     *+ BIT
-     *- ``.length`` &#64;n
-     *Maximum number of displayable binary digits.
-     *&#64;note
-     *The valid range for M of the ``BIT`` type is 1 - 64.
-     *&#64;par Tip
-     *https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html
-     *- ``value`` &#64;n
-     *Variable length encoded unsigned 64 integer.
-     *+ DOUBLE
-     *- ``.length`` &#64;n
-     *Maximum number of displayable decimal digits (including
-     *the decimal point and ``.fractional_digits``).
-     *- ``.fractional_digits`` &#64;n
-     *Maximum number of displayable decimal digits following
-     *the decimal point.
-     *- ``value``&#64;n
-     *Encoded as protobuf's 'double'.
-     *+ FLOAT
-     *- ``.length``&#64;n
-     *Maximum number of displayable decimal digits (including
-     *the decimal point and ``.fractional_digits``).
-     *- ``.fractional_digits``&#64;n
-     *Maximum number of displayable decimal digits following
-     *the decimal point.
-     *- ``value``&#64;n
-     *Encoded as protobuf's 'float'.
-     *+ BYTES, ENUM
-     *&#64;note
-     *BYTES is used for all opaque byte strings that may have a charset:
-     *-  TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB
-     *-  TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT
-     *-  VARCHAR, VARBINARY
-     *-  CHAR, BINARY
-     *-  ENUM
-     *- ``.length``&#64;n
-     *Maximum length of characters of the underlying type.
-     *- ``.flags &amp; 1`` (rightpad) &#64;n
-     *If the length of the field is less than ``.length``, the
-     *receiver is supposed to add padding characters to the
-     *right end of the string. If the ``.charset`` is
-     *"binary", the padding character is ``0x00``, otherwise
-     *it is a space character as defined by that character
-     *set.
-     *| SQL Type      | .length  | .charset  | .flags   |
-     *|---------------|----------|-----------|----------|
-     *| TINYBLOB      | 256      | binary    |          |
-     *| BLOB          | 65535    | binary    |          |
-     *| VARCHAR(32)   | 32       | utf8      |          |
-     *| VARBINARY(32) | 32       | utf8&#92;_bin |          |
-     *| BINARY(32)    | 32       | binary    | rightpad |
-     *| CHAR(32)      | 32       | utf8      | rightpad |
-     *- ``value``
-     *Sequence of bytes with added one extra ``0x00`` byte at
-     *the end. To obtain the original string, the extra
-     *``0x00`` should be removed. The length of the string can
-     *be acquired with protobuf's field ``length()`` method:
-     *``length of sequence-of-bytes = length-of-field - 1``
-     *&#64;note
-     *The extra byte allows to distinguish between a NULL
-     *and empty byte sequence.
-     *+ TIME
-     *A time value.
-     *- ``value``&#64;n
-     *The following bytes sequence:
-     *``negate [ hour [ minutes [ seconds [ useconds ]]]]``
-     *-  negate - one byte, should be one of: 0x00 for "+",
-     *0x01 for "-"
-     *-  hour - optional variable length encoded unsigned64
-     *value for the hour
-     *-  minutes - optional variable length encoded unsigned64
-     *value for the minutes
-     *-  seconds - optional variable length encoded unsigned64
-     *value for the seconds
-     *-  useconds - optional variable length encoded
-     *unsigned64 value for the microseconds
-     *&#64;par Tip
-     *The protobuf encoding in
-     *https://developers.google.com/protocol-buffers/docs/encoding.
-     *&#64;note
-     *Hour, minutes, seconds, and useconds are optional if
-     *all the values to the right are 0.
-     *Example: ``0x00 -&gt; +00:00:00.000000``
-     *+ DATETIME
-     *A date or date and time value.
-     *- ``value`` &#64;n
-     *A sequence of variants, arranged as follows:
-     *``| year | month | day | [ | hour | [ | minutes | [ | seconds | [ | useconds | ]]]]``
-     *-  year - variable length encoded unsigned64 value for
-     *the year
-     *-  month - variable length encoded unsigned64 value for
-     *the month
-     *-  day - variable length encoded unsigned64 value for
-     *the day
-     *-  hour - optional variable length encoded unsigned64
-     *value for the hour
-     *-  minutes - optional variable length encoded unsigned64
-     *value for the minutes
-     *-  seconds - optional variable length encoded unsigned64
-     *value for the seconds
-     *-  useconds - optional variable length encoded
-     *unsigned64 value for the microseconds
-     *&#64;note
-     *Hour, minutes, seconds, useconds are optional if all
-     *the values to the right are 0.
-     *- ``.flags``&#64;n
-     *| Name          | Position |
-     *|---------------|----------|
-     *| is&#92;_timestamp | 1        |
-     *+ DECIMAL
-     *An arbitrary length number. The number is encoded as a
-     *single byte indicating the position of the decimal point
-     *followed by the Packed BCD encoded number. Packed BCD is
-     *used to simplify conversion to and from strings and other
-     *native arbitrary precision math data types. See also: packed
-     *BCD in https://en.wikipedia.org/wiki/Binary-coded_decimal
-     *- ``.length``
-     *Maximum number of displayable decimal digits
-     *(*excluding* the decimal point and sign, but including
-     *``.fractional_digits``).
-     *&#64;note
-     *Should be in the range of 1 - 65.
-     *- ``.fractional_digits``
-     *The decimal digits to display out of length.
-     *&#64;note
-     *Should be in the range of 0 - 30.
-     *``value``
-     *The following bytes sequence:
-     *``scale | BCD+ sign [0x00]?``
-     *-  scale - 8bit scale value (number of decimal digit after the '.')
-     *-  BCD - BCD encoded digits (4 bits for each digit)
-     *-  sign - sign encoded on 4 bits (0xc = "+", 0xd = "-")
-     *-  0x0 - last 4bits if length(digits) % 2 == 0
-     *Example: ``x04 0x12 0x34 0x01
-     *0xd0 -&gt; -12.3401``
-     *+ SET
-     *A list of strings representing a SET of values.
-     *- ``value``&#64;n
-     *A sequence of 0 or more of protobuf's bytes (length
-     *prepended octets) or one of the special sequences with a
-     *predefined meaning listed below.
-     *Example (length of the bytes array shown in brackets):
-     *-  ``[0]`` - the NULL value
-     *-  ``[1] 0x00`` - a set containing a blank string ''
-     *-  ``[1] 0x01`` - this would be an invalid value,
-     *but is to be treated as the empty set
-     *-  ``[2] 0x01 0x00`` - a set with a single item, which is the '0'
-     *character
-     *-  ``[8] 0x03 F O O 0x03 B A R`` - a set with 2 items: FOO,BAR
+     * *
+     * Meta data of a column
+     * &#64;note
+     * The encoding used for the different ``bytes`` fields in the
+     * meta data is externally controlled. See also:
+     * https://dev.mysql.com/doc/refman/5.0/en/charset-connection.html
+     * &#64;par
+     * &#64;note
+     * The server may not set the ``original_{table|name}`` fields
+     * if they are equal to the plain ``{table|name}`` field.
+     * &#64;par
+     * &#64;note
+     * A client has to reconstruct it like:
+     * &#64;code{py}
+     * if .original_name is empty and .name is not empty:
+     * .original_name = .name
+     * if .original_table is empty and .table is not empty:
+     * .original_table = .table
+     * &#64;endcode
+     * &#64;par
+     * &#64;note
+     * ``Compact metadata format`` can be requested by the client.
+     * In that case, only ``.type`` is set and all other fields are  empty.
+     * Expected data type of Mysqlx.Resultset.Row per SQL Type for
+     * non-NULL values:
+     * | SQL Type          | .type     | .length | .frac&#92;_dig | .flags | .charset |
+     * |-------------------|-----------|---------|------------|--------|----------|
+     * | TINY              | SINT      | x       |            |        |          |
+     * | TINY UNSIGNED     | UINT      | x       |            | x      |          |
+     * | SHORT             | SINT      | x       |            |        |          |
+     * | SHORT UNSIGNED    | UINT      | x       |            | x      |          |
+     * | INT24             | SINT      | x       |            |        |          |
+     * | INT24 UNSIGNED    | UINT      | x       |            | x      |          |
+     * | INT               | SINT      | x       |            |        |          |
+     * | INT UNSIGNED      | UINT      | x       |            | x      |          |
+     * | LONGLONG          | SINT      | x       |            |        |          |
+     * | LONGLONG UNSIGNED | UINT      | x       |            | x      |          |
+     * | DOUBLE            | DOUBLE    | x       | x          | x      |          |
+     * | FLOAT             | FLOAT     | x       | x          | x      |          |
+     * | DECIMAL           | DECIMAL   | x       | x          | x      |          |
+     * | VARCHAR,CHAR,...  | BYTES     | x       |            | x      | x        |
+     * | GEOMETRY          | BYTES     |         |            |        |          |
+     * | TIME              | TIME      | x       |            |        |          |
+     * | DATE              | DATETIME  | x       |            |        |          |
+     * | DATETIME          | DATETIME  | x       |            |        |          |
+     * | YEAR              | UINT      | x       |            | x      |          |
+     * | TIMESTAMP         | DATETIME  | x       |            |        |          |
+     * | SET               | SET       |         |            |        | x        |
+     * | ENUM              | ENUM      |         |            |        | x        |
+     * | NULL              | BYTES     |         |            |        |          |
+     * | BIT               | BIT       | x       |            |        |          |
+     * &#64;note
+     * The SQL "NULL" value is sent as an empty field value in
+     * &#64;ref Mysqlx::Resultset::Row.
+     * &#64;par Tip
+     * The protobuf encoding of primitive data types is described in
+     * https://developers.google.com/protocol-buffers/docs/encoding
+     * + SINT
+     * - ``.length`` &#64;n
+     * Maximum number of displayable decimal digits (including
+     * minus sign) of the type.
+     * &#64;note
+     * The valid range is 0-255, but usually you'll see 1-20.
+     * | SQL Type         | Maximum Digits per Type |
+     * |------------------|-------------------------|
+     * | TINY SIGNED      | 4                       |
+     * | SHORT SIGNED     | 6                       |
+     * | INT24 SIGNED     | 8                       |
+     * | INT SIGNED       | 11                      |
+     * | LONGLONG SIGNED  | 20                      |
+     * &#64;par Tip
+     * Definition of ``M`` are in
+     * https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html.
+     * - ``value``&#64;n
+     * Variable length encoded signed 64 integer.
+     * + UINT
+     * - ``.flags &amp; 1`` (zerofill) &#64;n
+     * The client has to left pad with 0's up to .length.
+     * - ``.length`` &#64;n
+     * Maximum number of displayable decimal digits of the
+     * type.
+     * &#64;note
+     * The valid range is 0-255, but usually you'll see
+     * 1-20.
+     * | SQL Type             | max digits per type |
+     * |----------------------|---------------------|
+     * | TINY UNSIGNED        | 3                   |
+     * | SHORT UNSIGNED       | 5                   |
+     * | INT24 UNSIGNED       | 8                   |
+     * | INT UNSIGNED         | 10                  |
+     * | LONGLONG UNSIGNED    | 20                  |
+     * &#64;par Tip
+     * Definition of ``M`` are in
+     * https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html.
+     * - ``value`` &#64;n
+     * Variable length encoded unsigned 64 integer.
+     * + BIT
+     * - ``.length`` &#64;n
+     * Maximum number of displayable binary digits.
+     * &#64;note
+     * The valid range for M of the ``BIT`` type is 1 - 64.
+     * &#64;par Tip
+     * https://dev.mysql.com/doc/refman/5.5/en/numeric-type-overview.html
+     * - ``value`` &#64;n
+     * Variable length encoded unsigned 64 integer.
+     * + DOUBLE
+     * - ``.length`` &#64;n
+     * Maximum number of displayable decimal digits (including
+     * the decimal point and ``.fractional_digits``).
+     * - ``.fractional_digits`` &#64;n
+     * Maximum number of displayable decimal digits following
+     * the decimal point.
+     * - ``value``&#64;n
+     * Encoded as protobuf's 'double'.
+     * + FLOAT
+     * - ``.length``&#64;n
+     * Maximum number of displayable decimal digits (including
+     * the decimal point and ``.fractional_digits``).
+     * - ``.fractional_digits``&#64;n
+     * Maximum number of displayable decimal digits following
+     * the decimal point.
+     * - ``value``&#64;n
+     * Encoded as protobuf's 'float'.
+     * + BYTES, ENUM
+     * &#64;note
+     * BYTES is used for all opaque byte strings that may have a charset:
+     * -  TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB
+     * -  TINYTEXT, TEXT, MEDIUMTEXT, LONGTEXT
+     * -  VARCHAR, VARBINARY
+     * -  CHAR, BINARY
+     * -  ENUM
+     * - ``.length``&#64;n
+     * Maximum length of characters of the underlying type.
+     * - ``.flags &amp; 1`` (rightpad) &#64;n
+     * If the length of the field is less than ``.length``, the
+     * receiver is supposed to add padding characters to the
+     * right end of the string. If the ``.charset`` is
+     * "binary", the padding character is ``0x00``, otherwise
+     * it is a space character as defined by that character
+     * set.
+     * | SQL Type      | .length  | .charset  | .flags   |
+     * |---------------|----------|-----------|----------|
+     * | TINYBLOB      | 256      | binary    |          |
+     * | BLOB          | 65535    | binary    |          |
+     * | VARCHAR(32)   | 32       | utf8      |          |
+     * | VARBINARY(32) | 32       | utf8&#92;_bin |          |
+     * | BINARY(32)    | 32       | binary    | rightpad |
+     * | CHAR(32)      | 32       | utf8      | rightpad |
+     * - ``value``
+     * Sequence of bytes with added one extra ``0x00`` byte at
+     * the end. To obtain the original string, the extra
+     * ``0x00`` should be removed. The length of the string can
+     * be acquired with protobuf's field ``length()`` method:
+     * ``length of sequence-of-bytes = length-of-field - 1``
+     * &#64;note
+     * The extra byte allows to distinguish between a NULL
+     * and empty byte sequence.
+     * + TIME
+     * A time value.
+     * - ``value``&#64;n
+     * The following bytes sequence:
+     * ``negate [ hour [ minutes [ seconds [ useconds ]]]]``
+     * -  negate - one byte, should be one of: 0x00 for "+",
+     * 0x01 for "-"
+     * -  hour - optional variable length encoded unsigned64
+     * value for the hour
+     * -  minutes - optional variable length encoded unsigned64
+     * value for the minutes
+     * -  seconds - optional variable length encoded unsigned64
+     * value for the seconds
+     * -  useconds - optional variable length encoded
+     * unsigned64 value for the microseconds
+     * &#64;par Tip
+     * The protobuf encoding in
+     * https://developers.google.com/protocol-buffers/docs/encoding.
+     * &#64;note
+     * Hour, minutes, seconds, and useconds are optional if
+     * all the values to the right are 0.
+     * Example: ``0x00 -&gt; +00:00:00.000000``
+     * + DATETIME
+     * A date or date and time value.
+     * - ``value`` &#64;n
+     * A sequence of variants, arranged as follows:
+     * ``| year | month | day | [ | hour | [ | minutes | [ | seconds | [ | useconds | ]]]]``
+     * -  year - variable length encoded unsigned64 value for
+     * the year
+     * -  month - variable length encoded unsigned64 value for
+     * the month
+     * -  day - variable length encoded unsigned64 value for
+     * the day
+     * -  hour - optional variable length encoded unsigned64
+     * value for the hour
+     * -  minutes - optional variable length encoded unsigned64
+     * value for the minutes
+     * -  seconds - optional variable length encoded unsigned64
+     * value for the seconds
+     * -  useconds - optional variable length encoded
+     * unsigned64 value for the microseconds
+     * &#64;note
+     * Hour, minutes, seconds, useconds are optional if all
+     * the values to the right are 0.
+     * - ``.flags``&#64;n
+     * | Name          | Position |
+     * |---------------|----------|
+     * | is&#92;_timestamp | 1        |
+     * + DECIMAL
+     * An arbitrary length number. The number is encoded as a
+     * single byte indicating the position of the decimal point
+     * followed by the Packed BCD encoded number. Packed BCD is
+     * used to simplify conversion to and from strings and other
+     * native arbitrary precision math data types. See also: packed
+     * BCD in https://en.wikipedia.org/wiki/Binary-coded_decimal
+     * - ``.length``
+     * Maximum number of displayable decimal digits
+     * (*excluding* the decimal point and sign, but including
+     * ``.fractional_digits``).
+     * &#64;note
+     * Should be in the range of 1 - 65.
+     * - ``.fractional_digits``
+     * The decimal digits to display out of length.
+     * &#64;note
+     * Should be in the range of 0 - 30.
+     * ``value``
+     * The following bytes sequence:
+     * ``scale | BCD+ sign [0x00]?``
+     * -  scale - 8bit scale value (number of decimal digit after the '.')
+     * -  BCD - BCD encoded digits (4 bits for each digit)
+     * -  sign - sign encoded on 4 bits (0xc = "+", 0xd = "-")
+     * -  0x0 - last 4bits if length(digits) % 2 == 0
+     * Example: ``x04 0x12 0x34 0x01
+     * 0xd0 -&gt; -12.3401``
+     * + SET
+     * A list of strings representing a SET of values.
+     * - ``value``&#64;n
+     * A sequence of 0 or more of protobuf's bytes (length
+     * prepended octets) or one of the special sequences with a
+     * predefined meaning listed below.
+     * Example (length of the bytes array shown in brackets):
+     * -  ``[0]`` - the NULL value
+     * -  ``[1] 0x00`` - a set containing a blank string ''
+     * -  ``[1] 0x01`` - this would be an invalid value,
+     * but is to be treated as the empty set
+     * -  ``[2] 0x01 0x00`` - a set with a single item, which is the '0'
+     * character
+     * -  ``[8] 0x03 F O O 0x03 B A R`` - a set with 2 items: FOO,BAR
      * </pre>
      *
      * Protobuf type {@code Mysqlx.Resultset.ColumnMetaData}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:Mysqlx.Resultset.ColumnMetaData)
         com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaDataOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_ColumnMetaData_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_ColumnMetaData_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.class, com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.class,
+                com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.Builder.class);
       }
 
       // Construct using com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.newBuilder()
@@ -3840,16 +4036,15 @@ public final class MysqlxResultset {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -3881,9 +4076,9 @@ public final class MysqlxResultset {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor;
       }
 
       @java.lang.Override
@@ -3902,7 +4097,8 @@ public final class MysqlxResultset {
 
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData buildPartial() {
-        com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData result = new com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData(this);
+        com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData result =
+            new com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -3962,38 +4158,41 @@ public final class MysqlxResultset {
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData) {
-          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData)other);
+          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -4001,7 +4200,8 @@ public final class MysqlxResultset {
       }
 
       public Builder mergeFrom(com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData other) {
-        if (other == com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.getDefaultInstance()) return this;
+        if (other == com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.getDefaultInstance())
+          return this;
         if (other.hasType()) {
           setType(other.getType());
         }
@@ -4060,7 +4260,8 @@ public final class MysqlxResultset {
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData) e.getUnfinishedMessage();
+          parsedMessage =
+              (com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -4069,44 +4270,59 @@ public final class MysqlxResultset {
         }
         return this;
       }
+
       private int bitField0_;
 
       private int type_ = 1;
       /**
+       *
+       *
        * <pre>
-       ** datatype of the field in a row 
+       * * datatype of the field in a row
        * </pre>
        *
        * <code>required .Mysqlx.Resultset.ColumnMetaData.FieldType type = 1;</code>
+       *
        * @return Whether the type field is set.
        */
-      @java.lang.Override public boolean hasType() {
+      @java.lang.Override
+      public boolean hasType() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** datatype of the field in a row 
+       * * datatype of the field in a row
        * </pre>
        *
        * <code>required .Mysqlx.Resultset.ColumnMetaData.FieldType type = 1;</code>
+       *
        * @return The type.
        */
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType getType() {
         @SuppressWarnings("deprecation")
-        com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType result = com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.valueOf(type_);
-        return result == null ? com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.SINT : result;
+        com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType result =
+            com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.valueOf(type_);
+        return result == null
+            ? com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType.SINT
+            : result;
       }
       /**
+       *
+       *
        * <pre>
-       ** datatype of the field in a row 
+       * * datatype of the field in a row
        * </pre>
        *
        * <code>required .Mysqlx.Resultset.ColumnMetaData.FieldType type = 1;</code>
+       *
        * @param value The type to set.
        * @return This builder for chaining.
        */
-      public Builder setType(com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType value) {
+      public Builder setType(
+          com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData.FieldType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4116,11 +4332,14 @@ public final class MysqlxResultset {
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** datatype of the field in a row 
+       * * datatype of the field in a row
        * </pre>
        *
        * <code>required .Mysqlx.Resultset.ColumnMetaData.FieldType type = 1;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearType() {
@@ -4132,11 +4351,14 @@ public final class MysqlxResultset {
 
       private com.google.protobuf.ByteString name_ = com.google.protobuf.ByteString.EMPTY;
       /**
+       *
+       *
        * <pre>
-       ** name of the column 
+       * * name of the column
        * </pre>
        *
        * <code>optional bytes name = 2;</code>
+       *
        * @return Whether the name field is set.
        */
       @java.lang.Override
@@ -4144,11 +4366,14 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000002) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the column 
+       * * name of the column
        * </pre>
        *
        * <code>optional bytes name = 2;</code>
+       *
        * @return The name.
        */
       @java.lang.Override
@@ -4156,29 +4381,35 @@ public final class MysqlxResultset {
         return name_;
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the column 
+       * * name of the column
        * </pre>
        *
        * <code>optional bytes name = 2;</code>
+       *
        * @param value The name to set.
        * @return This builder for chaining.
        */
       public Builder setName(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000002;
         name_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the column 
+       * * name of the column
        * </pre>
        *
        * <code>optional bytes name = 2;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearName() {
@@ -4190,11 +4421,14 @@ public final class MysqlxResultset {
 
       private com.google.protobuf.ByteString originalName_ = com.google.protobuf.ByteString.EMPTY;
       /**
+       *
+       *
        * <pre>
-       ** name of the column before an alias was applied 
+       * * name of the column before an alias was applied
        * </pre>
        *
        * <code>optional bytes original_name = 3;</code>
+       *
        * @return Whether the originalName field is set.
        */
       @java.lang.Override
@@ -4202,11 +4436,14 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000004) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the column before an alias was applied 
+       * * name of the column before an alias was applied
        * </pre>
        *
        * <code>optional bytes original_name = 3;</code>
+       *
        * @return The originalName.
        */
       @java.lang.Override
@@ -4214,29 +4451,35 @@ public final class MysqlxResultset {
         return originalName_;
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the column before an alias was applied 
+       * * name of the column before an alias was applied
        * </pre>
        *
        * <code>optional bytes original_name = 3;</code>
+       *
        * @param value The originalName to set.
        * @return This builder for chaining.
        */
       public Builder setOriginalName(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000004;
         originalName_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the column before an alias was applied 
+       * * name of the column before an alias was applied
        * </pre>
        *
        * <code>optional bytes original_name = 3;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearOriginalName() {
@@ -4248,11 +4491,14 @@ public final class MysqlxResultset {
 
       private com.google.protobuf.ByteString table_ = com.google.protobuf.ByteString.EMPTY;
       /**
+       *
+       *
        * <pre>
-       ** name of the table the column originates from 
+       * * name of the table the column originates from
        * </pre>
        *
        * <code>optional bytes table = 4;</code>
+       *
        * @return Whether the table field is set.
        */
       @java.lang.Override
@@ -4260,11 +4506,14 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000008) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the table the column originates from 
+       * * name of the table the column originates from
        * </pre>
        *
        * <code>optional bytes table = 4;</code>
+       *
        * @return The table.
        */
       @java.lang.Override
@@ -4272,29 +4521,35 @@ public final class MysqlxResultset {
         return table_;
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the table the column originates from 
+       * * name of the table the column originates from
        * </pre>
        *
        * <code>optional bytes table = 4;</code>
+       *
        * @param value The table to set.
        * @return This builder for chaining.
        */
       public Builder setTable(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000008;
         table_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the table the column originates from 
+       * * name of the table the column originates from
        * </pre>
        *
        * <code>optional bytes table = 4;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearTable() {
@@ -4306,11 +4561,14 @@ public final class MysqlxResultset {
 
       private com.google.protobuf.ByteString originalTable_ = com.google.protobuf.ByteString.EMPTY;
       /**
+       *
+       *
        * <pre>
-       ** name of the table the column originates from before an alias was applied 
+       * * name of the table the column originates from before an alias was applied
        * </pre>
        *
        * <code>optional bytes original_table = 5;</code>
+       *
        * @return Whether the originalTable field is set.
        */
       @java.lang.Override
@@ -4318,11 +4576,14 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000010) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the table the column originates from before an alias was applied 
+       * * name of the table the column originates from before an alias was applied
        * </pre>
        *
        * <code>optional bytes original_table = 5;</code>
+       *
        * @return The originalTable.
        */
       @java.lang.Override
@@ -4330,29 +4591,35 @@ public final class MysqlxResultset {
         return originalTable_;
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the table the column originates from before an alias was applied 
+       * * name of the table the column originates from before an alias was applied
        * </pre>
        *
        * <code>optional bytes original_table = 5;</code>
+       *
        * @param value The originalTable to set.
        * @return This builder for chaining.
        */
       public Builder setOriginalTable(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000010;
         originalTable_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** name of the table the column originates from before an alias was applied 
+       * * name of the table the column originates from before an alias was applied
        * </pre>
        *
        * <code>optional bytes original_table = 5;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearOriginalTable() {
@@ -4364,11 +4631,14 @@ public final class MysqlxResultset {
 
       private com.google.protobuf.ByteString schema_ = com.google.protobuf.ByteString.EMPTY;
       /**
+       *
+       *
        * <pre>
-       ** schema the column originates from 
+       * * schema the column originates from
        * </pre>
        *
        * <code>optional bytes schema = 6;</code>
+       *
        * @return Whether the schema field is set.
        */
       @java.lang.Override
@@ -4376,11 +4646,14 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000020) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** schema the column originates from 
+       * * schema the column originates from
        * </pre>
        *
        * <code>optional bytes schema = 6;</code>
+       *
        * @return The schema.
        */
       @java.lang.Override
@@ -4388,29 +4661,35 @@ public final class MysqlxResultset {
         return schema_;
       }
       /**
+       *
+       *
        * <pre>
-       ** schema the column originates from 
+       * * schema the column originates from
        * </pre>
        *
        * <code>optional bytes schema = 6;</code>
+       *
        * @param value The schema to set.
        * @return This builder for chaining.
        */
       public Builder setSchema(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000020;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000020;
         schema_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** schema the column originates from 
+       * * schema the column originates from
        * </pre>
        *
        * <code>optional bytes schema = 6;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearSchema() {
@@ -4422,15 +4701,18 @@ public final class MysqlxResultset {
 
       private com.google.protobuf.ByteString catalog_ = com.google.protobuf.ByteString.EMPTY;
       /**
+       *
+       *
        * <pre>
-       ** catalog the schema originates from
-       *&#64;note
-       *As there is currently no support for catalogs in MySQL,
-       *don't expect this field to be set. In the MySQL C/S
-       *protocol the field had the value ``def`` all the time 
+       * * catalog the schema originates from
+       * &#64;note
+       * As there is currently no support for catalogs in MySQL,
+       * don't expect this field to be set. In the MySQL C/S
+       * protocol the field had the value ``def`` all the time
        * </pre>
        *
        * <code>optional bytes catalog = 7;</code>
+       *
        * @return Whether the catalog field is set.
        */
       @java.lang.Override
@@ -4438,15 +4720,18 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000040) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** catalog the schema originates from
-       *&#64;note
-       *As there is currently no support for catalogs in MySQL,
-       *don't expect this field to be set. In the MySQL C/S
-       *protocol the field had the value ``def`` all the time 
+       * * catalog the schema originates from
+       * &#64;note
+       * As there is currently no support for catalogs in MySQL,
+       * don't expect this field to be set. In the MySQL C/S
+       * protocol the field had the value ``def`` all the time
        * </pre>
        *
        * <code>optional bytes catalog = 7;</code>
+       *
        * @return The catalog.
        */
       @java.lang.Override
@@ -4454,37 +4739,43 @@ public final class MysqlxResultset {
         return catalog_;
       }
       /**
+       *
+       *
        * <pre>
-       ** catalog the schema originates from
-       *&#64;note
-       *As there is currently no support for catalogs in MySQL,
-       *don't expect this field to be set. In the MySQL C/S
-       *protocol the field had the value ``def`` all the time 
+       * * catalog the schema originates from
+       * &#64;note
+       * As there is currently no support for catalogs in MySQL,
+       * don't expect this field to be set. In the MySQL C/S
+       * protocol the field had the value ``def`` all the time
        * </pre>
        *
        * <code>optional bytes catalog = 7;</code>
+       *
        * @param value The catalog to set.
        * @return This builder for chaining.
        */
       public Builder setCatalog(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000040;
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000040;
         catalog_ = value;
         onChanged();
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** catalog the schema originates from
-       *&#64;note
-       *As there is currently no support for catalogs in MySQL,
-       *don't expect this field to be set. In the MySQL C/S
-       *protocol the field had the value ``def`` all the time 
+       * * catalog the schema originates from
+       * &#64;note
+       * As there is currently no support for catalogs in MySQL,
+       * don't expect this field to be set. In the MySQL C/S
+       * protocol the field had the value ``def`` all the time
        * </pre>
        *
        * <code>optional bytes catalog = 7;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearCatalog() {
@@ -4494,9 +4785,10 @@ public final class MysqlxResultset {
         return this;
       }
 
-      private long collation_ ;
+      private long collation_;
       /**
        * <code>optional uint64 collation = 8;</code>
+       *
        * @return Whether the collation field is set.
        */
       @java.lang.Override
@@ -4505,6 +4797,7 @@ public final class MysqlxResultset {
       }
       /**
        * <code>optional uint64 collation = 8;</code>
+       *
        * @return The collation.
        */
       @java.lang.Override
@@ -4513,6 +4806,7 @@ public final class MysqlxResultset {
       }
       /**
        * <code>optional uint64 collation = 8;</code>
+       *
        * @param value The collation to set.
        * @return This builder for chaining.
        */
@@ -4524,6 +4818,7 @@ public final class MysqlxResultset {
       }
       /**
        * <code>optional uint64 collation = 8;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearCollation() {
@@ -4533,14 +4828,17 @@ public final class MysqlxResultset {
         return this;
       }
 
-      private int fractionalDigits_ ;
+      private int fractionalDigits_;
       /**
+       *
+       *
        * <pre>
-       ** displayed factional decimal digits for floating point and
-       *fixed point numbers 
+       * * displayed factional decimal digits for floating point and
+       * fixed point numbers
        * </pre>
        *
        * <code>optional uint32 fractional_digits = 9;</code>
+       *
        * @return Whether the fractionalDigits field is set.
        */
       @java.lang.Override
@@ -4548,12 +4846,15 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000100) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** displayed factional decimal digits for floating point and
-       *fixed point numbers 
+       * * displayed factional decimal digits for floating point and
+       * fixed point numbers
        * </pre>
        *
        * <code>optional uint32 fractional_digits = 9;</code>
+       *
        * @return The fractionalDigits.
        */
       @java.lang.Override
@@ -4561,12 +4862,15 @@ public final class MysqlxResultset {
         return fractionalDigits_;
       }
       /**
+       *
+       *
        * <pre>
-       ** displayed factional decimal digits for floating point and
-       *fixed point numbers 
+       * * displayed factional decimal digits for floating point and
+       * fixed point numbers
        * </pre>
        *
        * <code>optional uint32 fractional_digits = 9;</code>
+       *
        * @param value The fractionalDigits to set.
        * @return This builder for chaining.
        */
@@ -4577,12 +4881,15 @@ public final class MysqlxResultset {
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** displayed factional decimal digits for floating point and
-       *fixed point numbers 
+       * * displayed factional decimal digits for floating point and
+       * fixed point numbers
        * </pre>
        *
        * <code>optional uint32 fractional_digits = 9;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearFractionalDigits() {
@@ -4592,13 +4899,16 @@ public final class MysqlxResultset {
         return this;
       }
 
-      private int length_ ;
+      private int length_;
       /**
+       *
+       *
        * <pre>
-       ** maximum count of displayable characters of .type 
+       * * maximum count of displayable characters of .type
        * </pre>
        *
        * <code>optional uint32 length = 10;</code>
+       *
        * @return Whether the length field is set.
        */
       @java.lang.Override
@@ -4606,11 +4916,14 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000200) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** maximum count of displayable characters of .type 
+       * * maximum count of displayable characters of .type
        * </pre>
        *
        * <code>optional uint32 length = 10;</code>
+       *
        * @return The length.
        */
       @java.lang.Override
@@ -4618,11 +4931,14 @@ public final class MysqlxResultset {
         return length_;
       }
       /**
+       *
+       *
        * <pre>
-       ** maximum count of displayable characters of .type 
+       * * maximum count of displayable characters of .type
        * </pre>
        *
        * <code>optional uint32 length = 10;</code>
+       *
        * @param value The length to set.
        * @return This builder for chaining.
        */
@@ -4633,11 +4949,14 @@ public final class MysqlxResultset {
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** maximum count of displayable characters of .type 
+       * * maximum count of displayable characters of .type
        * </pre>
        *
        * <code>optional uint32 length = 10;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearLength() {
@@ -4647,28 +4966,31 @@ public final class MysqlxResultset {
         return this;
       }
 
-      private int flags_ ;
+      private int flags_;
       /**
+       *
+       *
        * <pre>
-       ** ``.type`` specific flags
-       *| Type    | Value  | Description  |
-       *|---------|--------|--------------|
-       *| UINT    | 0x0001 | zerofill     |
-       *| DOUBLE  | 0x0001 | unsigned     |
-       *| FLOAT   | 0x0001 | unsigned     |
-       *| DECIMAL | 0x0001 | unsigned     |
-       *| BYTES   | 0x0001 | rightpad     |
-       *| Value  | Description     |
-       *|--------|-----------------|
-       *| 0x0010 | NOT&#92;_NULL       |
-       *| 0x0020 | PRIMARY&#92;_KEY    |
-       *| 0x0040 | UNIQUE&#92;_KEY     |
-       *| 0x0080 | MULTIPLE&#92;_KEY   |
-       *| 0x0100 | AUTO&#92;_INCREMENT |
-       *default: 0 
+       * * ``.type`` specific flags
+       * | Type    | Value  | Description  |
+       * |---------|--------|--------------|
+       * | UINT    | 0x0001 | zerofill     |
+       * | DOUBLE  | 0x0001 | unsigned     |
+       * | FLOAT   | 0x0001 | unsigned     |
+       * | DECIMAL | 0x0001 | unsigned     |
+       * | BYTES   | 0x0001 | rightpad     |
+       * | Value  | Description     |
+       * |--------|-----------------|
+       * | 0x0010 | NOT&#92;_NULL       |
+       * | 0x0020 | PRIMARY&#92;_KEY    |
+       * | 0x0040 | UNIQUE&#92;_KEY     |
+       * | 0x0080 | MULTIPLE&#92;_KEY   |
+       * | 0x0100 | AUTO&#92;_INCREMENT |
+       * default: 0
        * </pre>
        *
        * <code>optional uint32 flags = 11;</code>
+       *
        * @return Whether the flags field is set.
        */
       @java.lang.Override
@@ -4676,26 +4998,29 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000400) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** ``.type`` specific flags
-       *| Type    | Value  | Description  |
-       *|---------|--------|--------------|
-       *| UINT    | 0x0001 | zerofill     |
-       *| DOUBLE  | 0x0001 | unsigned     |
-       *| FLOAT   | 0x0001 | unsigned     |
-       *| DECIMAL | 0x0001 | unsigned     |
-       *| BYTES   | 0x0001 | rightpad     |
-       *| Value  | Description     |
-       *|--------|-----------------|
-       *| 0x0010 | NOT&#92;_NULL       |
-       *| 0x0020 | PRIMARY&#92;_KEY    |
-       *| 0x0040 | UNIQUE&#92;_KEY     |
-       *| 0x0080 | MULTIPLE&#92;_KEY   |
-       *| 0x0100 | AUTO&#92;_INCREMENT |
-       *default: 0 
+       * * ``.type`` specific flags
+       * | Type    | Value  | Description  |
+       * |---------|--------|--------------|
+       * | UINT    | 0x0001 | zerofill     |
+       * | DOUBLE  | 0x0001 | unsigned     |
+       * | FLOAT   | 0x0001 | unsigned     |
+       * | DECIMAL | 0x0001 | unsigned     |
+       * | BYTES   | 0x0001 | rightpad     |
+       * | Value  | Description     |
+       * |--------|-----------------|
+       * | 0x0010 | NOT&#92;_NULL       |
+       * | 0x0020 | PRIMARY&#92;_KEY    |
+       * | 0x0040 | UNIQUE&#92;_KEY     |
+       * | 0x0080 | MULTIPLE&#92;_KEY   |
+       * | 0x0100 | AUTO&#92;_INCREMENT |
+       * default: 0
        * </pre>
        *
        * <code>optional uint32 flags = 11;</code>
+       *
        * @return The flags.
        */
       @java.lang.Override
@@ -4703,26 +5028,29 @@ public final class MysqlxResultset {
         return flags_;
       }
       /**
+       *
+       *
        * <pre>
-       ** ``.type`` specific flags
-       *| Type    | Value  | Description  |
-       *|---------|--------|--------------|
-       *| UINT    | 0x0001 | zerofill     |
-       *| DOUBLE  | 0x0001 | unsigned     |
-       *| FLOAT   | 0x0001 | unsigned     |
-       *| DECIMAL | 0x0001 | unsigned     |
-       *| BYTES   | 0x0001 | rightpad     |
-       *| Value  | Description     |
-       *|--------|-----------------|
-       *| 0x0010 | NOT&#92;_NULL       |
-       *| 0x0020 | PRIMARY&#92;_KEY    |
-       *| 0x0040 | UNIQUE&#92;_KEY     |
-       *| 0x0080 | MULTIPLE&#92;_KEY   |
-       *| 0x0100 | AUTO&#92;_INCREMENT |
-       *default: 0 
+       * * ``.type`` specific flags
+       * | Type    | Value  | Description  |
+       * |---------|--------|--------------|
+       * | UINT    | 0x0001 | zerofill     |
+       * | DOUBLE  | 0x0001 | unsigned     |
+       * | FLOAT   | 0x0001 | unsigned     |
+       * | DECIMAL | 0x0001 | unsigned     |
+       * | BYTES   | 0x0001 | rightpad     |
+       * | Value  | Description     |
+       * |--------|-----------------|
+       * | 0x0010 | NOT&#92;_NULL       |
+       * | 0x0020 | PRIMARY&#92;_KEY    |
+       * | 0x0040 | UNIQUE&#92;_KEY     |
+       * | 0x0080 | MULTIPLE&#92;_KEY   |
+       * | 0x0100 | AUTO&#92;_INCREMENT |
+       * default: 0
        * </pre>
        *
        * <code>optional uint32 flags = 11;</code>
+       *
        * @param value The flags to set.
        * @return This builder for chaining.
        */
@@ -4733,26 +5061,29 @@ public final class MysqlxResultset {
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** ``.type`` specific flags
-       *| Type    | Value  | Description  |
-       *|---------|--------|--------------|
-       *| UINT    | 0x0001 | zerofill     |
-       *| DOUBLE  | 0x0001 | unsigned     |
-       *| FLOAT   | 0x0001 | unsigned     |
-       *| DECIMAL | 0x0001 | unsigned     |
-       *| BYTES   | 0x0001 | rightpad     |
-       *| Value  | Description     |
-       *|--------|-----------------|
-       *| 0x0010 | NOT&#92;_NULL       |
-       *| 0x0020 | PRIMARY&#92;_KEY    |
-       *| 0x0040 | UNIQUE&#92;_KEY     |
-       *| 0x0080 | MULTIPLE&#92;_KEY   |
-       *| 0x0100 | AUTO&#92;_INCREMENT |
-       *default: 0 
+       * * ``.type`` specific flags
+       * | Type    | Value  | Description  |
+       * |---------|--------|--------------|
+       * | UINT    | 0x0001 | zerofill     |
+       * | DOUBLE  | 0x0001 | unsigned     |
+       * | FLOAT   | 0x0001 | unsigned     |
+       * | DECIMAL | 0x0001 | unsigned     |
+       * | BYTES   | 0x0001 | rightpad     |
+       * | Value  | Description     |
+       * |--------|-----------------|
+       * | 0x0010 | NOT&#92;_NULL       |
+       * | 0x0020 | PRIMARY&#92;_KEY    |
+       * | 0x0040 | UNIQUE&#92;_KEY     |
+       * | 0x0080 | MULTIPLE&#92;_KEY   |
+       * | 0x0100 | AUTO&#92;_INCREMENT |
+       * default: 0
        * </pre>
        *
        * <code>optional uint32 flags = 11;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearFlags() {
@@ -4762,25 +5093,28 @@ public final class MysqlxResultset {
         return this;
       }
 
-      private int contentType_ ;
+      private int contentType_;
       /**
+       *
+       *
        * <pre>
-       ** a hint about the higher-level encoding of a BYTES field
-       *| Type   | Value  | Description             |
-       *|--------|--------|-------------------------|
-       *| BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
-       *| BYTES  | 0x0002 | JSON (text encoding)    |
-       *| BYTES  | 0x0003 | XML (text encoding)     |
-       *&#64;note
-       *This list isn't comprehensive. As a guideline: the field's
-       *value is expected to pass a validator check on client
-       *and server if this field is set. If the server adds more
-       *internal data types that rely on BLOB storage like image
-       *manipulation, seeking into complex types in BLOBs, and
-       *more types will be added 
+       * * a hint about the higher-level encoding of a BYTES field
+       * | Type   | Value  | Description             |
+       * |--------|--------|-------------------------|
+       * | BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
+       * | BYTES  | 0x0002 | JSON (text encoding)    |
+       * | BYTES  | 0x0003 | XML (text encoding)     |
+       * &#64;note
+       * This list isn't comprehensive. As a guideline: the field's
+       * value is expected to pass a validator check on client
+       * and server if this field is set. If the server adds more
+       * internal data types that rely on BLOB storage like image
+       * manipulation, seeking into complex types in BLOBs, and
+       * more types will be added
        * </pre>
        *
        * <code>optional uint32 content_type = 12;</code>
+       *
        * @return Whether the contentType field is set.
        */
       @java.lang.Override
@@ -4788,23 +5122,26 @@ public final class MysqlxResultset {
         return ((bitField0_ & 0x00000800) != 0);
       }
       /**
+       *
+       *
        * <pre>
-       ** a hint about the higher-level encoding of a BYTES field
-       *| Type   | Value  | Description             |
-       *|--------|--------|-------------------------|
-       *| BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
-       *| BYTES  | 0x0002 | JSON (text encoding)    |
-       *| BYTES  | 0x0003 | XML (text encoding)     |
-       *&#64;note
-       *This list isn't comprehensive. As a guideline: the field's
-       *value is expected to pass a validator check on client
-       *and server if this field is set. If the server adds more
-       *internal data types that rely on BLOB storage like image
-       *manipulation, seeking into complex types in BLOBs, and
-       *more types will be added 
+       * * a hint about the higher-level encoding of a BYTES field
+       * | Type   | Value  | Description             |
+       * |--------|--------|-------------------------|
+       * | BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
+       * | BYTES  | 0x0002 | JSON (text encoding)    |
+       * | BYTES  | 0x0003 | XML (text encoding)     |
+       * &#64;note
+       * This list isn't comprehensive. As a guideline: the field's
+       * value is expected to pass a validator check on client
+       * and server if this field is set. If the server adds more
+       * internal data types that rely on BLOB storage like image
+       * manipulation, seeking into complex types in BLOBs, and
+       * more types will be added
        * </pre>
        *
        * <code>optional uint32 content_type = 12;</code>
+       *
        * @return The contentType.
        */
       @java.lang.Override
@@ -4812,23 +5149,26 @@ public final class MysqlxResultset {
         return contentType_;
       }
       /**
+       *
+       *
        * <pre>
-       ** a hint about the higher-level encoding of a BYTES field
-       *| Type   | Value  | Description             |
-       *|--------|--------|-------------------------|
-       *| BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
-       *| BYTES  | 0x0002 | JSON (text encoding)    |
-       *| BYTES  | 0x0003 | XML (text encoding)     |
-       *&#64;note
-       *This list isn't comprehensive. As a guideline: the field's
-       *value is expected to pass a validator check on client
-       *and server if this field is set. If the server adds more
-       *internal data types that rely on BLOB storage like image
-       *manipulation, seeking into complex types in BLOBs, and
-       *more types will be added 
+       * * a hint about the higher-level encoding of a BYTES field
+       * | Type   | Value  | Description             |
+       * |--------|--------|-------------------------|
+       * | BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
+       * | BYTES  | 0x0002 | JSON (text encoding)    |
+       * | BYTES  | 0x0003 | XML (text encoding)     |
+       * &#64;note
+       * This list isn't comprehensive. As a guideline: the field's
+       * value is expected to pass a validator check on client
+       * and server if this field is set. If the server adds more
+       * internal data types that rely on BLOB storage like image
+       * manipulation, seeking into complex types in BLOBs, and
+       * more types will be added
        * </pre>
        *
        * <code>optional uint32 content_type = 12;</code>
+       *
        * @param value The contentType to set.
        * @return This builder for chaining.
        */
@@ -4839,23 +5179,26 @@ public final class MysqlxResultset {
         return this;
       }
       /**
+       *
+       *
        * <pre>
-       ** a hint about the higher-level encoding of a BYTES field
-       *| Type   | Value  | Description             |
-       *|--------|--------|-------------------------|
-       *| BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
-       *| BYTES  | 0x0002 | JSON (text encoding)    |
-       *| BYTES  | 0x0003 | XML (text encoding)     |
-       *&#64;note
-       *This list isn't comprehensive. As a guideline: the field's
-       *value is expected to pass a validator check on client
-       *and server if this field is set. If the server adds more
-       *internal data types that rely on BLOB storage like image
-       *manipulation, seeking into complex types in BLOBs, and
-       *more types will be added 
+       * * a hint about the higher-level encoding of a BYTES field
+       * | Type   | Value  | Description             |
+       * |--------|--------|-------------------------|
+       * | BYTES  | 0x0001 | GEOMETRY (WKB encoding) |
+       * | BYTES  | 0x0002 | JSON (text encoding)    |
+       * | BYTES  | 0x0003 | XML (text encoding)     |
+       * &#64;note
+       * This list isn't comprehensive. As a guideline: the field's
+       * value is expected to pass a validator check on client
+       * and server if this field is set. If the server adds more
+       * internal data types that rely on BLOB storage like image
+       * manipulation, seeking into complex types in BLOBs, and
+       * more types will be added
        * </pre>
        *
        * <code>optional uint32 content_type = 12;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearContentType() {
@@ -4864,6 +5207,7 @@ public final class MysqlxResultset {
         onChanged();
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -4876,12 +5220,12 @@ public final class MysqlxResultset {
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:Mysqlx.Resultset.ColumnMetaData)
     }
 
     // @@protoc_insertion_point(class_scope:Mysqlx.Resultset.ColumnMetaData)
     private static final com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData();
     }
@@ -4890,16 +5234,17 @@ public final class MysqlxResultset {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<ColumnMetaData>
-        PARSER = new com.google.protobuf.AbstractParser<ColumnMetaData>() {
-      @java.lang.Override
-      public ColumnMetaData parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ColumnMetaData(input, extensionRegistry);
-      }
-    };
+    @java.lang.Deprecated
+    public static final com.google.protobuf.Parser<ColumnMetaData> PARSER =
+        new com.google.protobuf.AbstractParser<ColumnMetaData>() {
+          @java.lang.Override
+          public ColumnMetaData parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new ColumnMetaData(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<ColumnMetaData> parser() {
       return PARSER;
@@ -4914,68 +5259,73 @@ public final class MysqlxResultset {
     public com.mysql.cj.x.protobuf.MysqlxResultset.ColumnMetaData getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
-  public interface RowOrBuilder extends
+  public interface RowOrBuilder
+      extends
       // @@protoc_insertion_point(interface_extends:Mysqlx.Resultset.Row)
       com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>repeated bytes field = 1;</code>
+     *
      * @return A list containing the field.
      */
     java.util.List<com.google.protobuf.ByteString> getFieldList();
     /**
      * <code>repeated bytes field = 1;</code>
+     *
      * @return The count of field.
      */
     int getFieldCount();
     /**
      * <code>repeated bytes field = 1;</code>
+     *
      * @param index The index of the element to return.
      * @return The field at the given index.
      */
     com.google.protobuf.ByteString getField(int index);
   }
   /**
+   *
+   *
    * <pre>
-   **
-   *Row in a Resultset.
-   *A row is represented as a list of fields encoded as byte blobs.
-   *Value of each field is encoded as sequence of bytes using
-   *encoding appropriate for the type of the value given by
-   *``ColumnMetadata``, as specified in the &#64;ref Mysqlx::Resultset::ColumnMetaData
-   *description.
+   * *
+   * Row in a Resultset.
+   * A row is represented as a list of fields encoded as byte blobs.
+   * Value of each field is encoded as sequence of bytes using
+   * encoding appropriate for the type of the value given by
+   * ``ColumnMetadata``, as specified in the &#64;ref Mysqlx::Resultset::ColumnMetaData
+   * description.
    * </pre>
    *
    * Protobuf type {@code Mysqlx.Resultset.Row}
    */
-  public static final class Row extends
-      com.google.protobuf.GeneratedMessageV3 implements
+  public static final class Row extends com.google.protobuf.GeneratedMessageV3
+      implements
       // @@protoc_insertion_point(message_implements:Mysqlx.Resultset.Row)
       RowOrBuilder {
-  private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     // Use Row.newBuilder() to construct.
     private Row(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private Row() {
       field_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
+    protected java.lang.Object newInstance(UnusedPrivateParameter unused) {
       return new Row();
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return this.unknownFields;
     }
+
     private Row(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4995,28 +5345,28 @@ public final class MysqlxResultset {
             case 0:
               done = true;
               break;
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                field_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
-                mutable_bitField0_ |= 0x00000001;
+            case 10:
+              {
+                if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                  field_ = new java.util.ArrayList<com.google.protobuf.ByteString>();
+                  mutable_bitField0_ |= 0x00000001;
+                }
+                field_.add(input.readBytes());
+                break;
               }
-              field_.add(input.readBytes());
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
+            default:
+              {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
               }
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) != 0)) {
           field_ = java.util.Collections.unmodifiableList(field_); // C
@@ -5025,32 +5375,36 @@ public final class MysqlxResultset {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_Row_descriptor;
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_Row_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_Row_fieldAccessorTable
+      return com.mysql.cj.x.protobuf.MysqlxResultset
+          .internal_static_Mysqlx_Resultset_Row_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.mysql.cj.x.protobuf.MysqlxResultset.Row.class, com.mysql.cj.x.protobuf.MysqlxResultset.Row.Builder.class);
+              com.mysql.cj.x.protobuf.MysqlxResultset.Row.class,
+              com.mysql.cj.x.protobuf.MysqlxResultset.Row.Builder.class);
     }
 
     public static final int FIELD_FIELD_NUMBER = 1;
     private java.util.List<com.google.protobuf.ByteString> field_;
     /**
      * <code>repeated bytes field = 1;</code>
+     *
      * @return A list containing the field.
      */
     @java.lang.Override
-    public java.util.List<com.google.protobuf.ByteString>
-        getFieldList() {
+    public java.util.List<com.google.protobuf.ByteString> getFieldList() {
       return field_;
     }
     /**
      * <code>repeated bytes field = 1;</code>
+     *
      * @return The count of field.
      */
     public int getFieldCount() {
@@ -5058,6 +5412,7 @@ public final class MysqlxResultset {
     }
     /**
      * <code>repeated bytes field = 1;</code>
+     *
      * @param index The index of the element to return.
      * @return The field at the given index.
      */
@@ -5066,6 +5421,7 @@ public final class MysqlxResultset {
     }
 
     private byte memoizedIsInitialized = -1;
+
     @java.lang.Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -5077,8 +5433,7 @@ public final class MysqlxResultset {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
       for (int i = 0; i < field_.size(); i++) {
         output.writeBytes(1, field_.get(i));
       }
@@ -5094,8 +5449,7 @@ public final class MysqlxResultset {
       {
         int dataSize = 0;
         for (int i = 0; i < field_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(field_.get(i));
+          dataSize += com.google.protobuf.CodedOutputStream.computeBytesSizeNoTag(field_.get(i));
         }
         size += dataSize;
         size += 1 * getFieldList().size();
@@ -5108,15 +5462,15 @@ public final class MysqlxResultset {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof com.mysql.cj.x.protobuf.MysqlxResultset.Row)) {
         return super.equals(obj);
       }
-      com.mysql.cj.x.protobuf.MysqlxResultset.Row other = (com.mysql.cj.x.protobuf.MysqlxResultset.Row) obj;
+      com.mysql.cj.x.protobuf.MysqlxResultset.Row other =
+          (com.mysql.cj.x.protobuf.MysqlxResultset.Row) obj;
 
-      if (!getFieldList()
-          .equals(other.getFieldList())) return false;
+      if (!getFieldList().equals(other.getFieldList())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -5137,88 +5491,94 @@ public final class MysqlxResultset {
       return hash;
     }
 
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(
-        java.nio.ByteBuffer data)
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
-    public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        java.io.InputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
+    public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(
+          PARSER, input, extensionRegistry);
+    }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.mysql.cj.x.protobuf.MysqlxResultset.Row parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(
+          PARSER, input, extensionRegistry);
     }
 
     @java.lang.Override
-    public Builder newBuilderForType() { return newBuilder(); }
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
+
     public static Builder newBuilder(com.mysql.cj.x.protobuf.MysqlxResultset.Row prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     @java.lang.Override
     public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+      return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
@@ -5228,33 +5588,38 @@ public final class MysqlxResultset {
       return builder;
     }
     /**
+     *
+     *
      * <pre>
-     **
-     *Row in a Resultset.
-     *A row is represented as a list of fields encoded as byte blobs.
-     *Value of each field is encoded as sequence of bytes using
-     *encoding appropriate for the type of the value given by
-     *``ColumnMetadata``, as specified in the &#64;ref Mysqlx::Resultset::ColumnMetaData
-     *description.
+     * *
+     * Row in a Resultset.
+     * A row is represented as a list of fields encoded as byte blobs.
+     * Value of each field is encoded as sequence of bytes using
+     * encoding appropriate for the type of the value given by
+     * ``ColumnMetadata``, as specified in the &#64;ref Mysqlx::Resultset::ColumnMetaData
+     * description.
      * </pre>
      *
      * Protobuf type {@code Mysqlx.Resultset.Row}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+    public static final class Builder
+        extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
+        implements
         // @@protoc_insertion_point(builder_implements:Mysqlx.Resultset.Row)
         com.mysql.cj.x.protobuf.MysqlxResultset.RowOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_Row_descriptor;
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_Row_descriptor;
       }
 
       @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_Row_fieldAccessorTable
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_Row_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.mysql.cj.x.protobuf.MysqlxResultset.Row.class, com.mysql.cj.x.protobuf.MysqlxResultset.Row.Builder.class);
+                com.mysql.cj.x.protobuf.MysqlxResultset.Row.class,
+                com.mysql.cj.x.protobuf.MysqlxResultset.Row.Builder.class);
       }
 
       // Construct using com.mysql.cj.x.protobuf.MysqlxResultset.Row.newBuilder()
@@ -5262,16 +5627,15 @@ public final class MysqlxResultset {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+        if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {}
       }
+
       @java.lang.Override
       public Builder clear() {
         super.clear();
@@ -5281,9 +5645,9 @@ public final class MysqlxResultset {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.mysql.cj.x.protobuf.MysqlxResultset.internal_static_Mysqlx_Resultset_Row_descriptor;
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+        return com.mysql.cj.x.protobuf.MysqlxResultset
+            .internal_static_Mysqlx_Resultset_Row_descriptor;
       }
 
       @java.lang.Override
@@ -5302,7 +5666,8 @@ public final class MysqlxResultset {
 
       @java.lang.Override
       public com.mysql.cj.x.protobuf.MysqlxResultset.Row buildPartial() {
-        com.mysql.cj.x.protobuf.MysqlxResultset.Row result = new com.mysql.cj.x.protobuf.MysqlxResultset.Row(this);
+        com.mysql.cj.x.protobuf.MysqlxResultset.Row result =
+            new com.mysql.cj.x.protobuf.MysqlxResultset.Row(this);
         int from_bitField0_ = bitField0_;
         if (((bitField0_ & 0x00000001) != 0)) {
           field_ = java.util.Collections.unmodifiableList(field_);
@@ -5317,38 +5682,41 @@ public final class MysqlxResultset {
       public Builder clone() {
         return super.clone();
       }
+
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.setField(field, value);
       }
+
       @java.lang.Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+
       @java.lang.Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+
       @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index,
+          java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field, java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.mysql.cj.x.protobuf.MysqlxResultset.Row) {
-          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.Row)other);
+          return mergeFrom((com.mysql.cj.x.protobuf.MysqlxResultset.Row) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -5395,26 +5763,31 @@ public final class MysqlxResultset {
         }
         return this;
       }
+
       private int bitField0_;
 
-      private java.util.List<com.google.protobuf.ByteString> field_ = java.util.Collections.emptyList();
+      private java.util.List<com.google.protobuf.ByteString> field_ =
+          java.util.Collections.emptyList();
+
       private void ensureFieldIsMutable() {
         if (!((bitField0_ & 0x00000001) != 0)) {
           field_ = new java.util.ArrayList<com.google.protobuf.ByteString>(field_);
           bitField0_ |= 0x00000001;
-         }
+        }
       }
       /**
        * <code>repeated bytes field = 1;</code>
+       *
        * @return A list containing the field.
        */
-      public java.util.List<com.google.protobuf.ByteString>
-          getFieldList() {
-        return ((bitField0_ & 0x00000001) != 0) ?
-                 java.util.Collections.unmodifiableList(field_) : field_;
+      public java.util.List<com.google.protobuf.ByteString> getFieldList() {
+        return ((bitField0_ & 0x00000001) != 0)
+            ? java.util.Collections.unmodifiableList(field_)
+            : field_;
       }
       /**
        * <code>repeated bytes field = 1;</code>
+       *
        * @return The count of field.
        */
       public int getFieldCount() {
@@ -5422,6 +5795,7 @@ public final class MysqlxResultset {
       }
       /**
        * <code>repeated bytes field = 1;</code>
+       *
        * @param index The index of the element to return.
        * @return The field at the given index.
        */
@@ -5430,49 +5804,51 @@ public final class MysqlxResultset {
       }
       /**
        * <code>repeated bytes field = 1;</code>
+       *
        * @param index The index to set the value at.
        * @param value The field to set.
        * @return This builder for chaining.
        */
-      public Builder setField(
-          int index, com.google.protobuf.ByteString value) {
+      public Builder setField(int index, com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureFieldIsMutable();
+          throw new NullPointerException();
+        }
+        ensureFieldIsMutable();
         field_.set(index, value);
         onChanged();
         return this;
       }
       /**
        * <code>repeated bytes field = 1;</code>
+       *
        * @param value The field to add.
        * @return This builder for chaining.
        */
       public Builder addField(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureFieldIsMutable();
+          throw new NullPointerException();
+        }
+        ensureFieldIsMutable();
         field_.add(value);
         onChanged();
         return this;
       }
       /**
        * <code>repeated bytes field = 1;</code>
+       *
        * @param values The field to add.
        * @return This builder for chaining.
        */
       public Builder addAllField(
           java.lang.Iterable<? extends com.google.protobuf.ByteString> values) {
         ensureFieldIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, field_);
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, field_);
         onChanged();
         return this;
       }
       /**
        * <code>repeated bytes field = 1;</code>
+       *
        * @return This builder for chaining.
        */
       public Builder clearField() {
@@ -5481,6 +5857,7 @@ public final class MysqlxResultset {
         onChanged();
         return this;
       }
+
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -5493,12 +5870,12 @@ public final class MysqlxResultset {
         return super.mergeUnknownFields(unknownFields);
       }
 
-
       // @@protoc_insertion_point(builder_scope:Mysqlx.Resultset.Row)
     }
 
     // @@protoc_insertion_point(class_scope:Mysqlx.Resultset.Row)
     private static final com.mysql.cj.x.protobuf.MysqlxResultset.Row DEFAULT_INSTANCE;
+
     static {
       DEFAULT_INSTANCE = new com.mysql.cj.x.protobuf.MysqlxResultset.Row();
     }
@@ -5507,16 +5884,17 @@ public final class MysqlxResultset {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<Row>
-        PARSER = new com.google.protobuf.AbstractParser<Row>() {
-      @java.lang.Override
-      public Row parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Row(input, extensionRegistry);
-      }
-    };
+    @java.lang.Deprecated
+    public static final com.google.protobuf.Parser<Row> PARSER =
+        new com.google.protobuf.AbstractParser<Row>() {
+          @java.lang.Override
+          public Row parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new Row(input, extensionRegistry);
+          }
+        };
 
     public static com.google.protobuf.Parser<Row> parser() {
       return PARSER;
@@ -5531,114 +5909,150 @@ public final class MysqlxResultset {
     public com.mysql.cj.x.protobuf.MysqlxResultset.Row getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
-
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Resultset_FetchDone_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Resultset_FetchDone_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Resultset_FetchDone_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Resultset_FetchSuspended_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Resultset_FetchSuspended_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Resultset_FetchSuspended_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Resultset_ColumnMetaData_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Mysqlx_Resultset_Row_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Mysqlx_Resultset_Row_descriptor;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Mysqlx_Resultset_Row_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
-      "\n\026mysqlx_resultset.proto\022\020Mysqlx.Results" +
-      "et\032\014mysqlx.proto\"\036\n\026FetchDoneMoreOutPara" +
-      "ms:\004\220\3520\022\"\037\n\027FetchDoneMoreResultsets:\004\220\3520" +
-      "\020\"\021\n\tFetchDone:\004\220\3520\016\"\026\n\016FetchSuspended:\004" +
-      "\220\3520\017\"\245\003\n\016ColumnMetaData\0228\n\004type\030\001 \002(\0162*." +
-      "Mysqlx.Resultset.ColumnMetaData.FieldTyp" +
-      "e\022\014\n\004name\030\002 \001(\014\022\025\n\roriginal_name\030\003 \001(\014\022\r" +
-      "\n\005table\030\004 \001(\014\022\026\n\016original_table\030\005 \001(\014\022\016\n" +
-      "\006schema\030\006 \001(\014\022\017\n\007catalog\030\007 \001(\014\022\021\n\tcollat" +
-      "ion\030\010 \001(\004\022\031\n\021fractional_digits\030\t \001(\r\022\016\n\006" +
-      "length\030\n \001(\r\022\r\n\005flags\030\013 \001(\r\022\024\n\014content_t" +
-      "ype\030\014 \001(\r\"\202\001\n\tFieldType\022\010\n\004SINT\020\001\022\010\n\004UIN" +
-      "T\020\002\022\n\n\006DOUBLE\020\005\022\t\n\005FLOAT\020\006\022\t\n\005BYTES\020\007\022\010\n" +
-      "\004TIME\020\n\022\014\n\010DATETIME\020\014\022\007\n\003SET\020\017\022\010\n\004ENUM\020\020" +
-      "\022\007\n\003BIT\020\021\022\013\n\007DECIMAL\020\022:\004\220\3520\014\"\032\n\003Row\022\r\n\005f" +
-      "ield\030\001 \003(\014:\004\220\3520\r*4\n\021ContentType_BYTES\022\014\n" +
-      "\010GEOMETRY\020\001\022\010\n\004JSON\020\002\022\007\n\003XML\020\003*.\n\024Conten" +
-      "tType_DATETIME\022\010\n\004DATE\020\001\022\014\n\010DATETIME\020\002B\031" +
-      "\n\027com.mysql.cj.x.protobuf"
+      "\n"
+          + "\026mysqlx_resultset.proto\022\020Mysqlx.Resultset\032\014mysqlx.proto\"\036\n"
+          + "\026FetchDoneMoreOutParams:\004\220\3520\022\"\037\n"
+          + "\027FetchDoneMoreResultsets:\004\220\3520\020\"\021\n"
+          + "\tFetchDone:\004\220\3520\016\"\026\n"
+          + "\016FetchSuspended:\004\220\3520\017\"\245\003\n"
+          + "\016ColumnMetaData\0228\n"
+          + "\004type\030\001 \002(\0162*.Mysqlx.Resultset.ColumnMetaData.FieldType\022\014\n"
+          + "\004name\030\002 \001(\014\022\025\n\r"
+          + "original_name\030\003 \001(\014\022\r"
+          + "\n"
+          + "\005table\030\004 \001(\014\022\026\n"
+          + "\016original_table\030\005 \001(\014\022\016\n"
+          + "\006schema\030\006 \001(\014\022\017\n"
+          + "\007catalog\030\007 \001(\014\022\021\n"
+          + "\tcollation\030\010 \001(\004\022\031\n"
+          + "\021fractional_digits\030\t \001(\r"
+          + "\022\016\n"
+          + "\006length\030\n"
+          + " \001(\r"
+          + "\022\r\n"
+          + "\005flags\030\013 \001(\r"
+          + "\022\024\n"
+          + "\014content_type\030\014 \001(\r"
+          + "\"\202\001\n"
+          + "\tFieldType\022\010\n"
+          + "\004SINT\020\001\022\010\n"
+          + "\004UINT\020\002\022\n\n"
+          + "\006DOUBLE\020\005\022\t\n"
+          + "\005FLOAT\020\006\022\t\n"
+          + "\005BYTES\020\007\022\010\n"
+          + "\004TIME\020\n"
+          + "\022\014\n"
+          + "\010DATETIME\020\014\022\007\n"
+          + "\003SET\020\017\022\010\n"
+          + "\004ENUM\020\020\022\007\n"
+          + "\003BIT\020\021\022\013\n"
+          + "\007DECIMAL\020\022:\004\220\3520\014\"\032\n"
+          + "\003Row\022\r\n"
+          + "\005field\030\001 \003(\014:\004\220\3520\r"
+          + "*4\n"
+          + "\021ContentType_BYTES\022\014\n"
+          + "\010GEOMETRY\020\001\022\010\n"
+          + "\004JSON\020\002\022\007\n"
+          + "\003XML\020\003*.\n"
+          + "\024ContentType_DATETIME\022\010\n"
+          + "\004DATE\020\001\022\014\n"
+          + "\010DATETIME\020\002B\031\n"
+          + "\027com.mysql.cj.x.protobuf"
     };
-    descriptor = com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.mysql.cj.x.protobuf.Mysqlx.getDescriptor(),
-        });
+    descriptor =
+        com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
+            descriptorData,
+            new com.google.protobuf.Descriptors.FileDescriptor[] {
+              com.mysql.cj.x.protobuf.Mysqlx.getDescriptor(),
+            });
     internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor,
-        new java.lang.String[] { });
+        getDescriptor().getMessageTypes().get(0);
+    internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Resultset_FetchDoneMoreOutParams_descriptor,
+            new java.lang.String[] {});
     internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor,
-        new java.lang.String[] { });
+        getDescriptor().getMessageTypes().get(1);
+    internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Resultset_FetchDoneMoreResultsets_descriptor,
+            new java.lang.String[] {});
     internal_static_Mysqlx_Resultset_FetchDone_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_Mysqlx_Resultset_FetchDone_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Resultset_FetchDone_descriptor,
-        new java.lang.String[] { });
+        getDescriptor().getMessageTypes().get(2);
+    internal_static_Mysqlx_Resultset_FetchDone_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Resultset_FetchDone_descriptor, new java.lang.String[] {});
     internal_static_Mysqlx_Resultset_FetchSuspended_descriptor =
-      getDescriptor().getMessageTypes().get(3);
-    internal_static_Mysqlx_Resultset_FetchSuspended_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Resultset_FetchSuspended_descriptor,
-        new java.lang.String[] { });
+        getDescriptor().getMessageTypes().get(3);
+    internal_static_Mysqlx_Resultset_FetchSuspended_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Resultset_FetchSuspended_descriptor, new java.lang.String[] {});
     internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor =
-      getDescriptor().getMessageTypes().get(4);
-    internal_static_Mysqlx_Resultset_ColumnMetaData_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor,
-        new java.lang.String[] { "Type", "Name", "OriginalName", "Table", "OriginalTable", "Schema", "Catalog", "Collation", "FractionalDigits", "Length", "Flags", "ContentType", });
-    internal_static_Mysqlx_Resultset_Row_descriptor =
-      getDescriptor().getMessageTypes().get(5);
-    internal_static_Mysqlx_Resultset_Row_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_Mysqlx_Resultset_Row_descriptor,
-        new java.lang.String[] { "Field", });
+        getDescriptor().getMessageTypes().get(4);
+    internal_static_Mysqlx_Resultset_ColumnMetaData_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Resultset_ColumnMetaData_descriptor,
+            new java.lang.String[] {
+              "Type",
+              "Name",
+              "OriginalName",
+              "Table",
+              "OriginalTable",
+              "Schema",
+              "Catalog",
+              "Collation",
+              "FractionalDigits",
+              "Length",
+              "Flags",
+              "ContentType",
+            });
+    internal_static_Mysqlx_Resultset_Row_descriptor = getDescriptor().getMessageTypes().get(5);
+    internal_static_Mysqlx_Resultset_Row_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_Mysqlx_Resultset_Row_descriptor,
+            new java.lang.String[] {
+              "Field",
+            });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();
     registry.add(com.mysql.cj.x.protobuf.Mysqlx.serverMessageId);
-    com.google.protobuf.Descriptors.FileDescriptor
-        .internalUpdateFileDescriptor(descriptor, registry);
+    com.google.protobuf.Descriptors.FileDescriptor.internalUpdateFileDescriptor(
+        descriptor, registry);
     com.mysql.cj.x.protobuf.Mysqlx.getDescriptor();
   }
 

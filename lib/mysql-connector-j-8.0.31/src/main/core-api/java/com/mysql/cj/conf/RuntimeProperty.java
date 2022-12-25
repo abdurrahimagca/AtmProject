@@ -29,92 +29,86 @@
 
 package com.mysql.cj.conf;
 
-import java.util.Properties;
-
-import javax.naming.Reference;
-
 import com.mysql.cj.exceptions.ExceptionInterceptor;
+import java.util.Properties;
+import javax.naming.Reference;
 
 public interface RuntimeProperty<T> {
 
-    PropertyDefinition<T> getPropertyDefinition();
+  PropertyDefinition<T> getPropertyDefinition();
 
-    /**
-     * Explicitly set value of this RuntimeProperty according to the self-titled property value contained in extractFrom.
-     * This method is called during PropertySet initialization thus ignores the RUNTIME_NOT_MODIFIABLE flag.
-     * <p>
-     * This value will also be the initial one, i.e. {@link #resetValue()} will reset to this value, not the default one.
-     * <p>
-     * If extractFrom does not contain such property then this RuntimeProperty remains unchanged.
-     * 
-     * @param extractFrom
-     *            {@link Properties} object containing key-value pairs usually passed from connection string.
-     * @param exceptionInterceptor
-     *            exceptionInterceptor
-     */
-    void initializeFrom(Properties extractFrom, ExceptionInterceptor exceptionInterceptor);
+  /**
+   * Explicitly set value of this RuntimeProperty according to the self-titled property value
+   * contained in extractFrom. This method is called during PropertySet initialization thus ignores
+   * the RUNTIME_NOT_MODIFIABLE flag.
+   *
+   * <p>This value will also be the initial one, i.e. {@link #resetValue()} will reset to this
+   * value, not the default one.
+   *
+   * <p>If extractFrom does not contain such property then this RuntimeProperty remains unchanged.
+   *
+   * @param extractFrom {@link Properties} object containing key-value pairs usually passed from
+   *     connection string.
+   * @param exceptionInterceptor exceptionInterceptor
+   */
+  void initializeFrom(Properties extractFrom, ExceptionInterceptor exceptionInterceptor);
 
-    void initializeFrom(Reference ref, ExceptionInterceptor exceptionInterceptor);
+  void initializeFrom(Reference ref, ExceptionInterceptor exceptionInterceptor);
 
-    /**
-     * Reset to initial value (default or defined in connection string/Properties)
-     */
-    void resetValue();
+  /** Reset to initial value (default or defined in connection string/Properties) */
+  void resetValue();
 
-    boolean isExplicitlySet();
+  boolean isExplicitlySet();
 
-    /**
-     * Add listener for this property changes.
-     * 
-     * @param l
-     *            {@link RuntimePropertyListener}
-     */
-    void addListener(RuntimePropertyListener l);
+  /**
+   * Add listener for this property changes.
+   *
+   * @param l {@link RuntimePropertyListener}
+   */
+  void addListener(RuntimePropertyListener l);
 
-    void removeListener(RuntimePropertyListener l);
+  void removeListener(RuntimePropertyListener l);
 
-    @FunctionalInterface
-    public static interface RuntimePropertyListener {
-        void handlePropertyChange(RuntimeProperty<?> prop);
-    }
+  @FunctionalInterface
+  public static interface RuntimePropertyListener {
+    void handlePropertyChange(RuntimeProperty<?> prop);
+  }
 
-    /**
-     * Get internal value representation as Object.
-     * 
-     * @return value
-     */
-    T getValue();
+  /**
+   * Get internal value representation as Object.
+   *
+   * @return value
+   */
+  T getValue();
 
-    /**
-     * Get initial value (default or defined in connection string/Properties)
-     * 
-     * @return value
-     */
-    T getInitialValue();
+  /**
+   * Get initial value (default or defined in connection string/Properties)
+   *
+   * @return value
+   */
+  T getInitialValue();
 
-    /**
-     * Get internal value representation as String.
-     * 
-     * @return value
-     */
-    String getStringValue();
+  /**
+   * Get internal value representation as String.
+   *
+   * @return value
+   */
+  String getStringValue();
 
-    /**
-     * Set the object value of a property directly. Validation against allowable values will be performed.
-     * 
-     * @param value
-     *            value
-     */
-    void setValue(T value);
+  /**
+   * Set the object value of a property directly. Validation against allowable values will be
+   * performed.
+   *
+   * @param value value
+   */
+  void setValue(T value);
 
-    /**
-     * Set the object value of a property directly. Validation against allowable values will be performed.
-     * 
-     * @param value
-     *            value
-     * @param exceptionInterceptor
-     *            exception interceptor
-     */
-    void setValue(T value, ExceptionInterceptor exceptionInterceptor);
-
+  /**
+   * Set the object value of a property directly. Validation against allowable values will be
+   * performed.
+   *
+   * @param value value
+   * @param exceptionInterceptor exception interceptor
+   */
+  void setValue(T value, ExceptionInterceptor exceptionInterceptor);
 }

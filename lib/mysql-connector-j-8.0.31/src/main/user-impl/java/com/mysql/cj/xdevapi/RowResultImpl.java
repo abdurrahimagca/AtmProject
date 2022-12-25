@@ -29,52 +29,53 @@
 
 package com.mysql.cj.xdevapi;
 
+import com.mysql.cj.conf.PropertySet;
+import com.mysql.cj.protocol.ColumnDefinition;
+import com.mysql.cj.protocol.ProtocolEntity;
+import com.mysql.cj.result.Field;
+import com.mysql.cj.result.RowList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import com.mysql.cj.conf.PropertySet;
-import com.mysql.cj.protocol.ColumnDefinition;
-import com.mysql.cj.protocol.ProtocolEntity;
-import com.mysql.cj.result.Field;
-import com.mysql.cj.result.RowList;
-
-/**
- * {@link RowResult} implementation.
- */
+/** {@link RowResult} implementation. */
 public class RowResultImpl extends AbstractDataResult<Row> implements RowResult {
-    private ColumnDefinition metadata;
+  private ColumnDefinition metadata;
 
-    /**
-     * Constructor.
-     * 
-     * @param metadata
-     *            {@link ColumnDefinition} object to use for new rows.
-     * @param defaultTimeZone
-     *            {@link TimeZone} object representing the default time zone
-     * @param rows
-     *            {@link RowList} provided by c/J core
-     * @param completer
-     *            supplier for completion task
-     * @param pset
-     *            {@link PropertySet}
-     */
-    public RowResultImpl(ColumnDefinition metadata, TimeZone defaultTimeZone, RowList rows, Supplier<ProtocolEntity> completer, PropertySet pset) {
-        super(rows, completer, new RowFactory(metadata, defaultTimeZone, pset));
-        this.metadata = metadata;
-    }
+  /**
+   * Constructor.
+   *
+   * @param metadata {@link ColumnDefinition} object to use for new rows.
+   * @param defaultTimeZone {@link TimeZone} object representing the default time zone
+   * @param rows {@link RowList} provided by c/J core
+   * @param completer supplier for completion task
+   * @param pset {@link PropertySet}
+   */
+  public RowResultImpl(
+      ColumnDefinition metadata,
+      TimeZone defaultTimeZone,
+      RowList rows,
+      Supplier<ProtocolEntity> completer,
+      PropertySet pset) {
+    super(rows, completer, new RowFactory(metadata, defaultTimeZone, pset));
+    this.metadata = metadata;
+  }
 
-    public int getColumnCount() {
-        return this.metadata.getFields().length;
-    }
+  public int getColumnCount() {
+    return this.metadata.getFields().length;
+  }
 
-    public List<Column> getColumns() {
-        return Arrays.stream(this.metadata.getFields()).map(ColumnImpl::new).collect(Collectors.toList());
-    }
+  public List<Column> getColumns() {
+    return Arrays.stream(this.metadata.getFields())
+        .map(ColumnImpl::new)
+        .collect(Collectors.toList());
+  }
 
-    public List<String> getColumnNames() {
-        return Arrays.stream(this.metadata.getFields()).map(Field::getColumnLabel).collect(Collectors.toList());
-    }
+  public List<String> getColumnNames() {
+    return Arrays.stream(this.metadata.getFields())
+        .map(Field::getColumnLabel)
+        .collect(Collectors.toList());
+  }
 }

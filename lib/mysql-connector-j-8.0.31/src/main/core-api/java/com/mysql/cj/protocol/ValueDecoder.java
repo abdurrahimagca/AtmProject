@@ -33,47 +33,48 @@ import com.mysql.cj.result.Field;
 import com.mysql.cj.result.ValueFactory;
 
 /**
- * A value decoder is responsible for interpreting a byte array as a value. The type of the value is encoded in the method call. After decoding, the value
- * decoder passes an <i>intermediate representation</i> of the value to a {@link ValueFactory} for result value creation.
- * 
+ * A value decoder is responsible for interpreting a byte array as a value. The type of the value is
+ * encoded in the method call. After decoding, the value decoder passes an <i>intermediate
+ * representation</i> of the value to a {@link ValueFactory} for result value creation.
+ *
  * @since 6.0
  */
 public interface ValueDecoder {
-    <T> T decodeDate(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeDate(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeTime(byte[] bytes, int offset, int length, int scale, ValueFactory<T> vf);
+  <T> T decodeTime(byte[] bytes, int offset, int length, int scale, ValueFactory<T> vf);
 
-    <T> T decodeTimestamp(byte[] bytes, int offset, int length, int scale, ValueFactory<T> vf);
+  <T> T decodeTimestamp(byte[] bytes, int offset, int length, int scale, ValueFactory<T> vf);
 
-    <T> T decodeDatetime(byte[] bytes, int offset, int length, int scale, ValueFactory<T> vf);
+  <T> T decodeDatetime(byte[] bytes, int offset, int length, int scale, ValueFactory<T> vf);
 
-    <T> T decodeInt1(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeInt1(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeUInt1(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeUInt1(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeInt2(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeInt2(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeUInt2(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeUInt2(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeInt4(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeInt4(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeUInt4(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeUInt4(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeInt8(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeInt8(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeUInt8(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeUInt8(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeFloat(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeFloat(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeDouble(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeDouble(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeDecimal(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeDecimal(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeByteArray(byte[] bytes, int offset, int length, Field f, ValueFactory<T> vf);
+  <T> T decodeByteArray(byte[] bytes, int offset, int length, Field f, ValueFactory<T> vf);
 
-    <T> T decodeBit(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeBit(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 
-    <T> T decodeSet(byte[] bytes, int offset, int length, Field f, ValueFactory<T> vf);
+  <T> T decodeSet(byte[] bytes, int offset, int length, Field f, ValueFactory<T> vf);
 
-    <T> T decodeYear(byte[] bytes, int offset, int length, ValueFactory<T> vf);
+  <T> T decodeYear(byte[] bytes, int offset, int length, ValueFactory<T> vf);
 }

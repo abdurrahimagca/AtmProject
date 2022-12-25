@@ -29,73 +29,68 @@
 
 package com.mysql.cj.protocol.a;
 
-import java.io.IOException;
-
 import com.mysql.cj.log.Log;
 import com.mysql.cj.protocol.MessageSender;
 import com.mysql.cj.util.StringUtils;
+import java.io.IOException;
 
-/**
- * A decorating {@link MessageSender} which traces all sent packets to the provided logger.
- */
+/** A decorating {@link MessageSender} which traces all sent packets to the provided logger. */
 public class TracingPacketSender implements MessageSender<NativePacketPayload> {
-    private MessageSender<NativePacketPayload> packetSender;
-    private String host;
-    private long serverThreadId;
-    private Log log;
+  private MessageSender<NativePacketPayload> packetSender;
+  private String host;
+  private long serverThreadId;
+  private Log log;
 
-    public TracingPacketSender(MessageSender<NativePacketPayload> packetSender, Log log, String host, long serverThreadId) {
-        this.packetSender = packetSender;
-        this.host = host;
-        this.serverThreadId = serverThreadId;
-        this.log = log;
-    }
+  public TracingPacketSender(
+      MessageSender<NativePacketPayload> packetSender, Log log, String host, long serverThreadId) {
+    this.packetSender = packetSender;
+    this.host = host;
+    this.serverThreadId = serverThreadId;
+    this.log = log;
+  }
 
-    public void setServerThreadId(long serverThreadId) {
-        this.serverThreadId = serverThreadId;
-    }
+  public void setServerThreadId(long serverThreadId) {
+    this.serverThreadId = serverThreadId;
+  }
 
-    /**
-     * Log the packet details to the provided logger.
-     * 
-     * @param packet
-     *            packet as bytes
-     * @param packetLen
-     *            packet length
-     * @param packetSequence
-     *            sequence index
-     */
-    private void logPacket(byte[] packet, int packetLen, byte packetSequence) {
-        StringBuilder traceMessageBuf = new StringBuilder();
+  /**
+   * Log the packet details to the provided logger.
+   *
+   * @param packet packet as bytes
+   * @param packetLen packet length
+   * @param packetSequence sequence index
+   */
+  private void logPacket(byte[] packet, int packetLen, byte packetSequence) {
+    StringBuilder traceMessageBuf = new StringBuilder();
 
-        traceMessageBuf.append("send packet payload:\n");
-        traceMessageBuf.append("host: '");
-        traceMessageBuf.append(this.host);
-        traceMessageBuf.append("' serverThreadId: '");
-        traceMessageBuf.append(this.serverThreadId);
-        traceMessageBuf.append("' packetLen: '");
-        traceMessageBuf.append(packetLen);
-        traceMessageBuf.append("' packetSequence: '");
-        traceMessageBuf.append(packetSequence);
-        traceMessageBuf.append("'\n");
-        traceMessageBuf.append(StringUtils.dumpAsHex(packet, packetLen));
+    traceMessageBuf.append("send packet payload:\n");
+    traceMessageBuf.append("host: '");
+    traceMessageBuf.append(this.host);
+    traceMessageBuf.append("' serverThreadId: '");
+    traceMessageBuf.append(this.serverThreadId);
+    traceMessageBuf.append("' packetLen: '");
+    traceMessageBuf.append(packetLen);
+    traceMessageBuf.append("' packetSequence: '");
+    traceMessageBuf.append(packetSequence);
+    traceMessageBuf.append("'\n");
+    traceMessageBuf.append(StringUtils.dumpAsHex(packet, packetLen));
 
-        this.log.logTrace(traceMessageBuf.toString());
-    }
+    this.log.logTrace(traceMessageBuf.toString());
+  }
 
-    public void send(byte[] packet, int packetLen, byte packetSequence) throws IOException {
-        logPacket(packet, packetLen, packetSequence);
+  public void send(byte[] packet, int packetLen, byte packetSequence) throws IOException {
+    logPacket(packet, packetLen, packetSequence);
 
-        this.packetSender.send(packet, packetLen, packetSequence);
-    }
+    this.packetSender.send(packet, packetLen, packetSequence);
+  }
 
-    @Override
-    public MessageSender<NativePacketPayload> undecorateAll() {
-        return this.packetSender.undecorateAll();
-    }
+  @Override
+  public MessageSender<NativePacketPayload> undecorateAll() {
+    return this.packetSender.undecorateAll();
+  }
 
-    @Override
-    public MessageSender<NativePacketPayload> undecorate() {
-        return this.packetSender;
-    }
+  @Override
+  public MessageSender<NativePacketPayload> undecorate() {
+    return this.packetSender;
+  }
 }

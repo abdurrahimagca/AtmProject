@@ -29,8 +29,6 @@
 
 package instrumentation;
 
-import java.util.Collection;
-
 import com.mysql.cj.conf.BooleanPropertyDefinition;
 import com.mysql.cj.conf.EnumPropertyDefinition;
 import com.mysql.cj.conf.IntegerPropertyDefinition;
@@ -40,7 +38,7 @@ import com.mysql.cj.conf.PropertyDefinition;
 import com.mysql.cj.conf.PropertyDefinitions;
 import com.mysql.cj.conf.StringPropertyDefinition;
 import com.mysql.cj.jdbc.MysqlDataSource;
-
+import java.util.Collection;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -48,92 +46,112 @@ import javassist.CtNewMethod;
 import javassist.bytecode.DuplicateMemberException;
 
 public class AddMethods {
-    private static boolean verbose = false;
+  private static boolean verbose = false;
 
-    public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws Exception {
 
-        System.out.println("Applying AddMethods.");
+    System.out.println("Applying AddMethods.");
 
-        verbose = "true".equalsIgnoreCase(args[1]);
+    verbose = "true".equalsIgnoreCase(args[1]);
 
-        ClassPool pool = ClassPool.getDefault();
-        pool.insertClassPath(args[0]);
+    ClassPool pool = ClassPool.getDefault();
+    pool.insertClassPath(args[0]);
 
-        sysOut("---");
-        CtClass clazz = pool.get(MysqlDataSource.class.getName());
-        sysOut("Add properties setters/getters to " + clazz.getName());
-        addPropertiesGettersSetters(clazz, PropertyDefinitions.PROPERTY_KEY_TO_PROPERTY_DEFINITION.values());
-        clazz.writeFile(args[0]);
+    sysOut("---");
+    CtClass clazz = pool.get(MysqlDataSource.class.getName());
+    sysOut("Add properties setters/getters to " + clazz.getName());
+    addPropertiesGettersSetters(
+        clazz, PropertyDefinitions.PROPERTY_KEY_TO_PROPERTY_DEFINITION.values());
+    clazz.writeFile(args[0]);
+  }
 
+  private static void sysOut(String s) {
+    if (verbose) {
+      System.out.println(s);
     }
+  }
 
-    private static void sysOut(String s) {
-        if (verbose) {
-            System.out.println(s);
-        }
+  private static void addPropertiesGettersSetters(
+      CtClass clazz, Collection<PropertyDefinition<?>> propertyDefinitions) throws Exception {
+    for (PropertyDefinition<?> def : propertyDefinitions) {
+      if (def.getCategory().equals(PropertyDefinitions.CATEGORY_XDEVAPI)) {
+        continue;
+      }
+      String pname = def.hasCcAlias() ? def.getCcAlias() : def.getName();
+
+      if (def instanceof StringPropertyDefinition) {
+        addGetter(clazz, pname, String.class.getName(), "getStringRuntimeProperty");
+        addSetter(clazz, pname, String.class.getName(), "setStringRuntimeProperty");
+
+      } else if (def instanceof BooleanPropertyDefinition) {
+        addGetter(clazz, pname, Boolean.TYPE.getName(), "getBooleanRuntimeProperty");
+        addSetter(clazz, pname, Boolean.TYPE.getName(), "setBooleanRuntimeProperty");
+
+      } else if (def instanceof IntegerPropertyDefinition) {
+        addGetter(clazz, pname, Integer.TYPE.getName(), "getIntegerRuntimeProperty");
+        addSetter(clazz, pname, Integer.TYPE.getName(), "setIntegerRuntimeProperty");
+
+      } else if (def instanceof LongPropertyDefinition) {
+        addGetter(clazz, pname, Long.TYPE.getName(), "getLongRuntimeProperty");
+        addSetter(clazz, pname, Long.TYPE.getName(), "setLongRuntimeProperty");
+
+      } else if (def instanceof MemorySizePropertyDefinition) {
+        addGetter(clazz, pname, Integer.TYPE.getName(), "getMemorySizeRuntimeProperty");
+        addSetter(clazz, pname, Integer.TYPE.getName(), "setMemorySizeRuntimeProperty");
+
+      } else if (def instanceof EnumPropertyDefinition<?>) {
+        addGetter(clazz, pname, String.class.getName(), "getEnumRuntimeProperty");
+        addSetter(clazz, pname, "java.lang.String", "setEnumRuntimeProperty");
+
+      } else {
+        throw new Exception("Unknown " + def.getName() + " property type.");
+      }
     }
+  }
 
-    private static void addPropertiesGettersSetters(CtClass clazz, Collection<PropertyDefinition<?>> propertyDefinitions) throws Exception {
-        for (PropertyDefinition<?> def : propertyDefinitions) {
-            if (def.getCategory().equals(PropertyDefinitions.CATEGORY_XDEVAPI)) {
-                continue;
-            }
-            String pname = def.hasCcAlias() ? def.getCcAlias() : def.getName();
-
-            if (def instanceof StringPropertyDefinition) {
-                addGetter(clazz, pname, String.class.getName(), "getStringRuntimeProperty");
-                addSetter(clazz, pname, String.class.getName(), "setStringRuntimeProperty");
-
-            } else if (def instanceof BooleanPropertyDefinition) {
-                addGetter(clazz, pname, Boolean.TYPE.getName(), "getBooleanRuntimeProperty");
-                addSetter(clazz, pname, Boolean.TYPE.getName(), "setBooleanRuntimeProperty");
-
-            } else if (def instanceof IntegerPropertyDefinition) {
-                addGetter(clazz, pname, Integer.TYPE.getName(), "getIntegerRuntimeProperty");
-                addSetter(clazz, pname, Integer.TYPE.getName(), "setIntegerRuntimeProperty");
-
-            } else if (def instanceof LongPropertyDefinition) {
-                addGetter(clazz, pname, Long.TYPE.getName(), "getLongRuntimeProperty");
-                addSetter(clazz, pname, Long.TYPE.getName(), "setLongRuntimeProperty");
-
-            } else if (def instanceof MemorySizePropertyDefinition) {
-                addGetter(clazz, pname, Integer.TYPE.getName(), "getMemorySizeRuntimeProperty");
-                addSetter(clazz, pname, Integer.TYPE.getName(), "setMemorySizeRuntimeProperty");
-
-            } else if (def instanceof EnumPropertyDefinition<?>) {
-                addGetter(clazz, pname, String.class.getName(), "getEnumRuntimeProperty");
-                addSetter(clazz, pname, "java.lang.String", "setEnumRuntimeProperty");
-
-            } else {
-                throw new Exception("Unknown " + def.getName() + " property type.");
-            }
-        }
+  private static void addGetter(
+      CtClass clazz, String pname, String paramType, String getPropertyMethod) throws Exception {
+    String mname = "get" + pname.substring(0, 1).toUpperCase() + pname.substring(1);
+    String mbody =
+        "public "
+            + paramType
+            + " "
+            + mname
+            + "() throws java.sql.SQLException { return "
+            + getPropertyMethod
+            + "(\""
+            + pname
+            + "\");}";
+    sysOut(mbody);
+    try {
+      CtMethod m = CtNewMethod.make(mbody, clazz);
+      clazz.addMethod(m);
+      sysOut(m.toString());
+    } catch (DuplicateMemberException ex) {
+      // ignore
     }
+  }
 
-    private static void addGetter(CtClass clazz, String pname, String paramType, String getPropertyMethod) throws Exception {
-        String mname = "get" + pname.substring(0, 1).toUpperCase() + pname.substring(1);
-        String mbody = "public " + paramType + " " + mname + "() throws java.sql.SQLException { return " + getPropertyMethod + "(\"" + pname + "\");}";
-        sysOut(mbody);
-        try {
-            CtMethod m = CtNewMethod.make(mbody, clazz);
-            clazz.addMethod(m);
-            sysOut(m.toString());
-        } catch (DuplicateMemberException ex) {
-            // ignore
-        }
+  private static void addSetter(
+      CtClass clazz, String pname, String paramType, String setPropertyMethod) throws Exception {
+    String mname = "set" + pname.substring(0, 1).toUpperCase() + pname.substring(1);
+    String mbody =
+        "public void "
+            + mname
+            + "("
+            + paramType
+            + " value) throws java.sql.SQLException { "
+            + setPropertyMethod
+            + "(\""
+            + pname
+            + "\", value);}";
+    sysOut(mbody);
+    try {
+      CtMethod m = CtNewMethod.make(mbody, clazz);
+      clazz.addMethod(m);
+      sysOut(m.toString());
+    } catch (DuplicateMemberException ex) {
+      // ignore
     }
-
-    private static void addSetter(CtClass clazz, String pname, String paramType, String setPropertyMethod) throws Exception {
-        String mname = "set" + pname.substring(0, 1).toUpperCase() + pname.substring(1);
-        String mbody = "public void " + mname + "(" + paramType + " value) throws java.sql.SQLException { " + setPropertyMethod + "(\"" + pname
-                + "\", value);}";
-        sysOut(mbody);
-        try {
-            CtMethod m = CtNewMethod.make(mbody, clazz);
-            clazz.addMethod(m);
-            sysOut(m.toString());
-        } catch (DuplicateMemberException ex) {
-            // ignore
-        }
-    }
+  }
 }

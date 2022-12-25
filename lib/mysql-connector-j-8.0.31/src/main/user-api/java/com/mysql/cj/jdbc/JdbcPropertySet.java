@@ -29,20 +29,17 @@
 
 package com.mysql.cj.jdbc;
 
+import com.mysql.cj.conf.PropertySet;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.mysql.cj.conf.PropertySet;
-
 public interface JdbcPropertySet extends PropertySet {
-    /**
-     * Exposes all ConnectionPropertyInfo instances as DriverPropertyInfo
-     * 
-     * @return a {@link List} of all ConnectionPropertyInfo instances, as DriverPropertyInfo
-     * 
-     * @throws SQLException
-     *             if an error occurs
-     */
-    List<DriverPropertyInfo> exposeAsDriverPropertyInfo() throws SQLException;
+  /**
+   * Exposes all ConnectionPropertyInfo instances as DriverPropertyInfo
+   *
+   * @return a {@link List} of all ConnectionPropertyInfo instances, as DriverPropertyInfo
+   * @throws SQLException if an error occurs
+   */
+  List<DriverPropertyInfo> exposeAsDriverPropertyInfo() throws SQLException;
 }

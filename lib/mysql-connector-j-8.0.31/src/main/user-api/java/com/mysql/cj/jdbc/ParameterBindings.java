@@ -43,59 +43,60 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
- * Interface to allow PreparedStatement implementations to expose their parameter bindings to QueryInterceptors.
+ * Interface to allow PreparedStatement implementations to expose their parameter bindings to
+ * QueryInterceptors.
  */
 public interface ParameterBindings {
 
-    Array getArray(int parameterIndex) throws SQLException;
+  Array getArray(int parameterIndex) throws SQLException;
 
-    InputStream getAsciiStream(int parameterIndex) throws SQLException;
+  InputStream getAsciiStream(int parameterIndex) throws SQLException;
 
-    BigDecimal getBigDecimal(int parameterIndex) throws SQLException;
+  BigDecimal getBigDecimal(int parameterIndex) throws SQLException;
 
-    InputStream getBinaryStream(int parameterIndex) throws SQLException;
+  InputStream getBinaryStream(int parameterIndex) throws SQLException;
 
-    java.sql.Blob getBlob(int parameterIndex) throws SQLException;
+  java.sql.Blob getBlob(int parameterIndex) throws SQLException;
 
-    boolean getBoolean(int parameterIndex) throws SQLException;
+  boolean getBoolean(int parameterIndex) throws SQLException;
 
-    byte getByte(int parameterIndex) throws SQLException;
+  byte getByte(int parameterIndex) throws SQLException;
 
-    byte[] getBytes(int parameterIndex) throws SQLException;
+  byte[] getBytes(int parameterIndex) throws SQLException;
 
-    Reader getCharacterStream(int parameterIndex) throws SQLException;
+  Reader getCharacterStream(int parameterIndex) throws SQLException;
 
-    Clob getClob(int parameterIndex) throws SQLException;
+  Clob getClob(int parameterIndex) throws SQLException;
 
-    Date getDate(int parameterIndex) throws SQLException;
+  Date getDate(int parameterIndex) throws SQLException;
 
-    double getDouble(int parameterIndex) throws SQLException;
+  double getDouble(int parameterIndex) throws SQLException;
 
-    float getFloat(int parameterIndex) throws SQLException;
+  float getFloat(int parameterIndex) throws SQLException;
 
-    int getInt(int parameterIndex) throws SQLException;
+  int getInt(int parameterIndex) throws SQLException;
 
-    BigInteger getBigInteger(int parameterIndex) throws SQLException;
+  BigInteger getBigInteger(int parameterIndex) throws SQLException;
 
-    long getLong(int parameterIndex) throws SQLException;
+  long getLong(int parameterIndex) throws SQLException;
 
-    Reader getNCharacterStream(int parameterIndex) throws SQLException;
+  Reader getNCharacterStream(int parameterIndex) throws SQLException;
 
-    Reader getNClob(int parameterIndex) throws SQLException;
+  Reader getNClob(int parameterIndex) throws SQLException;
 
-    Object getObject(int parameterIndex) throws SQLException;
+  Object getObject(int parameterIndex) throws SQLException;
 
-    Ref getRef(int parameterIndex) throws SQLException;
+  Ref getRef(int parameterIndex) throws SQLException;
 
-    short getShort(int parameterIndex) throws SQLException;
+  short getShort(int parameterIndex) throws SQLException;
 
-    String getString(int parameterIndex) throws SQLException;
+  String getString(int parameterIndex) throws SQLException;
 
-    Time getTime(int parameterIndex) throws SQLException;
+  Time getTime(int parameterIndex) throws SQLException;
 
-    Timestamp getTimestamp(int parameterIndex) throws SQLException;
+  Timestamp getTimestamp(int parameterIndex) throws SQLException;
 
-    URL getURL(int parameterIndex) throws SQLException;
+  URL getURL(int parameterIndex) throws SQLException;
 
-    boolean isNull(int parameterIndex) throws SQLException;
+  boolean isNull(int parameterIndex) throws SQLException;
 }

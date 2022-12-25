@@ -32,113 +32,119 @@ package testsuite.simple;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.mysql.cj.conf.PropertyDefinitions.DatabaseTerm;
+import com.mysql.cj.conf.PropertyKey;
+import com.mysql.cj.jdbc.JdbcConnection;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
-
 import org.junit.jupiter.api.Test;
-
-import com.mysql.cj.conf.PropertyDefinitions.DatabaseTerm;
-import com.mysql.cj.conf.PropertyKey;
-import com.mysql.cj.jdbc.JdbcConnection;
-
 import testsuite.BaseTestCase;
 
 public class ReadOnlyCallableStatementTest extends BaseTestCase {
-    @Test
-    public void testReadOnlyWithProcBodyAccess() throws Exception {
-        Connection replConn = null;
-        Properties props = getHostFreePropertiesFromTestsuiteUrl();
-        props.setProperty(PropertyKey.autoReconnect.getKeyName(), "true");
+  @Test
+  public void testReadOnlyWithProcBodyAccess() throws Exception {
+    Connection replConn = null;
+    Properties props = getHostFreePropertiesFromTestsuiteUrl();
+    props.setProperty(PropertyKey.autoReconnect.getKeyName(), "true");
 
-        try {
-            createProcedure("testProc1", "()\nREADS SQL DATA\nbegin\nSELECT NOW();\nend\n");
+    try {
+      createProcedure("testProc1", "()\nREADS SQL DATA\nbegin\nSELECT NOW();\nend\n");
 
-            createProcedure("`testProc.1`", "()\nREADS SQL DATA\nbegin\nSELECT NOW();\nend\n");
+      createProcedure("`testProc.1`", "()\nREADS SQL DATA\nbegin\nSELECT NOW();\nend\n");
 
-            Properties props2 = new Properties();
-            props2.setProperty(PropertyKey.sslMode.getKeyName(), "DISABLED");
-            props2.setProperty(PropertyKey.allowPublicKeyRetrieval.getKeyName(), "true");
-            replConn = getSourceReplicaReplicationConnection(props2);
-            replConn.setReadOnly(true);
+      Properties props2 = new Properties();
+      props2.setProperty(PropertyKey.sslMode.getKeyName(), "DISABLED");
+      props2.setProperty(PropertyKey.allowPublicKeyRetrieval.getKeyName(), "true");
+      replConn = getSourceReplicaReplicationConnection(props2);
+      replConn.setReadOnly(true);
 
-            CallableStatement cstmt = replConn.prepareCall("CALL testProc1()");
-            cstmt.execute();
-            cstmt.execute();
+      CallableStatement cstmt = replConn.prepareCall("CALL testProc1()");
+      cstmt.execute();
+      cstmt.execute();
 
-            String db = ((JdbcConnection) replConn).getPropertySet().<DatabaseTerm>getEnumProperty(PropertyKey.databaseTerm).getValue() == DatabaseTerm.SCHEMA
-                    ? replConn.getSchema()
-                    : replConn.getCatalog();
+      String db =
+          ((JdbcConnection) replConn)
+                      .getPropertySet()
+                      .<DatabaseTerm>getEnumProperty(PropertyKey.databaseTerm)
+                      .getValue()
+                  == DatabaseTerm.SCHEMA
+              ? replConn.getSchema()
+              : replConn.getCatalog();
 
-            cstmt = replConn.prepareCall("CALL `" + db + "`.testProc1()");
-            cstmt.execute();
+      cstmt = replConn.prepareCall("CALL `" + db + "`.testProc1()");
+      cstmt.execute();
 
-            cstmt = replConn.prepareCall("CALL `" + db + "`.`testProc.1`()");
-            cstmt.execute();
+      cstmt = replConn.prepareCall("CALL `" + db + "`.`testProc.1`()");
+      cstmt.execute();
 
-        } finally {
+    } finally {
 
-            if (replConn != null) {
-                replConn.close();
-            }
-        }
+      if (replConn != null) {
+        replConn.close();
+      }
     }
+  }
 
-    @Test
-    public void testNotReadOnlyWithProcBodyAccess() throws Exception {
-        Connection replConn = null;
-        Properties props = getHostFreePropertiesFromTestsuiteUrl();
-        props.setProperty(PropertyKey.autoReconnect.getKeyName(), "true");
+  @Test
+  public void testNotReadOnlyWithProcBodyAccess() throws Exception {
+    Connection replConn = null;
+    Properties props = getHostFreePropertiesFromTestsuiteUrl();
+    props.setProperty(PropertyKey.autoReconnect.getKeyName(), "true");
 
-        try {
-            createProcedure("testProc2", "()\nMODIFIES SQL DATA\nbegin\nSELECT NOW();\nend\n");
+    try {
+      createProcedure("testProc2", "()\nMODIFIES SQL DATA\nbegin\nSELECT NOW();\nend\n");
 
-            createProcedure("`testProc.2`", "()\nMODIFIES SQL DATA\nbegin\nSELECT NOW();\nend\n");
+      createProcedure("`testProc.2`", "()\nMODIFIES SQL DATA\nbegin\nSELECT NOW();\nend\n");
 
-            Properties props2 = new Properties();
-            props2.setProperty(PropertyKey.sslMode.getKeyName(), "DISABLED");
-            props2.setProperty(PropertyKey.allowPublicKeyRetrieval.getKeyName(), "true");
-            replConn = getSourceReplicaReplicationConnection(props2);
-            replConn.setReadOnly(true);
+      Properties props2 = new Properties();
+      props2.setProperty(PropertyKey.sslMode.getKeyName(), "DISABLED");
+      props2.setProperty(PropertyKey.allowPublicKeyRetrieval.getKeyName(), "true");
+      replConn = getSourceReplicaReplicationConnection(props2);
+      replConn.setReadOnly(true);
 
-            CallableStatement cstmt = replConn.prepareCall("CALL testProc2()");
+      CallableStatement cstmt = replConn.prepareCall("CALL testProc2()");
 
-            try {
-                cstmt.execute();
-                fail("Should not execute because procedure modifies data.");
-            } catch (SQLException e) {
-                assertEquals(e.getSQLState(), "S1009", "Should error for read-only connection.");
-            }
+      try {
+        cstmt.execute();
+        fail("Should not execute because procedure modifies data.");
+      } catch (SQLException e) {
+        assertEquals(e.getSQLState(), "S1009", "Should error for read-only connection.");
+      }
 
-            String db = ((JdbcConnection) replConn).getPropertySet().<DatabaseTerm>getEnumProperty(PropertyKey.databaseTerm).getValue() == DatabaseTerm.SCHEMA
-                    ? replConn.getSchema()
-                    : replConn.getCatalog();
+      String db =
+          ((JdbcConnection) replConn)
+                      .getPropertySet()
+                      .<DatabaseTerm>getEnumProperty(PropertyKey.databaseTerm)
+                      .getValue()
+                  == DatabaseTerm.SCHEMA
+              ? replConn.getSchema()
+              : replConn.getCatalog();
 
-            cstmt = replConn.prepareCall("CALL `" + db + "`.testProc2()");
+      cstmt = replConn.prepareCall("CALL `" + db + "`.testProc2()");
 
-            try {
-                cstmt.execute();
-                fail("Should not execute because procedure modifies data.");
-            } catch (SQLException e) {
-                assertEquals(e.getSQLState(), "S1009", "Should error for read-only connection.");
-            }
+      try {
+        cstmt.execute();
+        fail("Should not execute because procedure modifies data.");
+      } catch (SQLException e) {
+        assertEquals(e.getSQLState(), "S1009", "Should error for read-only connection.");
+      }
 
-            cstmt = replConn.prepareCall("CALL `" + db + "`.`testProc.2`()");
+      cstmt = replConn.prepareCall("CALL `" + db + "`.`testProc.2`()");
 
-            try {
-                cstmt.execute();
-                fail("Should not execute because procedure modifies data.");
-            } catch (SQLException e) {
-                assertEquals(e.getSQLState(), "S1009", "Should error for read-only connection.");
-            }
+      try {
+        cstmt.execute();
+        fail("Should not execute because procedure modifies data.");
+      } catch (SQLException e) {
+        assertEquals(e.getSQLState(), "S1009", "Should error for read-only connection.");
+      }
 
-        } finally {
+    } finally {
 
-            if (replConn != null) {
-                replConn.close();
-            }
-        }
+      if (replConn != null) {
+        replConn.close();
+      }
     }
-
+  }
 }

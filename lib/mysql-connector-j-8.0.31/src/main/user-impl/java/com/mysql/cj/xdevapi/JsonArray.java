@@ -31,49 +31,45 @@ package com.mysql.cj.xdevapi;
 
 import java.util.ArrayList;
 
-/**
- * Represents a JSON <b>array</b>.
- */
+/** Represents a JSON <b>array</b>. */
 public class JsonArray extends ArrayList<JsonValue> implements JsonValue {
 
-    private static final long serialVersionUID = 6557406141541247905L;
+  private static final long serialVersionUID = 6557406141541247905L;
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("[");
-        for (JsonValue val : this) {
-            if (sb.length() > 1) {
-                sb.append(",");
-            }
-            sb.append(val.toString());
-        }
-        sb.append("]");
-        return sb.toString();
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("[");
+    for (JsonValue val : this) {
+      if (sb.length() > 1) {
+        sb.append(",");
+      }
+      sb.append(val.toString());
     }
+    sb.append("]");
+    return sb.toString();
+  }
 
-    @Override
-    public String toFormattedString() {
-        StringBuilder sb = new StringBuilder("[");
-        for (JsonValue val : this) {
-            if (sb.length() > 1) {
-                sb.append(", ");
-            }
-            sb.append(val.toFormattedString());
-        }
-        sb.append("]");
-        return sb.toString();
+  @Override
+  public String toFormattedString() {
+    StringBuilder sb = new StringBuilder("[");
+    for (JsonValue val : this) {
+      if (sb.length() > 1) {
+        sb.append(", ");
+      }
+      sb.append(val.toFormattedString());
     }
+    sb.append("]");
+    return sb.toString();
+  }
 
-    /**
-     * Add value to this array.
-     * 
-     * @param val
-     *            value
-     * @return this JsonArray
-     */
-    public JsonArray addValue(JsonValue val) {
-        add(val);
-        return this;
-    }
-
+  /**
+   * Add value to this array.
+   *
+   * @param val value
+   * @return this JsonArray
+   */
+  public JsonArray addValue(JsonValue val) {
+    add(val);
+    return this;
+  }
 }

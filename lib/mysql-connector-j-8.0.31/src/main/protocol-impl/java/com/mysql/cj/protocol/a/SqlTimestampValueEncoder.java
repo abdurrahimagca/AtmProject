@@ -29,13 +29,6 @@
 
 package com.mysql.cj.protocol.a;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
 import com.mysql.cj.BindValue;
 import com.mysql.cj.Messages;
 import com.mysql.cj.MysqlType;
@@ -49,147 +42,197 @@ import com.mysql.cj.protocol.a.NativeConstants.IntegerDataType;
 import com.mysql.cj.protocol.a.NativeConstants.StringSelfDataType;
 import com.mysql.cj.util.StringUtils;
 import com.mysql.cj.util.TimeUtil;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class SqlTimestampValueEncoder extends AbstractValueEncoder {
 
-    private SimpleDateFormat tsdf = null;
+  private SimpleDateFormat tsdf = null;
 
-    @Override
-    public String getString(BindValue binding) {
-        Timestamp x = adjustTimestamp((Timestamp) ((Timestamp) binding.getValue()).clone(), binding.getField(), binding.keepOrigNanos());
+  @Override
+  public String getString(BindValue binding) {
+    Timestamp x =
+        adjustTimestamp(
+            (Timestamp) ((Timestamp) binding.getValue()).clone(),
+            binding.getField(),
+            binding.keepOrigNanos());
 
-        switch (binding.getMysqlType()) {
-            case NULL:
-                return "null";
-            case DATE:
-                return binding.getCalendar() != null
-                        ? TimeUtil.getSimpleDateFormat("''yyyy-MM-dd''", binding.getCalendar())
-                                .format(new java.sql.Date(((java.util.Date) binding.getValue()).getTime()))
-                        : TimeUtil.getSimpleDateFormat(null, "''yyyy-MM-dd''", this.serverSession.getDefaultTimeZone())
-                                .format(new java.sql.Date(((java.util.Date) binding.getValue()).getTime()));
-            case DATETIME:
-            case TIMESTAMP:
-            case CHAR:
-            case VARCHAR:
-            case TINYTEXT:
-            case TEXT:
-            case MEDIUMTEXT:
-            case LONGTEXT:
-                StringBuffer buf = new StringBuffer();
+    switch (binding.getMysqlType()) {
+      case NULL:
+        return "null";
+      case DATE:
+        return binding.getCalendar() != null
+            ? TimeUtil.getSimpleDateFormat("''yyyy-MM-dd''", binding.getCalendar())
+                .format(new java.sql.Date(((java.util.Date) binding.getValue()).getTime()))
+            : TimeUtil.getSimpleDateFormat(
+                    null, "''yyyy-MM-dd''", this.serverSession.getDefaultTimeZone())
+                .format(new java.sql.Date(((java.util.Date) binding.getValue()).getTime()));
+      case DATETIME:
+      case TIMESTAMP:
+      case CHAR:
+      case VARCHAR:
+      case TINYTEXT:
+      case TEXT:
+      case MEDIUMTEXT:
+      case LONGTEXT:
+        StringBuffer buf = new StringBuffer();
 
-                if (binding.getCalendar() != null) {
-                    buf.append(TimeUtil.getSimpleDateFormat("''yyyy-MM-dd HH:mm:ss", binding.getCalendar()).format(x));
-                } else {
-                    this.tsdf = TimeUtil.getSimpleDateFormat(this.tsdf, "''yyyy-MM-dd HH:mm:ss",
-                            binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue() ? this.serverSession.getSessionTimeZone()
-                                    : this.serverSession.getDefaultTimeZone());
-                    buf.append(this.tsdf.format(x));
-                }
-
-                if (this.serverSession.getCapabilities().serverSupportsFracSecs() && x.getNanos() > 0) {
-                    buf.append('.');
-                    buf.append(TimeUtil.formatNanos(x.getNanos(), 6));
-                }
-                buf.append('\'');
-
-                return buf.toString();
-            case YEAR:
-                Calendar cal = Calendar.getInstance();
-                cal.setTime((java.util.Date) binding.getValue());
-                return String.valueOf(cal.get(Calendar.YEAR));
-            case TIME:
-                StringBuilder sb = new StringBuilder("'");
-                sb.append(adjustLocalTime(((Timestamp) binding.getValue()).toLocalDateTime().toLocalTime(), binding.getField())
-                        .format(TimeUtil.TIME_FORMATTER_WITH_OPTIONAL_MICROS));
-                sb.append("'");
-                return sb.toString();
-            default:
-                throw ExceptionFactory.createException(WrongArgumentException.class,
-                        Messages.getString("PreparedStatement.67", new Object[] { binding.getValue().getClass().getName(), binding.getMysqlType().toString() }),
-                        this.exceptionInterceptor);
+        if (binding.getCalendar() != null) {
+          buf.append(
+              TimeUtil.getSimpleDateFormat("''yyyy-MM-dd HH:mm:ss", binding.getCalendar())
+                  .format(x));
+        } else {
+          this.tsdf =
+              TimeUtil.getSimpleDateFormat(
+                  this.tsdf,
+                  "''yyyy-MM-dd HH:mm:ss",
+                  binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue()
+                      ? this.serverSession.getSessionTimeZone()
+                      : this.serverSession.getDefaultTimeZone());
+          buf.append(this.tsdf.format(x));
         }
 
-    }
-
-    @Override
-    public void encodeAsBinary(Message msg, BindValue binding) {
-        NativePacketPayload intoPacket = (NativePacketPayload) msg;
-        Timestamp x = adjustTimestamp((Timestamp) ((Timestamp) binding.getValue()).clone(), binding.getField(), binding.keepOrigNanos());
-        Calendar calendar = binding.getCalendar();
-        switch (binding.getMysqlType()) {
-            case DATE:
-                if (calendar == null) {
-                    calendar = Calendar.getInstance(this.serverSession.getDefaultTimeZone(), Locale.US);
-                }
-                calendar.setTime((java.util.Date) binding.getValue());
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                writeDate(msg, InternalDate.from(calendar));
-                return;
-            case DATETIME:
-            case TIMESTAMP:
-                if (calendar == null) {
-                    calendar = Calendar.getInstance(
-                            binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue() ? this.serverSession.getSessionTimeZone()
-                                    : this.serverSession.getDefaultTimeZone(),
-                            Locale.US);
-                }
-                calendar.setTime(x);
-                writeDateTime(msg, InternalTimestamp.from(calendar, x.getNanos()));
-                return;
-            case YEAR:
-                Calendar cal = Calendar.getInstance();
-                cal.setTime((java.util.Date) binding.getValue());
-                intoPacket.writeInteger(IntegerDataType.INT4, cal.get(Calendar.YEAR));
-                return;
-            case TIME:
-                Time t = adjustTime(new Time(x.getTime()));
-                if (calendar == null) {
-                    calendar = Calendar.getInstance(this.serverSession.getDefaultTimeZone(), Locale.US);
-                }
-                calendar.setTime(t);
-                writeTime(msg, InternalTime.from(calendar,
-                        adjustTimestamp((Timestamp) ((Timestamp) binding.getValue()).clone(), binding.getField(), binding.keepOrigNanos()).getNanos()));
-                return;
-            case CHAR:
-            case VARCHAR:
-            case TINYTEXT:
-            case TEXT:
-            case MEDIUMTEXT:
-            case LONGTEXT:
-                StringBuffer buf = new StringBuffer();
-
-                if (binding.getCalendar() != null) {
-                    buf.append(TimeUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss", binding.getCalendar()).format(x));
-                } else {
-                    this.tsdf = TimeUtil.getSimpleDateFormat(this.tsdf, "yyyy-MM-dd HH:mm:ss",
-                            binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue() ? this.serverSession.getSessionTimeZone()
-                                    : this.serverSession.getDefaultTimeZone());
-                    buf.append(this.tsdf.format(x));
-                }
-
-                if (this.serverSession.getCapabilities().serverSupportsFracSecs() && x.getNanos() > 0) {
-                    buf.append('.');
-                    buf.append(TimeUtil.formatNanos(x.getNanos(), 6));
-                }
-
-                intoPacket.writeBytes(StringSelfDataType.STRING_LENENC, StringUtils.getBytes(buf.toString(), this.charEncoding.getValue()));
-                return;
-            default:
-                throw ExceptionFactory.createException(WrongArgumentException.class,
-                        Messages.getString("PreparedStatement.67", new Object[] { binding.getValue().getClass().getName(), binding.getMysqlType().toString() }),
-                        this.exceptionInterceptor);
+        if (this.serverSession.getCapabilities().serverSupportsFracSecs() && x.getNanos() > 0) {
+          buf.append('.');
+          buf.append(TimeUtil.formatNanos(x.getNanos(), 6));
         }
-    }
+        buf.append('\'');
 
-    @Override
-    public void encodeAsQueryAttribute(Message msg, BindValue binding) {
-        Timestamp x = (Timestamp) binding.getValue();
-        Calendar cal = Calendar.getInstance(this.serverSession.getDefaultTimeZone(), Locale.US);
-        cal.setTime(x);
-        InternalTimestamp internalTimestamp = InternalTimestamp.from(cal, x.getNanos());
-        internalTimestamp.setOffset((int) TimeUnit.MILLISECONDS.toMinutes(cal.getTimeZone().getOffset(cal.getTimeInMillis())));
-        writeDateTimeWithOffset(msg, internalTimestamp);
+        return buf.toString();
+      case YEAR:
+        Calendar cal = Calendar.getInstance();
+        cal.setTime((java.util.Date) binding.getValue());
+        return String.valueOf(cal.get(Calendar.YEAR));
+      case TIME:
+        StringBuilder sb = new StringBuilder("'");
+        sb.append(
+            adjustLocalTime(
+                    ((Timestamp) binding.getValue()).toLocalDateTime().toLocalTime(),
+                    binding.getField())
+                .format(TimeUtil.TIME_FORMATTER_WITH_OPTIONAL_MICROS));
+        sb.append("'");
+        return sb.toString();
+      default:
+        throw ExceptionFactory.createException(
+            WrongArgumentException.class,
+            Messages.getString(
+                "PreparedStatement.67",
+                new Object[] {
+                  binding.getValue().getClass().getName(), binding.getMysqlType().toString()
+                }),
+            this.exceptionInterceptor);
     }
+  }
+
+  @Override
+  public void encodeAsBinary(Message msg, BindValue binding) {
+    NativePacketPayload intoPacket = (NativePacketPayload) msg;
+    Timestamp x =
+        adjustTimestamp(
+            (Timestamp) ((Timestamp) binding.getValue()).clone(),
+            binding.getField(),
+            binding.keepOrigNanos());
+    Calendar calendar = binding.getCalendar();
+    switch (binding.getMysqlType()) {
+      case DATE:
+        if (calendar == null) {
+          calendar = Calendar.getInstance(this.serverSession.getDefaultTimeZone(), Locale.US);
+        }
+        calendar.setTime((java.util.Date) binding.getValue());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        writeDate(msg, InternalDate.from(calendar));
+        return;
+      case DATETIME:
+      case TIMESTAMP:
+        if (calendar == null) {
+          calendar =
+              Calendar.getInstance(
+                  binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue()
+                      ? this.serverSession.getSessionTimeZone()
+                      : this.serverSession.getDefaultTimeZone(),
+                  Locale.US);
+        }
+        calendar.setTime(x);
+        writeDateTime(msg, InternalTimestamp.from(calendar, x.getNanos()));
+        return;
+      case YEAR:
+        Calendar cal = Calendar.getInstance();
+        cal.setTime((java.util.Date) binding.getValue());
+        intoPacket.writeInteger(IntegerDataType.INT4, cal.get(Calendar.YEAR));
+        return;
+      case TIME:
+        Time t = adjustTime(new Time(x.getTime()));
+        if (calendar == null) {
+          calendar = Calendar.getInstance(this.serverSession.getDefaultTimeZone(), Locale.US);
+        }
+        calendar.setTime(t);
+        writeTime(
+            msg,
+            InternalTime.from(
+                calendar,
+                adjustTimestamp(
+                        (Timestamp) ((Timestamp) binding.getValue()).clone(),
+                        binding.getField(),
+                        binding.keepOrigNanos())
+                    .getNanos()));
+        return;
+      case CHAR:
+      case VARCHAR:
+      case TINYTEXT:
+      case TEXT:
+      case MEDIUMTEXT:
+      case LONGTEXT:
+        StringBuffer buf = new StringBuffer();
+
+        if (binding.getCalendar() != null) {
+          buf.append(
+              TimeUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss", binding.getCalendar()).format(x));
+        } else {
+          this.tsdf =
+              TimeUtil.getSimpleDateFormat(
+                  this.tsdf,
+                  "yyyy-MM-dd HH:mm:ss",
+                  binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue()
+                      ? this.serverSession.getSessionTimeZone()
+                      : this.serverSession.getDefaultTimeZone());
+          buf.append(this.tsdf.format(x));
+        }
+
+        if (this.serverSession.getCapabilities().serverSupportsFracSecs() && x.getNanos() > 0) {
+          buf.append('.');
+          buf.append(TimeUtil.formatNanos(x.getNanos(), 6));
+        }
+
+        intoPacket.writeBytes(
+            StringSelfDataType.STRING_LENENC,
+            StringUtils.getBytes(buf.toString(), this.charEncoding.getValue()));
+        return;
+      default:
+        throw ExceptionFactory.createException(
+            WrongArgumentException.class,
+            Messages.getString(
+                "PreparedStatement.67",
+                new Object[] {
+                  binding.getValue().getClass().getName(), binding.getMysqlType().toString()
+                }),
+            this.exceptionInterceptor);
+    }
+  }
+
+  @Override
+  public void encodeAsQueryAttribute(Message msg, BindValue binding) {
+    Timestamp x = (Timestamp) binding.getValue();
+    Calendar cal = Calendar.getInstance(this.serverSession.getDefaultTimeZone(), Locale.US);
+    cal.setTime(x);
+    InternalTimestamp internalTimestamp = InternalTimestamp.from(cal, x.getNanos());
+    internalTimestamp.setOffset(
+        (int) TimeUnit.MILLISECONDS.toMinutes(cal.getTimeZone().getOffset(cal.getTimeInMillis())));
+    writeDateTimeWithOffset(msg, internalTimestamp);
+  }
 }

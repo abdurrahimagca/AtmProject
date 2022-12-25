@@ -34,35 +34,36 @@ import com.mysql.cj.protocol.ProtocolEntityFactory;
 import com.mysql.cj.result.DefaultColumnDefinition;
 import com.mysql.cj.result.Field;
 
-public class ColumnDefinitionFactory implements ProtocolEntityFactory<ColumnDefinition, NativePacketPayload> {
+public class ColumnDefinitionFactory
+    implements ProtocolEntityFactory<ColumnDefinition, NativePacketPayload> {
 
-    protected long columnCount;
-    protected ColumnDefinition columnDefinitionFromCache;
+  protected long columnCount;
+  protected ColumnDefinition columnDefinitionFromCache;
 
-    public ColumnDefinitionFactory(long columnCount, ColumnDefinition columnDefinitionFromCache) {
-        this.columnCount = columnCount;
-        this.columnDefinitionFromCache = columnDefinitionFromCache;
-    }
+  public ColumnDefinitionFactory(long columnCount, ColumnDefinition columnDefinitionFromCache) {
+    this.columnCount = columnCount;
+    this.columnDefinitionFromCache = columnDefinitionFromCache;
+  }
 
-    public long getColumnCount() {
-        return this.columnCount;
-    }
+  public long getColumnCount() {
+    return this.columnCount;
+  }
 
-    public ColumnDefinition getColumnDefinitionFromCache() {
-        return this.columnDefinitionFromCache;
-    }
+  public ColumnDefinition getColumnDefinitionFromCache() {
+    return this.columnDefinitionFromCache;
+  }
 
-    @Override
-    public ColumnDefinition createFromMessage(NativePacketPayload packetPayload) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+  @Override
+  public ColumnDefinition createFromMessage(NativePacketPayload packetPayload) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-    public boolean mergeColumnDefinitions() {
-        return false;
-    }
+  public boolean mergeColumnDefinitions() {
+    return false;
+  }
 
-    public ColumnDefinition createFromFields(Field[] fields) {
-        return new DefaultColumnDefinition(fields);
-    }
+  public ColumnDefinition createFromFields(Field[] fields) {
+    return new DefaultColumnDefinition(fields);
+  }
 }

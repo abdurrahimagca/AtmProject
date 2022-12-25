@@ -29,11 +29,6 @@
 
 package testsuite.simple;
 
-import java.sql.SQLException;
-import java.util.concurrent.Callable;
-
-import org.junit.jupiter.api.Test;
-
 import com.mysql.cj.jdbc.JdbcConnection;
 import com.mysql.cj.jdbc.NonRegisteringDriver;
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
@@ -49,81 +44,94 @@ import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
 import com.mysql.cj.jdbc.exceptions.SQLError;
 import com.mysql.cj.protocol.PacketReceivedTimeHolder;
 import com.mysql.cj.protocol.PacketSentTimeHolder;
-
+import java.sql.SQLException;
+import java.util.concurrent.Callable;
+import org.junit.jupiter.api.Test;
 import testsuite.BaseTestCase;
 
 public class ExceptionsTest extends BaseTestCase {
-    static String TEST_MESSAGE = "Test message";
-    static String TEST_SQL_STATE = "Test SQLState";
+  static String TEST_MESSAGE = "Test message";
+  static String TEST_SQL_STATE = "Test SQLState";
 
-    @Test
-    public void testExceptionsTranslation() throws Exception {
-        // java.sql.Driver methods
-        assertThrows(SQLException.class,
-                "Communications link failure\n\nThe last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.",
-                new Callable<Void>() {
-                    public Void call() throws Exception {
-                        new NonRegisteringDriver().connect("jdbc:mysql://wrongurl?user=usr", null);
-                        return null;
-                    }
-                });
-        assertThrows(SQLException.class, ".*Can't find configuration template named 'wrongvalue'", new Callable<Void>() {
-            public Void call() throws Exception {
-                new NonRegisteringDriver().connect(dbUrl + "&useConfigs=wrongvalue", null);
-                return null;
-            }
+  @Test
+  public void testExceptionsTranslation() throws Exception {
+    // java.sql.Driver methods
+    assertThrows(
+        SQLException.class,
+        "Communications link failure\n\n"
+            + "The last packet sent successfully to the server was 0 milliseconds ago. The driver"
+            + " has not received any packets from the server.",
+        new Callable<Void>() {
+          public Void call() throws Exception {
+            new NonRegisteringDriver().connect("jdbc:mysql://wrongurl?user=usr", null);
+            return null;
+          }
         });
-        assertThrows(SQLException.class,
-                "The connection property 'useServerPrepStmts' acceptable values are: 'TRUE', 'FALSE', 'YES' or 'NO'\\. The value 'wrongvalue' is not acceptable\\.",
-                new Callable<Void>() {
-                    public Void call() throws Exception {
-                        new NonRegisteringDriver().getPropertyInfo(dbUrl + "&useServerPrepStmts=wrongvalue", null);
-                        return null;
-                    }
-                });
-    }
+    assertThrows(
+        SQLException.class,
+        ".*Can't find configuration template named 'wrongvalue'",
+        new Callable<Void>() {
+          public Void call() throws Exception {
+            new NonRegisteringDriver().connect(dbUrl + "&useConfigs=wrongvalue", null);
+            return null;
+          }
+        });
+    assertThrows(
+        SQLException.class,
+        "The connection property 'useServerPrepStmts' acceptable values are: 'TRUE', 'FALSE', 'YES'"
+            + " or 'NO'\\. The value 'wrongvalue' is not acceptable\\.",
+        new Callable<Void>() {
+          public Void call() throws Exception {
+            new NonRegisteringDriver()
+                .getPropertyInfo(dbUrl + "&useServerPrepStmts=wrongvalue", null);
+            return null;
+          }
+        });
+  }
 
-    @Test
-    public void testConstructors() {
-        new CommunicationsException(TEST_MESSAGE, new Throwable());
-        new CommunicationsException((JdbcConnection) this.conn, new PacketSentTimeHolder() {
-        }, new PacketReceivedTimeHolder() {
-        }, new Exception());
+  @Test
+  public void testConstructors() {
+    new CommunicationsException(TEST_MESSAGE, new Throwable());
+    new CommunicationsException(
+        (JdbcConnection) this.conn,
+        new PacketSentTimeHolder() {},
+        new PacketReceivedTimeHolder() {},
+        new Exception());
 
-        new ConnectionFeatureNotAvailableException(TEST_MESSAGE, new Throwable());
-        new ConnectionFeatureNotAvailableException((JdbcConnection) this.conn, new PacketSentTimeHolder() {
-        }, new Exception());
+    new ConnectionFeatureNotAvailableException(TEST_MESSAGE, new Throwable());
+    new ConnectionFeatureNotAvailableException(
+        (JdbcConnection) this.conn, new PacketSentTimeHolder() {}, new Exception());
 
-        new MysqlDataTruncation(TEST_MESSAGE, 0, false, false, 0, 0, 0);
+    new MysqlDataTruncation(TEST_MESSAGE, 0, false, false, 0, 0, 0);
 
-        new MySQLQueryInterruptedException();
-        new MySQLQueryInterruptedException(TEST_MESSAGE);
-        new MySQLQueryInterruptedException(TEST_MESSAGE, TEST_SQL_STATE);
-        new MySQLQueryInterruptedException(TEST_MESSAGE, TEST_SQL_STATE, 0);
+    new MySQLQueryInterruptedException();
+    new MySQLQueryInterruptedException(TEST_MESSAGE);
+    new MySQLQueryInterruptedException(TEST_MESSAGE, TEST_SQL_STATE);
+    new MySQLQueryInterruptedException(TEST_MESSAGE, TEST_SQL_STATE, 0);
 
-        new MySQLStatementCancelledException();
-        new MySQLStatementCancelledException(TEST_MESSAGE);
-        new MySQLStatementCancelledException(TEST_MESSAGE, TEST_SQL_STATE);
-        new MySQLStatementCancelledException(TEST_MESSAGE, TEST_SQL_STATE, 0);
+    new MySQLStatementCancelledException();
+    new MySQLStatementCancelledException(TEST_MESSAGE);
+    new MySQLStatementCancelledException(TEST_MESSAGE, TEST_SQL_STATE);
+    new MySQLStatementCancelledException(TEST_MESSAGE, TEST_SQL_STATE, 0);
 
-        new MySQLTimeoutException();
-        new MySQLTimeoutException(TEST_MESSAGE);
-        new MySQLTimeoutException(TEST_MESSAGE, TEST_SQL_STATE);
-        new MySQLTimeoutException(TEST_MESSAGE, TEST_SQL_STATE, 0);
+    new MySQLTimeoutException();
+    new MySQLTimeoutException(TEST_MESSAGE);
+    new MySQLTimeoutException(TEST_MESSAGE, TEST_SQL_STATE);
+    new MySQLTimeoutException(TEST_MESSAGE, TEST_SQL_STATE, 0);
 
-        new MySQLTransactionRollbackException();
-        new MySQLTransactionRollbackException(TEST_MESSAGE);
-        new MySQLTransactionRollbackException(TEST_MESSAGE, TEST_SQL_STATE);
-        new MySQLTransactionRollbackException(TEST_MESSAGE, TEST_SQL_STATE, 0);
+    new MySQLTransactionRollbackException();
+    new MySQLTransactionRollbackException(TEST_MESSAGE);
+    new MySQLTransactionRollbackException(TEST_MESSAGE, TEST_SQL_STATE);
+    new MySQLTransactionRollbackException(TEST_MESSAGE, TEST_SQL_STATE, 0);
 
-        new NotUpdatable(TEST_MESSAGE);
+    new NotUpdatable(TEST_MESSAGE);
 
-        new OperationNotSupportedException();
-        new OperationNotSupportedException(TEST_MESSAGE);
+    new OperationNotSupportedException();
+    new OperationNotSupportedException(TEST_MESSAGE);
 
-        new PacketTooBigException(TEST_MESSAGE);
-        new PacketTooBigException(0, 100);
+    new PacketTooBigException(TEST_MESSAGE);
+    new PacketTooBigException(0, 100);
 
-        new SQLError();
-    }
+    new SQLError();
+  }
 }

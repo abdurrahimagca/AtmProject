@@ -35,72 +35,77 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 /**
- * An implementation of ClientInfoProvider that exposes the client info as a comment prepended to all statements issued by the driver.
- * 
- * Client information is <i>never</i> read from the server with this implementation, it is always cached locally.
+ * An implementation of ClientInfoProvider that exposes the client info as a comment prepended to
+ * all statements issued by the driver.
+ *
+ * <p>Client information is <i>never</i> read from the server with this implementation, it is always
+ * cached locally.
  */
-
 public class CommentClientInfoProvider implements ClientInfoProvider {
-    private Properties clientInfo;
+  private Properties clientInfo;
 
-    @Override
-    public synchronized void initialize(java.sql.Connection conn, Properties configurationProps) throws SQLException {
-        this.clientInfo = new Properties();
+  @Override
+  public synchronized void initialize(java.sql.Connection conn, Properties configurationProps)
+      throws SQLException {
+    this.clientInfo = new Properties();
+  }
+
+  @Override
+  public synchronized void destroy() throws SQLException {
+    this.clientInfo = null;
+  }
+
+  @Override
+  public synchronized Properties getClientInfo(java.sql.Connection conn) throws SQLException {
+    return this.clientInfo;
+  }
+
+  @Override
+  public synchronized String getClientInfo(java.sql.Connection conn, String name)
+      throws SQLException {
+    return this.clientInfo.getProperty(name);
+  }
+
+  @Override
+  public synchronized void setClientInfo(java.sql.Connection conn, Properties properties)
+      throws SQLClientInfoException {
+    this.clientInfo = new Properties();
+
+    Enumeration<?> propNames = properties.propertyNames();
+
+    while (propNames.hasMoreElements()) {
+      String name = (String) propNames.nextElement();
+
+      this.clientInfo.put(name, properties.getProperty(name));
     }
 
-    @Override
-    public synchronized void destroy() throws SQLException {
-        this.clientInfo = null;
+    setComment(conn);
+  }
+
+  @Override
+  public synchronized void setClientInfo(java.sql.Connection conn, String name, String value)
+      throws SQLClientInfoException {
+    this.clientInfo.setProperty(name, value);
+    setComment(conn);
+  }
+
+  private synchronized void setComment(java.sql.Connection conn) {
+    StringBuilder commentBuf = new StringBuilder();
+
+    Enumeration<?> propNames = this.clientInfo.propertyNames();
+
+    while (propNames.hasMoreElements()) {
+      String name = (String) propNames.nextElement();
+
+      if (commentBuf.length() > 0) {
+        commentBuf.append(", ");
+      }
+
+      commentBuf.append("" + name);
+      commentBuf.append("=");
+      commentBuf.append("" + this.clientInfo.getProperty(name));
     }
 
-    @Override
-    public synchronized Properties getClientInfo(java.sql.Connection conn) throws SQLException {
-        return this.clientInfo;
-    }
-
-    @Override
-    public synchronized String getClientInfo(java.sql.Connection conn, String name) throws SQLException {
-        return this.clientInfo.getProperty(name);
-    }
-
-    @Override
-    public synchronized void setClientInfo(java.sql.Connection conn, Properties properties) throws SQLClientInfoException {
-        this.clientInfo = new Properties();
-
-        Enumeration<?> propNames = properties.propertyNames();
-
-        while (propNames.hasMoreElements()) {
-            String name = (String) propNames.nextElement();
-
-            this.clientInfo.put(name, properties.getProperty(name));
-        }
-
-        setComment(conn);
-    }
-
-    @Override
-    public synchronized void setClientInfo(java.sql.Connection conn, String name, String value) throws SQLClientInfoException {
-        this.clientInfo.setProperty(name, value);
-        setComment(conn);
-    }
-
-    private synchronized void setComment(java.sql.Connection conn) {
-        StringBuilder commentBuf = new StringBuilder();
-
-        Enumeration<?> propNames = this.clientInfo.propertyNames();
-
-        while (propNames.hasMoreElements()) {
-            String name = (String) propNames.nextElement();
-
-            if (commentBuf.length() > 0) {
-                commentBuf.append(", ");
-            }
-
-            commentBuf.append("" + name);
-            commentBuf.append("=");
-            commentBuf.append("" + this.clientInfo.getProperty(name));
-        }
-
-        ((com.mysql.cj.jdbc.JdbcConnection) conn).setStatementComment(commentBuf.toString());
-    }
+    ((com.mysql.cj.jdbc.JdbcConnection) conn).setStatementComment(commentBuf.toString());
+  }
 }

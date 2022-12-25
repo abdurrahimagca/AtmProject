@@ -29,67 +29,62 @@
 
 package com.mysql.cj.xdevapi;
 
+import com.mysql.cj.xdevapi.JsonParser.EscapeChar;
 import java.util.HashMap;
 
-import com.mysql.cj.xdevapi.JsonParser.EscapeChar;
-
-/**
- * Represents a JSON <b>string</b>.
- */
+/** Represents a JSON <b>string</b>. */
 public class JsonString implements JsonValue {
 
-    static HashMap<Character, String> escapeChars = new HashMap<>();
+  static HashMap<Character, String> escapeChars = new HashMap<>();
 
-    static {
-        for (EscapeChar ec : EscapeChar.values()) {
-            if (ec.NEEDS_ESCAPING) {
-                escapeChars.put(ec.CHAR, ec.ESCAPED);
-            }
-        }
+  static {
+    for (EscapeChar ec : EscapeChar.values()) {
+      if (ec.NEEDS_ESCAPING) {
+        escapeChars.put(ec.CHAR, ec.ESCAPED);
+      }
+    }
+  }
+
+  private String val = "";
+
+  /**
+   * Get internal unescaped JsonString value.
+   *
+   * @return internal string value
+   */
+  public String getString() {
+    return this.val;
+  }
+
+  /**
+   * Set JsonString value.
+   *
+   * @param value string value
+   * @return this JsonString
+   */
+  public JsonString setValue(String value) {
+    this.val = value;
+    return this;
+  }
+
+  /**
+   * Get escaped JsonString value.
+   *
+   * @return string value
+   */
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("\"");
+
+    for (int i = 0; i < this.val.length(); i++) {
+      if (escapeChars.containsKey(this.val.charAt(i))) {
+        sb.append(escapeChars.get(this.val.charAt(i)));
+      } else {
+        sb.append(this.val.charAt(i));
+      }
     }
 
-    private String val = "";
-
-    /**
-     * Get internal unescaped JsonString value.
-     * 
-     * @return internal string value
-     */
-    public String getString() {
-        return this.val;
-    }
-
-    /**
-     * Set JsonString value.
-     * 
-     * @param value
-     *            string value
-     * @return this JsonString
-     */
-    public JsonString setValue(String value) {
-        this.val = value;
-        return this;
-    }
-
-    /**
-     * Get escaped JsonString value.
-     * 
-     * @return string value
-     */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("\"");
-
-        for (int i = 0; i < this.val.length(); i++) {
-            if (escapeChars.containsKey(this.val.charAt(i))) {
-                sb.append(escapeChars.get(this.val.charAt(i)));
-            } else {
-                sb.append(this.val.charAt(i));
-            }
-        }
-
-        sb.append("\"");
-        return sb.toString();
-    }
-
+    sb.append("\"");
+    return sb.toString();
+  }
 }

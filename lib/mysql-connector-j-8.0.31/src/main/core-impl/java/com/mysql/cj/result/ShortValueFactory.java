@@ -29,68 +29,76 @@
 
 package com.mysql.cj.result;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.mysql.cj.Constants;
 import com.mysql.cj.Messages;
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.exceptions.NumberOutOfRange;
 import com.mysql.cj.util.DataTypeUtil;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
-/**
- * A value factory for creating short values.
- */
+/** A value factory for creating short values. */
 public class ShortValueFactory extends AbstractNumericValueFactory<Short> {
 
-    public ShortValueFactory(PropertySet pset) {
-        super(pset);
-    }
+  public ShortValueFactory(PropertySet pset) {
+    super(pset);
+  }
 
-    @Override
-    public Short createFromBigInteger(BigInteger i) {
-        if (this.jdbcCompliantTruncationForReads
-                && (i.compareTo(Constants.BIG_INTEGER_MIN_SHORT_VALUE) < 0 || i.compareTo(Constants.BIG_INTEGER_MAX_SHORT_VALUE) > 0)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { i, getTargetTypeName() }));
-        }
-        return (short) i.intValue();
+  @Override
+  public Short createFromBigInteger(BigInteger i) {
+    if (this.jdbcCompliantTruncationForReads
+        && (i.compareTo(Constants.BIG_INTEGER_MIN_SHORT_VALUE) < 0
+            || i.compareTo(Constants.BIG_INTEGER_MAX_SHORT_VALUE) > 0)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {i, getTargetTypeName()}));
     }
+    return (short) i.intValue();
+  }
 
-    @Override
-    public Short createFromLong(long l) {
-        if (this.jdbcCompliantTruncationForReads && (l < Short.MIN_VALUE || l > Short.MAX_VALUE)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { Long.valueOf(l).toString(), getTargetTypeName() }));
-        }
-        return (short) l;
+  @Override
+  public Short createFromLong(long l) {
+    if (this.jdbcCompliantTruncationForReads && (l < Short.MIN_VALUE || l > Short.MAX_VALUE)) {
+      throw new NumberOutOfRange(
+          Messages.getString(
+              "ResultSet.NumberOutOfRange",
+              new Object[] {Long.valueOf(l).toString(), getTargetTypeName()}));
     }
+    return (short) l;
+  }
 
-    @Override
-    public Short createFromBigDecimal(BigDecimal d) {
-        if (this.jdbcCompliantTruncationForReads
-                && (d.compareTo(Constants.BIG_DECIMAL_MIN_SHORT_VALUE) < 0 || d.compareTo(Constants.BIG_DECIMAL_MAX_SHORT_VALUE) > 0)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { d, getTargetTypeName() }));
-        }
-        return (short) d.longValue();
+  @Override
+  public Short createFromBigDecimal(BigDecimal d) {
+    if (this.jdbcCompliantTruncationForReads
+        && (d.compareTo(Constants.BIG_DECIMAL_MIN_SHORT_VALUE) < 0
+            || d.compareTo(Constants.BIG_DECIMAL_MAX_SHORT_VALUE) > 0)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {d, getTargetTypeName()}));
     }
+    return (short) d.longValue();
+  }
 
-    @Override
-    public Short createFromDouble(double d) {
-        if (this.jdbcCompliantTruncationForReads && (d < Short.MIN_VALUE || d > Short.MAX_VALUE)) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { d, getTargetTypeName() }));
-        }
-        return (short) d;
+  @Override
+  public Short createFromDouble(double d) {
+    if (this.jdbcCompliantTruncationForReads && (d < Short.MIN_VALUE || d > Short.MAX_VALUE)) {
+      throw new NumberOutOfRange(
+          Messages.getString("ResultSet.NumberOutOfRange", new Object[] {d, getTargetTypeName()}));
     }
+    return (short) d;
+  }
 
-    @Override
-    public Short createFromBit(byte[] bytes, int offset, int length) {
-        long l = DataTypeUtil.bitToLong(bytes, offset, length);
-        if (this.jdbcCompliantTruncationForReads && l >> 16 != 0) {
-            throw new NumberOutOfRange(Messages.getString("ResultSet.NumberOutOfRange", new Object[] { Long.valueOf(l).toString(), getTargetTypeName() }));
-        }
-        return (short) l;
+  @Override
+  public Short createFromBit(byte[] bytes, int offset, int length) {
+    long l = DataTypeUtil.bitToLong(bytes, offset, length);
+    if (this.jdbcCompliantTruncationForReads && l >> 16 != 0) {
+      throw new NumberOutOfRange(
+          Messages.getString(
+              "ResultSet.NumberOutOfRange",
+              new Object[] {Long.valueOf(l).toString(), getTargetTypeName()}));
     }
+    return (short) l;
+  }
 
-    public String getTargetTypeName() {
-        return Short.class.getName();
-    }
+  public String getTargetTypeName() {
+    return Short.class.getName();
+  }
 }

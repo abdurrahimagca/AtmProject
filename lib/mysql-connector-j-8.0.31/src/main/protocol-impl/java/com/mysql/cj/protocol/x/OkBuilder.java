@@ -34,24 +34,22 @@ import com.mysql.cj.exceptions.WrongArgumentException;
 import com.mysql.cj.protocol.ProtocolEntity;
 import com.mysql.cj.protocol.ResultBuilder;
 
-/**
- * Result builder producing an {@link Ok} instance.
- */
+/** Result builder producing an {@link Ok} instance. */
 public class OkBuilder implements ResultBuilder<Ok> {
 
-    @Override
-    public boolean addProtocolEntity(ProtocolEntity entity) {
-        if (entity instanceof Notice) {
-            return false;
+  @Override
+  public boolean addProtocolEntity(ProtocolEntity entity) {
+    if (entity instanceof Notice) {
+      return false;
 
-        } else if (entity instanceof Ok) {
-            return true;
-        }
-        throw ExceptionFactory.createException(WrongArgumentException.class, "Unexpected protocol entity " + entity);
+    } else if (entity instanceof Ok) {
+      return true;
     }
+    throw ExceptionFactory.createException(
+        WrongArgumentException.class, "Unexpected protocol entity " + entity);
+  }
 
-    public Ok build() {
-        return new Ok();
-    }
-
+  public Ok build() {
+    return new Ok();
+  }
 }

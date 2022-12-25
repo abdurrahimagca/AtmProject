@@ -43,42 +43,55 @@ import com.mysql.cj.xdevapi.SessionFactory;
  * Sample program showing how to use Connector/J's Dev API support.
  */
 public class DevApiSample {
-    public static void main(String[] args) {
-        Session session = new SessionFactory().getSession("mysqlx://localhost:33060/test?user=user&password=password1234");
-        System.err.println("Connected!");
-        Schema schema = session.getDefaultSchema();
-        System.err.println("Default schema is: " + schema);
+  public static void main(String[] args) {
+    Session session =
+        new SessionFactory()
+            .getSession("mysqlx://localhost:33060/test?user=user&password=password1234");
+    System.err.println("Connected!");
+    Schema schema = session.getDefaultSchema();
+    System.err.println("Default schema is: " + schema);
 
-        documentWalkthrough(schema);
-    }
+    documentWalkthrough(schema);
+  }
 
-    public static void documentWalkthrough(Schema schema) {
-        // document walthrough
-        Collection coll = schema.createCollection("myBooks", /* reuseExisting? */ true);
-        DbDoc newDoc = new DbDocImpl().add("isbn", new JsonString().setValue("12345"));
-        newDoc.add("title", new JsonString().setValue("Effi Briest"));
-        newDoc.add("author", new JsonString().setValue("Theodor Fontane"));
-        newDoc.add("currentlyReadingPage", new JsonNumber().setValue(String.valueOf(42)));
-        coll.add(newDoc).execute();
+  public static void documentWalkthrough(Schema schema) {
+    // document walthrough
+    Collection coll = schema.createCollection("myBooks", /* reuseExisting? */ true);
+    DbDoc newDoc = new DbDocImpl().add("isbn", new JsonString().setValue("12345"));
+    newDoc.add("title", new JsonString().setValue("Effi Briest"));
+    newDoc.add("author", new JsonString().setValue("Theodor Fontane"));
+    newDoc.add("currentlyReadingPage", new JsonNumber().setValue(String.valueOf(42)));
+    coll.add(newDoc).execute();
 
-        // note: "$" prefix for document paths is optional. "$.title.somethingElse[0]" is the same as "title.somethingElse[0]" in document expressions
-        DocResult docs = coll.find("$.title = 'Effi Briest' and $.currentlyReadingPage > 10").execute();
-        DbDoc book = docs.next();
-        System.err.println("Currently reading " + ((JsonString) book.get("title")).getString() + " on page "
-                + ((JsonNumber) book.get("currentlyReadingPage")).getInteger());
+    // note: "$" prefix for document paths is optional. "$.title.somethingElse[0]" is the same as
+    // "title.somethingElse[0]" in document expressions
+    DocResult docs = coll.find("$.title = 'Effi Briest' and $.currentlyReadingPage > 10").execute();
+    DbDoc book = docs.next();
+    System.err.println(
+        "Currently reading "
+            + ((JsonString) book.get("title")).getString()
+            + " on page "
+            + ((JsonNumber) book.get("currentlyReadingPage")).getInteger());
 
-        // increment the page number and fetch it again
-        coll.modify("$.isbn = 12345").set("$.currentlyReadingPage", ((JsonNumber) book.get("currentlyReadingPage")).getInteger() + 1).execute();
+    // increment the page number and fetch it again
+    coll.modify("$.isbn = 12345")
+        .set(
+            "$.currentlyReadingPage",
+            ((JsonNumber) book.get("currentlyReadingPage")).getInteger() + 1)
+        .execute();
 
-        docs = coll.find("$.title = 'Effi Briest' and $.currentlyReadingPage > 10").execute();
-        book = docs.next();
-        System.err.println("Currently reading " + ((JsonString) book.get("title")).getString() + " on page "
-                + ((JsonNumber) book.get("currentlyReadingPage")).getInteger());
+    docs = coll.find("$.title = 'Effi Briest' and $.currentlyReadingPage > 10").execute();
+    book = docs.next();
+    System.err.println(
+        "Currently reading "
+            + ((JsonString) book.get("title")).getString()
+            + " on page "
+            + ((JsonNumber) book.get("currentlyReadingPage")).getInteger());
 
-        // remove the doc
-        coll.remove("true").execute();
-        System.err.println("Number of books in collection: " + coll.count());
+    // remove the doc
+    coll.remove("true").execute();
+    System.err.println("Number of books in collection: " + coll.count());
 
-        schema.dropCollection(coll.getName());
-    }
+    schema.dropCollection(coll.getName());
+  }
 }

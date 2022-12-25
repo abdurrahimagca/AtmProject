@@ -31,30 +31,27 @@ package com.mysql.cj.protocol;
 
 import java.io.CharArrayWriter;
 
-/**
- * A java.io.Writer used to write unicode data into Blobs and Clobs
- */
+/** A java.io.Writer used to write unicode data into Blobs and Clobs */
 public class WatchableWriter extends CharArrayWriter {
-    private WriterWatcher watcher;
+  private WriterWatcher watcher;
 
-    /**
-     * @see java.io.Writer#close()
-     */
-    @Override
-    public void close() {
-        super.close();
+  /**
+   * @see java.io.Writer#close()
+   */
+  @Override
+  public void close() {
+    super.close();
 
-        // Send data to watcher
-        if (this.watcher != null) {
-            this.watcher.writerClosed(this);
-        }
+    // Send data to watcher
+    if (this.watcher != null) {
+      this.watcher.writerClosed(this);
     }
+  }
 
-    /**
-     * @param watcher
-     *            {@link WriterWatcher}
-     */
-    public void setWatcher(WriterWatcher watcher) {
-        this.watcher = watcher;
-    }
+  /**
+   * @param watcher {@link WriterWatcher}
+   */
+  public void setWatcher(WriterWatcher watcher) {
+    this.watcher = watcher;
+  }
 }

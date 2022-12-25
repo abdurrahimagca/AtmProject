@@ -38,78 +38,77 @@ import com.mysql.cj.protocol.a.NativePacketPayload;
 import com.mysql.cj.protocol.a.NativeServerSessionStateController.NativeServerSessionStateChanges;
 
 public class OkPacket implements ProtocolEntity {
-    private long updateCount = -1;
-    private long updateID = -1;
-    private int statusFlags = 0;
-    private int warningCount = 0;
-    private String info = null;
-    private NativeServerSessionStateChanges sessionStateChanges;
+  private long updateCount = -1;
+  private long updateID = -1;
+  private int statusFlags = 0;
+  private int warningCount = 0;
+  private String info = null;
+  private NativeServerSessionStateChanges sessionStateChanges;
 
-    private OkPacket() {
-        this.sessionStateChanges = new NativeServerSessionStateChanges();
+  private OkPacket() {
+    this.sessionStateChanges = new NativeServerSessionStateChanges();
+  }
+
+  public static OkPacket parse(NativePacketPayload buf, String errorMessageEncoding) {
+    OkPacket ok = new OkPacket();
+
+    buf.setPosition(1); // skips the 'last packet' flag (packet signature)
+
+    // read OK packet
+    ok.setUpdateCount(buf.readInteger(IntegerDataType.INT_LENENC)); // affected_rows
+    ok.setUpdateID(buf.readInteger(IntegerDataType.INT_LENENC)); // last_insert_id
+    ok.setStatusFlags((int) buf.readInteger(IntegerDataType.INT2));
+    ok.setWarningCount((int) buf.readInteger(IntegerDataType.INT2));
+    ok.setInfo(buf.readString(StringSelfDataType.STRING_TERM, errorMessageEncoding)); // info
+
+    // read session state changes info
+    if ((ok.getStatusFlags() & SERVER_SESSION_STATE_CHANGED) > 0) {
+      ok.sessionStateChanges.init(buf, errorMessageEncoding);
     }
+    return ok;
+  }
 
-    public static OkPacket parse(NativePacketPayload buf, String errorMessageEncoding) {
-        OkPacket ok = new OkPacket();
+  public long getUpdateCount() {
+    return this.updateCount;
+  }
 
-        buf.setPosition(1); // skips the 'last packet' flag (packet signature)
+  public void setUpdateCount(long updateCount) {
+    this.updateCount = updateCount;
+  }
 
-        // read OK packet
-        ok.setUpdateCount(buf.readInteger(IntegerDataType.INT_LENENC)); // affected_rows
-        ok.setUpdateID(buf.readInteger(IntegerDataType.INT_LENENC)); // last_insert_id
-        ok.setStatusFlags((int) buf.readInteger(IntegerDataType.INT2));
-        ok.setWarningCount((int) buf.readInteger(IntegerDataType.INT2));
-        ok.setInfo(buf.readString(StringSelfDataType.STRING_TERM, errorMessageEncoding)); // info
+  public long getUpdateID() {
+    return this.updateID;
+  }
 
-        // read session state changes info
-        if ((ok.getStatusFlags() & SERVER_SESSION_STATE_CHANGED) > 0) {
-            ok.sessionStateChanges.init(buf, errorMessageEncoding);
-        }
-        return ok;
-    }
+  public void setUpdateID(long updateID) {
+    this.updateID = updateID;
+  }
 
-    public long getUpdateCount() {
-        return this.updateCount;
-    }
+  public String getInfo() {
+    return this.info;
+  }
 
-    public void setUpdateCount(long updateCount) {
-        this.updateCount = updateCount;
-    }
+  public void setInfo(String info) {
+    this.info = info;
+  }
 
-    public long getUpdateID() {
-        return this.updateID;
-    }
+  public int getStatusFlags() {
+    return this.statusFlags;
+  }
 
-    public void setUpdateID(long updateID) {
-        this.updateID = updateID;
-    }
+  public void setStatusFlags(int statusFlags) {
+    this.statusFlags = statusFlags;
+  }
 
-    public String getInfo() {
-        return this.info;
-    }
+  public int getWarningCount() {
+    return this.warningCount;
+  }
 
-    public void setInfo(String info) {
-        this.info = info;
-    }
+  public void setWarningCount(int warningCount) {
+    this.warningCount = warningCount;
+  }
 
-    public int getStatusFlags() {
-        return this.statusFlags;
-    }
-
-    public void setStatusFlags(int statusFlags) {
-        this.statusFlags = statusFlags;
-    }
-
-    public int getWarningCount() {
-        return this.warningCount;
-    }
-
-    public void setWarningCount(int warningCount) {
-        this.warningCount = warningCount;
-    }
-
-    public NativeServerSessionStateChanges getSessionStateChanges() {
-        return this.sessionStateChanges;
-    }
-
+  public NativeServerSessionStateChanges getSessionStateChanges() {
+    return this.sessionStateChanges;
+  }
 }

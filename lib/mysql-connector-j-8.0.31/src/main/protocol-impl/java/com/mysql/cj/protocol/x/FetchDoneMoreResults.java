@@ -31,11 +31,8 @@ package com.mysql.cj.protocol.x;
 
 import com.mysql.cj.protocol.ProtocolEntity;
 
-/**
- * ProtocolEntity representing a {@link FetchDoneMoreResults} message.
- */
+/** ProtocolEntity representing a {@link FetchDoneMoreResults} message. */
 public class FetchDoneMoreResults implements ProtocolEntity {
 
-    public FetchDoneMoreResults() {
-    }
+  public FetchDoneMoreResults() {}
 }

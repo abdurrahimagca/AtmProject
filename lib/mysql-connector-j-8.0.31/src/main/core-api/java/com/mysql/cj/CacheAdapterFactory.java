@@ -31,6 +31,5 @@ package com.mysql.cj;
 
 public interface CacheAdapterFactory<K, V> {
 
-    CacheAdapter<K, V> getInstance(Object syncMutex, String url, int cacheMaxSize, int maxKeySize);
-
+  CacheAdapter<K, V> getInstance(Object syncMutex, String url, int cacheMaxSize, int maxKeySize);
 }

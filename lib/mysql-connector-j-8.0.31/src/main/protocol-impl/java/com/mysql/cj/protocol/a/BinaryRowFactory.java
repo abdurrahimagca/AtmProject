@@ -44,112 +44,114 @@ import com.mysql.cj.protocol.a.result.BinaryBufferRow;
 import com.mysql.cj.protocol.a.result.ByteArrayRow;
 import com.mysql.cj.result.Field;
 
-/**
- * Handle binary-encoded data for server-side PreparedStatements
- *
- */
-public class BinaryRowFactory extends AbstractRowFactory implements ProtocolEntityFactory<ResultsetRow, NativePacketPayload> {
+/** Handle binary-encoded data for server-side PreparedStatements */
+public class BinaryRowFactory extends AbstractRowFactory
+    implements ProtocolEntityFactory<ResultsetRow, NativePacketPayload> {
 
-    public BinaryRowFactory(NativeProtocol protocol, ColumnDefinition columnDefinition, Resultset.Concurrency resultSetConcurrency,
-            boolean canReuseRowPacketForBufferRow) {
-        this.columnDefinition = columnDefinition;
-        this.resultSetConcurrency = resultSetConcurrency;
-        this.canReuseRowPacketForBufferRow = canReuseRowPacketForBufferRow;
-        this.useBufferRowSizeThreshold = protocol.getPropertySet().getMemorySizeProperty(PropertyKey.largeRowSizeThreshold);
-        this.exceptionInterceptor = protocol.getExceptionInterceptor();
-        this.valueDecoder = new MysqlBinaryValueDecoder();
+  public BinaryRowFactory(
+      NativeProtocol protocol,
+      ColumnDefinition columnDefinition,
+      Resultset.Concurrency resultSetConcurrency,
+      boolean canReuseRowPacketForBufferRow) {
+    this.columnDefinition = columnDefinition;
+    this.resultSetConcurrency = resultSetConcurrency;
+    this.canReuseRowPacketForBufferRow = canReuseRowPacketForBufferRow;
+    this.useBufferRowSizeThreshold =
+        protocol.getPropertySet().getMemorySizeProperty(PropertyKey.largeRowSizeThreshold);
+    this.exceptionInterceptor = protocol.getExceptionInterceptor();
+    this.valueDecoder = new MysqlBinaryValueDecoder();
+  }
+
+  @Override
+  public ResultsetRow createFromMessage(NativePacketPayload rowPacket) {
+
+    // use a buffer row for reusable packets (streaming results), blobs and long strings
+    // or if we're over the threshold
+    boolean useBufferRow =
+        this.canReuseRowPacketForBufferRow
+            || this.columnDefinition.hasLargeFields()
+            || rowPacket.getPayloadLength() >= this.useBufferRowSizeThreshold.getValue();
+
+    // bump past ProtocolBinary::ResultsetRow packet header
+    rowPacket.setPosition(rowPacket.getPosition() + 1);
+
+    if (this.resultSetConcurrency == Concurrency.UPDATABLE || !useBufferRow) {
+      return unpackBinaryResultSetRow(this.columnDefinition.getFields(), rowPacket);
     }
 
-    @Override
-    public ResultsetRow createFromMessage(NativePacketPayload rowPacket) {
+    return new BinaryBufferRow(
+        rowPacket, this.columnDefinition, this.exceptionInterceptor, this.valueDecoder);
+  }
 
-        // use a buffer row for reusable packets (streaming results), blobs and long strings
-        // or if we're over the threshold
-        boolean useBufferRow = this.canReuseRowPacketForBufferRow || this.columnDefinition.hasLargeFields()
-                || rowPacket.getPayloadLength() >= this.useBufferRowSizeThreshold.getValue();
+  @Override
+  public boolean canReuseRowPacketForBufferRow() {
+    return this.canReuseRowPacketForBufferRow;
+  }
 
-        // bump past ProtocolBinary::ResultsetRow packet header
-        rowPacket.setPosition(rowPacket.getPosition() + 1);
+  /**
+   * Un-packs binary-encoded result set data for one row
+   *
+   * @param fields {@link Field}s array
+   * @param binaryData data
+   * @return byte[][]
+   */
+  private final ResultsetRow unpackBinaryResultSetRow(
+      Field[] fields, NativePacketPayload binaryData) {
+    int numFields = fields.length;
 
-        if (this.resultSetConcurrency == Concurrency.UPDATABLE || !useBufferRow) {
-            return unpackBinaryResultSetRow(this.columnDefinition.getFields(), rowPacket);
-        }
+    byte[][] unpackedRowBytes = new byte[numFields][];
 
-        return new BinaryBufferRow(rowPacket, this.columnDefinition, this.exceptionInterceptor, this.valueDecoder);
+    //
+    // Unpack the null bitmask, first
+    //
+
+    int nullCount = (numFields + 9) / 8;
+    int nullMaskPos = binaryData.getPosition();
+    binaryData.setPosition(nullMaskPos + nullCount);
+    int bit = 4; // first two bits are reserved for future use
+
+    byte[] buf = binaryData.getByteBuffer();
+    for (int i = 0; i < numFields; i++) {
+      if ((buf[nullMaskPos] & bit) != 0) {
+        unpackedRowBytes[i] = null;
+      } else {
+        extractNativeEncodedColumn(binaryData, fields, i, unpackedRowBytes);
+      }
+
+      if (((bit <<= 1) & 255) == 0) {
+        bit = 1; /* To next byte */
+
+        nullMaskPos++;
+      }
     }
 
-    @Override
-    public boolean canReuseRowPacketForBufferRow() {
-        return this.canReuseRowPacketForBufferRow;
+    return new ByteArrayRow(
+        unpackedRowBytes, this.exceptionInterceptor, new MysqlBinaryValueDecoder());
+  }
+
+  /**
+   * Copy the raw result bytes from the
+   *
+   * @param binaryData packet to the
+   * @param fields {@link Field}s array
+   * @param columnIndex column index
+   * @param unpackedRowData byte array.
+   */
+  private final void extractNativeEncodedColumn(
+      NativePacketPayload binaryData, Field[] fields, int columnIndex, byte[][] unpackedRowData) {
+    int type = fields[columnIndex].getMysqlTypeId();
+
+    int len = NativeUtils.getBinaryEncodedLength(type);
+
+    if (type == MysqlType.FIELD_TYPE_NULL) {
+      // Do nothing
+    } else if (len == 0) {
+      unpackedRowData[columnIndex] = binaryData.readBytes(StringSelfDataType.STRING_LENENC);
+    } else if (len > 0) {
+      unpackedRowData[columnIndex] = binaryData.readBytes(StringLengthDataType.STRING_FIXED, len);
+    } else {
+      throw ExceptionFactory.createException(
+          Messages.getString("MysqlIO.97", new Object[] {type, columnIndex, fields.length}));
     }
-
-    /**
-     * Un-packs binary-encoded result set data for one row
-     * 
-     * @param fields
-     *            {@link Field}s array
-     * @param binaryData
-     *            data
-     * 
-     * @return byte[][]
-     */
-    private final ResultsetRow unpackBinaryResultSetRow(Field[] fields, NativePacketPayload binaryData) {
-        int numFields = fields.length;
-
-        byte[][] unpackedRowBytes = new byte[numFields][];
-
-        //
-        // Unpack the null bitmask, first
-        //
-
-        int nullCount = (numFields + 9) / 8;
-        int nullMaskPos = binaryData.getPosition();
-        binaryData.setPosition(nullMaskPos + nullCount);
-        int bit = 4; // first two bits are reserved for future use
-
-        byte[] buf = binaryData.getByteBuffer();
-        for (int i = 0; i < numFields; i++) {
-            if ((buf[nullMaskPos] & bit) != 0) {
-                unpackedRowBytes[i] = null;
-            } else {
-                extractNativeEncodedColumn(binaryData, fields, i, unpackedRowBytes);
-            }
-
-            if (((bit <<= 1) & 255) == 0) {
-                bit = 1; /* To next byte */
-
-                nullMaskPos++;
-            }
-        }
-
-        return new ByteArrayRow(unpackedRowBytes, this.exceptionInterceptor, new MysqlBinaryValueDecoder());
-    }
-
-    /**
-     * Copy the raw result bytes from the
-     * 
-     * @param binaryData
-     *            packet to the
-     * @param fields
-     *            {@link Field}s array
-     * @param columnIndex
-     *            column index
-     * @param unpackedRowData
-     *            byte array.
-     */
-    private final void extractNativeEncodedColumn(NativePacketPayload binaryData, Field[] fields, int columnIndex, byte[][] unpackedRowData) {
-        int type = fields[columnIndex].getMysqlTypeId();
-
-        int len = NativeUtils.getBinaryEncodedLength(type);
-
-        if (type == MysqlType.FIELD_TYPE_NULL) {
-            // Do nothing
-        } else if (len == 0) {
-            unpackedRowData[columnIndex] = binaryData.readBytes(StringSelfDataType.STRING_LENENC);
-        } else if (len > 0) {
-            unpackedRowData[columnIndex] = binaryData.readBytes(StringLengthDataType.STRING_FIXED, len);
-        } else {
-            throw ExceptionFactory.createException(Messages.getString("MysqlIO.97", new Object[] { type, columnIndex, fields.length }));
-        }
-    }
+  }
 }

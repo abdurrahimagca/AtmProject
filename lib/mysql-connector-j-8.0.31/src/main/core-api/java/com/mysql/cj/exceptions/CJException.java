@@ -29,75 +29,75 @@
 
 package com.mysql.cj.exceptions;
 
-/**
- * The base unchecked exception thrown internally in connector.
- */
+/** The base unchecked exception thrown internally in connector. */
 public class CJException extends RuntimeException {
 
-    private static final long serialVersionUID = -8618536991444733607L;
+  private static final long serialVersionUID = -8618536991444733607L;
 
-    /**
-     * We can't override the {@link Throwable#detailMessage} directly because it has a private accessibility,
-     * thus for that need we use this protected variable and override {@link #getMessage()}
-     */
-    protected String exceptionMessage;
+  /**
+   * We can't override the {@link Throwable#detailMessage} directly because it has a private
+   * accessibility, thus for that need we use this protected variable and override {@link
+   * #getMessage()}
+   */
+  protected String exceptionMessage;
 
-    private String SQLState = "S1000"; // GENERAL_ERROR by default
+  private String SQLState = "S1000"; // GENERAL_ERROR by default
 
-    private int vendorCode = 0;
+  private int vendorCode = 0;
 
-    private boolean isTransient = false;
+  private boolean isTransient = false;
 
-    public CJException() {
-        super();
-    }
+  public CJException() {
+    super();
+  }
 
-    public CJException(String message) {
-        super(message);
-    }
+  public CJException(String message) {
+    super(message);
+  }
 
-    public CJException(Throwable cause) {
-        super(cause);
-    }
+  public CJException(Throwable cause) {
+    super(cause);
+  }
 
-    public CJException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public CJException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    protected CJException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+  protected CJException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 
-    public String getSQLState() {
-        return this.SQLState;
-    }
+  public String getSQLState() {
+    return this.SQLState;
+  }
 
-    public void setSQLState(String sQLState) {
-        this.SQLState = sQLState;
-    }
+  public void setSQLState(String sQLState) {
+    this.SQLState = sQLState;
+  }
 
-    public int getVendorCode() {
-        return this.vendorCode;
-    }
+  public int getVendorCode() {
+    return this.vendorCode;
+  }
 
-    public void setVendorCode(int vendorCode) {
-        this.vendorCode = vendorCode;
-    }
+  public void setVendorCode(int vendorCode) {
+    this.vendorCode = vendorCode;
+  }
 
-    public boolean isTransient() {
-        return this.isTransient;
-    }
+  public boolean isTransient() {
+    return this.isTransient;
+  }
 
-    public void setTransient(boolean isTransient) {
-        this.isTransient = isTransient;
-    }
+  public void setTransient(boolean isTransient) {
+    this.isTransient = isTransient;
+  }
 
-    @Override
-    public String getMessage() {
-        return this.exceptionMessage != null ? this.exceptionMessage : super.getMessage();
-    }
+  @Override
+  public String getMessage() {
+    return this.exceptionMessage != null ? this.exceptionMessage : super.getMessage();
+  }
 
-    public void appendMessage(String messageToAppend) {
-        this.exceptionMessage = getMessage() + messageToAppend;
-    }
+  public void appendMessage(String messageToAppend) {
+    this.exceptionMessage = getMessage() + messageToAppend;
+  }
 }

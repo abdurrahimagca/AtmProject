@@ -35,20 +35,29 @@ import com.mysql.cj.exceptions.WrongArgumentException;
 
 public class IntegerProperty extends AbstractRuntimeProperty<Integer> {
 
-    private static final long serialVersionUID = 9208223182595760858L;
+  private static final long serialVersionUID = 9208223182595760858L;
 
-    public IntegerProperty(PropertyDefinition<Integer> propertyDefinition) {
-        super(propertyDefinition);
-    }
+  public IntegerProperty(PropertyDefinition<Integer> propertyDefinition) {
+    super(propertyDefinition);
+  }
 
-    @Override
-    protected void checkRange(Integer val, String valueAsString, ExceptionInterceptor exceptionInterceptor) {
-        if ((val.intValue() < getPropertyDefinition().getLowerBound()) || (val.intValue() > getPropertyDefinition().getUpperBound())) {
-            throw ExceptionFactory.createException(WrongArgumentException.class,
-                    "The connection property '" + getPropertyDefinition().getName() + "' only accepts integer values in the range of "
-                            + getPropertyDefinition().getLowerBound() + " - " + getPropertyDefinition().getUpperBound() + ", the value '"
-                            + (valueAsString == null ? val.intValue() : valueAsString) + "' exceeds this range.",
-                    exceptionInterceptor);
-        }
+  @Override
+  protected void checkRange(
+      Integer val, String valueAsString, ExceptionInterceptor exceptionInterceptor) {
+    if ((val.intValue() < getPropertyDefinition().getLowerBound())
+        || (val.intValue() > getPropertyDefinition().getUpperBound())) {
+      throw ExceptionFactory.createException(
+          WrongArgumentException.class,
+          "The connection property '"
+              + getPropertyDefinition().getName()
+              + "' only accepts integer values in the range of "
+              + getPropertyDefinition().getLowerBound()
+              + " - "
+              + getPropertyDefinition().getUpperBound()
+              + ", the value '"
+              + (valueAsString == null ? val.intValue() : valueAsString)
+              + "' exceeds this range.",
+          exceptionInterceptor);
     }
+  }
 }

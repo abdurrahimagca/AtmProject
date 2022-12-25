@@ -32,63 +32,62 @@ package testsuite.simple;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.mysql.cj.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
-
-import com.mysql.cj.util.StringUtils;
-
 import testsuite.BaseTestCase;
 
 /**
- * Tests new StringUtils functions in the driver: public static String sanitizeProcOrFuncName(String src) and public static List splitDBdotName(String src,
- * String cat, String quotId, boolean isNoBslashEscSet)
- * 
- * By the time sanitizeProcOrFuncName is called we should only have DB.SP as src, ie. SP/FUNC name is already sanitized during the process!
+ * Tests new StringUtils functions in the driver: public static String sanitizeProcOrFuncName(String
+ * src) and public static List splitDBdotName(String src, String cat, String quotId, boolean
+ * isNoBslashEscSet)
+ *
+ * <p>By the time sanitizeProcOrFuncName is called we should only have DB.SP as src, ie. SP/FUNC
+ * name is already sanitized during the process!
  */
 public class SplitDBdotNameTest extends BaseTestCase {
-    /**
-     * Tests sanitation and SplitDBdotName
-     * 
-     * @throws Exception
-     */
-    @Test
-    public void testSplit() throws Exception {
-        String src = null;
-        String resString = null;
-        List<String> results = new ArrayList<>();
+  /**
+   * Tests sanitation and SplitDBdotName
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testSplit() throws Exception {
+    String src = null;
+    String resString = null;
+    List<String> results = new ArrayList<>();
 
-        //Test 1.1, weird DB.SP name
-        src = "`MyDatabase 1.0.1.0`.`Proc 1.v1`";
-        resString = StringUtils.sanitizeProcOrFuncName(src);
-        assertNotNull(resString, "Test 1.1 returned null resString");
-        results = StringUtils.splitDBdotName(resString, null, "`", true);
-        assertEquals(results.get(0), "MyDatabase 1.0.1.0");
-        assertEquals(results.get(1), "Proc 1.v1");
+    // Test 1.1, weird DB.SP name
+    src = "`MyDatabase 1.0.1.0`.`Proc 1.v1`";
+    resString = StringUtils.sanitizeProcOrFuncName(src);
+    assertNotNull(resString, "Test 1.1 returned null resString");
+    results = StringUtils.splitDBdotName(resString, null, "`", true);
+    assertEquals(results.get(0), "MyDatabase 1.0.1.0");
+    assertEquals(results.get(1), "Proc 1.v1");
 
-        //Test 1.2, toggle isNoBslashEscSet
-        src = "`MyDatabase 1.0.1.0`.`Proc 1.v1`";
-        resString = StringUtils.sanitizeProcOrFuncName(src);
-        assertNotNull(resString, "Test 1.2 returned null resString");
-        results = StringUtils.splitDBdotName(resString, null, "`", false);
-        assertEquals(results.get(0), "MyDatabase 1.0.1.0");
-        assertEquals(results.get(1), "Proc 1.v1");
+    // Test 1.2, toggle isNoBslashEscSet
+    src = "`MyDatabase 1.0.1.0`.`Proc 1.v1`";
+    resString = StringUtils.sanitizeProcOrFuncName(src);
+    assertNotNull(resString, "Test 1.2 returned null resString");
+    results = StringUtils.splitDBdotName(resString, null, "`", false);
+    assertEquals(results.get(0), "MyDatabase 1.0.1.0");
+    assertEquals(results.get(1), "Proc 1.v1");
 
-        //Test 2.1, weird SP name, no DB parameter
-        src = "`Proc 1.v1`";
-        resString = StringUtils.sanitizeProcOrFuncName(src);
-        assertNotNull(resString, "Test 2.1 returned null resString");
-        results = StringUtils.splitDBdotName(resString, null, "`", true);
-        assertEquals(results.get(0), null);
-        assertEquals(results.get(1), "Proc 1.v1");
+    // Test 2.1, weird SP name, no DB parameter
+    src = "`Proc 1.v1`";
+    resString = StringUtils.sanitizeProcOrFuncName(src);
+    assertNotNull(resString, "Test 2.1 returned null resString");
+    results = StringUtils.splitDBdotName(resString, null, "`", true);
+    assertEquals(results.get(0), null);
+    assertEquals(results.get(1), "Proc 1.v1");
 
-        //Test 2.2, toggle isNoBslashEscSet
-        src = "`Proc 1.v1`";
-        resString = StringUtils.sanitizeProcOrFuncName(src);
-        assertNotNull(resString, "Test 2.2 returned null resString");
-        results = StringUtils.splitDBdotName(resString, null, "`", false);
-        assertEquals(results.get(0), null);
-        assertEquals(results.get(1), "Proc 1.v1");
-    }
+    // Test 2.2, toggle isNoBslashEscSet
+    src = "`Proc 1.v1`";
+    resString = StringUtils.sanitizeProcOrFuncName(src);
+    assertNotNull(resString, "Test 2.2 returned null resString");
+    results = StringUtils.splitDBdotName(resString, null, "`", false);
+    assertEquals(results.get(0), null);
+    assertEquals(results.get(1), "Proc 1.v1");
+  }
 }

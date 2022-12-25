@@ -35,53 +35,89 @@ import com.mysql.cj.exceptions.WrongArgumentException;
 
 public class IntegerPropertyDefinition extends AbstractPropertyDefinition<Integer> {
 
-    private static final long serialVersionUID = 4151893695173946081L;
+  private static final long serialVersionUID = 4151893695173946081L;
 
-    protected int multiplier = 1;
+  protected int multiplier = 1;
 
-    public IntegerPropertyDefinition(PropertyKey key, int defaultValue, boolean isRuntimeModifiable, String description, String sinceVersion, String category,
-            int orderInCategory) {
-        super(key, Integer.valueOf(defaultValue), isRuntimeModifiable, description, sinceVersion, category, orderInCategory);
+  public IntegerPropertyDefinition(
+      PropertyKey key,
+      int defaultValue,
+      boolean isRuntimeModifiable,
+      String description,
+      String sinceVersion,
+      String category,
+      int orderInCategory) {
+    super(
+        key,
+        Integer.valueOf(defaultValue),
+        isRuntimeModifiable,
+        description,
+        sinceVersion,
+        category,
+        orderInCategory);
+  }
+
+  public IntegerPropertyDefinition(
+      PropertyKey key,
+      int defaultValue,
+      boolean isRuntimeModifiable,
+      String description,
+      String sinceVersion,
+      String category,
+      int orderInCategory,
+      int lowerBound,
+      int upperBound) {
+    super(
+        key,
+        Integer.valueOf(defaultValue),
+        isRuntimeModifiable,
+        description,
+        sinceVersion,
+        category,
+        orderInCategory,
+        lowerBound,
+        upperBound);
+  }
+
+  @Override
+  public boolean isRangeBased() {
+    return getUpperBound() != getLowerBound();
+  }
+
+  @Override
+  public Integer parseObject(String value, ExceptionInterceptor exceptionInterceptor) {
+    return integerFrom(getName(), value, this.multiplier, exceptionInterceptor);
+  }
+
+  /**
+   * Creates instance of IntegerProperty.
+   *
+   * @return RuntimeProperty
+   */
+  @Override
+  public RuntimeProperty<Integer> createRuntimeProperty() {
+    return new IntegerProperty(this);
+  }
+
+  public static Integer integerFrom(
+      String name, String value, int multiplier, ExceptionInterceptor exceptionInterceptor) {
+    try {
+      // Parse decimals, too
+      int intValue = (int) (Double.valueOf(value).doubleValue() * multiplier);
+
+      // TODO check bounds
+
+      return intValue;
+
+    } catch (NumberFormatException nfe) {
+      throw ExceptionFactory.createException(
+          WrongArgumentException.class,
+          "The connection property '"
+              + name
+              + "' only accepts integer values. The value '"
+              + value
+              + "' can not be converted to an integer.",
+          exceptionInterceptor);
     }
-
-    public IntegerPropertyDefinition(PropertyKey key, int defaultValue, boolean isRuntimeModifiable, String description, String sinceVersion, String category,
-            int orderInCategory, int lowerBound, int upperBound) {
-        super(key, Integer.valueOf(defaultValue), isRuntimeModifiable, description, sinceVersion, category, orderInCategory, lowerBound, upperBound);
-    }
-
-    @Override
-    public boolean isRangeBased() {
-        return getUpperBound() != getLowerBound();
-    }
-
-    @Override
-    public Integer parseObject(String value, ExceptionInterceptor exceptionInterceptor) {
-        return integerFrom(getName(), value, this.multiplier, exceptionInterceptor);
-    }
-
-    /**
-     * Creates instance of IntegerProperty.
-     * 
-     * @return RuntimeProperty
-     */
-    @Override
-    public RuntimeProperty<Integer> createRuntimeProperty() {
-        return new IntegerProperty(this);
-    }
-
-    public static Integer integerFrom(String name, String value, int multiplier, ExceptionInterceptor exceptionInterceptor) {
-        try {
-            // Parse decimals, too
-            int intValue = (int) (Double.valueOf(value).doubleValue() * multiplier);
-
-            // TODO check bounds
-
-            return intValue;
-
-        } catch (NumberFormatException nfe) {
-            throw ExceptionFactory.createException(WrongArgumentException.class,
-                    "The connection property '" + name + "' only accepts integer values. The value '" + value + "' can not be converted to an integer.",
-                    exceptionInterceptor);
-        }
-    }
+  }
 }

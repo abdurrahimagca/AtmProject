@@ -29,15 +29,13 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * A result from the table.insert() statement.
- */
+/** A result from the table.insert() statement. */
 public interface InsertResult extends Result {
 
-    /**
-     * Get the auto-increment value if one was generated from a row insert statement.
-     * 
-     * @return auto-increment value
-     */
-    Long getAutoIncrementValue();
+  /**
+   * Get the auto-increment value if one was generated from a row insert statement.
+   *
+   * @return auto-increment value
+   */
+  Long getAutoIncrementValue();
 }

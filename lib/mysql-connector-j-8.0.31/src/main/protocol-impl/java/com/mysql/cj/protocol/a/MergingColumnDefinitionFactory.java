@@ -37,30 +37,35 @@ import com.mysql.cj.result.DefaultColumnDefinition;
 import com.mysql.cj.result.Field;
 
 // We need to merge metadata from COM_STMT_PREPARE and COM_STMT_EXECUTE:
-// 1. some field flags do exist in metadata returned by COM_STMT_PREPARE but are missed after COM_STMT_EXECUTE
-// 2. COM_STMT_EXECUTE returns metadata with actual field data types, they may mismatch those from COM_STMT_PREPARE
-public class MergingColumnDefinitionFactory extends ColumnDefinitionFactory implements ProtocolEntityFactory<ColumnDefinition, NativePacketPayload> {
+// 1. some field flags do exist in metadata returned by COM_STMT_PREPARE but are missed after
+// COM_STMT_EXECUTE
+// 2. COM_STMT_EXECUTE returns metadata with actual field data types, they may mismatch those from
+// COM_STMT_PREPARE
+public class MergingColumnDefinitionFactory extends ColumnDefinitionFactory
+    implements ProtocolEntityFactory<ColumnDefinition, NativePacketPayload> {
 
-    public MergingColumnDefinitionFactory(long columnCount, ColumnDefinition columnDefinitionFromCache) {
-        super(columnCount, columnDefinitionFromCache);
-    }
+  public MergingColumnDefinitionFactory(
+      long columnCount, ColumnDefinition columnDefinitionFromCache) {
+    super(columnCount, columnDefinitionFromCache);
+  }
 
-    @Override
-    public boolean mergeColumnDefinitions() {
-        return true;
-    }
+  @Override
+  public boolean mergeColumnDefinitions() {
+    return true;
+  }
 
-    @Override
-    public ColumnDefinition createFromFields(Field[] fields) {
-        if (this.columnDefinitionFromCache != null) {
-            if (fields.length != this.columnCount) {
-                throw ExceptionFactory.createException(WrongArgumentException.class, "Wrong number of ColumnDefinition fields.");
-            }
-            Field[] f = this.columnDefinitionFromCache.getFields();
-            for (int i = 0; i < fields.length; i++) {
-                fields[i].setFlags(f[i].getFlags());
-            }
-        }
-        return new DefaultColumnDefinition(fields);
+  @Override
+  public ColumnDefinition createFromFields(Field[] fields) {
+    if (this.columnDefinitionFromCache != null) {
+      if (fields.length != this.columnCount) {
+        throw ExceptionFactory.createException(
+            WrongArgumentException.class, "Wrong number of ColumnDefinition fields.");
+      }
+      Field[] f = this.columnDefinitionFromCache.getFields();
+      for (int i = 0; i < fields.length; i++) {
+        fields[i].setFlags(f[i].getFlags());
+      }
     }
+    return new DefaultColumnDefinition(fields);
+  }
 }

@@ -31,27 +31,28 @@ package com.mysql.cj.callback;
 
 /**
  * A functional interface for implementing callback handlers.
- * 
- * The single method {@link MysqlCallbackHandler#handle(MysqlCallback)} is called by the classes where the callback handler is passed when they need to share
- * data with the caller. The kind of data to exchange depends on the implementations of {@link MysqlCallback} they choose to use.
+ *
+ * <p>The single method {@link MysqlCallbackHandler#handle(MysqlCallback)} is called by the classes
+ * where the callback handler is passed when they need to share data with the caller. The kind of
+ * data to exchange depends on the implementations of {@link MysqlCallback} they choose to use.
  */
 @FunctionalInterface
 public interface MysqlCallbackHandler {
-    /**
-     * Exchanges information between the caller of this method and the owner of the {@link MysqlCallbackHandler} instance. The method can be called multiple
-     * times with different callback implementations to exchange different types of information. A typical {@link MysqlCallbackHandler} implementation looks
-     * like:
-     * 
-     * <pre>
-     * private MysqlCallbackHandler callbackHandler = (cb) -> {
-     *     if (cb instanceof UsernameCallback) {
-     *         this.username = ((UsernameCallback) cb).getUsername();
-     *     }
-     * };
-     * </pre>
-     * 
-     * @param cb
-     * 
-     */
-    void handle(MysqlCallback cb);
+  /**
+   * Exchanges information between the caller of this method and the owner of the {@link
+   * MysqlCallbackHandler} instance. The method can be called multiple times with different callback
+   * implementations to exchange different types of information. A typical {@link
+   * MysqlCallbackHandler} implementation looks like:
+   *
+   * <pre>
+   * private MysqlCallbackHandler callbackHandler = (cb) -> {
+   *     if (cb instanceof UsernameCallback) {
+   *         this.username = ((UsernameCallback) cb).getUsername();
+   *     }
+   * };
+   * </pre>
+   *
+   * @param cb
+   */
+  void handle(MysqlCallback cb);
 }

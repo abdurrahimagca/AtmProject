@@ -29,32 +29,31 @@
 
 package com.mysql.cj.jdbc;
 
+import com.mysql.cj.MysqlType;
+import com.mysql.cj.QueryBindings;
+import com.mysql.cj.QueryInfo;
 import java.math.BigInteger;
 import java.sql.SQLException;
 
-import com.mysql.cj.MysqlType;
-import com.mysql.cj.QueryInfo;
-import com.mysql.cj.QueryBindings;
-
 public interface JdbcPreparedStatement extends java.sql.PreparedStatement, JdbcStatement {
 
-    void realClose(boolean calledExplicitly, boolean closeOpenResults) throws SQLException;
+  void realClose(boolean calledExplicitly, boolean closeOpenResults) throws SQLException;
 
-    QueryBindings getQueryBindings();
+  QueryBindings getQueryBindings();
 
-    byte[] getBytesRepresentation(int parameterIndex) throws SQLException;
+  byte[] getBytesRepresentation(int parameterIndex) throws SQLException;
 
-    QueryInfo getQueryInfo();
+  QueryInfo getQueryInfo();
 
-    boolean isNull(int paramIndex) throws SQLException;
+  boolean isNull(int paramIndex) throws SQLException;
 
-    String getPreparedSql();
+  String getPreparedSql();
 
-    void setBytes(int parameterIndex, byte[] x, boolean escapeIfNeeded) throws SQLException;
+  void setBytes(int parameterIndex, byte[] x, boolean escapeIfNeeded) throws SQLException;
 
-    void setBigInteger(int parameterIndex, BigInteger x) throws SQLException;
+  void setBigInteger(int parameterIndex, BigInteger x) throws SQLException;
 
-    void setNull(int parameterIndex, MysqlType mysqlType) throws SQLException;
+  void setNull(int parameterIndex, MysqlType mysqlType) throws SQLException;
 
-    ParameterBindings getParameterBindings() throws SQLException;
+  ParameterBindings getParameterBindings() throws SQLException;
 }

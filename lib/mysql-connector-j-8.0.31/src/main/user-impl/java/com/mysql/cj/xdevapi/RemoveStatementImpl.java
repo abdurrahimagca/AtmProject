@@ -29,58 +29,63 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.concurrent.CompletableFuture;
-
 import com.mysql.cj.Messages;
 import com.mysql.cj.MysqlxSession;
 import com.mysql.cj.protocol.x.XMessage;
 import com.mysql.cj.protocol.x.XMessageBuilder;
+import java.util.concurrent.CompletableFuture;
 
-/**
- * {@link RemoveStatement} implementation.
- */
-public class RemoveStatementImpl extends FilterableStatement<RemoveStatement, Result> implements RemoveStatement {
-    /* package private */ RemoveStatementImpl(MysqlxSession mysqlxSession, String schema, String collection, String criteria) {
-        super(new DocFilterParams(schema, collection, false));
-        this.mysqlxSession = mysqlxSession;
-        if (criteria == null || criteria.trim().length() == 0) {
-            throw new XDevAPIError(Messages.getString("RemoveStatement.0", new String[] { "criteria" }));
-        }
-        this.filterParams.setCriteria(criteria);
+/** {@link RemoveStatement} implementation. */
+public class RemoveStatementImpl extends FilterableStatement<RemoveStatement, Result>
+    implements RemoveStatement {
+  /* package private */ RemoveStatementImpl(
+      MysqlxSession mysqlxSession, String schema, String collection, String criteria) {
+    super(new DocFilterParams(schema, collection, false));
+    this.mysqlxSession = mysqlxSession;
+    if (criteria == null || criteria.trim().length() == 0) {
+      throw new XDevAPIError(Messages.getString("RemoveStatement.0", new String[] {"criteria"}));
     }
+    this.filterParams.setCriteria(criteria);
+  }
 
-    @Override
-    @Deprecated
-    public RemoveStatement orderBy(String... sortFields) {
-        return super.orderBy(sortFields);
-    }
+  @Override
+  @Deprecated
+  public RemoveStatement orderBy(String... sortFields) {
+    return super.orderBy(sortFields);
+  }
 
-    @Override
-    public Result executeStatement() {
-        return this.mysqlxSession.query(getMessageBuilder().buildDelete(this.filterParams), new UpdateResultBuilder<>());
-    }
+  @Override
+  public Result executeStatement() {
+    return this.mysqlxSession.query(
+        getMessageBuilder().buildDelete(this.filterParams), new UpdateResultBuilder<>());
+  }
 
-    @Override
-    protected XMessage getPrepareStatementXMessage() {
-        return getMessageBuilder().buildPrepareDelete(this.preparedStatementId, this.filterParams);
-    }
+  @Override
+  protected XMessage getPrepareStatementXMessage() {
+    return getMessageBuilder().buildPrepareDelete(this.preparedStatementId, this.filterParams);
+  }
 
-    @Override
-    protected Result executePreparedStatement() {
-        return this.mysqlxSession.query(getMessageBuilder().buildPrepareExecute(this.preparedStatementId, this.filterParams), new UpdateResultBuilder<>());
-    }
+  @Override
+  protected Result executePreparedStatement() {
+    return this.mysqlxSession.query(
+        getMessageBuilder().buildPrepareExecute(this.preparedStatementId, this.filterParams),
+        new UpdateResultBuilder<>());
+  }
 
-    public CompletableFuture<Result> executeAsync() {
-        return this.mysqlxSession.queryAsync(((XMessageBuilder) this.mysqlxSession.<XMessage>getMessageBuilder()).buildDelete(this.filterParams),
-                new UpdateResultBuilder<>());
-    }
+  public CompletableFuture<Result> executeAsync() {
+    return this.mysqlxSession.queryAsync(
+        ((XMessageBuilder) this.mysqlxSession.<XMessage>getMessageBuilder())
+            .buildDelete(this.filterParams),
+        new UpdateResultBuilder<>());
+  }
 
-    /**
-     * @deprecated Deprecated in Connector/J 8.0.17. Please use filter criteria in the operation starting method.
-     */
-    @Deprecated
-    @Override
-    public RemoveStatement where(String searchCondition) {
-        return super.where(searchCondition);
-    }
+  /**
+   * @deprecated Deprecated in Connector/J 8.0.17. Please use filter criteria in the operation
+   *     starting method.
+   */
+  @Deprecated
+  @Override
+  public RemoveStatement where(String searchCondition) {
+    return super.where(searchCondition);
+  }
 }

@@ -29,57 +29,56 @@
 
 package com.mysql.cj.protocol;
 
+import com.mysql.cj.result.Field;
 import java.util.Map;
 
-import com.mysql.cj.result.Field;
-
 /**
- * Represents protocol specific result set metadata,
- * eg., for native protocol, Protocol::ColumnDefinition41 protocol entity.
- *
+ * Represents protocol specific result set metadata, eg., for native protocol,
+ * Protocol::ColumnDefinition41 protocol entity.
  */
 public interface ColumnDefinition extends ProtocolEntity {
 
-    Field[] getFields();
+  Field[] getFields();
 
-    void setFields(Field[] fields);
+  void setFields(Field[] fields);
 
-    /**
-     * Builds a hash between column names and their indices for fast retrieval.
-     * This is done lazily to support findColumn() and get*(String), as it
-     * can be more expensive than just retrieving result set values by ordinal
-     * index.
-     */
-    void buildIndexMapping();
+  /**
+   * Builds a hash between column names and their indices for fast retrieval. This is done lazily to
+   * support findColumn() and get*(String), as it can be more expensive than just retrieving result
+   * set values by ordinal index.
+   */
+  void buildIndexMapping();
 
-    boolean hasBuiltIndexMapping();
+  boolean hasBuiltIndexMapping();
 
-    public Map<String, Integer> getColumnLabelToIndex();
+  public Map<String, Integer> getColumnLabelToIndex();
 
-    void setColumnLabelToIndex(Map<String, Integer> columnLabelToIndex);
+  void setColumnLabelToIndex(Map<String, Integer> columnLabelToIndex);
 
-    public Map<String, Integer> getFullColumnNameToIndex();
+  public Map<String, Integer> getFullColumnNameToIndex();
 
-    void setFullColumnNameToIndex(Map<String, Integer> fullColNameToIndex);
+  void setFullColumnNameToIndex(Map<String, Integer> fullColNameToIndex);
 
-    public Map<String, Integer> getColumnNameToIndex();
+  public Map<String, Integer> getColumnNameToIndex();
 
-    void setColumnNameToIndex(Map<String, Integer> colNameToIndex);
+  void setColumnNameToIndex(Map<String, Integer> colNameToIndex);
 
-    public Map<String, Integer> getColumnToIndexCache();
+  public Map<String, Integer> getColumnToIndexCache();
 
-    public void setColumnToIndexCache(Map<String, Integer> columnToIndexCache);
+  public void setColumnToIndexCache(Map<String, Integer> columnToIndexCache);
 
-    void initializeFrom(ColumnDefinition columnDefinition);
+  void initializeFrom(ColumnDefinition columnDefinition);
 
-    void exportTo(ColumnDefinition columnDefinition);
+  void exportTo(ColumnDefinition columnDefinition);
 
-    int findColumn(String columnName, boolean useColumnNamesInFindColumn, int indexBase);
+  int findColumn(String columnName, boolean useColumnNamesInFindColumn, int indexBase);
 
-    /**
-     * Check if fields with type BLOB, MEDIUMBLOB, LONGBLOB, TEXT, MEDIUMTEXT or LONGTEXT exist in this ColumnDefinition.
-     * 
-     * @return true if fields with type BLOB, MEDIUMBLOB, LONGBLOB, TEXT, MEDIUMTEXT or LONGTEXT exist in this ColumnDefinition.
-     */
-    boolean hasLargeFields();
+  /**
+   * Check if fields with type BLOB, MEDIUMBLOB, LONGBLOB, TEXT, MEDIUMTEXT or LONGTEXT exist in
+   * this ColumnDefinition.
+   *
+   * @return true if fields with type BLOB, MEDIUMBLOB, LONGBLOB, TEXT, MEDIUMTEXT or LONGTEXT exist
+   *     in this ColumnDefinition.
+   */
+  boolean hasLargeFields();
 }

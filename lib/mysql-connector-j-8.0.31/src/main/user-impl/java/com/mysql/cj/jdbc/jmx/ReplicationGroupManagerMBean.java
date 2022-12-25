@@ -33,153 +33,139 @@ import java.sql.SQLException;
 
 public interface ReplicationGroupManagerMBean {
 
-    void addReplicaHost(String groupFilter, String host) throws SQLException;
+  void addReplicaHost(String groupFilter, String host) throws SQLException;
 
-    /**
-     * Use {@link #addReplicaHost(String, String)} instead.
-     * 
-     * @param groupFilter
-     *            filter
-     * @param host
-     *            host
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default void addSlaveHost(String groupFilter, String host) throws SQLException {
-        addReplicaHost(groupFilter, host);
-    }
+  /**
+   * Use {@link #addReplicaHost(String, String)} instead.
+   *
+   * @param groupFilter filter
+   * @param host host
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  default void addSlaveHost(String groupFilter, String host) throws SQLException {
+    addReplicaHost(groupFilter, host);
+  }
 
-    void removeReplicaHost(String groupFilter, String host) throws SQLException;
+  void removeReplicaHost(String groupFilter, String host) throws SQLException;
 
-    /**
-     * Use {@link #removeReplicaHost(String, String)} instead.
-     * 
-     * @param groupFilter
-     *            filter
-     * @param host
-     *            host
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default void removeSlaveHost(String groupFilter, String host) throws SQLException {
-        removeReplicaHost(groupFilter, host);
-    }
+  /**
+   * Use {@link #removeReplicaHost(String, String)} instead.
+   *
+   * @param groupFilter filter
+   * @param host host
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  default void removeSlaveHost(String groupFilter, String host) throws SQLException {
+    removeReplicaHost(groupFilter, host);
+  }
 
-    void promoteReplicaToSource(String groupFilter, String host) throws SQLException;
+  void promoteReplicaToSource(String groupFilter, String host) throws SQLException;
 
-    /**
-     * Use {@link #promoteReplicaToSource(String, String)} instead.
-     * 
-     * @param groupFilter
-     *            filter
-     * @param host
-     *            host
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default void promoteSlaveToMaster(String groupFilter, String host) throws SQLException {
-        promoteReplicaToSource(groupFilter, host);
-    }
+  /**
+   * Use {@link #promoteReplicaToSource(String, String)} instead.
+   *
+   * @param groupFilter filter
+   * @param host host
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  default void promoteSlaveToMaster(String groupFilter, String host) throws SQLException {
+    promoteReplicaToSource(groupFilter, host);
+  }
 
-    void removeSourceHost(String groupFilter, String host) throws SQLException;
+  void removeSourceHost(String groupFilter, String host) throws SQLException;
 
-    /**
-     * Use {@link #removeSourceHost(String, String)} instead.
-     * 
-     * @param groupFilter
-     *            filter
-     * @param host
-     *            host
-     * @throws SQLException
-     * @deprecated
-     */
-    @Deprecated
-    default void removeMasterHost(String groupFilter, String host) throws SQLException {
-        removeSourceHost(groupFilter, host);
-    }
+  /**
+   * Use {@link #removeSourceHost(String, String)} instead.
+   *
+   * @param groupFilter filter
+   * @param host host
+   * @throws SQLException
+   * @deprecated
+   */
+  @Deprecated
+  default void removeMasterHost(String groupFilter, String host) throws SQLException {
+    removeSourceHost(groupFilter, host);
+  }
 
-    String getSourceHostsList(String group);
+  String getSourceHostsList(String group);
 
-    /**
-     * Use {@link #getSourceHostsList(String)} instead.
-     * 
-     * @param group
-     *            group
-     * @return source hosts
-     * @deprecated
-     */
-    @Deprecated
-    default String getMasterHostsList(String group) {
-        return getSourceHostsList(group);
-    }
+  /**
+   * Use {@link #getSourceHostsList(String)} instead.
+   *
+   * @param group group
+   * @return source hosts
+   * @deprecated
+   */
+  @Deprecated
+  default String getMasterHostsList(String group) {
+    return getSourceHostsList(group);
+  }
 
-    String getReplicaHostsList(String group);
+  String getReplicaHostsList(String group);
 
-    /**
-     * Use {@link #getReplicaHostsList(String)} instead.
-     * 
-     * @param group
-     *            group
-     * @return replica hosts
-     * @deprecated
-     */
-    @Deprecated
-    default String getSlaveHostsList(String group) {
-        return getReplicaHostsList(group);
-    }
+  /**
+   * Use {@link #getReplicaHostsList(String)} instead.
+   *
+   * @param group group
+   * @return replica hosts
+   * @deprecated
+   */
+  @Deprecated
+  default String getSlaveHostsList(String group) {
+    return getReplicaHostsList(group);
+  }
 
-    String getRegisteredConnectionGroups();
+  String getRegisteredConnectionGroups();
 
-    int getActiveSourceHostCount(String group);
+  int getActiveSourceHostCount(String group);
 
-    /**
-     * Use {@link #getActiveSourceHostCount(String)} instead.
-     * 
-     * @param group
-     *            group
-     * @return count
-     * @deprecated
-     */
-    @Deprecated
-    default int getActiveMasterHostCount(String group) {
-        return getActiveSourceHostCount(group);
-    }
+  /**
+   * Use {@link #getActiveSourceHostCount(String)} instead.
+   *
+   * @param group group
+   * @return count
+   * @deprecated
+   */
+  @Deprecated
+  default int getActiveMasterHostCount(String group) {
+    return getActiveSourceHostCount(group);
+  }
 
-    int getActiveReplicaHostCount(String group);
+  int getActiveReplicaHostCount(String group);
 
-    /**
-     * Use {@link #getActiveReplicaHostCount(String)} instead.
-     * 
-     * @param group
-     *            group
-     * @return count
-     * @deprecated
-     */
-    @Deprecated
-    default int getActiveSlaveHostCount(String group) {
-        return getActiveReplicaHostCount(group);
-    }
+  /**
+   * Use {@link #getActiveReplicaHostCount(String)} instead.
+   *
+   * @param group group
+   * @return count
+   * @deprecated
+   */
+  @Deprecated
+  default int getActiveSlaveHostCount(String group) {
+    return getActiveReplicaHostCount(group);
+  }
 
-    int getReplicaPromotionCount(String group);
+  int getReplicaPromotionCount(String group);
 
-    /**
-     * Use {@link #getReplicaPromotionCount(String)} instead.
-     * 
-     * @param group
-     *            group
-     * @return count
-     * @deprecated
-     */
-    @Deprecated
-    default int getSlavePromotionCount(String group) {
-        return getReplicaPromotionCount(group);
-    }
+  /**
+   * Use {@link #getReplicaPromotionCount(String)} instead.
+   *
+   * @param group group
+   * @return count
+   * @deprecated
+   */
+  @Deprecated
+  default int getSlavePromotionCount(String group) {
+    return getReplicaPromotionCount(group);
+  }
 
-    long getTotalLogicalConnectionCount(String group);
+  long getTotalLogicalConnectionCount(String group);
 
-    long getActiveLogicalConnectionCount(String group);
-
+  long getActiveLogicalConnectionCount(String group);
 }

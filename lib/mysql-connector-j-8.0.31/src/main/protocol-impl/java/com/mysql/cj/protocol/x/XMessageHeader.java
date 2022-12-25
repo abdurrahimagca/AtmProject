@@ -29,56 +29,55 @@
 
 package com.mysql.cj.protocol.x;
 
+import com.mysql.cj.protocol.MessageHeader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.mysql.cj.protocol.MessageHeader;
-
 public class XMessageHeader implements MessageHeader {
-    public static final int MESSAGE_SIZE_LENGTH = 4;
-    public static final int MESSAGE_TYPE_LENGTH = 1;
-    public static final int HEADER_LENGTH = MESSAGE_SIZE_LENGTH + MESSAGE_TYPE_LENGTH;
+  public static final int MESSAGE_SIZE_LENGTH = 4;
+  public static final int MESSAGE_TYPE_LENGTH = 1;
+  public static final int HEADER_LENGTH = MESSAGE_SIZE_LENGTH + MESSAGE_TYPE_LENGTH;
 
-    private ByteBuffer headerBuf;
-    /** Type tag of the message to read (indicates parser to use). */
-    private int messageType = -1;
-    /** Size of the message that will be read. */
-    private int messageSize = -1;
+  private ByteBuffer headerBuf;
+  /** Type tag of the message to read (indicates parser to use). */
+  private int messageType = -1;
+  /** Size of the message that will be read. */
+  private int messageSize = -1;
 
-    public XMessageHeader() {
-        this.headerBuf = ByteBuffer.allocate(HEADER_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
+  public XMessageHeader() {
+    this.headerBuf = ByteBuffer.allocate(HEADER_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
+  }
+
+  public XMessageHeader(byte[] buf) {
+    this.headerBuf = ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN);
+  }
+
+  private void parseBuffer() {
+    if (this.messageSize == -1) {
+      this.headerBuf.position(0); // process the completed header and initiate message reading
+      this.messageSize = this.headerBuf.getInt() - 1;
+      this.messageType = this.headerBuf.get();
     }
+  }
 
-    public XMessageHeader(byte[] buf) {
-        this.headerBuf = ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN);
-    }
+  @Override
+  public ByteBuffer getBuffer() {
+    return this.headerBuf;
+  }
 
-    private void parseBuffer() {
-        if (this.messageSize == -1) {
-            this.headerBuf.position(0); // process the completed header and initiate message reading
-            this.messageSize = this.headerBuf.getInt() - 1;
-            this.messageType = this.headerBuf.get();
-        }
-    }
+  @Override
+  public int getMessageSize() {
+    parseBuffer();
+    return this.messageSize;
+  }
 
-    @Override
-    public ByteBuffer getBuffer() {
-        return this.headerBuf;
-    }
+  @Override
+  public byte getMessageSequence() {
+    return 0;
+  }
 
-    @Override
-    public int getMessageSize() {
-        parseBuffer();
-        return this.messageSize;
-    }
-
-    @Override
-    public byte getMessageSequence() {
-        return 0;
-    }
-
-    public int getMessageType() {
-        parseBuffer();
-        return this.messageType;
-    }
+  public int getMessageType() {
+    parseBuffer();
+    return this.messageType;
+  }
 }

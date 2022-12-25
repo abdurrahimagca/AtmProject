@@ -31,15 +31,13 @@ package com.mysql.cj.xdevapi;
 
 import java.util.List;
 
-/**
- * A result from the collection.add() statement.
- */
+/** A result from the collection.add() statement. */
 public interface AddResult extends Result {
 
-    /**
-     * Get a list of document ids generated in the server for the documents added by collection.add().
-     * 
-     * @return all generated document ids
-     */
-    List<String> getGeneratedIds();
+  /**
+   * Get a list of document ids generated in the server for the documents added by collection.add().
+   *
+   * @return all generated document ids
+   */
+  List<String> getGeneratedIds();
 }

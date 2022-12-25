@@ -35,30 +35,27 @@ import com.mysql.cj.exceptions.ExceptionFactory;
 /**
  * Sink for messages that are read asynchonously from the socket.
  *
- * Return whether the listener is done receiving messages.
- * 
- * @param <M>
- *            Message type
+ * <p>Return whether the listener is done receiving messages.
+ *
+ * @param <M> Message type
  */
 public interface MessageListener<M extends Message> {
 
-    /**
-     * Process protocol message.
-     * 
-     * @param message
-     *            {@link Message} instance
-     * @return true - if this listener is done with processing the messages sequence and may be discarded;
-     *         false - if the next message must be dispatched to the same listener
-     */
-    default boolean processMessage(M message) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
-    }
+  /**
+   * Process protocol message.
+   *
+   * @param message {@link Message} instance
+   * @return true - if this listener is done with processing the messages sequence and may be
+   *     discarded; false - if the next message must be dispatched to the same listener
+   */
+  default boolean processMessage(M message) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
+  }
 
-    /**
-     * Exceptionally complete underlying Future.
-     * 
-     * @param ex
-     *            exception to pass to underlying Future.
-     */
-    void error(Throwable ex);
+  /**
+   * Exceptionally complete underlying Future.
+   *
+   * @param ex exception to pass to underlying Future.
+   */
+  void error(Throwable ex);
 }

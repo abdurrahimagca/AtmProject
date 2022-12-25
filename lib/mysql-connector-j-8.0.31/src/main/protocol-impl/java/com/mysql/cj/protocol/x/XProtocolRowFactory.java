@@ -32,13 +32,11 @@ package com.mysql.cj.protocol.x;
 import com.mysql.cj.protocol.ProtocolEntityFactory;
 import com.mysql.cj.x.protobuf.MysqlxResultset.Row;
 
-/**
- * Factory producing an {@link XProtocolRow} from protocol message.
- */
+/** Factory producing an {@link XProtocolRow} from protocol message. */
 public class XProtocolRowFactory implements ProtocolEntityFactory<XProtocolRow, XMessage> {
 
-    @Override
-    public XProtocolRow createFromMessage(XMessage message) {
-        return new XProtocolRow(Row.class.cast(message.getMessage()));
-    }
+  @Override
+  public XProtocolRow createFromMessage(XMessage message) {
+    return new XProtocolRow(Row.class.cast(message.getMessage()));
+  }
 }

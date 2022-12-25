@@ -29,10 +29,6 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimeZone;
-
 import com.mysql.cj.MysqlxSession;
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.protocol.ColumnDefinition;
@@ -47,84 +43,99 @@ import com.mysql.cj.result.BufferedRowList;
 import com.mysql.cj.result.DefaultColumnDefinition;
 import com.mysql.cj.result.Field;
 import com.mysql.cj.result.Row;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimeZone;
 
-/**
- * Result builder producing a {@link SqlResult} instance.
- */
+/** Result builder producing a {@link SqlResult} instance. */
 public class SqlResultBuilder implements ResultBuilder<SqlResult> {
-    private ArrayList<Field> fields = new ArrayList<>();
-    private ColumnDefinition metadata;
-    private List<Row> rows = new ArrayList<>();
+  private ArrayList<Field> fields = new ArrayList<>();
+  private ColumnDefinition metadata;
+  private List<Row> rows = new ArrayList<>();
 
-    TimeZone defaultTimeZone;
-    PropertySet pset;
-    boolean isRowResult = false;
+  TimeZone defaultTimeZone;
+  PropertySet pset;
+  boolean isRowResult = false;
 
-    List<SqlSingleResult> resultSets = new ArrayList<>();
+  List<SqlSingleResult> resultSets = new ArrayList<>();
 
-    private ProtocolEntity prevEntity = null;
-    private StatementExecuteOkBuilder statementExecuteOkBuilder = new StatementExecuteOkBuilder();
+  private ProtocolEntity prevEntity = null;
+  private StatementExecuteOkBuilder statementExecuteOkBuilder = new StatementExecuteOkBuilder();
 
-    public SqlResultBuilder(TimeZone defaultTimeZone, PropertySet pset) {
-        this.defaultTimeZone = defaultTimeZone;
-        this.pset = pset;
+  public SqlResultBuilder(TimeZone defaultTimeZone, PropertySet pset) {
+    this.defaultTimeZone = defaultTimeZone;
+    this.pset = pset;
+  }
+
+  public SqlResultBuilder(MysqlxSession sess) {
+    this.defaultTimeZone = sess.getServerSession().getDefaultTimeZone();
+    this.pset = sess.getPropertySet();
+  }
+
+  @Override
+  public boolean addProtocolEntity(ProtocolEntity entity) {
+    if (entity instanceof Field) {
+      this.fields.add((Field) entity);
+      if (!this.isRowResult) {
+        this.isRowResult = true;
+      }
+      this.prevEntity = entity;
+      return false;
+
+    } else if (entity instanceof Notice) {
+      this.statementExecuteOkBuilder.addProtocolEntity(entity);
+      return false;
     }
 
-    public SqlResultBuilder(MysqlxSession sess) {
-        this.defaultTimeZone = sess.getServerSession().getDefaultTimeZone();
-        this.pset = sess.getPropertySet();
+    if (this.isRowResult && this.metadata == null) {
+      this.metadata = new DefaultColumnDefinition(this.fields.toArray(new Field[] {}));
     }
 
-    @Override
-    public boolean addProtocolEntity(ProtocolEntity entity) {
-        if (entity instanceof Field) {
-            this.fields.add((Field) entity);
-            if (!this.isRowResult) {
-                this.isRowResult = true;
-            }
-            this.prevEntity = entity;
-            return false;
+    if (entity instanceof Row) {
+      this.rows.add(((Row) entity).setMetadata(this.metadata));
 
-        } else if (entity instanceof Notice) {
-            this.statementExecuteOkBuilder.addProtocolEntity(entity);
-            return false;
-        }
+    } else if (entity instanceof FetchDoneMoreResults) {
+      this.resultSets.add(
+          new SqlSingleResult(
+              this.metadata,
+              this.defaultTimeZone,
+              new BufferedRowList(this.rows),
+              () -> this.statementExecuteOkBuilder.build(),
+              this.pset));
+      // clear variables to accept next result set
+      this.fields = new ArrayList<>();
+      this.metadata = null;
+      this.rows = new ArrayList<>();
+      this.statementExecuteOkBuilder = new StatementExecuteOkBuilder();
 
-        if (this.isRowResult && this.metadata == null) {
-            this.metadata = new DefaultColumnDefinition(this.fields.toArray(new Field[] {}));
-        }
+    } else if (entity instanceof FetchDoneEntity) {
+      if (this.prevEntity instanceof FetchDoneMoreResults) {
+        // no-op, possibly bug in xplugin sending FetchDone immediately following
+        // FetchDoneMoreResultsets
+      } else {
+        this.resultSets.add(
+            new SqlSingleResult(
+                this.metadata,
+                this.defaultTimeZone,
+                new BufferedRowList(this.rows),
+                () -> this.statementExecuteOkBuilder.build(),
+                this.pset));
+      }
 
-        if (entity instanceof Row) {
-            this.rows.add(((Row) entity).setMetadata(this.metadata));
-
-        } else if (entity instanceof FetchDoneMoreResults) {
-            this.resultSets.add(new SqlSingleResult(this.metadata, this.defaultTimeZone, new BufferedRowList(this.rows),
-                    () -> this.statementExecuteOkBuilder.build(), this.pset));
-            // clear variables to accept next result set
-            this.fields = new ArrayList<>();
-            this.metadata = null;
-            this.rows = new ArrayList<>();
-            this.statementExecuteOkBuilder = new StatementExecuteOkBuilder();
-
-        } else if (entity instanceof FetchDoneEntity) {
-            if (this.prevEntity instanceof FetchDoneMoreResults) {
-                // no-op, possibly bug in xplugin sending FetchDone immediately following FetchDoneMoreResultsets
-            } else {
-                this.resultSets.add(new SqlSingleResult(this.metadata, this.defaultTimeZone, new BufferedRowList(this.rows),
-                        () -> this.statementExecuteOkBuilder.build(), this.pset));
-            }
-
-        } else if (entity instanceof StatementExecuteOk) {
-            return true;
-        }
-        this.prevEntity = entity;
-        return false;
+    } else if (entity instanceof StatementExecuteOk) {
+      return true;
     }
+    this.prevEntity = entity;
+    return false;
+  }
 
-    @Override
-    public SqlResult build() {
-        return this.isRowResult ? new SqlMultiResult(() -> {
-            return this.resultSets.size() > 0 ? this.resultSets.remove(0) : null;
-        }) : new SqlUpdateResult(this.statementExecuteOkBuilder.build());
-    }
+  @Override
+  public SqlResult build() {
+    return this.isRowResult
+        ? new SqlMultiResult(
+            () -> {
+              return this.resultSets.size() > 0 ? this.resultSets.remove(0) : null;
+            })
+        : new SqlUpdateResult(this.statementExecuteOkBuilder.build());
+  }
 }

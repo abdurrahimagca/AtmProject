@@ -29,89 +29,95 @@
 
 package com.mysql.cj.jdbc.ha;
 
+import com.mysql.cj.jdbc.ConnectionImpl;
+import com.mysql.cj.jdbc.JdbcConnection;
 import java.lang.reflect.InvocationHandler;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import com.mysql.cj.jdbc.ConnectionImpl;
-import com.mysql.cj.jdbc.JdbcConnection;
-
 public class BestResponseTimeBalanceStrategy implements BalanceStrategy {
 
-    public BestResponseTimeBalanceStrategy() {
-    }
+  public BestResponseTimeBalanceStrategy() {}
 
-    @Override
-    public ConnectionImpl pickConnection(InvocationHandler proxy, List<String> configuredHosts, Map<String, JdbcConnection> liveConnections,
-            long[] responseTimes, int numRetries) throws SQLException {
+  @Override
+  public ConnectionImpl pickConnection(
+      InvocationHandler proxy,
+      List<String> configuredHosts,
+      Map<String, JdbcConnection> liveConnections,
+      long[] responseTimes,
+      int numRetries)
+      throws SQLException {
 
-        Map<String, Long> blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist();
+    Map<String, Long> blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist();
 
-        SQLException ex = null;
+    SQLException ex = null;
 
-        for (int attempts = 0; attempts < numRetries;) {
-            long minResponseTime = Long.MAX_VALUE;
+    for (int attempts = 0; attempts < numRetries; ) {
+      long minResponseTime = Long.MAX_VALUE;
 
-            int bestHostIndex = 0;
+      int bestHostIndex = 0;
 
-            // safety
+      // safety
+      if (blockList.size() == configuredHosts.size()) {
+        blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist();
+      }
+
+      for (int i = 0; i < responseTimes.length; i++) {
+        long candidateResponseTime = responseTimes[i];
+
+        if (candidateResponseTime < minResponseTime
+            && !blockList.containsKey(configuredHosts.get(i))) {
+          if (candidateResponseTime == 0) {
+            bestHostIndex = i;
+
+            break;
+          }
+
+          bestHostIndex = i;
+          minResponseTime = candidateResponseTime;
+        }
+      }
+
+      String bestHost = configuredHosts.get(bestHostIndex);
+
+      ConnectionImpl conn = (ConnectionImpl) liveConnections.get(bestHost);
+
+      if (conn == null) {
+        try {
+          conn = ((LoadBalancedConnectionProxy) proxy).createConnectionForHost(bestHost);
+        } catch (SQLException sqlEx) {
+          ex = sqlEx;
+
+          if (((LoadBalancedConnectionProxy) proxy).shouldExceptionTriggerConnectionSwitch(sqlEx)) {
+            ((LoadBalancedConnectionProxy) proxy).addToGlobalBlocklist(bestHost);
+            blockList.put(bestHost, null);
+
             if (blockList.size() == configuredHosts.size()) {
-                blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist();
+              attempts++;
+              try {
+                Thread.sleep(250);
+              } catch (InterruptedException e) {
+              }
+              blockList =
+                  ((LoadBalancedConnectionProxy) proxy)
+                      .getGlobalBlocklist(); // try again after a little bit
             }
 
-            for (int i = 0; i < responseTimes.length; i++) {
-                long candidateResponseTime = responseTimes[i];
+            continue;
+          }
 
-                if (candidateResponseTime < minResponseTime && !blockList.containsKey(configuredHosts.get(i))) {
-                    if (candidateResponseTime == 0) {
-                        bestHostIndex = i;
-
-                        break;
-                    }
-
-                    bestHostIndex = i;
-                    minResponseTime = candidateResponseTime;
-                }
-            }
-
-            String bestHost = configuredHosts.get(bestHostIndex);
-
-            ConnectionImpl conn = (ConnectionImpl) liveConnections.get(bestHost);
-
-            if (conn == null) {
-                try {
-                    conn = ((LoadBalancedConnectionProxy) proxy).createConnectionForHost(bestHost);
-                } catch (SQLException sqlEx) {
-                    ex = sqlEx;
-
-                    if (((LoadBalancedConnectionProxy) proxy).shouldExceptionTriggerConnectionSwitch(sqlEx)) {
-                        ((LoadBalancedConnectionProxy) proxy).addToGlobalBlocklist(bestHost);
-                        blockList.put(bestHost, null);
-
-                        if (blockList.size() == configuredHosts.size()) {
-                            attempts++;
-                            try {
-                                Thread.sleep(250);
-                            } catch (InterruptedException e) {
-                            }
-                            blockList = ((LoadBalancedConnectionProxy) proxy).getGlobalBlocklist(); // try again after a little bit
-                        }
-
-                        continue;
-                    }
-
-                    throw sqlEx;
-                }
-            }
-
-            return conn;
+          throw sqlEx;
         }
+      }
 
-        if (ex != null) {
-            throw ex;
-        }
-
-        return null; // we won't get here, compiler can't tell
+      return conn;
     }
+
+    if (ex != null) {
+      throw ex;
+    }
+
+    return null; // we won't get here, compiler can't tell
+  }
 }

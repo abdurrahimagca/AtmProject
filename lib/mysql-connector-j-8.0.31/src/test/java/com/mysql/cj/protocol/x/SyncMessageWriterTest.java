@@ -33,75 +33,79 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.google.protobuf.ByteString;
 import com.mysql.cj.exceptions.WrongArgumentException;
 import com.mysql.cj.x.protobuf.Mysqlx.ClientMessages;
 import com.mysql.cj.x.protobuf.Mysqlx.Ok;
 import com.mysql.cj.x.protobuf.MysqlxSession.AuthenticateStart;
 import com.mysql.cj.x.protobuf.MysqlxSession.Reset;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SyncMessageWriterTest {
-    private ByteArrayOutputStream outputStream;
-    private SyncMessageSender writer;
+  private ByteArrayOutputStream outputStream;
+  private SyncMessageSender writer;
 
-    @BeforeEach
-    public void setUp() {
-        this.outputStream = new ByteArrayOutputStream();
-        this.writer = new SyncMessageSender(new BufferedOutputStream(this.outputStream));
-    }
+  @BeforeEach
+  public void setUp() {
+    this.outputStream = new ByteArrayOutputStream();
+    this.writer = new SyncMessageSender(new BufferedOutputStream(this.outputStream));
+  }
 
-    /**
-     * Test that we can (properly) write a complete message.
-     * 
-     * @throws IOException
-     */
-    @Test
-    public void testCompleteWriteMessage() throws IOException {
-        // construct and write the message
-        AuthenticateStart.Builder msgBuilder = AuthenticateStart.newBuilder();
-        msgBuilder.setMechName("Unit-Test");
-        msgBuilder.setAuthData(ByteString.copyFromUtf8("some-auth-data"));
-        AuthenticateStart msg = msgBuilder.build();
-        this.writer.send(new XMessage(msg));
+  /**
+   * Test that we can (properly) write a complete message.
+   *
+   * @throws IOException
+   */
+  @Test
+  public void testCompleteWriteMessage() throws IOException {
+    // construct and write the message
+    AuthenticateStart.Builder msgBuilder = AuthenticateStart.newBuilder();
+    msgBuilder.setMechName("Unit-Test");
+    msgBuilder.setAuthData(ByteString.copyFromUtf8("some-auth-data"));
+    AuthenticateStart msg = msgBuilder.build();
+    this.writer.send(new XMessage(msg));
 
-        // verify the written packet
-        byte[] sentBytes = this.outputStream.toByteArray();
-        int msgSize = msg.getSerializedSize();
-        assertTrue(msgSize < Byte.MAX_VALUE, "Required for rest of test, should never fail");
-        int payloadSize = msgSize + 1;
-        // message size (4 bytes little endian)
-        assertEquals(payloadSize, sentBytes[0]);
-        assertEquals(0, sentBytes[1]);
-        assertEquals(0, sentBytes[2]);
-        assertEquals(0, sentBytes[3]);
-        assertEquals(ClientMessages.Type.SESS_AUTHENTICATE_START_VALUE, sentBytes[4], "Type tag");
-        assertEquals(payloadSize + 4, sentBytes.length, "Entire packet size should be header bytes + serialized message");
-    }
+    // verify the written packet
+    byte[] sentBytes = this.outputStream.toByteArray();
+    int msgSize = msg.getSerializedSize();
+    assertTrue(msgSize < Byte.MAX_VALUE, "Required for rest of test, should never fail");
+    int payloadSize = msgSize + 1;
+    // message size (4 bytes little endian)
+    assertEquals(payloadSize, sentBytes[0]);
+    assertEquals(0, sentBytes[1]);
+    assertEquals(0, sentBytes[2]);
+    assertEquals(0, sentBytes[3]);
+    assertEquals(ClientMessages.Type.SESS_AUTHENTICATE_START_VALUE, sentBytes[4], "Type tag");
+    assertEquals(
+        payloadSize + 4,
+        sentBytes.length,
+        "Entire packet size should be header bytes + serialized message");
+  }
 
-    @Test
-    public void testBadMessageClass() {
-        assertThrows(WrongArgumentException.class, () -> {
-            // try sending "Ok" which is a server-sent message. should fail with exception
-            this.writer.send(new XMessage(Ok.getDefaultInstance()));
-        }, "Writing OK message should fail");
-    }
+  @Test
+  public void testBadMessageClass() {
+    assertThrows(
+        WrongArgumentException.class,
+        () -> {
+          // try sending "Ok" which is a server-sent message. should fail with exception
+          this.writer.send(new XMessage(Ok.getDefaultInstance()));
+        },
+        "Writing OK message should fail");
+  }
 
-    @Test
-    public void testLastPacketSentTime() throws InterruptedException {
-        long start = System.currentTimeMillis();
-        this.writer.send(new XMessage(Reset.getDefaultInstance()));
-        long lastSent1 = this.writer.getLastPacketSentTime();
-        assertTrue(lastSent1 >= start);
-        Thread.sleep(50);
-        this.writer.send(new XMessage(Reset.getDefaultInstance()));
-        long lastSent2 = this.writer.getLastPacketSentTime();
-        assertTrue(lastSent2 >= lastSent1);
-    }
+  @Test
+  public void testLastPacketSentTime() throws InterruptedException {
+    long start = System.currentTimeMillis();
+    this.writer.send(new XMessage(Reset.getDefaultInstance()));
+    long lastSent1 = this.writer.getLastPacketSentTime();
+    assertTrue(lastSent1 >= start);
+    Thread.sleep(50);
+    this.writer.send(new XMessage(Reset.getDefaultInstance()));
+    long lastSent2 = this.writer.getLastPacketSentTime();
+    assertTrue(lastSent2 >= lastSent1);
+  }
 }

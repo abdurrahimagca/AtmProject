@@ -31,39 +31,40 @@ package testsuite.x.devapi;
 
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import com.mysql.cj.conf.PropertyDefinitions;
+import com.mysql.cj.xdevapi.Collection;
 import java.util.Random;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-import com.mysql.cj.conf.PropertyDefinitions;
-import com.mysql.cj.xdevapi.Collection;
-
 public class BaseCollectionTestCase extends DevApiBaseTestCase {
-    /** Collection for testing. */
-    protected Collection collection;
-    protected String collectionName;
+  /** Collection for testing. */
+  protected Collection collection;
 
-    @BeforeEach
-    public void setupCollectionTest() {
-        assumeTrue(this.isSetForXTests, PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
-        if (setupTestSession()) {
-            this.collectionName = "CollectionTest-" + new Random().nextInt(1000);
-            dropCollection(this.collectionName);
-            this.collection = this.schema.createCollection(this.collectionName);
-        }
-    }
+  protected String collectionName;
 
-    @AfterEach
-    public void teardownCollectionTest() {
-        if (this.isSetForXTests && this.session != null && this.session.isOpen()) {
-            try {
-                dropCollection(this.collectionName);
-            } catch (Exception ex) {
-                System.err.println("Error during cleanup teardownCollectionTest()");
-                ex.printStackTrace();
-            }
-            destroyTestSession();
-        }
+  @BeforeEach
+  public void setupCollectionTest() {
+    assumeTrue(
+        this.isSetForXTests,
+        PropertyDefinitions.SYSP_testsuite_url_mysqlx + " must be set to run this test.");
+    if (setupTestSession()) {
+      this.collectionName = "CollectionTest-" + new Random().nextInt(1000);
+      dropCollection(this.collectionName);
+      this.collection = this.schema.createCollection(this.collectionName);
     }
+  }
+
+  @AfterEach
+  public void teardownCollectionTest() {
+    if (this.isSetForXTests && this.session != null && this.session.isOpen()) {
+      try {
+        dropCollection(this.collectionName);
+      } catch (Exception ex) {
+        System.err.println("Error during cleanup teardownCollectionTest()");
+        ex.printStackTrace();
+      }
+      destroyTestSession();
+    }
+  }
 }

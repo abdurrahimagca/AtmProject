@@ -29,35 +29,30 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * A statement requesting to remove a set of documents.
- */
+/** A statement requesting to remove a set of documents. */
 public interface RemoveStatement extends Statement<RemoveStatement, Result> {
-    /**
-     * Add/replace the order specification for the removal.
-     * 
-     * @param sortFields
-     *            sort expression
-     * @return {@link RemoveStatement}
-     */
-    @Deprecated
-    RemoveStatement orderBy(String... sortFields);
+  /**
+   * Add/replace the order specification for the removal.
+   *
+   * @param sortFields sort expression
+   * @return {@link RemoveStatement}
+   */
+  @Deprecated
+  RemoveStatement orderBy(String... sortFields);
 
-    /**
-     * Add/replace the order specification for the removal.
-     * 
-     * @param sortFields
-     *            sort expression
-     * @return {@link RemoveStatement}
-     */
-    RemoveStatement sort(String... sortFields);
+  /**
+   * Add/replace the order specification for the removal.
+   *
+   * @param sortFields sort expression
+   * @return {@link RemoveStatement}
+   */
+  RemoveStatement sort(String... sortFields);
 
-    /**
-     * Add/replace the document limit for the removal.
-     * 
-     * @param numberOfRows
-     *            limit
-     * @return {@link RemoveStatement}
-     */
-    RemoveStatement limit(long numberOfRows);
+  /**
+   * Add/replace the document limit for the removal.
+   *
+   * @param numberOfRows limit
+   * @return {@link RemoveStatement}
+   */
+  RemoveStatement limit(long numberOfRows);
 }

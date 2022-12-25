@@ -29,44 +29,42 @@
 
 package com.mysql.cj.protocol.a;
 
-/**
- * Keep track of splitting a large packet into multi-packets segments.
- */
+/** Keep track of splitting a large packet into multi-packets segments. */
 public class PacketSplitter {
-    private int totalSize;
-    private int currentPacketLen = 0;
-    private int offset = 0;
+  private int totalSize;
+  private int currentPacketLen = 0;
+  private int offset = 0;
 
-    public PacketSplitter(int totalSize) {
-        this.totalSize = totalSize;
+  public PacketSplitter(int totalSize) {
+    this.totalSize = totalSize;
+  }
+
+  public int getPacketLen() {
+    return this.currentPacketLen;
+  }
+
+  public int getOffset() {
+    return this.offset;
+  }
+
+  public boolean nextPacket() {
+    this.offset += this.currentPacketLen;
+    // need a zero-len packet if final packet len is MAX_PACKET_SIZE
+    if (this.currentPacketLen == NativeConstants.MAX_PACKET_SIZE && this.offset == this.totalSize) {
+      this.currentPacketLen = 0;
+      return true;
     }
 
-    public int getPacketLen() {
-        return this.currentPacketLen;
+    // allow empty packets
+    if (this.totalSize == 0) {
+      this.totalSize = -1; // to return `false' next iteration
+      return true;
     }
 
-    public int getOffset() {
-        return this.offset;
+    this.currentPacketLen = this.totalSize - this.offset;
+    if (this.currentPacketLen > NativeConstants.MAX_PACKET_SIZE) {
+      this.currentPacketLen = NativeConstants.MAX_PACKET_SIZE;
     }
-
-    public boolean nextPacket() {
-        this.offset += this.currentPacketLen;
-        // need a zero-len packet if final packet len is MAX_PACKET_SIZE
-        if (this.currentPacketLen == NativeConstants.MAX_PACKET_SIZE && this.offset == this.totalSize) {
-            this.currentPacketLen = 0;
-            return true;
-        }
-
-        // allow empty packets
-        if (this.totalSize == 0) {
-            this.totalSize = -1; // to return `false' next iteration
-            return true;
-        }
-
-        this.currentPacketLen = this.totalSize - this.offset;
-        if (this.currentPacketLen > NativeConstants.MAX_PACKET_SIZE) {
-            this.currentPacketLen = NativeConstants.MAX_PACKET_SIZE;
-        }
-        return this.offset < this.totalSize;
-    }
+    return this.offset < this.totalSize;
+  }
 }

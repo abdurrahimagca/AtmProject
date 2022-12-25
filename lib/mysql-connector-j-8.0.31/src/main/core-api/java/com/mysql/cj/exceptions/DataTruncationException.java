@@ -31,82 +31,89 @@ package com.mysql.cj.exceptions;
 
 public class DataTruncationException extends CJException {
 
-    private static final long serialVersionUID = -5209088385943506720L;
+  private static final long serialVersionUID = -5209088385943506720L;
 
-    private int index;
-    private boolean parameter;
-    private boolean read;
-    private int dataSize;
-    private int transferSize;
+  private int index;
+  private boolean parameter;
+  private boolean read;
+  private int dataSize;
+  private int transferSize;
 
-    public DataTruncationException() {
-        super();
-    }
+  public DataTruncationException() {
+    super();
+  }
 
-    public DataTruncationException(String message) {
-        super(message);
-    }
+  public DataTruncationException(String message) {
+    super(message);
+  }
 
-    public DataTruncationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public DataTruncationException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public DataTruncationException(Throwable cause) {
-        super(cause);
-    }
+  public DataTruncationException(Throwable cause) {
+    super(cause);
+  }
 
-    protected DataTruncationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+  protected DataTruncationException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 
-    public DataTruncationException(String message, int index, boolean parameter, boolean read, int dataSize, int transferSize, int vendorErrorCode) {
-        super(message);
-        this.setIndex(index);
-        this.setParameter(parameter);
-        this.setRead(read);
-        this.setDataSize(dataSize);
-        this.setTransferSize(transferSize);
-        setVendorCode(vendorErrorCode);
-    }
+  public DataTruncationException(
+      String message,
+      int index,
+      boolean parameter,
+      boolean read,
+      int dataSize,
+      int transferSize,
+      int vendorErrorCode) {
+    super(message);
+    this.setIndex(index);
+    this.setParameter(parameter);
+    this.setRead(read);
+    this.setDataSize(dataSize);
+    this.setTransferSize(transferSize);
+    setVendorCode(vendorErrorCode);
+  }
 
-    public int getIndex() {
-        return this.index;
-    }
+  public int getIndex() {
+    return this.index;
+  }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
+  public void setIndex(int index) {
+    this.index = index;
+  }
 
-    public boolean isParameter() {
-        return this.parameter;
-    }
+  public boolean isParameter() {
+    return this.parameter;
+  }
 
-    public void setParameter(boolean parameter) {
-        this.parameter = parameter;
-    }
+  public void setParameter(boolean parameter) {
+    this.parameter = parameter;
+  }
 
-    public boolean isRead() {
-        return this.read;
-    }
+  public boolean isRead() {
+    return this.read;
+  }
 
-    public void setRead(boolean read) {
-        this.read = read;
-    }
+  public void setRead(boolean read) {
+    this.read = read;
+  }
 
-    public int getDataSize() {
-        return this.dataSize;
-    }
+  public int getDataSize() {
+    return this.dataSize;
+  }
 
-    public void setDataSize(int dataSize) {
-        this.dataSize = dataSize;
-    }
+  public void setDataSize(int dataSize) {
+    this.dataSize = dataSize;
+  }
 
-    public int getTransferSize() {
-        return this.transferSize;
-    }
+  public int getTransferSize() {
+    return this.transferSize;
+  }
 
-    public void setTransferSize(int transferSize) {
-        this.transferSize = transferSize;
-    }
-
+  public void setTransferSize(int transferSize) {
+    this.transferSize = transferSize;
+  }
 }

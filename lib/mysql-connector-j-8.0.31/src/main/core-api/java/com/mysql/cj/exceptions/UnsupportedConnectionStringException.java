@@ -31,30 +31,31 @@ package com.mysql.cj.exceptions;
 
 public class UnsupportedConnectionStringException extends CJException {
 
-    private static final long serialVersionUID = 3991597077197801820L;
+  private static final long serialVersionUID = 3991597077197801820L;
 
-    public UnsupportedConnectionStringException() {
-        super();
-        setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
-    }
+  public UnsupportedConnectionStringException() {
+    super();
+    setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
+  }
 
-    public UnsupportedConnectionStringException(String message) {
-        super(message);
-        setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
-    }
+  public UnsupportedConnectionStringException(String message) {
+    super(message);
+    setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
+  }
 
-    public UnsupportedConnectionStringException(String message, Throwable cause) {
-        super(message, cause);
-        setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
-    }
+  public UnsupportedConnectionStringException(String message, Throwable cause) {
+    super(message, cause);
+    setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
+  }
 
-    public UnsupportedConnectionStringException(Throwable cause) {
-        super(cause);
-        setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
-    }
+  public UnsupportedConnectionStringException(Throwable cause) {
+    super(cause);
+    setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
+  }
 
-    public UnsupportedConnectionStringException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
-    }
+  public UnsupportedConnectionStringException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+    setSQLState(MysqlErrorNumbers.SQL_STATE_ILLEGAL_ARGUMENT);
+  }
 }

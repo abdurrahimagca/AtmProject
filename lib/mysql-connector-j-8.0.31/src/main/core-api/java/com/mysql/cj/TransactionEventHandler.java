@@ -31,7 +31,7 @@ package com.mysql.cj;
 
 public interface TransactionEventHandler {
 
-    void transactionBegun();
+  void transactionBegun();
 
-    void transactionCompleted();
+  void transactionCompleted();
 }

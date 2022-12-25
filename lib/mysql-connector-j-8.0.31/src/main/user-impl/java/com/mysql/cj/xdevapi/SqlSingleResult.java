@@ -29,33 +29,33 @@
 
 package com.mysql.cj.xdevapi;
 
-import java.util.TimeZone;
-import java.util.function.Supplier;
-
 import com.mysql.cj.conf.PropertySet;
 import com.mysql.cj.protocol.ColumnDefinition;
 import com.mysql.cj.protocol.ProtocolEntity;
 import com.mysql.cj.result.RowList;
+import java.util.TimeZone;
+import java.util.function.Supplier;
 
 /**
- * {@link SqlResult} representing a single result set. Implemented as a thin layer over {@link RowResultImpl}.
+ * {@link SqlResult} representing a single result set. Implemented as a thin layer over {@link
+ * RowResultImpl}.
  */
 public class SqlSingleResult extends RowResultImpl implements SqlResult {
-    /**
-     * Constructor.
-     * 
-     * @param metadata
-     *            {@link ColumnDefinition} object to use for new rows.
-     * @param defaultTimeZone
-     *            {@link TimeZone} object representing the default time zone
-     * @param rows
-     *            {@link RowList} provided by c/J core
-     * @param completer
-     *            supplier for completion task
-     * @param pset
-     *            {@link PropertySet}
-     */
-    public SqlSingleResult(ColumnDefinition metadata, TimeZone defaultTimeZone, RowList rows, Supplier<ProtocolEntity> completer, PropertySet pset) {
-        super(metadata, defaultTimeZone, rows, completer, pset);
-    }
+  /**
+   * Constructor.
+   *
+   * @param metadata {@link ColumnDefinition} object to use for new rows.
+   * @param defaultTimeZone {@link TimeZone} object representing the default time zone
+   * @param rows {@link RowList} provided by c/J core
+   * @param completer supplier for completion task
+   * @param pset {@link PropertySet}
+   */
+  public SqlSingleResult(
+      ColumnDefinition metadata,
+      TimeZone defaultTimeZone,
+      RowList rows,
+      Supplier<ProtocolEntity> completer,
+      PropertySet pset) {
+    super(metadata, defaultTimeZone, rows, completer, pset);
+  }
 }

@@ -35,28 +35,31 @@ import com.mysql.cj.jdbc.JdbcConnection;
 import com.mysql.cj.protocol.PacketSentTimeHolder;
 
 /**
- * Thrown when a client requests a connection-level feature that isn't available for this particular distribution of Connector/J (currently only used by code
- * that is export-controlled).
+ * Thrown when a client requests a connection-level feature that isn't available for this particular
+ * distribution of Connector/J (currently only used by code that is export-controlled).
  */
 public class ConnectionFeatureNotAvailableException extends CommunicationsException {
 
-    private static final long serialVersionUID = 8315412078945570018L;
+  private static final long serialVersionUID = 8315412078945570018L;
 
-    public ConnectionFeatureNotAvailableException(JdbcConnection conn, PacketSentTimeHolder packetSentTimeHolder, Exception underlyingException) {
-        super(conn, packetSentTimeHolder, null, underlyingException);
-    }
+  public ConnectionFeatureNotAvailableException(
+      JdbcConnection conn,
+      PacketSentTimeHolder packetSentTimeHolder,
+      Exception underlyingException) {
+    super(conn, packetSentTimeHolder, null, underlyingException);
+  }
 
-    public ConnectionFeatureNotAvailableException(String message, Throwable underlyingException) {
-        super(message, underlyingException);
-    }
+  public ConnectionFeatureNotAvailableException(String message, Throwable underlyingException) {
+    super(message, underlyingException);
+  }
 
-    @Override
-    public String getMessage() {
-        return Messages.getString("ConnectionFeatureNotAvailableException.0");
-    }
+  @Override
+  public String getMessage() {
+    return Messages.getString("ConnectionFeatureNotAvailableException.0");
+  }
 
-    @Override
-    public String getSQLState() {
-        return MysqlErrorNumbers.SQL_STATE_INVALID_CONNECTION_ATTRIBUTE;
-    }
+  @Override
+  public String getSQLState() {
+    return MysqlErrorNumbers.SQL_STATE_INVALID_CONNECTION_ATTRIBUTE;
+  }
 }

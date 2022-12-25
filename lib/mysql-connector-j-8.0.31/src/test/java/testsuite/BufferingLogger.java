@@ -32,41 +32,42 @@ package testsuite;
 import com.mysql.cj.log.StandardLogger;
 
 /**
- * Provides logging facilities for those platforms that don't have built-in facilities. Simply logs messages to STDERR.
+ * Provides logging facilities for those platforms that don't have built-in facilities. Simply logs
+ * messages to STDERR.
  */
 public class BufferingLogger extends StandardLogger {
 
-    private static StringBuffer bufferedLog = null;
+  private static StringBuffer bufferedLog = null;
 
-    public BufferingLogger(String name) {
-        super(name);
+  public BufferingLogger(String name) {
+    super(name);
+  }
+
+  public BufferingLogger(String name, boolean logLocationInfo) {
+    super(name, logLocationInfo);
+  }
+
+  public static void startLoggingToBuffer() {
+    bufferedLog = new StringBuffer();
+  }
+
+  public static void dropBuffer() {
+    bufferedLog = null;
+  }
+
+  public static Appendable getBuffer() {
+    return bufferedLog;
+  }
+
+  @Override
+  protected String logInternal(int level, Object msg, Throwable exception) {
+
+    String messageAsString = super.logInternal(level, msg, exception);
+
+    if (bufferedLog != null) {
+      bufferedLog.append(messageAsString);
     }
 
-    public BufferingLogger(String name, boolean logLocationInfo) {
-        super(name, logLocationInfo);
-    }
-
-    public static void startLoggingToBuffer() {
-        bufferedLog = new StringBuffer();
-    }
-
-    public static void dropBuffer() {
-        bufferedLog = null;
-    }
-
-    public static Appendable getBuffer() {
-        return bufferedLog;
-    }
-
-    @Override
-    protected String logInternal(int level, Object msg, Throwable exception) {
-
-        String messageAsString = super.logInternal(level, msg, exception);
-
-        if (bufferedLog != null) {
-            bufferedLog.append(messageAsString);
-        }
-
-        return messageAsString;
-    }
+    return messageAsString;
+  }
 }

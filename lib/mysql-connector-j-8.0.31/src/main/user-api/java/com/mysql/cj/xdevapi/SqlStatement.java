@@ -29,8 +29,5 @@
 
 package com.mysql.cj.xdevapi;
 
-/**
- * A statement representing a raw SQL command.
- */
-public interface SqlStatement extends Statement<SqlStatement, SqlResult> {
-}
+/** A statement representing a raw SQL command. */
+public interface SqlStatement extends Statement<SqlStatement, SqlResult> {}

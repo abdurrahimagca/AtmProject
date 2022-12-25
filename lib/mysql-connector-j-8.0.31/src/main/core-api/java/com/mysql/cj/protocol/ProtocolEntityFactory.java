@@ -34,37 +34,35 @@ import com.mysql.cj.exceptions.ExceptionFactory;
 
 public interface ProtocolEntityFactory<T, M extends Message> {
 
-    /**
-     * Create ProtocolEntity of type {@link T} from protocol message.
-     * 
-     * @param message
-     *            {@link Message} instance
-     * @return T
-     */
-    default T createFromMessage(M message) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
-    }
+  /**
+   * Create ProtocolEntity of type {@link T} from protocol message.
+   *
+   * @param message {@link Message} instance
+   * @return T
+   */
+  default T createFromMessage(M message) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
+  }
 
-    default Resultset.Type getResultSetType() {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
-    }
+  default Resultset.Type getResultSetType() {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
+  }
 
-    default Resultset.Concurrency getResultSetConcurrency() {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
-    }
+  default Resultset.Concurrency getResultSetConcurrency() {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
+  }
 
-    default int getFetchSize() {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
-    }
+  default int getFetchSize() {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
+  }
 
-    /**
-     * Create object from protocol entity.
-     * 
-     * @param protocolEntity
-     *            the {@link ProtocolEntity} to create from
-     * @return a new ProtocolEntity
-     */
-    default T createFromProtocolEntity(ProtocolEntity protocolEntity) {
-        throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
-    }
+  /**
+   * Create object from protocol entity.
+   *
+   * @param protocolEntity the {@link ProtocolEntity} to create from
+   * @return a new ProtocolEntity
+   */
+  default T createFromProtocolEntity(ProtocolEntity protocolEntity) {
+    throw ExceptionFactory.createException(CJOperationNotSupportedException.class, "Not allowed");
+  }
 }

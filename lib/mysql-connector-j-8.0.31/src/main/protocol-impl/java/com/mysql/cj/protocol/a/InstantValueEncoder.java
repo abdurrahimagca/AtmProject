@@ -29,12 +29,6 @@
 
 package com.mysql.cj.protocol.a;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.util.Calendar;
-import java.util.Locale;
-
 import com.mysql.cj.BindValue;
 import com.mysql.cj.Messages;
 import com.mysql.cj.MysqlType;
@@ -48,125 +42,195 @@ import com.mysql.cj.protocol.a.NativeConstants.IntegerDataType;
 import com.mysql.cj.protocol.a.NativeConstants.StringSelfDataType;
 import com.mysql.cj.util.StringUtils;
 import com.mysql.cj.util.TimeUtil;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class InstantValueEncoder extends AbstractValueEncoder {
 
-    @Override
-    public String getString(BindValue binding) {
-        switch (binding.getMysqlType()) {
-            case NULL:
-                return "null";
-            case DATE:
-                StringBuilder sb = new StringBuilder("'");
-                sb.append(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC).atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
-                        .toLocalDate().format(TimeUtil.DATE_FORMATTER));
-                sb.append("'");
-                return sb.toString();
-            case TIME:
-                sb = new StringBuilder("'");
-                sb.append(adjustLocalTime(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId()).toLocalTime(), binding.getField())
-                                .format(TimeUtil.TIME_FORMATTER_WITH_OPTIONAL_MICROS));
-                sb.append("'");
-                return sb.toString();
-            case DATETIME:
-            case TIMESTAMP:
-                Timestamp x = adjustTimestamp(
-                        Timestamp.valueOf(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                                .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId()).toLocalDateTime()),
-                        binding.getField(), binding.keepOrigNanos());
+  @Override
+  public String getString(BindValue binding) {
+    switch (binding.getMysqlType()) {
+      case NULL:
+        return "null";
+      case DATE:
+        StringBuilder sb = new StringBuilder("'");
+        sb.append(
+            ((Instant) binding.getValue())
+                .atOffset(ZoneOffset.UTC)
+                .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
+                .toLocalDate()
+                .format(TimeUtil.DATE_FORMATTER));
+        sb.append("'");
+        return sb.toString();
+      case TIME:
+        sb = new StringBuilder("'");
+        sb.append(
+            adjustLocalTime(
+                    ((Instant) binding.getValue())
+                        .atOffset(ZoneOffset.UTC)
+                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
+                        .toLocalTime(),
+                    binding.getField())
+                .format(TimeUtil.TIME_FORMATTER_WITH_OPTIONAL_MICROS));
+        sb.append("'");
+        return sb.toString();
+      case DATETIME:
+      case TIMESTAMP:
+        Timestamp x =
+            adjustTimestamp(
+                Timestamp.valueOf(
+                    ((Instant) binding.getValue())
+                        .atOffset(ZoneOffset.UTC)
+                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
+                        .toLocalDateTime()),
+                binding.getField(),
+                binding.keepOrigNanos());
 
-                StringBuffer buf = new StringBuffer();
+        StringBuffer buf = new StringBuffer();
 
-                buf.append(TimeUtil.getSimpleDateFormat(null, "''yyyy-MM-dd HH:mm:ss",
-                        binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue() ? this.serverSession.getSessionTimeZone()
-                                : this.serverSession.getDefaultTimeZone())
-                        .format(x));
+        buf.append(
+            TimeUtil.getSimpleDateFormat(
+                    null,
+                    "''yyyy-MM-dd HH:mm:ss",
+                    binding.getMysqlType() == MysqlType.TIMESTAMP
+                            && this.preserveInstants.getValue()
+                        ? this.serverSession.getSessionTimeZone()
+                        : this.serverSession.getDefaultTimeZone())
+                .format(x));
 
-                if (this.serverSession.getCapabilities().serverSupportsFracSecs() && x.getNanos() > 0) {
-                    buf.append('.');
-                    buf.append(TimeUtil.formatNanos(x.getNanos(), 6));
-                }
-                buf.append('\'');
-
-                return buf.toString();
-
-            case YEAR:
-                return String.valueOf(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId()).getYear());
-            case CHAR:
-            case VARCHAR:
-            case TINYTEXT:
-            case TEXT:
-            case MEDIUMTEXT:
-            case LONGTEXT:
-                sb = new StringBuilder("'");
-                sb.append(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                        .format(this.sendFractionalSeconds.getValue() && ((Instant) binding.getValue()).getNano() > 0
-                                ? TimeUtil.DATETIME_FORMATTER_WITH_NANOS_WITH_OFFSET
-                                : TimeUtil.DATETIME_FORMATTER_NO_FRACT_WITH_OFFSET)
-
-                );
-                sb.append("'");
-                return sb.toString();
-
-            default:
-                throw ExceptionFactory.createException(WrongArgumentException.class,
-                        Messages.getString("PreparedStatement.67", new Object[] { binding.getValue().getClass().getName(), binding.getMysqlType().toString() }),
-                        this.exceptionInterceptor);
+        if (this.serverSession.getCapabilities().serverSupportsFracSecs() && x.getNanos() > 0) {
+          buf.append('.');
+          buf.append(TimeUtil.formatNanos(x.getNanos(), 6));
         }
-    }
+        buf.append('\'');
 
-    @Override
-    public void encodeAsBinary(Message msg, BindValue binding) {
-        NativePacketPayload intoPacket = (NativePacketPayload) msg;
-        switch (binding.getMysqlType()) {
-            case DATE:
-                writeDate(msg, InternalDate.from(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId()).toLocalDate()));
-                return;
-            case TIME:
-                writeTime(msg, InternalTime.from(adjustLocalTime(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId()).toLocalTime(), binding.getField())));
-                return;
-            case DATETIME:
-            case TIMESTAMP:
-                Timestamp ts = adjustTimestamp(
-                        Timestamp.valueOf(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                                .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId()).toLocalDateTime()),
-                        binding.getField(), binding.keepOrigNanos());
-                Calendar calendar = Calendar
-                        .getInstance(binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue() ? this.serverSession.getSessionTimeZone()
-                                : this.serverSession.getDefaultTimeZone(), Locale.US);
-                calendar.setTime(ts);
-                writeDateTime(msg, InternalTimestamp.from(calendar, ts.getNanos()));
-                return;
-            case YEAR:
-                intoPacket.writeInteger(IntegerDataType.INT4, ((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId()).getYear());
-                return;
-            case CHAR:
-            case VARCHAR:
-            case TINYTEXT:
-            case TEXT:
-            case MEDIUMTEXT:
-            case LONGTEXT:
-                intoPacket.writeBytes(StringSelfDataType.STRING_LENENC,
-                        StringUtils.getBytes(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)
-                                .format(this.sendFractionalSeconds.getValue() && ((Instant) binding.getValue()).getNano() > 0
-                                        ? TimeUtil.DATETIME_FORMATTER_WITH_NANOS_WITH_OFFSET
-                                        : TimeUtil.DATETIME_FORMATTER_NO_FRACT_WITH_OFFSET),
-                                this.charEncoding.getValue()));
-                return;
-            default:
-                throw ExceptionFactory.createException(WrongArgumentException.class,
-                        Messages.getString("PreparedStatement.67", new Object[] { binding.getValue().getClass().getName(), binding.getMysqlType().toString() }),
-                        this.exceptionInterceptor);
-        }
-    }
+        return buf.toString();
 
-    @Override
-    public void encodeAsQueryAttribute(Message msg, BindValue binding) {
-        writeDateTimeWithOffset(msg, InternalTimestamp.from(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)));
+      case YEAR:
+        return String.valueOf(
+            ((Instant) binding.getValue())
+                .atOffset(ZoneOffset.UTC)
+                .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
+                .getYear());
+      case CHAR:
+      case VARCHAR:
+      case TINYTEXT:
+      case TEXT:
+      case MEDIUMTEXT:
+      case LONGTEXT:
+        sb = new StringBuilder("'");
+        sb.append(
+            ((Instant) binding.getValue())
+                .atOffset(ZoneOffset.UTC)
+                .format(
+                    this.sendFractionalSeconds.getValue()
+                            && ((Instant) binding.getValue()).getNano() > 0
+                        ? TimeUtil.DATETIME_FORMATTER_WITH_NANOS_WITH_OFFSET
+                        : TimeUtil.DATETIME_FORMATTER_NO_FRACT_WITH_OFFSET));
+
+        sb.append("'");
+        return sb.toString();
+
+      default:
+        throw ExceptionFactory.createException(
+            WrongArgumentException.class,
+            Messages.getString(
+                "PreparedStatement.67",
+                new Object[] {
+                  binding.getValue().getClass().getName(), binding.getMysqlType().toString()
+                }),
+            this.exceptionInterceptor);
     }
+  }
+
+  @Override
+  public void encodeAsBinary(Message msg, BindValue binding) {
+    NativePacketPayload intoPacket = (NativePacketPayload) msg;
+    switch (binding.getMysqlType()) {
+      case DATE:
+        writeDate(
+            msg,
+            InternalDate.from(
+                ((Instant) binding.getValue())
+                    .atOffset(ZoneOffset.UTC)
+                    .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
+                    .toLocalDate()));
+        return;
+      case TIME:
+        writeTime(
+            msg,
+            InternalTime.from(
+                adjustLocalTime(
+                    ((Instant) binding.getValue())
+                        .atOffset(ZoneOffset.UTC)
+                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
+                        .toLocalTime(),
+                    binding.getField())));
+        return;
+      case DATETIME:
+      case TIMESTAMP:
+        Timestamp ts =
+            adjustTimestamp(
+                Timestamp.valueOf(
+                    ((Instant) binding.getValue())
+                        .atOffset(ZoneOffset.UTC)
+                        .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
+                        .toLocalDateTime()),
+                binding.getField(),
+                binding.keepOrigNanos());
+        Calendar calendar =
+            Calendar.getInstance(
+                binding.getMysqlType() == MysqlType.TIMESTAMP && this.preserveInstants.getValue()
+                    ? this.serverSession.getSessionTimeZone()
+                    : this.serverSession.getDefaultTimeZone(),
+                Locale.US);
+        calendar.setTime(ts);
+        writeDateTime(msg, InternalTimestamp.from(calendar, ts.getNanos()));
+        return;
+      case YEAR:
+        intoPacket.writeInteger(
+            IntegerDataType.INT4,
+            ((Instant) binding.getValue())
+                .atOffset(ZoneOffset.UTC)
+                .atZoneSameInstant(this.serverSession.getDefaultTimeZone().toZoneId())
+                .getYear());
+        return;
+      case CHAR:
+      case VARCHAR:
+      case TINYTEXT:
+      case TEXT:
+      case MEDIUMTEXT:
+      case LONGTEXT:
+        intoPacket.writeBytes(
+            StringSelfDataType.STRING_LENENC,
+            StringUtils.getBytes(
+                ((Instant) binding.getValue())
+                    .atOffset(ZoneOffset.UTC)
+                    .format(
+                        this.sendFractionalSeconds.getValue()
+                                && ((Instant) binding.getValue()).getNano() > 0
+                            ? TimeUtil.DATETIME_FORMATTER_WITH_NANOS_WITH_OFFSET
+                            : TimeUtil.DATETIME_FORMATTER_NO_FRACT_WITH_OFFSET),
+                this.charEncoding.getValue()));
+        return;
+      default:
+        throw ExceptionFactory.createException(
+            WrongArgumentException.class,
+            Messages.getString(
+                "PreparedStatement.67",
+                new Object[] {
+                  binding.getValue().getClass().getName(), binding.getMysqlType().toString()
+                }),
+            this.exceptionInterceptor);
+    }
+  }
+
+  @Override
+  public void encodeAsQueryAttribute(Message msg, BindValue binding) {
+    writeDateTimeWithOffset(
+        msg, InternalTimestamp.from(((Instant) binding.getValue()).atOffset(ZoneOffset.UTC)));
+  }
 }

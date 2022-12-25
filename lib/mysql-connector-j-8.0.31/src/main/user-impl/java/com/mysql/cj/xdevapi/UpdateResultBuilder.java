@@ -38,31 +38,30 @@ import com.mysql.cj.protocol.x.Ok;
 import com.mysql.cj.protocol.x.StatementExecuteOk;
 import com.mysql.cj.protocol.x.StatementExecuteOkBuilder;
 
-/**
- * Result builder producing an {@link UpdateResult} instance.
- */
+/** Result builder producing an {@link UpdateResult} instance. */
 public class UpdateResultBuilder<T extends Result> implements ResultBuilder<T> {
 
-    protected StatementExecuteOkBuilder statementExecuteOkBuilder = new StatementExecuteOkBuilder();
+  protected StatementExecuteOkBuilder statementExecuteOkBuilder = new StatementExecuteOkBuilder();
 
-    @Override
-    public boolean addProtocolEntity(ProtocolEntity entity) {
-        if (entity instanceof Notice) {
-            this.statementExecuteOkBuilder.addProtocolEntity(entity);
-            return false;
+  @Override
+  public boolean addProtocolEntity(ProtocolEntity entity) {
+    if (entity instanceof Notice) {
+      this.statementExecuteOkBuilder.addProtocolEntity(entity);
+      return false;
 
-        } else if (entity instanceof StatementExecuteOk) {
-            return true;
+    } else if (entity instanceof StatementExecuteOk) {
+      return true;
 
-        } else if (entity instanceof Ok) {
-            return true;
-        }
-        throw ExceptionFactory.createException(WrongArgumentException.class, "Unexpected protocol entity " + entity);
+    } else if (entity instanceof Ok) {
+      return true;
     }
+    throw ExceptionFactory.createException(
+        WrongArgumentException.class, "Unexpected protocol entity " + entity);
+  }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public T build() {
-        return (T) new UpdateResult(this.statementExecuteOkBuilder.build());
-    }
+  @SuppressWarnings("unchecked")
+  @Override
+  public T build() {
+    return (T) new UpdateResult(this.statementExecuteOkBuilder.build());
+  }
 }

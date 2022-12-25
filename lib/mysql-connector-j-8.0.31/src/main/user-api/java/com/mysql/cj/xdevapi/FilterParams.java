@@ -31,300 +31,268 @@ package com.mysql.cj.xdevapi;
 
 import com.mysql.cj.exceptions.WrongArgumentException;
 
-/**
- * Transforms X DevAPI filter parameters into X Protocol message entities.
- * Used internally.
- */
+/** Transforms X DevAPI filter parameters into X Protocol message entities. Used internally. */
 public interface FilterParams {
 
-    /**
-     * The type of row lock.
-     */
-    public enum RowLock {
-        /**
-         * Lock matching rows against updates.
-         */
-        SHARED_LOCK(1),
-        /**
-         * Lock matching rows so no other transactions can read or write to it.
-         */
-        EXCLUSIVE_LOCK(2);
+  /** The type of row lock. */
+  public enum RowLock {
+    /** Lock matching rows against updates. */
+    SHARED_LOCK(1),
+    /** Lock matching rows so no other transactions can read or write to it. */
+    EXCLUSIVE_LOCK(2);
 
-        private int rowLock;
+    private int rowLock;
 
-        private RowLock(int rowLock) {
-            this.rowLock = rowLock;
-        }
-
-        /**
-         * Get the row lock type id.
-         * 
-         * @return row lock type id
-         */
-        public int asNumber() {
-            return rowLock;
-        }
+    private RowLock(int rowLock) {
+      this.rowLock = rowLock;
     }
 
     /**
-     * Options that define the behavior while retrieving locked rows.
+     * Get the row lock type id.
+     *
+     * @return row lock type id
      */
-    public enum RowLockOptions {
-        /**
-         * Do not wait to acquire row lock, fail with an error if a requested row is locked.
-         */
-        NOWAIT(1),
-        /**
-         * Do not wait to acquire a row lock, remove locked rows from the result set.
-         */
-        SKIP_LOCKED(2);
+    public int asNumber() {
+      return rowLock;
+    }
+  }
 
-        private int rowLockOption;
+  /** Options that define the behavior while retrieving locked rows. */
+  public enum RowLockOptions {
+    /** Do not wait to acquire row lock, fail with an error if a requested row is locked. */
+    NOWAIT(1),
+    /** Do not wait to acquire a row lock, remove locked rows from the result set. */
+    SKIP_LOCKED(2);
 
-        private RowLockOptions(int rowLockOption) {
-            this.rowLockOption = rowLockOption;
-        }
+    private int rowLockOption;
 
-        /**
-         * Get the row lock option id.
-         * 
-         * @return row lock option id
-         */
-        public int asNumber() {
-            return rowLockOption;
-        }
+    private RowLockOptions(int rowLockOption) {
+      this.rowLockOption = rowLockOption;
     }
 
     /**
-     * Get X Protocol Collection object.
-     * 
-     * @return X Protocol Collection object
+     * Get the row lock option id.
+     *
+     * @return row lock option id
      */
-    Object getCollection();
+    public int asNumber() {
+      return rowLockOption;
+    }
+  }
 
-    /**
-     * Get X Protocol Order objects.
-     * 
-     * @return List of X Protocol Order objects
-     */
-    Object getOrder();
+  /**
+   * Get X Protocol Collection object.
+   *
+   * @return X Protocol Collection object
+   */
+  Object getCollection();
 
-    /**
-     * Parse order expressions into X Protocol Order objects.
-     * 
-     * <pre>
-     * DocResult docs = this.collection.find().orderBy("$._id").execute();
-     * docs = this.collection.find().sort("$.x", "$.y").execute();
-     * </pre>
-     * 
-     * @param orderExpression
-     *            order expressions
-     * 
-     */
-    void setOrder(String... orderExpression);
+  /**
+   * Get X Protocol Order objects.
+   *
+   * @return List of X Protocol Order objects
+   */
+  Object getOrder();
 
-    /**
-     * Get max number of rows to filter.
-     * 
-     * @return limit
-     */
-    Long getLimit();
+  /**
+   * Parse order expressions into X Protocol Order objects.
+   *
+   * <pre>
+   * DocResult docs = this.collection.find().orderBy("$._id").execute();
+   * docs = this.collection.find().sort("$.x", "$.y").execute();
+   * </pre>
+   *
+   * @param orderExpression order expressions
+   */
+  void setOrder(String... orderExpression);
 
-    /**
-     * Set maximum rows to find.
-     * <p>
-     * For example, to find the 3 first rows:
-     * </p>
-     * 
-     * <pre>
-     * docs = this.collection.find().orderBy("$._id").limit(3).execute();
-     * </pre>
-     * 
-     * @param limit
-     *            maximum rows to find
-     */
-    void setLimit(Long limit);
+  /**
+   * Get max number of rows to filter.
+   *
+   * @return limit
+   */
+  Long getLimit();
 
-    /**
-     * Get number of rows to skip before finding others.
-     * 
-     * @return maximum rows to skip
-     */
-    Long getOffset();
+  /**
+   * Set maximum rows to find.
+   *
+   * <p>For example, to find the 3 first rows:
+   *
+   * <pre>
+   * docs = this.collection.find().orderBy("$._id").limit(3).execute();
+   * </pre>
+   *
+   * @param limit maximum rows to find
+   */
+  void setLimit(Long limit);
 
-    /**
-     * Set number of rows to skip before finding others.
-     * <p>
-     * For example, to skip 1 row and find other 3 rows:
-     * </p>
-     * 
-     * <pre>
-     * docs = this.collection.find().orderBy("$._id").limit(3).skip(1).execute();
-     * </pre>
-     * 
-     * @param offset
-     *            maximum rows to skip
-     */
-    void setOffset(Long offset);
+  /**
+   * Get number of rows to skip before finding others.
+   *
+   * @return maximum rows to skip
+   */
+  Long getOffset();
 
-    /**
-     * Whether <i>offset</i> clause is supported in the statement or not.
-     * <p>
-     * Note that setting offset values is always possible, even if they are not supported.
-     * </p>
-     * 
-     * @return
-     *         <code>true</code> if <i>offset</i> clause is supported
-     */
-    boolean supportsOffset();
+  /**
+   * Set number of rows to skip before finding others.
+   *
+   * <p>For example, to skip 1 row and find other 3 rows:
+   *
+   * <pre>
+   * docs = this.collection.find().orderBy("$._id").limit(3).skip(1).execute();
+   * </pre>
+   *
+   * @param offset maximum rows to skip
+   */
+  void setOffset(Long offset);
 
-    /**
-     * Get the search criteria.
-     * 
-     * @return X Protocol Expr object
-     */
-    Object getCriteria();
+  /**
+   * Whether <i>offset</i> clause is supported in the statement or not.
+   *
+   * <p>Note that setting offset values is always possible, even if they are not supported.
+   *
+   * @return <code>true</code> if <i>offset</i> clause is supported
+   */
+  boolean supportsOffset();
 
-    /**
-     * Parse criteriaString into X Protocol Expr object.
-     * 
-     * <pre>
-     * docs = this.collection.find("$.x1 = 29 | 15").execute();
-     * table.delete().where("age == 13").execute();
-     * </pre>
-     * 
-     * @param criteriaString
-     *            expression
-     */
-    void setCriteria(String criteriaString);
+  /**
+   * Get the search criteria.
+   *
+   * @return X Protocol Expr object
+   */
+  Object getCriteria();
 
-    /**
-     * Get binding arguments.
-     * 
-     * @return List of X Protocol Scalar object
-     */
-    Object getArgs();
+  /**
+   * Parse criteriaString into X Protocol Expr object.
+   *
+   * <pre>
+   * docs = this.collection.find("$.x1 = 29 | 15").execute();
+   * table.delete().where("age == 13").execute();
+   * </pre>
+   *
+   * @param criteriaString expression
+   */
+  void setCriteria(String criteriaString);
 
-    /**
-     * Set binding.
-     * 
-     * <pre>
-     * this.collection.find("a = :arg1 or b = :arg2").bind("arg1", 1).bind("arg2", 2).execute();
-     * </pre>
-     * 
-     * @param name
-     *            bind key
-     * @param value
-     *            bind value
-     */
-    void addArg(String name, Object value);
+  /**
+   * Get binding arguments.
+   *
+   * @return List of X Protocol Scalar object
+   */
+  Object getArgs();
 
-    /**
-     * Verify that all arguments are bound. Throws {@link WrongArgumentException} if any placeholder argument is not bound.
-     */
-    void verifyAllArgsBound();
+  /**
+   * Set binding.
+   *
+   * <pre>
+   * this.collection.find("a = :arg1 or b = :arg2").bind("arg1", 1).bind("arg2", 2).execute();
+   * </pre>
+   *
+   * @param name bind key
+   * @param value bind value
+   */
+  void addArg(String name, Object value);
 
-    /**
-     * Remove all current bindings.
-     */
-    void clearArgs();
+  /**
+   * Verify that all arguments are bound. Throws {@link WrongArgumentException} if any placeholder
+   * argument is not bound.
+   */
+  void verifyAllArgsBound();
 
-    /**
-     * Are relational columns identifiers allowed?
-     * 
-     * @return true if allowed
-     */
-    boolean isRelational();
+  /** Remove all current bindings. */
+  void clearArgs();
 
-    /**
-     * Parse projection expressions into X Protocol Projection objects.
-     * 
-     * <pre>
-     * collection.find().fields("CAST($.x as SIGNED) as x").execute();
-     * table.select("_id, name, birthday, age").execute();
-     * table.select("age as age_group, count(name) as cnt, something").execute();
-     * </pre>
-     * 
-     * @param projection
-     *            projection expression
-     */
-    void setFields(String... projection);
+  /**
+   * Are relational columns identifiers allowed?
+   *
+   * @return true if allowed
+   */
+  boolean isRelational();
 
-    /**
-     * Get X Protocol Projection objects.
-     * 
-     * @return List of X Protocol Projection objects.
-     */
-    Object getFields();
+  /**
+   * Parse projection expressions into X Protocol Projection objects.
+   *
+   * <pre>
+   * collection.find().fields("CAST($.x as SIGNED) as x").execute();
+   * table.select("_id, name, birthday, age").execute();
+   * table.select("age as age_group, count(name) as cnt, something").execute();
+   * </pre>
+   *
+   * @param projection projection expression
+   */
+  void setFields(String... projection);
 
-    /**
-     * Parse groupBy expressions into X Protocol Expr objects.
-     * 
-     * <pre>
-     * SelectStatement stmt = table.select("age as age_group, count(name) as cnt, something");
-     * stmt.groupBy("something", "age_group");
-     * </pre>
-     * 
-     * @param groupBy
-     *            groupBy expression
-     */
-    void setGrouping(String... groupBy);
+  /**
+   * Get X Protocol Projection objects.
+   *
+   * @return List of X Protocol Projection objects.
+   */
+  Object getFields();
 
-    /**
-     * Get X Protocol Expr objects for groupBy.
-     * 
-     * @return List of X Protocol Expr objects
-     */
-    Object getGrouping();
+  /**
+   * Parse groupBy expressions into X Protocol Expr objects.
+   *
+   * <pre>
+   * SelectStatement stmt = table.select("age as age_group, count(name) as cnt, something");
+   * stmt.groupBy("something", "age_group");
+   * </pre>
+   *
+   * @param groupBy groupBy expression
+   */
+  void setGrouping(String... groupBy);
 
-    /**
-     * Parse having expressions into X Protocol Expr objects.
-     * 
-     * <pre>
-     * SelectStatement stmt = table.select("age as age_group, count(name) as cnt, something");
-     * stmt.groupBy("something", "age_group");
-     * stmt.having("cnt &gt; 1");
-     * </pre>
-     * 
-     * @param having
-     *            having expression
-     */
-    void setGroupingCriteria(String having);
+  /**
+   * Get X Protocol Expr objects for groupBy.
+   *
+   * @return List of X Protocol Expr objects
+   */
+  Object getGrouping();
 
-    /**
-     * Get X Protocol Expr objects for grouping criteria.
-     * 
-     * @return List of X Protocol Expr objects
-     */
-    Object getGroupingCriteria();
+  /**
+   * Parse having expressions into X Protocol Expr objects.
+   *
+   * <pre>
+   * SelectStatement stmt = table.select("age as age_group, count(name) as cnt, something");
+   * stmt.groupBy("something", "age_group");
+   * stmt.having("cnt &gt; 1");
+   * </pre>
+   *
+   * @param having having expression
+   */
+  void setGroupingCriteria(String having);
 
-    /**
-     * Get {@link RowLock} value.
-     * 
-     * @return {@link RowLock}
-     */
-    RowLock getLock();
+  /**
+   * Get X Protocol Expr objects for grouping criteria.
+   *
+   * @return List of X Protocol Expr objects
+   */
+  Object getGroupingCriteria();
 
-    /**
-     * Set {@link RowLock} value.
-     * 
-     * @param rowLock
-     *            {@link RowLock}
-     */
-    void setLock(RowLock rowLock);
+  /**
+   * Get {@link RowLock} value.
+   *
+   * @return {@link RowLock}
+   */
+  RowLock getLock();
 
-    /**
-     * Get {@link RowLockOptions} value.
-     * 
-     * @return {@link RowLockOptions}
-     */
-    RowLockOptions getLockOption();
+  /**
+   * Set {@link RowLock} value.
+   *
+   * @param rowLock {@link RowLock}
+   */
+  void setLock(RowLock rowLock);
 
-    /**
-     * Set {@link RowLockOptions} value.
-     * 
-     * @param rowLockOption
-     *            {@link RowLockOptions}
-     */
-    void setLockOption(RowLockOptions rowLockOption);
+  /**
+   * Get {@link RowLockOptions} value.
+   *
+   * @return {@link RowLockOptions}
+   */
+  RowLockOptions getLockOption();
+
+  /**
+   * Set {@link RowLockOptions} value.
+   *
+   * @param rowLockOption {@link RowLockOptions}
+   */
+  void setLockOption(RowLockOptions rowLockOption);
 }

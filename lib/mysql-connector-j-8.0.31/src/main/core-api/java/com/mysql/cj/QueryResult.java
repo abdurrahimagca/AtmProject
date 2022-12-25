@@ -29,6 +29,4 @@
 
 package com.mysql.cj;
 
-public interface QueryResult {
-
-}
+public interface QueryResult {}

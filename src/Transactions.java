@@ -1,4 +1,3 @@
-
 public class Transactions {
 
   // hata: eger fonksiyon exception verirse sorun olabilir

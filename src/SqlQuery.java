@@ -1,5 +1,4 @@
-import com.mysql.cj.Query;
-import com.mysql.cj.x.protobuf.MysqlxCrud;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,6 +20,7 @@ public class SqlQuery {
 
     }
 
+    //todo: fonksiyon bool veri döndürmeli
     public static void UpdateData(String query) {
 
         try {

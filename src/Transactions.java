@@ -1,9 +1,10 @@
-import java.sql.SQLException;
+
 
 public class Transactions {
 
     //hata: eger fonksiyon exception verirse sorun olabilir
     private static double stringToDouble(String text) {
+        //handle in 5 usages that if catch statement works, return an escape integer
         double val = 0;
         try {
 
@@ -17,7 +18,7 @@ public class Transactions {
     }
 
 
-    //todo: para çek
+
     public static boolean withdraw(String id, double amount) {
         double deposit;
         if (amount < 10 || amount > 1000) {
@@ -44,13 +45,13 @@ public class Transactions {
             temp = String.valueOf(deposit);
 
             SqlQuery.UpdateData("UPDATE clients SET deposit=" + temp + "WHERE id=" + id);
-            //todo: güncelleme işleminin doğru olup olmadığı kontrol edilebilri
+
             return true;
         }
         return false;
     }
 
-    //todo: para yatır
+
     public static boolean deposit(String id, double amount) {
         double deposit;
 
@@ -65,16 +66,17 @@ public class Transactions {
         deposit = deposit + amount;
         temp = String.valueOf(deposit);
         SqlQuery.UpdateData("UPDATE clients SET deposit=" + temp + "WHERE id=" + id);
-        //todo: güncelleme işleminin doğru olup olmadığı kontrol edilebilri
+
         return true;
 
     }
 
 
-    //todo: para gönder
+
     public static boolean transfer(String id, String IBAN, double amount) {
         //todo: iban uzunlugunun kontrol edilmesi gerekli
-        //todo: kullanici kendi ibanina transfer para
+        if(IBAN.length()!=24) return false;
+
         double depositSender, depositReceiver;
         String temp = SqlQuery.StringGetSQL("SELECT deposit FROM clients WHERE id=" + id, "deposit");
         depositSender = stringToDouble(temp);
@@ -101,7 +103,7 @@ public class Transactions {
 
     }
 
-    //todo: borç öde
+
     public static boolean payOffDebt(String id, double amount) {
         double deposit, debt;
         String temp = SqlQuery.StringGetSQL("SELECT debt FROM clients WHERE id=" + id, "debt");
@@ -123,6 +125,7 @@ public class Transactions {
 
         } else {
             deposit = deposit - amount;
+            //todo: handle if temp is not a string
             temp = String.valueOf(deposit);
             SqlQuery.UpdateData("UPDATE clients SET deposit=" + temp + "WHERE id=" + id);
             debt = debt - amount;
@@ -133,6 +136,4 @@ public class Transactions {
     }
 
 
-    //todo: pin değiştir
-    //todo: ...
 }
